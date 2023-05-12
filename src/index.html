@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+   <meta charset="UTF-8">
+   <title>idkkkkkkkkkkkkkkkkk</title>
+</head>
+
+<body>
+   <form action="/game.html">
+      <label for="username">Username</label>
+      <input style="height: 30px; " id="username" name="username">
+
+      <br>
+      <label for="room">Room</label>
+      <input style="height: 30px; " id="room" name="room">
+
+      <br>
+      <input style="height: 200px; width: 200px; background-image: url(/assets/ok.jpg); font-size: 20px; color: green; " type="submit" onclick="
+         const username = document.querySelector('#username').value
+         const room = document.querySelector('#room').value
+         if (!username || !room)
+            window.location.href = 'https://www.google.com/search?q=a+venit+alex'
+         else
+            window.location.href = window.location.host + '/?username=' + username + '&room=' + room
+      ">
+   </form>
+</body>
+</html>

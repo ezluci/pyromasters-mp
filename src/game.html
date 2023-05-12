@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+   <meta charset="UTF-8">
+   <title>idkkkkkkkkkkkkkkkkk</title>
+
+   <script src="socket.io/socket.io.min.js"></script>
+   <script src="js/misc.js"></script>
+
+   <script src="js/game-socket.js"></script>
+   <script src="js/game-page.js"></script>
+
+   <script>
+      const params = new URLSearchParams(window.location.search);
+      const username = params.get('username');
+      const room = params.get('room');
+      
+      if (!username || !room)
+         window.location.href = 'https://www.google.com/search?q=a+venit+alex'
+      else
+         socket.emit('playerJoined', username, room, (players) => {
+            players.forEach(player => addPlayerToList(player))
+         })
+   </script>
+</head>
+
+<body>
+   <canvas width="800" height="600" style="background-color: black; "></canvas>
+
+   <div id="start-game" style="display: inline; ">
+      <button id="start-button" onclick="socket.emit('tryStart')">Start</button>
+      <span id="start-status"></span>
+   </div>
+
+   <ul id="player-list"></ul>
+</body>
+</html>
