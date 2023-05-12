@@ -5,7 +5,7 @@
    <title>idkkkkkkkkkkkkkkkkk</title>
 </head>
 
-<body>
+<body style="background-color: black; color: white; ">
    <form action="/game.html">
       <label for="username">Username</label>
       <input style="height: 30px; " id="username" name="username">
@@ -19,9 +19,9 @@
          const username = document.querySelector('#username').value
          const room = document.querySelector('#room').value
          if (!username || !room)
-            window.location.href = 'https://www.google.com/search?q=a+venit+alex'
+            window.open('https://www.google.com/search?q=a+venit+alex', '_self')
          else
-            window.location.href = window.location.host + '/?username=' + username + '&room=' + room
+            window.open(`${window.location.host}/?username=${username}&room=${room}`, '_self')
       ">
    </form>
 </body>

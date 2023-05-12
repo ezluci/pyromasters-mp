@@ -19,13 +19,14 @@
          window.location.href = 'https://www.google.com/search?q=a+venit+alex'
       else
          socket.emit('playerJoined', username, room, (players) => {
-            players.forEach(player => addPlayerToList(player))
+            players.forEach(player => addPlayerToList(player)) 
          })
    </script>
 </head>
 
 <body>
-   <canvas width="800" height="600" style="background-color: black; "></canvas>
+   <span id="loading" style="font-size: large; font-weight: bold;">LOADING...</span>
+   <canvas id="canvas" width="815" height="620"></canvas>
 
    <div id="start-game" style="display: inline; ">
       <button id="start-button" onclick="socket.emit('tryStart')">Start</button>
@@ -33,5 +34,7 @@
    </div>
 
    <ul id="player-list"></ul>
+
+   <script src="js/game.js"></script>
 </body>
 </html>

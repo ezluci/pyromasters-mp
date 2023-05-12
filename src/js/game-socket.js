@@ -9,11 +9,11 @@ socket.on('player-', (username) => {
 })
 
 socket.on('begin_startCountdown', (initiator) => {
-   document.querySelector('#start-status').innerText = `${initiator} started the game. starting in 3`
+   document.querySelector('#start-status').innerText = `'${initiator}' started the game. starting in 3`
    setTimeout(() => {
-      document.querySelector('#start-status').innerText = `${initiator} started the game. starting in 2`
+      document.querySelector('#start-status').innerText = `'${initiator}' started the game. starting in 2`
       setTimeout(() => {
-         document.querySelector('#start-status').innerText = `${initiator} started the game. starting in 1`
+         document.querySelector('#start-status').innerText = `'${initiator}' started the game. starting in 1`
          setTimeout(() => {
             document.querySelector('#start-status').innerText = `game started.`
          }, 1000)
