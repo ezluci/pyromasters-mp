@@ -36,15 +36,19 @@ io.on('connection', (socket) => {
       room = room1
       color = 'spectator'
       isOwner = !(io.sockets.adapter.rooms.get(room))
-      console.log(isOwner, io.sockets.adapter.rooms.get(room))
+
+      // TODO: what if the owner leaves?
+      
+      console.log(`connected:    ${socket.id}, {username: ${username}, room: ${room}, isOwner: ${isOwner}}`)
       
       socket.join(room)
-      socket.to(room).emit('player+', username)
-      IDS.set(socket.id, {username: username, room: room})
+      socket.to(room).emit('player+', username, color, isOwner)
+      IDS.set(socket.id, {username, room, color, isOwner})
 
       const players = []
       io.sockets.adapter.rooms.get(room).forEach((otherSocketId) => {
-         players.push(IDS.get(otherSocketId).username)
+         const otherPlayer = IDS.get(otherSocketId)
+         players.push({username: otherPlayer.username, color: otherPlayer.color, isOwner: otherPlayer.isOwner})
       })
 
       callback(players)
@@ -58,6 +62,8 @@ io.on('connection', (socket) => {
 
    socket.on('selectColor', (color1) => {
       color = color1
+      IDS.get(socket.id).color = color1
+      io.to(room).emit('player~', username, username, color, isOwner)
    })
 
    

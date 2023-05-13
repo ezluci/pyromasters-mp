@@ -1,11 +1,15 @@
-var socket = io()
+const socket = io()
 
-socket.on('player+', (username) => {
-   addPlayerToList(username)
+socket.on('player+', (username, color, isOwner) => {
+   addPlayerToList(username, color, isOwner)
 })
 
 socket.on('player-', (username) => {
    removePlayerFromList(username)
+})
+
+socket.on('player~', (oldUsername, username, color, isOwner) => {
+   changePlayerFromList(oldUsername, username, color, isOwner)
 })
 
 socket.on('begin_startCountdown', (initiator) => {

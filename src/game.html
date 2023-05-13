@@ -23,7 +23,7 @@
          window.location.href = 'https://www.google.com/search?q=a+venit+alex'
       else
          socket.emit('playerJoined', username, room, (players) => {
-            players.forEach(player => addPlayerToList(player)) 
+            players.forEach( ({username, color, isOwner}) => addPlayerToList(username, color, isOwner) )
          })
    </script>
 </head>
@@ -32,7 +32,7 @@
    <span id="loading" style="font-size: large; font-weight: bold;">LOADING...</span>
    <canvas id="canvas" width="815" height="620"></canvas>
 
-   <div id="start-game" style="display: inline; ">
+   <div id="start-game" style="display: inline;">
       <button id="start-button" onclick="socket.emit('tryStart')">Start game</button>
       <span id="start-status"></span>
    </div>
@@ -41,16 +41,19 @@
    <input value="60" id="fps">
 
    <br>
-   <div id="select-color" style="display: inline; ">
+   <div id="select-color" style="display: inline;">
       Select color (click):
       <a onclick="socket.emit('selectColor', 'white');   myColor = 'white'">white</a>
       <a onclick="socket.emit('selectColor', 'black');   myColor = 'black'">black</a>
       <a onclick="socket.emit('selectColor', 'green');   myColor = 'green'">green</a>
-      <a onclick="socket.emit('selectColor', 'orange');   myColor = 'orange'">orange</a>
+      <a onclick="socket.emit('selectColor', 'orange');  myColor = 'orange'">orange</a>
+      <a onclick="socket.emit('selectColor', 'spectator');  myColor = 'spectator'">spectator</a>
    </div>
 
-   <ul id="player-list"></ul>
+   <p><b>!! If you use a dark theme extension, disable it</b></p>
 
-   <button ontouchstart="keys.a = 1" ontouchend="keys.a = 0" style="height: 500px; width: 50%; ">GOLEFT (ANDROID)</button>
+   <ul style="background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; font-size: 30px;" id="player-list"></ul>
+
+   <button ontouchstart="keys.a = 1" ontouchend="keys.a = 0" style="height: 500px; width: 50%;">GOLEFT (ANDROID)</button>
 </body>
 </html>

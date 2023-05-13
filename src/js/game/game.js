@@ -10,14 +10,6 @@ let imagesLoaded = 0
 let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined}
 let blockImg
 
-const loadImage = src =>
-   new Promise((resolve, reject) => {
-      const img = new Image()
-      img.onload = () => resolve(img)
-      img.onerror = reject
-      img.src = src
-   })
-
 
 loadImage('assets/white.jpg').then(image => {
    plrImg['white'] = image

@@ -16,3 +16,12 @@ function drawBlock(block, xBlock, yBlock) {
 function drawPlayer(player, x, y) {
    ctx.drawImage(player, OFFSET_LEFT + x, OFFSET_UP + y, BLOCK_SIZE, BLOCK_SIZE)
 }
+
+function loadImage(src) {
+   return new Promise((resolve, reject) => {
+      const img = new Image()
+      img.onload = () => resolve(img)
+      img.onerror = reject
+      img.src = src
+   })
+}
