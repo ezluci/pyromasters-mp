@@ -47,11 +47,11 @@
    <br>
    <div id="select-color">
       <u><i>Select color here:</i></u>
-      <a onclick="socket.emit('selectColor', 'white');   myColor = 'white'">white</a>
-      <a onclick="socket.emit('selectColor', 'black');   myColor = 'black'">black</a>
-      <a onclick="socket.emit('selectColor', 'orange');  myColor = 'orange'">orange</a>
-      <a onclick="socket.emit('selectColor', 'green');   myColor = 'green'">green</a>
-      <a onclick="socket.emit('selectColor', 'spectator');  myColor = 'spectator'">spectator</a>
+      <a onclick="socket.emit('selectColor', 'white', ()=>{myColor = 'white'})">white</a>
+      <a onclick="socket.emit('selectColor', 'black', ()=>{myColor = 'black'})">black</a>
+      <a onclick="socket.emit('selectColor', 'orange', ()=>{myColor = 'orange'})">orange</a>
+      <a onclick="socket.emit('selectColor', 'green', ()=>{myColor = 'green'})">green</a>
+      <a onclick="socket.emit('selectColor', 'spectator', ()=>{myColor = 'spectator'})">spectator</a>
    </div>
 
    <p>You can move with W A S D.</p>
