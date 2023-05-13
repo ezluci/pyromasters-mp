@@ -14,7 +14,8 @@ server.listen(parseInt(PORT), () => {
    console.log(`Server-ul functioneaza pe portul ${PORT}.`)
 })
 
-const IDS = new Map()
+const IDS = new Map() // info about all socket_ids
+const ROOMS = new Map() // info about all rooms
 
 io.on('connection', (socket) => {
 
@@ -35,6 +36,10 @@ io.on('connection', (socket) => {
       username = username1
       room = room1
       color = 'spectator'
+      if (!io.sockets.adapter.rooms.get(room)) {
+         isOwner = true
+         ROOMS.set(room, {owner: username, whiteTaken: false, blackTaken: false, orangeTaken: false, greenTaken: false})
+      }
       isOwner = !(io.sockets.adapter.rooms.get(room))
 
       // TODO: what if the owner leaves?
@@ -61,6 +66,14 @@ io.on('connection', (socket) => {
 
 
    socket.on('selectColor', (color1) => {
+      if (color1 !== 'spectator' || color1 !== 'white' || color1 !== 'black' || color1 !== 'orange' || color1 !== 'green')
+         return socket.emit('error', 'invalid color for selectColor.')
+      
+      if (color1 !== 'spectator' && ROOMS.get(room)[`${color1}Taken`])
+         return socket.emit('error', 'color already taken')
+      
+      ROOMS.get(room)[`${color}Taken`] = false
+      ROOMS.get(room)[`${color1}Taken`] = true
       color = color1
       IDS.get(socket.id).color = color1
       io.to(room).emit('player~', username, username, color, isOwner)
@@ -78,8 +91,10 @@ io.on('connection', (socket) => {
       if (!username || !room)
          return
       
-      console.log(`disconnected: ${socket.id}, {username: ${username}, room: ${room}}`)
+      console.log(`disconnected: ${socket.id}, {username: ${username}, room: ${room}, isOwner: ${isOwner}}`)
       socket.to(room).emit('player-', username)
       IDS.delete(socket.id)
+      if (!io.sockets.adapter.rooms.get(room))
+         ROOMS.delete(room)
    })
 })

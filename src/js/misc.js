@@ -16,3 +16,7 @@ function waitForElm(selector) {
       });
    });
 }
+
+function invertHex(hex) {
+   return (Number(`0x1${hex}`) ^ 0xFFFFFF).toString(16).substring(1).toUpperCase()
+}

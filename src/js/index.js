@@ -12,7 +12,10 @@ function addPlayerToList(username, color, isOwner) {
    li.dataset.username = username
    li.style.backgroundColor = (color === 'spectator' ? 'gray' : color)
    li.style.fontWeight = 'bolder'
-   li.style.color = '#72cfdb'
+   if (color === 'black')
+      li.style.color = 'white'
+   else
+      li.style.color = 'black'
    playerListElm.appendChild(li)
 }
 
@@ -36,6 +39,10 @@ function changePlayerFromList(oldUsername, username, color, isOwner) {
          
          child.dataset.username = username
          child.style.backgroundColor = (color === 'spectator' ? 'gray' : color)
+         if (color === 'black')
+            child.style.color = 'white'
+         else
+            child.style.color = 'black'
       }
    })
 }

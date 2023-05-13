@@ -63,7 +63,7 @@ document.onkeyup = (event) => {
 
 
 const fpsElem = document.querySelector('#fps')
-myColor = 'white'
+myColor = 'spectator'
 coords = {
    'white': {x: MIN_X, y: MIN_Y},
    'black': {x: MAX_X, y: MAX_Y},
@@ -95,45 +95,48 @@ function gameloop() {
 
    /// UPDATES
 
-   me = coords[myColor]
-   meOld = {x: me.x, y: me.y}
+   if (myColor !== 'spectator') {
+      me = coords[myColor]
+      meOld = {x: me.x, y: me.y}
 
 
-   let keysPressed = 0
-   if (keys.a) keysPressed ++
-   if (keys.s) keysPressed ++
-   if (keys.d) keysPressed ++
-   if (keys.w) keysPressed ++
+      let keysPressed = 0
+      if (keys.a) keysPressed ++
+      if (keys.s) keysPressed ++
+      if (keys.d) keysPressed ++
+      if (keys.w) keysPressed ++
 
-   if (keysPressed === 1) {
-      if (keys.a)
-         moveLeft()
-      else if (keys.s)
-         moveDown()
-      else if (keys.d)
-         moveRight()
-      else if (keys.w)
-         moveUp()
-   }
-   else if (keysPressed === 2) {
-      if (lastPressed === 'a')
-         moveLeft()
-      else if (lastPressed === 's')
-         moveDown()
-      else if (lastPressed === 'd')
-         moveRight()
-      else if (lastPressed === 'w')
-         moveUp()
+      if (keysPressed === 1) {
+         if (keys.a)
+            moveLeft()
+         else if (keys.s)
+            moveDown()
+         else if (keys.d)
+            moveRight()
+         else if (keys.w)
+            moveUp()
+      }
+      else if (keysPressed === 2) {
+         if (lastPressed === 'a')
+            moveLeft()
+         else if (lastPressed === 's')
+            moveDown()
+         else if (lastPressed === 'd')
+            moveRight()
+         else if (lastPressed === 'w')
+            moveUp()
+      }
+      
+
+      me.x = Math.max(MIN_X, me.x)
+      me.x = Math.min(MAX_X, me.x)
+      me.y = Math.max(MIN_Y, me.y)
+      me.y = Math.min(MAX_Y, me.y)
+
+      if (meOld.x !== me.x || meOld.y !== me.y)
+         socket.emit('coords', me)
    }
    
-
-   me.x = Math.max(MIN_X, me.x)
-   me.x = Math.min(MAX_X, me.x)
-   me.y = Math.max(MIN_Y, me.y)
-   me.y = Math.min(MAX_Y, me.y)
-
-   if (meOld.x !== me.x || meOld.y !== me.y)
-      socket.emit('coords', me)
 
    /// DRAWING
 
@@ -149,7 +152,8 @@ function gameloop() {
          continue;
       drawPlayer(plrImg[indexToColor(i)], coords[indexToColor(i)].x, coords[indexToColor(i)].y)
    }
-   drawPlayer(plrImg[myColor], me.x, me.y)
+   if (myColor !== 'spectator')
+      drawPlayer(plrImg[myColor], me.x, me.y)
 
    for (let yb = 1; yb < BLOCKS_VERTICALLY; yb += 2)
       for (let xb = 1; xb < BLOCKS_HORIZONTALLY; xb += 2)
