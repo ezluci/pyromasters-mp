@@ -2,13 +2,17 @@
 <html lang="en-us">
 <head>
    <meta charset="UTF-8">
-   <title>idkkkkkkkkkkkkkkkkk</title>
+   <title>pyromasters-multiplayer - game.html</title>
 
    <script src="socket.io/socket.io.min.js"></script>
    <script src="js/misc.js"></script>
+   <script src="js/index.js"></script>
 
-   <script src="js/game-socket.js"></script>
-   <script src="js/game-page.js"></script>
+   <script src="js/game/misc.js"></script>
+   <script src="js/game/consts.js"></script>
+   <script src="js/game/game-socket.js"></script>
+   <script src="js/game/movement.js"></script>
+   <script src="js/game/game.js"></script>
 
    <script>
       const params = new URLSearchParams(window.location.search);
@@ -29,15 +33,24 @@
    <canvas id="canvas" width="815" height="620"></canvas>
 
    <div id="start-game" style="display: inline; ">
-      <button id="start-button" onclick="socket.emit('tryStart')">Start</button>
+      <button id="start-button" onclick="socket.emit('tryStart')">Start game</button>
       <span id="start-status"></span>
    </div>
 
    <label for="fps">\ \ \ Enter fps limit (not working):</label>
    <input value="60" id="fps">
 
+   <br>
+   <div id="select-color" style="display: inline; ">
+      Select color (click):
+      <a onclick="socket.emit('selectColor', 'white');   myColor = 'white'">white</a>
+      <a onclick="socket.emit('selectColor', 'black');   myColor = 'black'">black</a>
+      <a onclick="socket.emit('selectColor', 'green');   myColor = 'green'">green</a>
+      <a onclick="socket.emit('selectColor', 'orange');   myColor = 'orange'">orange</a>
+   </div>
+
    <ul id="player-list"></ul>
 
-   <script src="js/game.js"></script>
+   <button ontouchstart="keys.a = 1" ontouchend="keys.a = 0" style="height: 500px; width: 50%; ">GOLEFT (ANDROID)</button>
 </body>
 </html>

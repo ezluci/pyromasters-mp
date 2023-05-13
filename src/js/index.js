@@ -1,14 +1,14 @@
-let ul
-waitForElm('#player-list').then((elm) => {ul = elm})
+let playerListElm
+waitForElm('#player-list').then((elm) => {playerListElm = elm})
 
 function addPlayerToList(username) {
    const li = document.createElement('li')
    li.innerText = username
-   ul.appendChild(li)
+   playerListElm.appendChild(li)
 }
 
 function removePlayerFromList(username) {
-   ul.childNodes.forEach((child) => {
+   playerListElm.childNodes.forEach((child) => {
       if (child.innerText === username) {
          child.remove()
          return

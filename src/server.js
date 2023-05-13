@@ -18,7 +18,7 @@ const IDS = new Map()
 
 io.on('connection', (socket) => {
 
-   let username, room
+   let username, room, color, isOwner
 
    socket.on('playerJoined', (username1, room1, callback) => {
       if (!username1) {
@@ -34,8 +34,9 @@ io.on('connection', (socket) => {
 
       username = username1
       room = room1
-      
-      console.log(`connected:    ${socket.id}, {username: ${username}, room: ${room}}`)
+      color = 'spectator'
+      isOwner = !(io.sockets.adapter.rooms.get(room))
+      console.log(isOwner, io.sockets.adapter.rooms.get(room))
       
       socket.join(room)
       socket.to(room).emit('player+', username)
@@ -55,9 +56,17 @@ io.on('connection', (socket) => {
    })
 
 
-   socket.on('disconnecting', (reason) => {
-      
+   socket.on('selectColor', (color1) => {
+      color = color1
    })
+
+   
+   socket.on('coords', (coords) => {
+      socket.to(room).emit('coords', color, coords)
+      IDS.get(socket.id).x = coords.x
+      IDS.get(socket.id).y = coords.y
+   })
+
 
    socket.on('disconnect', () => {
       if (!username || !room)

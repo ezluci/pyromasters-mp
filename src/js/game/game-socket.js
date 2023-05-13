@@ -1,4 +1,4 @@
-const socket = io()
+var socket = io()
 
 socket.on('player+', (username) => {
    addPlayerToList(username)
@@ -19,6 +19,11 @@ socket.on('begin_startCountdown', (initiator) => {
          }, 1000)
       }, 1000)
    }, 1000)
+})
+
+socket.on('coords', (color, coords1) => {
+   coords[color].x = coords1.x
+   coords[color].y = coords1.y
 })
 
 socket.on('error', (msg) => {
