@@ -8,20 +8,40 @@ app.get('*', (req, res) => {
 })
 
 const server = http.createServer(app)
-const io = new socketio.Server(server)
-
 server.listen(parseInt(PORT), () => {
-   console.log(`Server-ul functioneaza pe portul ${PORT}.`)
+   console.log(`The server works on port ${PORT}.`)
 })
 
 const ROOM_STATUS = {
    WAITING: 'waiting',
    STARTING: 'starting',
-   STARTED: 'started'
+   RUNNING: 'running'
 }
+
+const BLOCKS_HORIZONTALLY = 15
+const BLOCKS_VERTICALLY = 11
+const BLOCK_SIZE = 53
+const MOVE_SPEED = 0.3 // default 0.15 maybe?
+const BLOCK_SAFE_PX = 5
+
+const MIN_X = 0
+const MIN_Y = 0
+const MAX_X = BLOCK_SIZE * (BLOCKS_HORIZONTALLY - 1)
+const MAX_Y = BLOCK_SIZE * (BLOCKS_VERTICALLY - 1)
+
+const INEXISTENT_POS = {x: -100, y: -100}
+const DEFAULT_POS = {
+   white: {x: MIN_X, y: MIN_Y}, black: {x: MAX_X, y: MAX_Y},
+   orange: {x: MAX_X, y: MIN_Y}, green: {x: MIN_X, y: MAX_Y},
+   spectator: INEXISTENT_POS
+}
+
+
+const io = new socketio.Server(server)
 
 const IDS = new Map() // info about all socket_ids
 const ROOMS = new Map() // info about all rooms
+
 
 io.on('connection', (socket) => {
 
@@ -51,13 +71,18 @@ io.on('connection', (socket) => {
       username = username1
       room = room1
       color = 'spectator'
-      if (!io.sockets.adapter.rooms.get(room)) {
-         isOwner = true
-         ROOMS.set(room, {owner: username, whiteTaken: false, blackTaken: false, orangeTaken: false,
-            greenTaken: false, status: ROOM_STATUS.WAITING}
-         )
-      }
       isOwner = !(io.sockets.adapter.rooms.get(room))
+
+      if (isOwner) {
+         ROOMS.set(room, {
+            owner: username,
+            white: {username: undefined, x: DEFAULT_POS['white'].x, y: DEFAULT_POS['white'].y},
+            black: {username: undefined, x: DEFAULT_POS['black'].x, y: DEFAULT_POS['black'].y},
+            orange: {username: undefined, x: DEFAULT_POS['orange'].x, y: DEFAULT_POS['orange'].y},
+            green: {username: undefined, x: DEFAULT_POS['green'].x, y: DEFAULT_POS['green'].y},
+            status: ROOM_STATUS.WAITING
+         })
+      }
 
       // TODO: what if the owner leaves?
       
@@ -67,13 +92,18 @@ io.on('connection', (socket) => {
       socket.to(room).emit('player+', username, color, isOwner)
       IDS.set(socket.id, {username, room, color, isOwner})
 
-      const players = []
+      const players = [], colors = []
+
       io.sockets.adapter.rooms.get(room).forEach((otherSocketId) => {
          const otherPlayer = IDS.get(otherSocketId)
          players.push({username: otherPlayer.username, color: otherPlayer.color, isOwner: otherPlayer.isOwner})
+      });
+
+      ['white', 'black', 'orange', 'green'].forEach(color => {
+         colors.push({color: color, x: ROOMS.get(room)[color].x, y: ROOMS.get(room)[color].y})
       })
 
-      callback(players)
+      callback(players, colors)
    })
 
 
@@ -82,9 +112,45 @@ io.on('connection', (socket) => {
          return
       
       if (ROOMS.get(room).status !== ROOM_STATUS.WAITING)
-         return socket.emit('error', 'tryStart: Cannot start game. Room is not in WAITING status.')
+         return socket.emit('error', 'tryStart: Room is not in WAITING status.')
       
-      io.to(room).emit('begin_startCountdown', username)
+      if (!isOwner)
+         return socket.emit('error', 'tryStart: You are not the owner of this room!')
+
+      ROOMS.get(room).status = ROOM_STATUS.STARTING
+      
+      io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 3`)
+      setTimeout(() => {
+         io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 2`)
+         setTimeout(() => {
+            io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 1`)
+            setTimeout(() => {
+
+               /// GAME STARTS HERE!
+
+               io.to(room).emit('room_status', `game running.`);
+               ROOMS.get(room).status = ROOM_STATUS.RUNNING
+
+               // set coordinates for each color
+               ['white', 'black', 'orange', 'green'].forEach(color => {
+                  if (ROOMS.get(room)[color].username === undefined) {
+                     ROOMS.get(room)[color].x = INEXISTENT_POS.x
+                     ROOMS.get(room)[color].y = INEXISTENT_POS.y
+                  }
+                  else {
+                     ROOMS.get(room)[color].x = DEFAULT_POS[color].x
+                     ROOMS.get(room)[color].y = DEFAULT_POS[color].y
+                  }
+                  
+                  io.to(room).emit('coords', color, {x: ROOMS.get(room)[color].x, y: ROOMS.get(room)[color].y})
+               })
+
+               // generate map
+
+
+            }, 1000)
+         }, 1000)
+      }, 1000)
    })
 
 
@@ -92,31 +158,36 @@ io.on('connection', (socket) => {
       if (!detailsOkCheck())
          return
       
+      if (ROOMS.get(room).status !== ROOM_STATUS.WAITING)
+         return socket.emit('error', 'selectColor: Room is not in WAITING status.')
+      
       if (newColor !== 'spectator' && newColor !== 'white' && newColor !== 'black' && newColor !== 'orange' && newColor !== 'green')
          return socket.emit('error', 'selectColor: invalid color.')
       
-      if (newColor !== 'spectator' && ROOMS.get(room)[`${newColor}Taken`])
+      if (newColor !== 'spectator' && ROOMS.get(room)[newColor].username)
          return socket.emit('error', 'selectColor: color already taken.')
       
       if (color !== 'spectator')
-         ROOMS.get(room)[`${color}Taken`] = false
-      ROOMS.get(room)[`${newColor}Taken`] = true
+         ROOMS.get(room)[color] = {username: undefined, x: INEXISTENT_POS.x, y: INEXISTENT_POS.y}
+      if (newColor !== 'spectator')
+         ROOMS.get(room)[newColor] = {username: username, x: DEFAULT_POS[newColor].x, y: DEFAULT_POS[newColor].y}
 
-      color = newColor
-      IDS.get(socket.id).color = newColor
+      color = IDS.get(socket.id).color = newColor
       io.to(room).emit('player~', username, username, color, isOwner)
 
       callback()
    })
 
-   
+
    socket.on('coords', (coords) => {
       if (!detailsOkCheck())
          return
       
+      // check suspicious coords maybe ...
+
       socket.to(room).emit('coords', color, coords)
-      IDS.get(socket.id).x = coords.x
-      IDS.get(socket.id).y = coords.y
+      ROOMS.get(room)[color].x = coords.x
+      ROOMS.get(room)[color].y = coords.y
    })
 
 
@@ -125,9 +196,22 @@ io.on('connection', (socket) => {
          return
       
       console.log(`disconnected: ${socket.id}, {username: ${username}, room: ${room}, isOwner: ${isOwner}}`)
-      socket.to(room).emit('player-', username)
+      
       IDS.delete(socket.id)
-      if (!io.sockets.adapter.rooms.get(room))
+      socket.to(room).emit('player-', username)
+      if (!io.sockets.adapter.rooms.get(room)) { // room empty
          ROOMS.delete(room)
+      }
+      else {
+         if (color !== 'spectator') {
+            if (ROOMS.get(room).status !== ROOM_STATUS.WAITING) {
+               io.to(room).emit('coords', color, INEXISTENT_POS)
+               ROOMS.get(room)[color] = {username: undefined, x: INEXISTENT_POS.x, y: INEXISTENT_POS.y}
+            } else {
+               io.to(room).emit('coords', color, DEFAULT_POS[color])
+               ROOMS.get(room)[color] = {username: undefined, x: DEFAULT_POS[color].x, y: DEFAULT_POS[color].y}
+            }
+         }
+      }
    })
 })

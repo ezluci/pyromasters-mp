@@ -12,17 +12,8 @@ socket.on('player~', (oldUsername, username, color, isOwner) => {
    changePlayerFromList(oldUsername, username, color, isOwner)
 })
 
-socket.on('begin_startCountdown', (initiator) => {
-   document.querySelector('#start-status').innerText = `'${initiator}' started the game. starting in 3`
-   setTimeout(() => {
-      document.querySelector('#start-status').innerText = `'${initiator}' started the game. starting in 2`
-      setTimeout(() => {
-         document.querySelector('#start-status').innerText = `'${initiator}' started the game. starting in 1`
-         setTimeout(() => {
-            document.querySelector('#start-status').innerText = `game started.`
-         }, 1000)
-      }, 1000)
-   }, 1000)
+socket.on('room_status', (msg) => {
+   document.querySelector('#room-status').innerText = msg
 })
 
 socket.on('coords', (color, coords1) => {
