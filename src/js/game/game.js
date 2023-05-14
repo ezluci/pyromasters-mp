@@ -1,4 +1,4 @@
-let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys
+let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map
 
 window.addEventListener('load', () => {
 
@@ -8,7 +8,7 @@ ctx = canvas.getContext('2d')
 
 let imagesLoaded = 0
 let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined}
-let blockImg
+let blockFixedImg, blockImg
 
 
 loadImage('assets/white.jpg').then(image => {
@@ -28,6 +28,11 @@ loadImage('assets/orange.jpg').then(image => {
 
 loadImage('assets/green.jpg').then(image => {
    plrImg['green'] = image
+   imagesLoaded ++
+})
+
+loadImage('assets/blockfixed.jpg').then(image => {
+   blockFixedImg = image
    imagesLoaded ++
 })
 
@@ -62,8 +67,9 @@ document.onkeyup = (event) => {
 }
 
 
-const fpsElem = document.querySelector('#fps')
+const fpsElem = document.querySelector('#fps') // currently not working
 myColor = 'spectator'
+map = []
 coords = {
    'white': {x: MIN_X, y: MIN_Y},
    'black': {x: MAX_X, y: MAX_Y},
@@ -73,7 +79,7 @@ coords = {
 let lastFrameTime
 
 const intervalID = setInterval(() => {
-   if (imagesLoaded === 5) {
+   if (imagesLoaded === 6) {
       clearInterval(intervalID)
 
       // starting game loop
@@ -81,7 +87,7 @@ const intervalID = setInterval(() => {
       lastFrameTime = performance.now()
       window.requestAnimationFrame(gameloop)
    }
-}, 25)
+}, 40)
 
 
 
@@ -155,9 +161,16 @@ function gameloop() {
    if (myColor !== 'spectator')
       drawPlayer(plrImg[myColor], me.x, me.y)
 
+   // fixed blocks
    for (let yb = 1; yb < BLOCKS_VERTICALLY; yb += 2)
       for (let xb = 1; xb < BLOCKS_HORIZONTALLY; xb += 2)
-         drawBlock(blockImg, xb, yb)
+         drawBlock(blockFixedImg, xb, yb)
+   // map blocks
+   if (map[0])
+      for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
+         for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x)
+            if (map[y][x])
+               drawBlock(blockImg, x, y)
    
    ctx.fillStyle = 'gray'
    ctx.font = '30px serif'

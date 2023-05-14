@@ -21,6 +21,10 @@ socket.on('coords', (color, coords1) => {
    coords[color].y = coords1.y
 })
 
+socket.on('map', (map1) => { // a 2d array
+   map = map1
+})
+
 socket.on('error', (msg) => {
    const createdElem = document.createElement('span')
    createdElem.innerText = 'ERROR FROM SERVER, check console!'

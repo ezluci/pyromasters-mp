@@ -23,7 +23,7 @@
       if (!username || !room)
          window.open('https://www.google.com/search?q=a+venit+alex')
       else
-         socket.emit('playerJoined', username, room, (players, colors) => {
+         socket.emit('playerJoined', username, room, (players, colors, map1) => {
             players.forEach( ({username, color, isOwner}) => {
                addPlayerToList(username, color, isOwner)
             })
@@ -31,6 +31,7 @@
                coords[color].x = x
                coords[color].y = y
             })
+            map = map1
          })
    </script>
 </head>

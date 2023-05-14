@@ -80,6 +80,7 @@ io.on('connection', (socket) => {
             black: {username: undefined, x: DEFAULT_POS['black'].x, y: DEFAULT_POS['black'].y},
             orange: {username: undefined, x: DEFAULT_POS['orange'].x, y: DEFAULT_POS['orange'].y},
             green: {username: undefined, x: DEFAULT_POS['green'].x, y: DEFAULT_POS['green'].y},
+            map: [],
             status: ROOM_STATUS.WAITING
          })
       }
@@ -103,7 +104,7 @@ io.on('connection', (socket) => {
          colors.push({color: color, x: ROOMS.get(room)[color].x, y: ROOMS.get(room)[color].y})
       })
 
-      callback(players, colors)
+      callback(players, colors, ROOMS.get(room).map)
    })
 
 
@@ -129,7 +130,7 @@ io.on('connection', (socket) => {
                /// GAME STARTS HERE!
 
                io.to(room).emit('room_status', `game running.`);
-               ROOMS.get(room).status = ROOM_STATUS.RUNNING
+               ROOMS.get(room).status = ROOM_STATUS.RUNNING;
 
                // set coordinates for each color
                ['white', 'black', 'orange', 'green'].forEach(color => {
@@ -146,7 +147,32 @@ io.on('connection', (socket) => {
                })
 
                // generate map
+               const map = ROOMS.get(room).map
+               for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
+                  map[y] = []
+                  for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
+                     if (y % 2 == 1 && x % 2 == 1)
+                        map[y][x] = false
+                     else {
+                        let canDraw = true;
+                        [
+                           [0, 0], [0, 1], [1, 0],
+                           [0, BLOCKS_HORIZONTALLY-2], [0, BLOCKS_HORIZONTALLY-1], [1, BLOCKS_HORIZONTALLY-1],
+                           [BLOCKS_VERTICALLY-2, 0], [BLOCKS_VERTICALLY-1, 0], [BLOCKS_VERTICALLY-1, 1],
+                           [BLOCKS_VERTICALLY-2, BLOCKS_HORIZONTALLY-1], [BLOCKS_VERTICALLY-1, BLOCKS_HORIZONTALLY-1], [BLOCKS_VERTICALLY-1, BLOCKS_HORIZONTALLY-2]
+                        ].forEach(coord => {
+                           if (y == coord[0] && x == coord[1])
+                              canDraw = false
+                        })
 
+                        if (!canDraw)
+                           map[y][x] = false
+                        else
+                           map[y][x] = (Math.random() < .5)
+                     }
+                  }
+               }
+               io.to(room).emit('map', map)
 
             }, 1000)
          }, 1000)
