@@ -168,7 +168,7 @@ io.on('connection', (socket) => {
                         if (!canDraw)
                            map[y][x] = false
                         else
-                           map[y][x] = (Math.random() < .5)
+                           map[y][x] = (Math.random() < .7)
                      }
                   }
                }

@@ -146,10 +146,10 @@ function gameloop() {
 
    /// DRAWING
 
-   ctx.fillStyle = '#0C0C06'
+   ctx.fillStyle = '#203d37'
    ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-   ctx.fillStyle = 'rgba(131, 29, 29, 0.541)'
+   ctx.fillStyle = 'rgba(131, 29, 29, 0.841)'
    ctx.fillRect(OFFSET_LEFT, OFFSET_UP, canvas.width - OFFSET_LEFT - OFFSET_RIGHT, canvas.height - OFFSET_UP - OFFSET_DOWN)
 
 

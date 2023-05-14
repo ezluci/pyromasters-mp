@@ -26,12 +26,6 @@ socket.on('map', (map1) => { // a 2d array
 })
 
 socket.on('error', (msg) => {
-   const createdElem = document.createElement('span')
-   createdElem.innerText = 'ERROR FROM SERVER, check console!'
-   document.body.appendChild(createdElem)
+   addLog(`ERROR FROM SERVER: ${msg}`)
    console.error(`ERROR FROM SERVER: ${msg}`)
-   
-   setTimeout(() => {
-      createdElem.remove()
-   }, 5000)
 })
