@@ -120,6 +120,7 @@ io.on('connection', (socket) => {
 
       ROOMS.get(room).status = ROOM_STATUS.STARTING
       
+      // bug: start game, wait a sec, reenter the room. the countdown should be stopped but it's still going.
       io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 3`)
       setTimeout(() => {
          io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 2`)
@@ -129,7 +130,7 @@ io.on('connection', (socket) => {
 
                /// GAME STARTS HERE!
 
-               io.to(room).emit('room_status', `game running.`);
+               io.to(room).emit('room_status', `game running.`)
                ROOMS.get(room).status = ROOM_STATUS.RUNNING;
 
                // set coordinates for each color
@@ -193,8 +194,10 @@ io.on('connection', (socket) => {
       if (newColor !== 'spectator' && ROOMS.get(room)[newColor].username)
          return socket.emit('error', 'selectColor: color already taken.')
       
-      if (color !== 'spectator')
-         ROOMS.get(room)[color] = {username: undefined, x: INEXISTENT_POS.x, y: INEXISTENT_POS.y}
+      if (color !== 'spectator') {
+         ROOMS.get(room)[color] = {username: undefined, x: DEFAULT_POS[color].x, y: DEFAULT_POS[color].y}
+         io.to(room).emit('coords', color, DEFAULT_POS[color])
+      }
       if (newColor !== 'spectator')
          ROOMS.get(room)[newColor] = {username: username, x: DEFAULT_POS[newColor].x, y: DEFAULT_POS[newColor].y}
 

@@ -65,9 +65,12 @@
       <a onclick="socket.emit('selectColor', 'spectator', ()=>{myColor = 'spectator'})">spectator</a>
    </div>
 
-   <p>You can move with W A S D. Place bombs with ENTER.</p>
+   <p>You can move with W A S D. Place bombs with P.</p>
    <p><b>!! If you use a dark theme extension, disable it.</b></p>
 
-   <button ontouchstart="keys.a = 1" ontouchend="keys.a = 0" style="height: 100px; width: 100px;">GOLEFT (ANDROID)</button>
+   <button ontouchstart="keys.a = 1" ontouchend="keys.a = 0" style="height: 100px; width: 100px;">LEFT (ANDROID)</button>
+   <button ontouchstart="keys.d = 1" ontouchend="keys.d = 0" style="height: 100px; width: 100px;">RIGHT (ANDROID)</button>
+   <button ontouchstart="keys.w = 1" ontouchend="keys.w = 0" style="height: 100px; width: 100px;">UP (ANDROID)</button>
+   <button ontouchstart="keys.s = 1" ontouchend="keys.s = 0" style="height: 100px; width: 100px;">DOWN (ANDROID)</button>
 </body>
 </html>

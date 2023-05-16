@@ -84,6 +84,8 @@ const intervalID = setInterval(() => {
 
       // starting game loop
       document.querySelector('#loading').hidden = true
+      for (let i = 0; i < BLOCKS_VERTICALLY; ++i)
+         map[i] = []
       lastFrameTime = performance.now()
       window.requestAnimationFrame(gameloop)
    }
@@ -95,6 +97,7 @@ function gameloop() {
    // calculate deltaTime and FPS
    const currentTime = performance.now()
    deltaTime = currentTime - lastFrameTime
+   // !!! maybe limit deltatime to 50..?
    lastFrameTime = currentTime
    const FPS = 1000 / deltaTime
 
