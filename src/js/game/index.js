@@ -4,7 +4,6 @@ waitForElm('#player-list').then((elm) => {playerListElm = elm})
 
 function addPlayerToList(username, color, isOwner) {
    const li = document.createElement('li')
-
    li.innerText = username
    if (isOwner)
       li.innerText += ` ${String.fromCodePoint(0x1F451)}`

@@ -29,6 +29,13 @@ const MIN_Y = 0
 const MAX_X = BLOCK_SIZE * (BLOCKS_HORIZONTALLY - 1)
 const MAX_Y = BLOCK_SIZE * (BLOCKS_VERTICALLY - 1)
 
+const BLOCK = {
+   NO: 0,   // nothing
+   NORMAL: 1,  // a block that can be destroyed with bombs
+   FIXED: 2,   // a block that cannot be destroyed
+   BOMB: 3  // a bomb
+}
+
 const INEXISTENT_POS = {x: -100, y: -100}
 const DEFAULT_POS = {
    white: {x: MIN_X, y: MIN_Y}, black: {x: MAX_X, y: MAX_Y},
@@ -39,7 +46,6 @@ const DEFAULT_POS = {
 
 const io = new socketio.Server(server)
 
-const IDS = new Map() // info about all socket_ids
 const ROOMS = new Map() // info about all rooms
 
 
@@ -74,16 +80,31 @@ io.on('connection', (socket) => {
       isOwner = !(io.sockets.adapter.rooms.get(room))
 
       if (isOwner) {
+         const map = []
+         for (let i = 0; i < BLOCKS_VERTICALLY; ++i) {
+            map[i] = []
+            for (let j = 0; j < BLOCKS_HORIZONTALLY; ++j) {
+               if (i % 2 == 1 && j % 2 == 1)
+                  map[i][j] = BLOCK.FIXED
+               else
+                  map[i][j] = BLOCK.NO
+            }
+         }
+            
+
          ROOMS.set(room, {
             owner: username,
-            white: {username: undefined, x: DEFAULT_POS['white'].x, y: DEFAULT_POS['white'].y},
-            black: {username: undefined, x: DEFAULT_POS['black'].x, y: DEFAULT_POS['black'].y},
-            orange: {username: undefined, x: DEFAULT_POS['orange'].x, y: DEFAULT_POS['orange'].y},
-            green: {username: undefined, x: DEFAULT_POS['green'].x, y: DEFAULT_POS['green'].y},
-            map: [],
+            white: {username: undefined, coords: DEFAULT_POS['white'], bombs: 0}, // "bombs" not used
+            black: {username: undefined, coords: DEFAULT_POS['black'], bombs: 0},
+            orange: {username: undefined, coords: DEFAULT_POS['orange'], bombs: 0},
+            green: {username: undefined, coords: DEFAULT_POS['green'], bombs: 0},
+            map: map,
+            players: [],
             status: ROOM_STATUS.WAITING
          })
       }
+
+      ROOMS.get(room).players.push({username, color, isOwner, coords: INEXISTENT_POS, bombs: 0})
 
       // TODO: what if the owner leaves?
       
@@ -91,20 +112,8 @@ io.on('connection', (socket) => {
       
       socket.join(room)
       socket.to(room).emit('player+', username, color, isOwner)
-      IDS.set(socket.id, {username, room, color, isOwner})
 
-      const players = [], colors = []
-
-      io.sockets.adapter.rooms.get(room).forEach((otherSocketId) => {
-         const otherPlayer = IDS.get(otherSocketId)
-         players.push({username: otherPlayer.username, color: otherPlayer.color, isOwner: otherPlayer.isOwner})
-      });
-
-      ['white', 'black', 'orange', 'green'].forEach(color => {
-         colors.push({color: color, x: ROOMS.get(room)[color].x, y: ROOMS.get(room)[color].y})
-      })
-
-      callback(players, colors, ROOMS.get(room).map)
+      callback(ROOMS.get(room).players, ROOMS.get(room).map)
    })
 
 
@@ -135,46 +144,39 @@ io.on('connection', (socket) => {
 
                // set coordinates for each color
                ['white', 'black', 'orange', 'green'].forEach(color => {
-                  if (ROOMS.get(room)[color].username === undefined) {
-                     ROOMS.get(room)[color].x = INEXISTENT_POS.x
-                     ROOMS.get(room)[color].y = INEXISTENT_POS.y
-                  }
-                  else {
-                     ROOMS.get(room)[color].x = DEFAULT_POS[color].x
-                     ROOMS.get(room)[color].y = DEFAULT_POS[color].y
-                  }
+                  if (ROOMS.get(room)[color].username === undefined)
+                     ROOMS.get(room)[color].coords = INEXISTENT_POS
+                  else
+                     ROOMS.get(room)[color].coords = DEFAULT_POS[color]
                   
-                  io.to(room).emit('coords', color, {x: ROOMS.get(room)[color].x, y: ROOMS.get(room)[color].y})
+                  io.to(room).emit('coords', color, ROOMS.get(room)[color])
                })
 
                // generate map
                const map = ROOMS.get(room).map
                for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
-                  map[y] = []
                   for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-                     if (y % 2 == 1 && x % 2 == 1)
-                        map[y][x] = false
-                     else {
+                     if ( !(y % 2 == 1 && x % 2 == 1) ) {
                         let canDraw = true;
                         [
                            [0, 0], [0, 1], [1, 0],
                            [0, BLOCKS_HORIZONTALLY-2], [0, BLOCKS_HORIZONTALLY-1], [1, BLOCKS_HORIZONTALLY-1],
                            [BLOCKS_VERTICALLY-2, 0], [BLOCKS_VERTICALLY-1, 0], [BLOCKS_VERTICALLY-1, 1],
                            [BLOCKS_VERTICALLY-2, BLOCKS_HORIZONTALLY-1], [BLOCKS_VERTICALLY-1, BLOCKS_HORIZONTALLY-1], [BLOCKS_VERTICALLY-1, BLOCKS_HORIZONTALLY-2]
-                        ].forEach(coord => {
-                           if (y == coord[0] && x == coord[1])
+                        ].forEach(coordBlocked => {
+                           if (y == coordBlocked[0] && x == coordBlocked[1])
                               canDraw = false
                         })
 
                         if (!canDraw)
                            map[y][x] = false
                         else
-                           map[y][x] = (Math.random() < .7)
+                           map[y][x] = (Math.random() < .67)
                      }
                   }
                }
-               io.to(room).emit('map', map)
 
+               io.to(room).emit('map', map)
             }, 1000)
          }, 1000)
       }, 1000)
@@ -195,16 +197,22 @@ io.on('connection', (socket) => {
          return socket.emit('error', 'selectColor: color already taken.')
       
       if (color !== 'spectator') {
-         ROOMS.get(room)[color] = {username: undefined, x: DEFAULT_POS[color].x, y: DEFAULT_POS[color].y}
+         ROOMS.get(room)[color] = {username: undefined, coords: DEFAULT_POS[color], bombs: 1}
          io.to(room).emit('coords', color, DEFAULT_POS[color])
       }
       if (newColor !== 'spectator')
-         ROOMS.get(room)[newColor] = {username: username, x: DEFAULT_POS[newColor].x, y: DEFAULT_POS[newColor].y}
+         ROOMS.get(room)[newColor] = {username, coords: DEFAULT_POS[newColor], bombs: 1}
+      ROOMS.get(room).players.filter(player => player.username === username)[0].color = newColor
 
-      color = IDS.get(socket.id).color = newColor
+      color = newColor
       io.to(room).emit('player~', username, username, color, isOwner)
 
       callback()
+   })
+
+
+   socket.on('bomb_placed', (x, y) => {
+      socket.to(room).emit('bomb_placed', x, y)
    })
 
 
@@ -212,11 +220,14 @@ io.on('connection', (socket) => {
       if (!detailsOkCheck())
          return
       
+      if (color === 'spectator')
+         return socket.emit('error', 'coords: You are a spectator.')
+      
       // check suspicious coords maybe ...
 
       socket.to(room).emit('coords', color, coords)
-      ROOMS.get(room)[color].x = coords.x
-      ROOMS.get(room)[color].y = coords.y
+      ROOMS.get(room)[color].coords = coords
+      ROOMS.get(room).players.filter(player => player.username === username)[0].coords = coords
    })
 
 
@@ -225,9 +236,13 @@ io.on('connection', (socket) => {
          return
       
       console.log(`disconnected: ${socket.id}, {username: ${username}, room: ${room}, isOwner: ${isOwner}}`)
-      
-      IDS.delete(socket.id)
+
       socket.to(room).emit('player-', username)
+      ROOMS.get(room).players.forEach((player, idx) => {
+         if (player.username === username)
+            ROOMS.get(room).players.splice(idx, 1)
+      })
+
       if (!io.sockets.adapter.rooms.get(room)) { // room empty
          ROOMS.delete(room)
       }
@@ -235,10 +250,10 @@ io.on('connection', (socket) => {
          if (color !== 'spectator') {
             if (ROOMS.get(room).status !== ROOM_STATUS.WAITING) {
                io.to(room).emit('coords', color, INEXISTENT_POS)
-               ROOMS.get(room)[color] = {username: undefined, x: INEXISTENT_POS.x, y: INEXISTENT_POS.y}
+               ROOMS.get(room)[color] = {username: undefined, coords: INEXISTENT_POS}
             } else {
                io.to(room).emit('coords', color, DEFAULT_POS[color])
-               ROOMS.get(room)[color] = {username: undefined, x: DEFAULT_POS[color].x, y: DEFAULT_POS[color].y}
+               ROOMS.get(room)[color] = {username: undefined, coords: DEFAULT_POS[color]}
             }
          }
       }

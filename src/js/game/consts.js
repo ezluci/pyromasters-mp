@@ -13,3 +13,10 @@ const MIN_X = 0
 const MIN_Y = 0
 const MAX_X = BLOCK_SIZE * (BLOCKS_HORIZONTALLY - 1)
 const MAX_Y = BLOCK_SIZE * (BLOCKS_VERTICALLY - 1)
+
+const BLOCK = {
+   NO: 0,   // nothing
+   NORMAL: 1,  // a block that can be destroyed with bombs
+   FIXED: 2,   // a block that cannot be destroyed
+   BOMB: 3  // a bomb
+}

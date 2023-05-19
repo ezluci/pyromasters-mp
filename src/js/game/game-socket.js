@@ -16,9 +16,12 @@ socket.on('room_status', (msg) => {
    document.querySelector('#room-status').innerText = msg
 })
 
+socket.on('bomb_placed', (x, y) => {
+   placeBomb(x, y)
+})
+
 socket.on('coords', (color, coords1) => {
-   coords[color].x = coords1.x
-   coords[color].y = coords1.y
+   coords[color] = coords1
 })
 
 socket.on('map', (map1) => { // a 2d array
