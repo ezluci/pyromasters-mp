@@ -20,3 +20,10 @@ const BLOCK = {
    FIXED: 2,   // a block that cannot be destroyed
    BOMB: 3  // a bomb
 }
+
+const INEXISTENT_POS = {x: -100, y: -100}
+const DEFAULT_POS = {
+   white: {x: MIN_X, y: MIN_Y}, black: {x: MAX_X, y: MAX_Y},
+   orange: {x: MAX_X, y: MIN_Y}, green: {x: MIN_X, y: MAX_Y},
+   spectator: INEXISTENT_POS
+}

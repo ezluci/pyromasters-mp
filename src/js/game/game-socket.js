@@ -16,7 +16,7 @@ socket.on('room_status', (msg) => {
    document.querySelector('#room-status').innerText = msg
 })
 
-socket.on('bomb_placed', (x, y) => {
+socket.on('bombPlaced', (x, y) => {
    placeBomb(x, y)
 })
 

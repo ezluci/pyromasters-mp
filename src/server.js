@@ -146,17 +146,21 @@ io.on('connection', (socket) => {
                ['white', 'black', 'orange', 'green'].forEach(color => {
                   if (ROOMS.get(room)[color].username === undefined)
                      ROOMS.get(room)[color].coords = INEXISTENT_POS
-                  else
+                  else {
                      ROOMS.get(room)[color].coords = DEFAULT_POS[color]
+                     ROOMS.get(room).players.filter(player => player.username === ROOMS.get(room)[color].username)[0].coords = DEFAULT_POS[color]
+                  }
                   
-                  io.to(room).emit('coords', color, ROOMS.get(room)[color])
+                  io.to(room).emit('coords', color, ROOMS.get(room)[color].coords)
                })
 
                // generate map
                const map = ROOMS.get(room).map
                for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
                   for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-                     if ( !(y % 2 == 1 && x % 2 == 1) ) {
+                     if (y % 2 == 1 && x % 2 == 1) {
+                        map[y][x] = BLOCK.FIXED
+                     } else {
                         let canDraw = true;
                         [
                            [0, 0], [0, 1], [1, 0],
@@ -169,9 +173,9 @@ io.on('connection', (socket) => {
                         })
 
                         if (!canDraw)
-                           map[y][x] = false
+                           map[y][x] = BLOCK.NO
                         else
-                           map[y][x] = (Math.random() < .67)
+                           map[y][x] = (Math.random() < .67 ? BLOCK.NORMAL : BLOCK.NO)
                      }
                   }
                }
@@ -200,8 +204,10 @@ io.on('connection', (socket) => {
          ROOMS.get(room)[color] = {username: undefined, coords: DEFAULT_POS[color], bombs: 1}
          io.to(room).emit('coords', color, DEFAULT_POS[color])
       }
-      if (newColor !== 'spectator')
+      if (newColor !== 'spectator') {
          ROOMS.get(room)[newColor] = {username, coords: DEFAULT_POS[newColor], bombs: 1}
+         io.to(room).emit('coords', newColor, DEFAULT_POS[newColor])
+      }
       ROOMS.get(room).players.filter(player => player.username === username)[0].color = newColor
 
       color = newColor
@@ -211,8 +217,9 @@ io.on('connection', (socket) => {
    })
 
 
-   socket.on('bomb_placed', (x, y) => {
-      socket.to(room).emit('bomb_placed', x, y)
+   socket.on('try_placeBomb', (x, y) => {
+      console.log('bomb')
+      socket.to(room).emit('bombPlaced', x, y)
    })
 
 

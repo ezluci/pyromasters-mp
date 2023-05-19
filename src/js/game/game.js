@@ -1,4 +1,4 @@
-let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map, placedBombs, placeBomb
+let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], placeBomb
 
 window.addEventListener('load', () => {
 
@@ -77,13 +77,11 @@ document.onkeyup = (event) => {
 const fpsElem = document.querySelector('#fps') // currently not working
 myColor = 'spectator'
 let numberBombs = 100 // how many bombs can I have at once
-placedBombs = new Set()
-map = []
 coords = {
-   'white': {x: MIN_X, y: MIN_Y},
-   'black': {x: MAX_X, y: MAX_Y},
-   'orange': {x: MAX_X, y: MIN_Y},
-   'green': {x: MIN_X, y: MAX_Y}
+   'white': DEFAULT_POS['white'],
+   'black': DEFAULT_POS['black'],
+   'orange': DEFAULT_POS['orange'],
+   'green': DEFAULT_POS['green']
 }
 let lastFrameTime
 
@@ -91,18 +89,22 @@ const intervalID = setInterval(() => {
    if (imagesLoaded === 7) {
       clearInterval(intervalID)
 
-      // starting game loop
-      document.querySelector('#loading').hidden = true
-      for (let i = 0; i < BLOCKS_VERTICALLY; ++i)
-         map[i] = []
-      lastFrameTime = performance.now()
-      window.requestAnimationFrame(gameloop)
+      const intervalID2 = setInterval(() => {
+         if (map[0]) {
+            clearInterval(intervalID2)
+
+            // starting game loop
+            document.querySelector('#loading').hidden = true
+            lastFrameTime = performance.now()
+            window.requestAnimationFrame(gameloop)
+         }
+      }, 40)
    }
 }, 40)
 
 
 placeBomb = (x, y) => {
-   placedBombs.add(JSON.stringify({x, y}))
+   // !!!!! // placedBombs.add(JSON.stringify({x, y}))
 }
 
 
@@ -123,15 +125,12 @@ function gameloop() {
 
       // place bomb
       if (keys.p) {
-         if (numberBombs - placedBombs.size > 0) {
-            const xx = Math.round(me.x / BLOCK_SIZE)
-            const yy = Math.round(me.y / BLOCK_SIZE)
             // !!! ADD BETTER BOMB PLACEMENT.
-            if (!placedBombs.has(JSON.stringify({x: xx, y: yy}))) {
-               placeBomb(xx, yy)
-               socket.emit('bomb_placed', xx, yy)
-            }
-         }
+         const xx = Math.round(me.x / BLOCK_SIZE)
+         const yy = Math.round(me.y / BLOCK_SIZE)
+         socket.emit('try_placeBomb', xx, yy, () => {
+            placeBomb(xx, yy)
+         })
       }
 
       // move
@@ -190,23 +189,16 @@ function gameloop() {
    if (myColor !== 'spectator')
       drawPlayer(plrImg[myColor], me.x, me.y)
 
-   // fixed blocks
-   for (let yb = 1; yb < BLOCKS_VERTICALLY; yb += 2)
-      for (let xb = 1; xb < BLOCKS_HORIZONTALLY; xb += 2)
-         drawBlock(blockFixedImg, xb, yb)
-   // map blocks
-   if (map[0])
-      for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
-         for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x)
-            if (map[y][x])
-               drawBlock(blockImg, x, y)
-   // bombs
-   placedBombs.forEach((str) => {
-      const obj = JSON.parse(str)
-      const x = obj.x
-      const y = obj.y
-      drawBlock(bombImg, x, y)
-   })
+   // draw map (+ bombs)
+   for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
+      for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
+         if (map[y][x] === BLOCK.FIXED)
+            drawBlock(blockFixedImg, x, y)
+         else if (map[y][x] === BLOCK.NORMAL)
+            drawBlock(blockImg, x, y)
+         else if (map[y][x] === BLOCK.BOMB)
+            drawBlock(bombImg, x, y)
+      }
    
    ctx.fillStyle = 'gray'
    ctx.font = '30px serif'
