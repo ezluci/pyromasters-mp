@@ -16,8 +16,10 @@ socket.on('room_status', (msg) => {
    document.querySelector('#room-status').innerText = msg
 })
 
-socket.on('bombPlaced', (x, y) => {
-   placeBomb(x, y)
+socket.on('mapUpdates', (blocks) => {
+   blocks.forEach(({x, y, block}) => {
+      map[y][x] = block
+   })
 })
 
 socket.on('coords', (color, coords1) => {

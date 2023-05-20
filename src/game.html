@@ -27,7 +27,7 @@
          socket.emit('playerJoined', username, room, (players, map1) => {
             map = map1
             
-            players.forEach( ({username, color, isOwner, coords: coords1, bombs}) => {
+            players.forEach( ({username, color, isOwner, coords: coords1}) => {
                addPlayerToList(username, color, isOwner)
                if (color !== 'spectator') {
                   coords[color] = coords1

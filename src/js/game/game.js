@@ -1,4 +1,4 @@
-let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], placeBomb
+let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = []
 
 window.addEventListener('load', () => {
 
@@ -8,41 +8,39 @@ ctx = canvas.getContext('2d')
 
 let imagesLoaded = 0
 let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined}
-let blockFixedImg, blockImg, bombImg
+let blockFixedImg, blockImg, bombImg, fireImg
 
 
 loadImage('assets/white.jpg').then(image => {
    plrImg['white'] = image
    imagesLoaded ++
 })
-
 loadImage('assets/black.jpg').then(image => {
    plrImg['black'] = image
    imagesLoaded ++
 })
-
 loadImage('assets/orange.jpg').then(image => {
    plrImg['orange'] = image
    imagesLoaded ++
 })
-
 loadImage('assets/green.jpg').then(image => {
    plrImg['green'] = image
    imagesLoaded ++
 })
-
 loadImage('assets/blockfixed.jpg').then(image => {
    blockFixedImg = image
    imagesLoaded ++
 })
-
 loadImage('assets/block.jpg').then(image => {
    blockImg = image
    imagesLoaded ++
 })
-
 loadImage('assets/bomb.png').then(image => {
    bombImg = image
+   imagesLoaded ++
+})
+loadImage('assets/fire.jpg').then(image => {
+   fireImg = image
    imagesLoaded ++
 })
 
@@ -76,7 +74,7 @@ document.onkeyup = (event) => {
 
 const fpsElem = document.querySelector('#fps') // currently not working
 myColor = 'spectator'
-let numberBombs = 100 // how many bombs can I have at once
+let numberBombs = 1 // how many bombs can I have at once
 coords = {
    'white': DEFAULT_POS['white'],
    'black': DEFAULT_POS['black'],
@@ -86,7 +84,7 @@ coords = {
 let lastFrameTime
 
 const intervalID = setInterval(() => {
-   if (imagesLoaded === 7) {
+   if (imagesLoaded === 8) {
       clearInterval(intervalID)
 
       const intervalID2 = setInterval(() => {
@@ -101,11 +99,6 @@ const intervalID = setInterval(() => {
       }, 40)
    }
 }, 40)
-
-
-placeBomb = (x, y) => {
-   // !!!!! // placedBombs.add(JSON.stringify({x, y}))
-}
 
 
 function gameloop() {
@@ -128,9 +121,7 @@ function gameloop() {
             // !!! ADD BETTER BOMB PLACEMENT.
          const xx = Math.round(me.x / BLOCK_SIZE)
          const yy = Math.round(me.y / BLOCK_SIZE)
-         socket.emit('try_placeBomb', xx, yy, () => {
-            placeBomb(xx, yy)
-         })
+         socket.emit('try_placeBomb', xx, yy)
       }
 
       // move
@@ -189,7 +180,7 @@ function gameloop() {
    if (myColor !== 'spectator')
       drawPlayer(plrImg[myColor], me.x, me.y)
 
-   // draw map (+ bombs)
+   // draw map (+ bombs + fire)
    for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
          if (map[y][x] === BLOCK.FIXED)
@@ -198,6 +189,8 @@ function gameloop() {
             drawBlock(blockImg, x, y)
          else if (map[y][x] === BLOCK.BOMB)
             drawBlock(bombImg, x, y)
+         else if (map[y][x] === BLOCK.FIRE)
+            drawBlock(fireImg, x, y)
       }
    
    ctx.fillStyle = 'gray'

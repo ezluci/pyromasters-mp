@@ -25,3 +25,7 @@ function loadImage(src) {
       img.src = src
    })
 }
+
+function placeBomb(x, y) {
+   // !!!!! // placedBombs.add(JSON.stringify({x, y}))
+}

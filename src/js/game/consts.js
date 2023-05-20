@@ -6,7 +6,7 @@ const OFFSET_DOWN = 10
 const BLOCKS_HORIZONTALLY = 15
 const BLOCKS_VERTICALLY = 11
 const BLOCK_SIZE = 53
-const MOVE_SPEED = 0.3 // default 0.15 maybe?
+const MOVE_SPEED = 0.25 // default 0.15 maybe?
 const BLOCK_SAFE_PX = 5
 
 const MIN_X = 0
@@ -18,7 +18,8 @@ const BLOCK = {
    NO: 0,   // nothing
    NORMAL: 1,  // a block that can be destroyed with bombs
    FIXED: 2,   // a block that cannot be destroyed
-   BOMB: 3  // a bomb
+   BOMB: 3, // a bomb
+   FIRE: 4  // fire from bomb
 }
 
 const INEXISTENT_POS = {x: -100, y: -100}
