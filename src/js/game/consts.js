@@ -7,7 +7,7 @@ const BLOCKS_HORIZONTALLY = 15
 const BLOCKS_VERTICALLY = 11
 const BLOCK_SIZE = 53
 const MOVE_SPEED = 0.25 // default 0.15 maybe?
-const BLOCK_SAFE_PX = 5
+const BLOCK_SAFE_PX = 7
 
 const MIN_X = 0
 const MIN_Y = 0

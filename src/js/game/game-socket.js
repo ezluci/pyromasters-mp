@@ -22,6 +22,14 @@ socket.on('mapUpdates', (blocks) => {
    })
 })
 
+socket.on('death', (color) => {
+   if (myColor === color) {
+      myColor = 'spectator'
+      me = INEXISTENT_POS
+   }
+   coords[color] = INEXISTENT_POS
+})
+
 socket.on('coords', (color, coords1) => {
    coords[color] = coords1
 })
