@@ -13,8 +13,9 @@ function drawBlock(block, xBlock, yBlock) {
 }
 
 // this function draws a player using normal coordinates (NO OFFSET REQUIRED)
-function drawPlayer(player, x, y) {
-   ctx.drawImage(player, OFFSET_LEFT + x, OFFSET_UP + y, BLOCK_SIZE, BLOCK_SIZE)
+function drawPlayer(img, x, y) { 
+   // 53x78
+   ctx.drawImage(img, OFFSET_LEFT + x, OFFSET_UP + y - 25, 53, 78)
 }
 
 function loadImage(src) {
@@ -24,8 +25,4 @@ function loadImage(src) {
       img.onerror = reject
       img.src = src
    })
-}
-
-function placeBomb(x, y) {
-   // !!!!! // placedBombs.add(JSON.stringify({x, y}))
 }

@@ -1,0 +1,6 @@
+.android-button {
+   height: 100px;
+   width: 100px;
+   touch-action: manipulation;
+   user-select: none;
+}

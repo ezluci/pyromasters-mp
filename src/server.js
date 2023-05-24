@@ -93,7 +93,7 @@ io.on('connection', (socket) => {
                   map[i][j] = BLOCK.NO
             }
          }
-            
+
 
          ROOMS.set(room, {
             owner: username,

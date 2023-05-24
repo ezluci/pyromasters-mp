@@ -4,6 +4,7 @@
    <meta charset="UTF-8">
    <title>pyromasters-multiplayer - game.html</title>
 
+   <link rel="stylesheet" href="css/game.css">
    <script src="socket.io/socket.io.min.js"></script>
    <script src="js/misc.js"></script>
    <script src="js/log.js"></script>
@@ -52,25 +53,28 @@
    </div>
    <br>
 
-   <label for="fps">Enter fps limit (not working):</label>
-   <input value="60" id="fps">
+   <label hidden for="fps">Enter fps limit:</label>
+   <input hidden value="60" id="fps">
 
-   <br>
    <div id="select-color">
-      <u><i>Select color here:</i></u>
-      <a onclick="socket.emit('selectColor', 'white', ()=>{myColor = 'white'})">white</a>
-      <a onclick="socket.emit('selectColor', 'black', ()=>{myColor = 'black'})">black</a>
-      <a onclick="socket.emit('selectColor', 'orange', ()=>{myColor = 'orange'})">orange</a>
-      <a onclick="socket.emit('selectColor', 'green', ()=>{myColor = 'green'})">green</a>
-      <a onclick="socket.emit('selectColor', 'spectator', ()=>{myColor = 'spectator'})">spectator</a>
+      <u><b><i>
+         <span style="color: red;">Select</span>
+         <span style="color: aqua;">color</span>
+         <span style="color: blue;">here:</span></i></b></u>
+      <a onclick="socket.emit('selectColor', 'white', ()=>{myColor = 'white'})">White,</a>
+      <a onclick="socket.emit('selectColor', 'black', ()=>{myColor = 'black'})">Black,</a>
+      <a onclick="socket.emit('selectColor', 'orange', ()=>{myColor = 'orange'})">Orange,</a>
+      <a onclick="socket.emit('selectColor', 'green', ()=>{myColor = 'green'})">Green,</a>
+      <a onclick="socket.emit('selectColor', 'spectator', ()=>{myColor = 'spectator'})">Spectator</a>
    </div>
 
    <p>You can move with W A S D. Place bombs with P.</p>
    <p><b>!! If you use a dark theme extension, disable it.</b></p>
 
-   <button ontouchstart="keys.a = 1" ontouchend="keys.a = 0" style="height: 100px; width: 100px;">LEFT (ANDROID)</button>
-   <button ontouchstart="keys.d = 1" ontouchend="keys.d = 0" style="height: 100px; width: 100px;">RIGHT (ANDROID)</button>
-   <button ontouchstart="keys.w = 1" ontouchend="keys.w = 0" style="height: 100px; width: 100px;">UP (ANDROID)</button>
-   <button ontouchstart="keys.s = 1" ontouchend="keys.s = 0" style="height: 100px; width: 100px;">DOWN (ANDROID)</button>
+   <button ontouchstart="keys.a = 1" ontouchend="keys.a = 0" class="android-button">LEFT <<<< (ANDROID)</button>
+   <button ontouchstart="keys.d = 1" ontouchend="keys.d = 0" class="android-button">RIGHT >>>> (ANDROID)</button>
+   <button ontouchstart="keys.w = 1" ontouchend="keys.w = 0" class="android-button">UP ^^^^ (ANDROID)</button>
+   <button ontouchstart="keys.s = 1" ontouchend="keys.s = 0" class="android-button">DOWN vvvv (ANDROID)</button>
+   <button ontouchstart="keys.p = 1" ontouchend="keys.p = 0" class="android-button">BOMB !!!! (ANDROID)</button>
 </body>
 </html>

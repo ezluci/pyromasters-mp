@@ -11,19 +11,19 @@ let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'gree
 let blockFixedImg, blockImg, bombImg, fireImg
 
 
-loadImage('assets/white.jpg').then(image => {
+loadImage('assets/white.png').then(image => {
    plrImg['white'] = image
    imagesLoaded ++
 })
-loadImage('assets/black.jpg').then(image => {
+loadImage('assets/black.png').then(image => {
    plrImg['black'] = image
    imagesLoaded ++
 })
-loadImage('assets/orange.jpg').then(image => {
+loadImage('assets/orange.png').then(image => {
    plrImg['orange'] = image
    imagesLoaded ++
 })
-loadImage('assets/green.jpg').then(image => {
+loadImage('assets/green.png').then(image => {
    plrImg['green'] = image
    imagesLoaded ++
 })
@@ -172,6 +172,20 @@ function gameloop() {
    ctx.fillRect(OFFSET_LEFT, OFFSET_UP, canvas.width - OFFSET_LEFT - OFFSET_RIGHT, canvas.height - OFFSET_UP - OFFSET_DOWN)
 
 
+   // draw map blocks
+   for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
+      for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
+         if (map[y][x] === BLOCK.NORMAL)
+            drawBlock(blockImg, x, y)
+         else if (map[y][x] === BLOCK.BOMB)
+            drawBlock(bombImg, x, y)
+         else if (map[y][x] === BLOCK.FIRE)
+            drawBlock(fireImg, x, y)
+         else if (map[y][x] === BLOCK.FIXED)
+            drawBlock(blockFixedImg, x, y)
+      }
+   
+   // draw players
    for (let i = 0; i < 4; ++i) {
       if (indexToColor(i) === myColor)
          continue;
@@ -179,19 +193,6 @@ function gameloop() {
    }
    if (myColor !== 'spectator')
       drawPlayer(plrImg[myColor], me.x, me.y)
-
-   // draw map (+ bombs + fire)
-   for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
-      for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-         if (map[y][x] === BLOCK.FIXED)
-            drawBlock(blockFixedImg, x, y)
-         else if (map[y][x] === BLOCK.NORMAL)
-            drawBlock(blockImg, x, y)
-         else if (map[y][x] === BLOCK.BOMB)
-            drawBlock(bombImg, x, y)
-         else if (map[y][x] === BLOCK.FIRE)
-            drawBlock(fireImg, x, y)
-      }
    
    ctx.fillStyle = 'gray'
    ctx.font = '30px serif'
