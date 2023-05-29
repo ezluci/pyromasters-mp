@@ -7,6 +7,10 @@ function indexToColor(idx) {
    console.error('?')
 }
 
+function isPowerup(blockCode) {
+   return 5 <= blockCode && blockCode <= 13
+}
+
 // this function draws a block using block coordinates => xB=0..15 and yB=0.11
 function drawBlock(block, xBlock, yBlock) {
    ctx.drawImage(block, OFFSET_LEFT + xBlock * BLOCK_SIZE, OFFSET_UP + yBlock * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)

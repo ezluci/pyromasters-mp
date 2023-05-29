@@ -9,38 +9,74 @@ ctx = canvas.getContext('2d')
 let imagesLoaded = 0
 let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined}
 let blockFixedImg, blockImg, bombImg, fireImg
+const powersImg = {}
 
-
-loadImage('assets/white.png').then(image => {
+loadImage('assets/players/white.png').then(image => {
    plrImg['white'] = image
    imagesLoaded ++
 })
-loadImage('assets/black.png').then(image => {
+loadImage('assets/players/black.png').then(image => {
    plrImg['black'] = image
    imagesLoaded ++
 })
-loadImage('assets/orange.png').then(image => {
+loadImage('assets/players/orange.png').then(image => {
    plrImg['orange'] = image
    imagesLoaded ++
 })
-loadImage('assets/green.png').then(image => {
+loadImage('assets/players/green.png').then(image => {
    plrImg['green'] = image
    imagesLoaded ++
 })
-loadImage('assets/blockfixed.jpg').then(image => {
+loadImage('assets/blocks/fixed.jpg').then(image => {
    blockFixedImg = image
    imagesLoaded ++
 })
-loadImage('assets/block.jpg').then(image => {
+loadImage('assets/blocks/normal.jpg').then(image => {
    blockImg = image
    imagesLoaded ++
 })
-loadImage('assets/bomb.png').then(image => {
+loadImage('assets/blocks/bomb.png').then(image => {
    bombImg = image
    imagesLoaded ++
 })
-loadImage('assets/fire.jpg').then(image => {
+loadImage('assets/blocks/fire.png').then(image => {
    fireImg = image
+   imagesLoaded ++
+})
+loadImage('assets/blocks/power_bombplus.png').then(image => {
+   powersImg.bombplus = image
+   imagesLoaded ++
+})
+loadImage('assets/blocks/power_bomblength.png').then(image => {
+   powersImg.bomblength = image
+   imagesLoaded ++
+})
+loadImage('assets/blocks/power_speed.png').then(image => {
+   powersImg.speed = image
+   imagesLoaded ++
+})
+loadImage('assets/blocks/power_shield.png').then(image => {
+   powersImg.shield = image
+   imagesLoaded ++
+})
+loadImage('assets/blocks/power_kickbombs.png').then(image => {
+   powersImg.kickbombs = image
+   imagesLoaded ++
+})
+loadImage('assets/blocks/power_bombtime.png').then(image => {
+   powersImg.bombtime = image
+   imagesLoaded ++
+})
+loadImage('assets/blocks/power_switchplayer.png').then(image => {
+   powersImg.switchplayer = image
+   imagesLoaded ++
+})
+loadImage('assets/blocks/power_illness.png').then(image => {
+   powersImg.illness = image
+   imagesLoaded ++
+})
+loadImage('assets/blocks/power_bonus.png').then(image => {
+   powersImg.bonus = image
    imagesLoaded ++
 })
 
@@ -74,7 +110,6 @@ document.onkeyup = (event) => {
 
 const fpsElem = document.querySelector('#fps') // currently not working
 myColor = 'spectator'
-let numberBombs = 1 // how many bombs can I have at once
 coords = {
    'white': DEFAULT_POS['white'],
    'black': DEFAULT_POS['black'],
@@ -84,7 +119,7 @@ coords = {
 let lastFrameTime
 
 const intervalID = setInterval(() => {
-   if (imagesLoaded === 8) {
+   if (imagesLoaded === 17) {
       clearInterval(intervalID)
 
       const intervalID2 = setInterval(() => {
@@ -175,7 +210,9 @@ function gameloop() {
    // draw map blocks
    for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-         if (map[y][x] === BLOCK.NORMAL)
+         if (map[y][x] === BLOCK.NO)
+            ;
+         else if (map[y][x] === BLOCK.NORMAL)
             drawBlock(blockImg, x, y)
          else if (map[y][x] === BLOCK.BOMB)
             drawBlock(bombImg, x, y)
@@ -183,6 +220,25 @@ function gameloop() {
             drawBlock(fireImg, x, y)
          else if (map[y][x] === BLOCK.FIXED)
             drawBlock(blockFixedImg, x, y)
+         
+         else if (map[y][x] === BLOCK.POWER_BOMBPLUS)
+            drawBlock(powersImg.bombplus, x, y)
+         else if (map[y][x] === BLOCK.POWER_BOMBLENGTH)
+            drawBlock(powersImg.bomblength, x, y)
+         else if (map[y][x] === BLOCK.POWER_SPEED)
+            drawBlock(powersImg.speed, x, y)
+         else if (map[y][x] === BLOCK.POWER_SHIELD)
+            drawBlock(powersImg.shield, x, y)
+         else if (map[y][x] === BLOCK.POWER_KICKBOMBS)
+            drawBlock(powersImg.kickbombs, x, y)
+         else if (map[y][x] === BLOCK.POWER_BOMBTIME)
+            drawBlock(powersImg.bombtime, x, y)
+         else if (map[y][x] === BLOCK.POWER_SWITCHPLAYER)
+            drawBlock(powersImg.switchplayer, x, y)
+         else if (map[y][x] === BLOCK.POWER_ILLNESS)
+            drawBlock(powersImg.illness, x, y)
+         else if (map[y][x] === BLOCK.POWER_BONUS)
+            drawBlock(powersImg.bonus, x, y)
       }
    
    // draw players

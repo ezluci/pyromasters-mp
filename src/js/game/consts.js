@@ -19,7 +19,16 @@ const BLOCK = {
    NORMAL: 1,  // a block that can be destroyed with bombs
    FIXED: 2,   // a block that cannot be destroyed
    BOMB: 3, // a bomb
-   FIRE: 4  // fire from bomb
+   FIRE: 4, // fire from bomb
+   POWER_BOMBPLUS: 5,
+   POWER_BOMBLENGTH: 6,
+   POWER_SPEED: 7,
+   POWER_SHIELD: 8,
+   POWER_KICKBOMBS: 9,
+   POWER_BOMBTIME: 10,
+   POWER_SWITCHPLAYER: 11,
+   POWER_ILLNESS: 12,
+   POWER_BONUS: 13
 }
 
 const INEXISTENT_POS = {x: -100, y: -100}

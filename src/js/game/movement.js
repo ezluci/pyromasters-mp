@@ -1,6 +1,6 @@
 // returns true if you CANNOT GO through this block
 function stop(blockCode) {
-   return (blockCode !== BLOCK.NO && blockCode !== BLOCK.FIRE && blockCode !== BLOCK.BOMB)
+   return (blockCode !== BLOCK.NO && blockCode !== BLOCK.FIRE && blockCode !== BLOCK.BOMB && !isPowerup(blockCode))
 }
 
 
