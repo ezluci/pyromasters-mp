@@ -17,7 +17,6 @@
    <script src="js/game/game.js"></script>
 
    <script>
-      var a
       const params = new URLSearchParams(window.location.search);
       const username = params.get('username');
       const room = params.get('room');
@@ -25,14 +24,15 @@
       if (!username || !room)
          window.open('https://www.google.com/search?q=a+venit+alex')
       else
-         socket.emit('playerJoined', username, room, (players, map1) => {
+         socket.emit('playerJoined', username, room, (players, colorsCoords, map1) => {
             map = map1
             
-            players.forEach( ({username, color, isOwner, coords: coords1}) => {
+            players.forEach( ({username, color, isOwner}) => {
                addPlayerToList(username, color, isOwner)
-               if (color !== 'spectator') {
-                  coords[color] = coords1
-               }
+            });
+
+            Object.keys(colorsCoords).forEach((color) => {
+               coords[color] = colorsCoords[color]
             })
          })
    </script>

@@ -1,59 +1,30 @@
-const express = require('express')
 const http = require('http')
 const PORT = process.env.PORT || 3000
 const socketio = require('socket.io')
-const app = express()
-app.get('*', (req, res) => {
-   res.sendFile(req.path, { root: __dirname })
-})
+const URL = require('node:url')
+const path = require('node:path')
+const fs = require('node:fs')
 
-const server = http.createServer(app)
-server.listen(parseInt(PORT), () => {
-   console.log(`The server works on port ${PORT}.`)
-})
+const server = http.createServer((req, res) => {
+   const reqURL = new URL.URL(req.url, 'a://a.a')
+   if (reqURL.pathname === '/' || reqURL.pathname === '')
+      reqURL.pathname = 'index.html'
+   const reqPath = path.join(__dirname, '..', 'client', reqURL.pathname)
+   
+   fs.readFile(reqPath, (err, data) => {
+      res.end(data)
+   })
+}).listen(parseInt(PORT), () => { console.log(`The server works on port ${PORT}.`) })
 
-const ROOM_STATUS = {
-   WAITING: 'waiting',
-   STARTING: 'starting',
-   RUNNING: 'running'
-}
+const {
+   OFFSET_LEFT, OFFSET_RIGHT, OFFSET_UP, OFFSET_DOWN,
+   BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BLOCK_SIZE, BLOCK_SAFE_PX, MOVE_SPEED, FIRE_TIME, BOMB_TIME,
+   MIN_X, MIN_Y, MAX_X, MAX_Y,
+   BLOCK,
+   INEXISTENT_POS, DEFAULT_POS,
+   ROOM_STATUS
+} = require('./consts')()
 
-const BLOCKS_HORIZONTALLY = 15
-const BLOCKS_VERTICALLY = 11
-const BLOCK_SIZE = 53
-const BLOCK_SAFE_PX = 7
-const MOVE_SPEED = 0.15 // default 0.15 maybe
-const FIRE_TIME = 400 // default 400 maybe
-const BOMB_TIME = 4000
-
-const MIN_X = 0
-const MIN_Y = 0
-const MAX_X = BLOCK_SIZE * (BLOCKS_HORIZONTALLY - 1)
-const MAX_Y = BLOCK_SIZE * (BLOCKS_VERTICALLY - 1)
-
-const BLOCK = {
-   NO: 0,   // nothing
-   NORMAL: 1,  // a block that can be destroyed with bombs
-   FIXED: 2,   // a block that cannot be destroyed
-   BOMB: 3, // a bomb
-   FIRE: 4, // fire from bomb
-   POWER_BOMBPLUS: 5,
-   POWER_BOMBLENGTH: 6,
-   POWER_SPEED: 7,
-   POWER_SHIELD: 8,
-   POWER_KICKBOMBS: 9,
-   POWER_BOMBTIME: 10,
-   POWER_SWITCHPLAYER: 11,
-   POWER_ILLNESS: 12,
-   POWER_BONUS: 13
-}
-
-const INEXISTENT_POS = {x: -10000, y: -10000}
-const DEFAULT_POS = {
-   white: {x: MIN_X, y: MIN_Y}, black: {x: MAX_X, y: MAX_Y},
-   orange: {x: MAX_X, y: MIN_Y}, green: {x: MIN_X, y: MAX_Y},
-   spectator: INEXISTENT_POS
-}
 
 // returns true if you CANNOT GO through this block
 function stop(blockCode) {
@@ -74,6 +45,7 @@ io.on('connection', (socket) => {
 
    let username, room, color, isOwner, map
 
+
    function detailsOkCheck() {
       if (!username) {
          socket.emit('error', 'Server does not have socket details (username, room, etc.). Probably playerJoined was never emitted. DISCONNECTED.')
@@ -82,6 +54,7 @@ io.on('connection', (socket) => {
       }
       return true
    }
+
 
    function onFireCheck(color) {
       const x = ROOMS.get(room)[color].coords.x
@@ -123,6 +96,36 @@ io.on('connection', (socket) => {
 
       return ((map[deadlyBlock1.y][deadlyBlock1.x] === BLOCK.FIRE) ||
             (deadlyBlock2.x !== INEXISTENT_POS.x && map[deadlyBlock2.y][deadlyBlock2.x] === BLOCK.FIRE))
+   }
+
+
+   function collectPowerup(x, y) {
+      if (!isPowerup(map[y][x]))
+         return
+      
+      if (map[y][x] === BLOCK.POWER_BOMBPLUS) {
+         if (ROOMS.get(room)[color].bombs < 5)
+            ROOMS.get(room)[color].bombs ++
+      } else if (map[y][x] === BLOCK.POWER_BOMBLENGTH) {
+         
+      } else if (map[y][x] === BLOCK.POWER_SPEED) {
+         
+      } else if (map[y][x] === BLOCK.POWER_SHIELD) {
+         
+      } else if (map[y][x] === BLOCK.POWER_KICKBOMBS) {
+         
+      } else if (map[y][x] === BLOCK.POWER_BOMBTIME) {
+         
+      } else if (map[y][x] === BLOCK.POWER_SWITCHPLAYER) {
+         
+      } else if (map[y][x] === BLOCK.POWER_ILLNESS) {
+         
+      } else if (map[y][x] === BLOCK.POWER_BONUS) {
+         
+      }
+   
+      io.to(room).emit('mapUpdates', [{x, y, block: BLOCK.NO}])
+      map[y][x] = BLOCK.NO
    }
 
 
@@ -181,11 +184,16 @@ io.on('connection', (socket) => {
       socket.to(room).emit('player+', username, color, isOwner)
 
       const players1 = []
-      ROOMS.get(room).players.forEach(({color, isOwner, coords}, username) => {
-         players1.push({username, color, isOwner, coords})
+      ROOMS.get(room).players.forEach(({color, isOwner}, username) => {
+         players1.push({username, color, isOwner})
+      })
+      
+      const colorsCoords = {};
+      ['white', 'black', 'orange', 'green'].forEach(color => {
+         colorsCoords[color] = ROOMS.get(room)[color].coords
       })
 
-      callback(players1, ROOMS.get(room).map)
+      callback(players1, colorsCoords, ROOMS.get(room).map)
    })
 
 
@@ -216,13 +224,13 @@ io.on('connection', (socket) => {
 
                // set coordinates for each color
                ['white', 'black', 'orange', 'green'].forEach(color => {
-                  if (!ROOMS.get(room)[color].selected)
+                  if (ROOMS.get(room)[color].selected === false) {
                      ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS)
-                  else {
+                  } else {
                      ROOMS.get(room)[color].coords = Object.assign(DEFAULT_POS[color])
+                     ROOMS.get(room)[color].bombs = 1
                      ROOMS.get(room).players.get(ROOMS.get(room)[color].username).coords = Object.assign(DEFAULT_POS[color])
                   }
-                  
                   io.to(room).emit('coords', color, ROOMS.get(room)[color].coords)
                })
 
@@ -289,14 +297,14 @@ io.on('connection', (socket) => {
 
 
    // ANTICHEAT: no x,y provided here
-   socket.on('try_placeBomb', (x, y) => {
+   socket.on('tryPlaceBomb', (x, y) => {
       if (!detailsOkCheck())
          return
       
       if ( !(0 <= x && x <= BLOCKS_HORIZONTALLY && 0 <= y && y <= BLOCKS_VERTICALLY) )
-         return socket.emit('error', 'try_placeBomb: x or y out of range.')
+         return socket.emit('error', 'tryPlaceBomb: x or y out of range.')
       
-      if (map[y][x] === BLOCK.BOMB || map[y][x] === BLOCK.FIXED || map[y][x] === BLOCK.NORMAL)
+      if (map[y][x] === BLOCK.FIRE || map[y][x] === BLOCK.BOMB || map[y][x] === BLOCK.FIXED || map[y][x] === BLOCK.NORMAL)
          return
       
       if (ROOMS.get(room)[color].bombs === 0)
@@ -305,41 +313,41 @@ io.on('connection', (socket) => {
       io.to(room).emit('mapUpdates', [{x, y, block: BLOCK.BOMB}])
       map[y][x] = BLOCK.BOMB
       ROOMS.get(room)[color].bombs --
-
+   
       setTimeout(() => {
          const fires = []
-         fires.push({x, y, block: BLOCK.FIRE})
+         fires.push({x, y, block: BLOCK.FIRE, wasBlock: false})
          for (let yy = y-1; yy >= Math.max(0, y - ROOMS.get(room)[color].bombLength); --yy) {
             if (map[yy][x] === BLOCK.NORMAL || map[yy][x] === BLOCK.NO || isPowerup(map[yy][x]))
-               fires.push({x: x, y: yy, block: BLOCK.FIRE})
+               fires.push({x: x, y: yy, block: BLOCK.FIRE, wasBlock: (map[yy][x] === BLOCK.NORMAL)})
             if (stop(map[yy][x]) || isPowerup(map[yy][x]))
                break
          }
          for (let yy = y+1; yy <= Math.min(BLOCKS_VERTICALLY-1, y + ROOMS.get(room)[color].bombLength); ++yy) {
             if (map[yy][x] === BLOCK.NORMAL || map[yy][x] === BLOCK.NO || isPowerup(map[yy][x]))
-               fires.push({x: x, y: yy, block: BLOCK.FIRE})
+               fires.push({x: x, y: yy, block: BLOCK.FIRE, wasBlock: (map[yy][x] === BLOCK.NORMAL)})
             if (stop(map[yy][x]) || isPowerup(map[yy][x]))
                break
          }
          for (let xx = x-1; xx >= Math.max(0, x - ROOMS.get(room)[color].bombLength); --xx) {
             if (map[y][xx] === BLOCK.NORMAL || map[y][xx] === BLOCK.NO || isPowerup(map[y][xx]))
-               fires.push({x: xx, y: y, block: BLOCK.FIRE})
+               fires.push({x: xx, y: y, block: BLOCK.FIRE, wasBlock: (map[y][xx] === BLOCK.NORMAL)})
             if (stop(map[y][xx]) || isPowerup(map[y][xx]))
                break
          }
          for (let xx = x+1; xx <= Math.min(BLOCKS_HORIZONTALLY-1, x + ROOMS.get(room)[color].bombLength); ++xx) {
             if (map[y][xx] === BLOCK.NORMAL || map[y][xx] === BLOCK.NO || isPowerup(map[y][xx]))
-               fires.push({x: xx, y: y, block: BLOCK.FIRE})
+               fires.push({x: xx, y: y, block: BLOCK.FIRE, wasBlock: (map[y][xx] === BLOCK.NORMAL)})
             if (stop(map[y][xx]) || isPowerup(map[y][xx]))
                break
          }
-
+   
          fires.forEach((fire) => {
             map[fire.y][fire.x] = BLOCK.FIRE
          })
-
+   
          io.to(room).emit('mapUpdates', fires);
-
+   
          ['white', 'black', 'orange', 'green'].forEach(color => {
             if (!ROOMS.get(room)[color].selected)
                return
@@ -348,22 +356,23 @@ io.on('connection', (socket) => {
             
             if (ROOMS.get(room).status === ROOM_STATUS.RUNNING && onFireCheck(color)) {
                io.to(room).emit('death', color)
-
+   
                ROOMS.get(room)[color].dead = true
                ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS)
                ROOMS.get(room).players.get(username).coords = Object.assign(INEXISTENT_POS)
             }
          })
-
+   
          setTimeout(() => {
             fires.forEach((fire) => {
                const rand = Math.random()
                let newBlock
 
                // update: check true chances in the original game
-               if (rand >= .2) {
+               if (!fire.wasBlock || rand >= .2) {
                   newBlock = BLOCK.NO
                } else {
+                  console.log(rand)
                   if (rand < 0.022) newBlock = BLOCK.POWER_BOMBPLUS
                   else if (rand < 0.044)  newBlock = BLOCK.POWER_BOMBLENGTH
                   else if (rand < 0.066)  newBlock = BLOCK.POWER_SPEED
@@ -374,15 +383,24 @@ io.on('connection', (socket) => {
                   else if (rand < 0.177)  newBlock = BLOCK.POWER_ILLNESS
                   else  newBlock = BLOCK.POWER_BONUS
                }
-
+   
                fire.block = newBlock
                map[fire.y][fire.x] = newBlock
             })
-
+   
             io.to(room).emit('mapUpdates', fires)
+   
+            if (ROOMS.get(room)[color].dead)
+               return
+   
             ROOMS.get(room)[color].bombs ++
+   
+            const x = ROOMS.get(room)[color].coords.x
+            const y = ROOMS.get(room)[color].coords.y
+            collectPowerup(Math.floor(x / BLOCK_SIZE), Math.floor(y / BLOCK_SIZE))
+            collectPowerup(Math.ceil(x / BLOCK_SIZE), Math.ceil(y / BLOCK_SIZE))
          }, FIRE_TIME)
-
+   
       }, ROOMS.get(room)[color].bombTime)
    })
 
@@ -397,7 +415,7 @@ io.on('connection', (socket) => {
       
       if (ROOMS.get(room)[color].dead)
          return socket.emit('error', 'coords: Player is \'dead\'')
-
+   
       if (ROOMS.get(room).status === ROOM_STATUS.RUNNING && onFireCheck(color)) {
          io.to(room).emit('death', color)
          ROOMS.get(room)[color].dead = true
@@ -405,10 +423,16 @@ io.on('connection', (socket) => {
          ROOMS.get(room).players.get(username).coords = Object.assign(INEXISTENT_POS)
          return
       }
-
-      io.to(room).emit('coords', color, coords)
+   
+      socket.to(room).emit('coords', color, coords)
       ROOMS.get(room)[color].coords = coords
       ROOMS.get(room).players.get(username).coords = coords
+   
+      // check if player collected some powerup
+      const x = ROOMS.get(room)[color].coords.x
+      const y = ROOMS.get(room)[color].coords.y
+      collectPowerup(Math.floor(x / BLOCK_SIZE), Math.floor(y / BLOCK_SIZE))
+      collectPowerup(Math.ceil(x / BLOCK_SIZE), Math.ceil(y / BLOCK_SIZE))
    })
 
 

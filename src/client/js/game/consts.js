@@ -6,8 +6,10 @@ const OFFSET_DOWN = 10
 const BLOCKS_HORIZONTALLY = 15
 const BLOCKS_VERTICALLY = 11
 const BLOCK_SIZE = 53
-const MOVE_SPEED = 0.25 // default 0.15 maybe?
 const BLOCK_SAFE_PX = 7
+const MOVE_SPEED = 0.2  // default 0.15 maybe?
+const FIRE_TIME = 400   // default 400 maybe
+const BOMB_TIME = 4000
 
 const MIN_X = 0
 const MIN_Y = 0
@@ -36,4 +38,19 @@ const DEFAULT_POS = {
    white: {x: MIN_X, y: MIN_Y}, black: {x: MAX_X, y: MAX_Y},
    orange: {x: MAX_X, y: MIN_Y}, green: {x: MIN_X, y: MAX_Y},
    spectator: INEXISTENT_POS
+}
+
+const ROOM_STATUS = {
+   WAITING: 'waiting',
+   STARTING: 'starting',
+   RUNNING: 'running'
+}
+
+module.exports = {
+   OFFSET_LEFT, OFFSET_RIGHT, OFFSET_UP, OFFSET_DOWN,
+   BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BLOCK_SIZE, BLOCK_SAFE_PX, MOVE_SPEED, FIRE_TIME, BOMB_TIME,
+   MIN_X, MIN_Y, MAX_X, MAX_Y,
+   BLOCK,
+   INEXISTENT_POS, DEFAULT_POS,
+   ROOM_STATUS
 }

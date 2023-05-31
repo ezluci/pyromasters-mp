@@ -111,10 +111,10 @@ document.onkeyup = (event) => {
 const fpsElem = document.querySelector('#fps') // currently not working
 myColor = 'spectator'
 coords = {
-   'white': DEFAULT_POS['white'],
-   'black': DEFAULT_POS['black'],
-   'orange': DEFAULT_POS['orange'],
-   'green': DEFAULT_POS['green']
+   'white': INEXISTENT_POS,
+   'black': INEXISTENT_POS,
+   'orange': INEXISTENT_POS,
+   'green': INEXISTENT_POS
 }
 let lastFrameTime
 
@@ -156,7 +156,7 @@ function gameloop() {
             // !!! ADD BETTER BOMB PLACEMENT.
          const xx = Math.round(me.x / BLOCK_SIZE)
          const yy = Math.round(me.y / BLOCK_SIZE)
-         socket.emit('try_placeBomb', xx, yy)
+         socket.emit('tryPlaceBomb', xx, yy)
       }
 
       // move
