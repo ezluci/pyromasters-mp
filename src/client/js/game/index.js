@@ -1,3 +1,5 @@
+'use strict'
+
 let playerListElm
 waitForElm('#player-list').then((elm) => {playerListElm = elm})
 

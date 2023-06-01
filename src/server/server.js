@@ -1,3 +1,5 @@
+'use strict'
+
 const http = require('http')
 const PORT = process.env.PORT || 3000
 const socketio = require('socket.io')
@@ -26,7 +28,6 @@ const {
    ROOM_STATUS
 } = require('./consts')()
 
-
 // returns true if you CANNOT GO through this block
 function stop(blockCode) {
    return (blockCode !== BLOCK.NO && blockCode !== BLOCK.FIRE && blockCode !== BLOCK.BOMB && !isPowerup(blockCode))
@@ -49,7 +50,7 @@ io.on('connection', (socket) => {
 
    function detailsOkCheck() {
       if (!username) {
-         socket.emit('error', 'Server does not have socket details (username, room, etc.). Probably playerJoined was never emitted. DISCONNECTED.')
+         socket.emit('error', 'Server does not have socket details (username, room, etc.). Probably playerJoined was never emitted, or the server was restarted mid-game. DISCONNECTED.')
          socket.disconnect()
          return false
       }
@@ -141,7 +142,10 @@ io.on('connection', (socket) => {
                break
             case 1:
                ROOMS.get(room)[color].sick = true
-               setTimeout(() => { ROOMS.get(room)[color].sick = false }, ILLNESS_TIME)
+               setTimeout(() => {
+                  if (ROOMS.get(room)?.[color]?.selected)
+                     ROOMS.get(room)[color].sick = false
+               }, ILLNESS_TIME)
                break
          }
       }
@@ -325,110 +329,122 @@ io.on('connection', (socket) => {
    // ANTICHEAT: don't provide x,y here
    socket.on('tryPlaceBomb', (x, y) => {
       if (!detailsOkCheck())
-         return
+         return;
+      
+      if (color === 'spectator')
+         return socket.emit('error', 'tryPlaceBomb: You are a spectator.');
+      if (ROOMS.get(room)[color].dead)
+         return socket.emit('error', 'tryPlaceBomb: Player is \'dead\'');
       
       if (ROOMS.get(room)[color].sick)
-         return // no need to place bomb, 'sick' does the job
+         return; // no need to place bombs, 'sick' will do the job
       
       if ( !(0 <= x && x <= BLOCKS_HORIZONTALLY && 0 <= y && y <= BLOCKS_VERTICALLY) )
-         return socket.emit('error', 'tryPlaceBomb: x or y out of range.')
+         return socket.emit('error', 'tryPlaceBomb: x or y out of range.');
       
       if (map[y][x] === BLOCK.FIRE || map[y][x] === BLOCK.BOMB || map[y][x] === BLOCK.FIXED || map[y][x] === BLOCK.NORMAL)
-         return
+         return;
       
       if (ROOMS.get(room)[color].bombs === 0)
-         return // no bombs left
+         return; // no bombs left
       
-      io.to(room).emit('mapUpdates', [{x, y, block: BLOCK.BOMB}])
-      map[y][x] = BLOCK.BOMB
-      ROOMS.get(room)[color].bombs --
+      io.to(room).emit('mapUpdates', [{x, y, block: BLOCK.BOMB}]);
+      map[y][x] = BLOCK.BOMB;
+      ROOMS.get(room)[color].bombs --;
+
+      const bombLength = ROOMS.get(room)[color].bombLength;
    
       setTimeout(() => {
-         const fires = []
-         fires.push({x, y, block: BLOCK.FIRE, wasBlock: false})
-         for (let yy = y-1; yy >= Math.max(0, y - ROOMS.get(room)[color].bombLength); --yy) {
+         if (! ROOMS.get(room))
+            return;
+         
+         const fires = [];
+
+         fires.push({x, y, block: BLOCK.FIRE, wasBlock: false});
+         for (let yy = y-1; yy >= Math.max(0, y - bombLength); --yy) {
             if (map[yy][x] === BLOCK.NORMAL || map[yy][x] === BLOCK.NO || isPowerup(map[yy][x]))
-               fires.push({x: x, y: yy, block: BLOCK.FIRE, wasBlock: (map[yy][x] === BLOCK.NORMAL)})
+               fires.push({x: x, y: yy, block: BLOCK.FIRE, wasBlock: (map[yy][x] === BLOCK.NORMAL)});
             if (stop(map[yy][x]) || isPowerup(map[yy][x]))
-               break
+               break;
          }
-         for (let yy = y+1; yy <= Math.min(BLOCKS_VERTICALLY-1, y + ROOMS.get(room)[color].bombLength); ++yy) {
+         for (let yy = y+1; yy <= Math.min(BLOCKS_VERTICALLY-1, y + bombLength); ++yy) {
             if (map[yy][x] === BLOCK.NORMAL || map[yy][x] === BLOCK.NO || isPowerup(map[yy][x]))
-               fires.push({x: x, y: yy, block: BLOCK.FIRE, wasBlock: (map[yy][x] === BLOCK.NORMAL)})
+               fires.push({x: x, y: yy, block: BLOCK.FIRE, wasBlock: (map[yy][x] === BLOCK.NORMAL)});
             if (stop(map[yy][x]) || isPowerup(map[yy][x]))
-               break
+               break;
          }
-         for (let xx = x-1; xx >= Math.max(0, x - ROOMS.get(room)[color].bombLength); --xx) {
+         for (let xx = x-1; xx >= Math.max(0, x - bombLength); --xx) {
             if (map[y][xx] === BLOCK.NORMAL || map[y][xx] === BLOCK.NO || isPowerup(map[y][xx]))
-               fires.push({x: xx, y: y, block: BLOCK.FIRE, wasBlock: (map[y][xx] === BLOCK.NORMAL)})
+               fires.push({x: xx, y: y, block: BLOCK.FIRE, wasBlock: (map[y][xx] === BLOCK.NORMAL)});
             if (stop(map[y][xx]) || isPowerup(map[y][xx]))
-               break
+               break;
          }
-         for (let xx = x+1; xx <= Math.min(BLOCKS_HORIZONTALLY-1, x + ROOMS.get(room)[color].bombLength); ++xx) {
+         for (let xx = x+1; xx <= Math.min(BLOCKS_HORIZONTALLY-1, x + bombLength); ++xx) {
             if (map[y][xx] === BLOCK.NORMAL || map[y][xx] === BLOCK.NO || isPowerup(map[y][xx]))
-               fires.push({x: xx, y: y, block: BLOCK.FIRE, wasBlock: (map[y][xx] === BLOCK.NORMAL)})
+               fires.push({x: xx, y: y, block: BLOCK.FIRE, wasBlock: (map[y][xx] === BLOCK.NORMAL)});
             if (stop(map[y][xx]) || isPowerup(map[y][xx]))
-               break
+               break;
          }
    
          fires.forEach((fire) => {
-            map[fire.y][fire.x] = BLOCK.FIRE
+            map[fire.y][fire.x] = BLOCK.FIRE;
          })
    
          io.to(room).emit('mapUpdates', fires);
-   
+
          ['white', 'black', 'orange', 'green'].forEach(color => {
-            if (!ROOMS.get(room)[color].selected)
-               return
-            if (ROOMS.get(room)[color].dead)
-               return
+            if (! ROOMS.get(room)[color].selected || ROOMS.get(room)[color].dead)
+               return;
             
             if (ROOMS.get(room).status === ROOM_STATUS.RUNNING && onFireCheck(color)) {
-               io.to(room).emit('death', color)
+               io.to(room).emit('death', color);
    
-               ROOMS.get(room)[color].dead = true
-               ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS)
-               ROOMS.get(room).players.get(username).coords = Object.assign(INEXISTENT_POS)
+               ROOMS.get(room)[color].dead = true;
+               ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
+               ROOMS.get(room).players.get(username).coords = Object.assign(INEXISTENT_POS);
             }
          })
 
          setTimeout(() => {
+            if (! ROOMS.get(room))
+               return;
+            
             fires.forEach((fire) => {
-               const rand = 0.78//Math.random()
-               let newBlock
+               const rand = Math.random();
+               let newBlock;
 
                // update: check true chances in the original game
                if (!fire.wasBlock || rand >= .9) {
-                  newBlock = BLOCK.NO
+                  newBlock = BLOCK.NO;
                } else {
-                  if (rand < 0.1)   newBlock = BLOCK.POWER_BOMBPLUS
-                  else if (rand < 0.2) newBlock = BLOCK.POWER_BOMBLENGTH
-                  else if (rand < 0.3) newBlock = BLOCK.POWER_SPEED
-                  else if (rand < 0.4) newBlock = BLOCK.POWER_SHIELD
-                  else if (rand < 0.5) newBlock = BLOCK.POWER_KICKBOMBS
-                  else if (rand < 0.6) newBlock = BLOCK.POWER_BOMBTIME
-                  else if (rand < 0.7) newBlock = BLOCK.POWER_SWITCHPLAYER
-                  else if (rand < 0.8) newBlock = BLOCK.POWER_ILLNESS
-                  else  newBlock = BLOCK.POWER_BONUS
+                  if (rand < 0.1)   newBlock = BLOCK.POWER_BOMBPLUS;
+                  else if (rand < 0.2) newBlock = BLOCK.POWER_BOMBLENGTH;
+                  else if (rand < 0.3) newBlock = BLOCK.POWER_SPEED;
+                  else if (rand < 0.4) newBlock = BLOCK.POWER_SHIELD;
+                  else if (rand < 0.5) newBlock = BLOCK.POWER_KICKBOMBS;
+                  else if (rand < 0.6) newBlock = BLOCK.POWER_BOMBTIME;
+                  else if (rand < 0.7) newBlock = BLOCK.POWER_SWITCHPLAYER;
+                  else if (rand < 0.8) newBlock = BLOCK.POWER_ILLNESS;
+                  else  newBlock = BLOCK.POWER_BONUS;
                }
    
-               fire.block = newBlock
-               map[fire.y][fire.x] = newBlock
+               fire.block = newBlock;
+               map[fire.y][fire.x] = newBlock;
             })
    
-            io.to(room).emit('mapUpdates', fires)
+            io.to(room).emit('mapUpdates', fires);
    
-            if (ROOMS.get(room)[color].dead)
-               return
+            if (! ROOMS.get(room)[color].selected || ROOMS.get(room)[color].dead)
+               return;
+
+            ROOMS.get(room)[color].bombs ++;
    
-            ROOMS.get(room)[color].bombs ++
-   
-            const x = ROOMS.get(room)[color].coords.x
-            const y = ROOMS.get(room)[color].coords.y
-            collectPowerup(Math.floor(x / BLOCK_SIZE), Math.floor(y / BLOCK_SIZE))
-            collectPowerup(Math.ceil(x / BLOCK_SIZE), Math.ceil(y / BLOCK_SIZE))
+            const x = ROOMS.get(room)[color].coords.x;
+            const y = ROOMS.get(room)[color].coords.y;
+            collectPowerup(Math.floor(x / BLOCK_SIZE), Math.floor(y / BLOCK_SIZE));
+            collectPowerup(Math.ceil(x / BLOCK_SIZE), Math.ceil(y / BLOCK_SIZE));
          }, FIRE_TIME)
-   
+
       }, BOMB_TIMES[ROOMS.get(room)[color].bombTimeIndex])
    })
 
@@ -436,55 +452,54 @@ io.on('connection', (socket) => {
    // implement anti-cheat maybe ...
    socket.on('coords', (coords) => {
       if (!detailsOkCheck())
-         return
-      
+         return;
+
       if (color === 'spectator')
-         return socket.emit('error', 'coords: You are a spectator.')
-      
+         return socket.emit('error', 'coords: You are a spectator.');
       if (ROOMS.get(room)[color].dead)
-         return socket.emit('error', 'coords: Player is \'dead\'')
+         return socket.emit('error', 'coords: Player is \'dead\'');
    
       if (ROOMS.get(room).status === ROOM_STATUS.RUNNING && onFireCheck(color)) {
-         io.to(room).emit('death', color)
-         ROOMS.get(room)[color].dead = true
-         ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS)
-         ROOMS.get(room).players.get(username).coords = Object.assign(INEXISTENT_POS)
-         return
+         io.to(room).emit('death', color);
+         ROOMS.get(room)[color].dead = true;
+         ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
+         ROOMS.get(room).players.get(username).coords = Object.assign(INEXISTENT_POS);
+         return;
       }
    
-      socket.to(room).emit('coords', color, coords)
-      ROOMS.get(room)[color].coords = coords
-      ROOMS.get(room).players.get(username).coords = coords
+      socket.to(room).emit('coords', color, coords);
+      ROOMS.get(room)[color].coords = coords;
+      ROOMS.get(room).players.get(username).coords = coords;
    
       // check if player collected some powerup
-      const x = ROOMS.get(room)[color].coords.x
-      const y = ROOMS.get(room)[color].coords.y
-      collectPowerup(Math.floor(x / BLOCK_SIZE), Math.floor(y / BLOCK_SIZE))
-      collectPowerup(Math.ceil(x / BLOCK_SIZE), Math.ceil(y / BLOCK_SIZE))
+      const x = ROOMS.get(room)[color].coords.x;
+      const y = ROOMS.get(room)[color].coords.y;
+      collectPowerup(Math.floor(x / BLOCK_SIZE), Math.floor(y / BLOCK_SIZE));
+      collectPowerup(Math.ceil(x / BLOCK_SIZE), Math.ceil(y / BLOCK_SIZE));
    })
 
 
    socket.on('disconnect', () => {
       if (!username || !room)
-         return
+         return;
       
-      console.log(`disconnected: ${socket.id}, {username: ${username}, room: ${room}, isOwner: ${isOwner}}`)
+      console.log(`disconnected: ${socket.id}, {username: ${username}, room: ${room}, isOwner: ${isOwner}}`);
 
-      socket.to(room).emit('player-', username)
-      ROOMS.get(room).players.delete(username)
+      socket.to(room).emit('player-', username);
+      ROOMS.get(room).players.delete(username);
 
       if (!io.sockets.adapter.rooms.get(room)) { // room empty
-         ROOMS.delete(room)
+         ROOMS.delete(room);
       } else {
          if (color !== 'spectator') {
             if (ROOMS.get(room).status !== ROOM_STATUS.WAITING) {
-               io.to(room).emit('coords', color, INEXISTENT_POS)
-               ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS)
-               ROOMS.get(room)[color].selected = false
+               io.to(room).emit('coords', color, INEXISTENT_POS);
+               ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
+               ROOMS.get(room)[color].selected = false;
             } else {
-               io.to(room).emit('coords', color, DEFAULT_POS[color])
-               ROOMS.get(room)[color].coords = Object.assign(DEFAULT_POS[color])
-               ROOMS.get(room)[color].selected = false
+               io.to(room).emit('coords', color, DEFAULT_POS[color]);
+               ROOMS.get(room)[color].coords = Object.assign(DEFAULT_POS[color]);
+               ROOMS.get(room)[color].selected = false;
             }
          }
       }

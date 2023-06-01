@@ -1,3 +1,5 @@
+'use strict'
+
 const socket = io()
 
 socket.on('player+', (username, color, isOwner) => {

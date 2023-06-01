@@ -1,3 +1,5 @@
+'use strict'
+
 let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, lastPressed
 
 window.addEventListener('load', () => {

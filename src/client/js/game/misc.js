@@ -1,3 +1,5 @@
+'use strict'
+
 // this function transforms an index 0..4 to a color.
 function indexToColor(idx) {
    if (idx === 0) return 'white'

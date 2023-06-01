@@ -1,3 +1,5 @@
+'use strict'
+
 let logElm
 waitForElm('#log').then((elm) => {logElm = elm})
 
