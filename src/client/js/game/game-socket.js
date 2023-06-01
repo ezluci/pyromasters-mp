@@ -22,6 +22,16 @@ socket.on('mapUpdates', (blocks) => {
    })
 })
 
+socket.on('speedUpdate', (newSpeed) => {
+   moveSpeed = newSpeed
+})
+
+socket.on('switchKeys', () => {
+   switchedKeys++
+
+   setTimeout(() => { switchedKeys--; }, ILLNESS_TIME)
+})
+
 socket.on('death', (color) => {
    if (myColor === color) {
       myColor = 'spectator'

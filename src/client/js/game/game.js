@@ -1,4 +1,4 @@
-let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = []
+let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, lastPressed
 
 window.addEventListener('load', () => {
 
@@ -83,12 +83,22 @@ loadImage('assets/blocks/power_bonus.png').then(image => {
 
 
 /// record key press events
-keys = {}
-let lastPressed = ''
-keys.a = keys.s = keys.d = keys.w = 0
+keys = {a:0, s:0, d:0, w:0, p:0}
+lastPressed = ''
 
 document.onkeydown = (event) => {
-   switch (event.code) {
+   let code = event.code
+
+   if (switchedKeys) {
+      switch (code) {
+         case 'KeyA':   code = 'KeyD'; break;
+         case 'KeyS':   code = 'KeyW'; break;
+         case 'KeyD':   code = 'KeyA'; break;
+         case 'KeyW':   code = 'KeyS'; break;
+      }
+   }
+
+   switch (code) {
       case 'KeyA':   keys.a = 1; lastPressed = 'a'; break;
       case 'KeyS':   keys.s = 1; lastPressed = 's'; break;
       case 'KeyD':   keys.d = 1; lastPressed = 'd'; break;
@@ -98,7 +108,24 @@ document.onkeydown = (event) => {
 }
 
 document.onkeyup = (event) => {
-   switch (event.code) {
+   let code = event.code
+
+   switch (lastPressed) {
+      case 'a':   lastPressed = 'd';   break;
+      case 's':   lastPressed = 'w';   break;
+      case 'd':   lastPressed = 'a';   break;
+      case 'w':   lastPressed = 's';   break;
+   }
+   if (switchedKeys) {
+      switch (code) {
+         case 'KeyA':   code = 'KeyD'; break;
+         case 'KeyS':   code = 'KeyW'; break;
+         case 'KeyD':   code = 'KeyA'; break;
+         case 'KeyW':   code = 'KeyS'; break;
+      }
+   }
+
+   switch (code) {
       case 'KeyA':   keys.a = 0; (lastPressed === 'a' ? lastPressed = '' :1); break;
       case 'KeyS':   keys.s = 0; (lastPressed === 's' ? lastPressed = '' :1); break;
       case 'KeyD':   keys.d = 0; (lastPressed === 'd' ? lastPressed = '' :1); break;
@@ -129,6 +156,8 @@ const intervalID = setInterval(() => {
             // starting game loop
             document.querySelector('#loading').hidden = true
             lastFrameTime = performance.now()
+            moveSpeed = MOVE_SPEEDS[0]
+            switchedKeys = 0
             window.requestAnimationFrame(gameloop)
          }
       }, 40)

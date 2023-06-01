@@ -14,7 +14,7 @@ function moveLeft() {
    const mod = me.y % (2 * BLOCK_SIZE)
 
    if (mod === 0) {
-      me.x -= MOVE_SPEED * deltaTime
+      me.x -= moveSpeed * deltaTime
       if (me.x < MIN_X || stop(map[me.y / BLOCK_SIZE][Math.floor(me.x / BLOCK_SIZE)]))
          me.x = Math.floor(meOld.x / BLOCK_SIZE) * BLOCK_SIZE
    }
@@ -22,7 +22,7 @@ function moveLeft() {
       return // next to the player is a block. we don't move anything.
    else {
       if (mod < BLOCK_SIZE && !stop(map[Math.floor(me.y / BLOCK_SIZE)][me.x / BLOCK_SIZE - 1])) {
-         me.y -= MOVE_SPEED * deltaTime
+         me.y -= moveSpeed * deltaTime
          const newMod = me.y % (2 * BLOCK_SIZE)
          if (newMod > mod) {
             me.x -= 2 * BLOCK_SIZE - newMod
@@ -30,7 +30,7 @@ function moveLeft() {
          }
       }
       else if (mod > BLOCK_SIZE && !stop(map[Math.floor(me.y / BLOCK_SIZE) + 1][me.x / BLOCK_SIZE - 1])) {
-         me.y += MOVE_SPEED * deltaTime
+         me.y += moveSpeed * deltaTime
          const newMod = me.y % (2 * BLOCK_SIZE)
          if (newMod < mod) {
             me.x -= newMod
@@ -50,7 +50,7 @@ function moveDown() {
    const mod = me.x % (2 * BLOCK_SIZE)
 
    if (mod === 0) {
-      me.y += MOVE_SPEED * deltaTime
+      me.y += moveSpeed * deltaTime
       if (me.y > MAX_Y || stop(map[Math.floor(me.y / BLOCK_SIZE) + 1][me.x / BLOCK_SIZE]))
          me.y = Math.floor(meOld.y / BLOCK_SIZE + 1) * BLOCK_SIZE
    }
@@ -58,7 +58,7 @@ function moveDown() {
       return
    else {
       if (mod < BLOCK_SIZE && !stop(map[me.y / BLOCK_SIZE + 1][Math.floor(me.x / BLOCK_SIZE)])) {
-         me.x -= MOVE_SPEED * deltaTime
+         me.x -= moveSpeed * deltaTime
          const newMod = me.x % (2 * BLOCK_SIZE)
          if (newMod > mod) {
             me.x = Math.floor(meOld.x / BLOCK_SIZE) * BLOCK_SIZE
@@ -66,7 +66,7 @@ function moveDown() {
          }
       }
       else if (mod > BLOCK_SIZE && !stop(map[me.y / BLOCK_SIZE + 1][Math.floor(me.x / BLOCK_SIZE) + 1])) {
-         me.x += MOVE_SPEED * deltaTime
+         me.x += moveSpeed * deltaTime
          const newMod = me.x % (2 * BLOCK_SIZE)
          if (newMod < mod) {
             me.x = Math.floor(me.x / BLOCK_SIZE) * BLOCK_SIZE
@@ -86,7 +86,7 @@ function moveRight() {
    const mod = me.y % (2 * BLOCK_SIZE)
 
    if (mod === 0) {
-      me.x += MOVE_SPEED * deltaTime
+      me.x += moveSpeed * deltaTime
       if (me.x > MAX_X || stop(map[me.y / BLOCK_SIZE][Math.floor(me.x / BLOCK_SIZE) + 1]))
          me.x = Math.floor(meOld.x / BLOCK_SIZE + 1) * BLOCK_SIZE
    }
@@ -94,7 +94,7 @@ function moveRight() {
       return
    else {
       if (mod < BLOCK_SIZE && !stop(map[Math.floor(me.y / BLOCK_SIZE)][me.x / BLOCK_SIZE + 1])) {
-         me.y -= MOVE_SPEED * deltaTime
+         me.y -= moveSpeed * deltaTime
          const newMod = me.y % (2 * BLOCK_SIZE)
          if (newMod > mod) {
             me.x += 2 * BLOCK_SIZE - newMod
@@ -102,7 +102,7 @@ function moveRight() {
          }
       }
       else if (mod > BLOCK_SIZE && !stop(map[Math.floor(me.y / BLOCK_SIZE) + 1][me.x / BLOCK_SIZE + 1])) {
-         me.y += MOVE_SPEED * deltaTime
+         me.y += moveSpeed * deltaTime
          const newMod = me.y % (2 * BLOCK_SIZE)
          if (newMod < mod) {
             me.x += newMod
@@ -122,7 +122,7 @@ function moveUp() {
    const mod = me.x % (2 * BLOCK_SIZE)
 
    if (mod === 0) {
-      me.y -= MOVE_SPEED * deltaTime
+      me.y -= moveSpeed * deltaTime
       if (me.y < MIN_Y || stop(map[Math.floor(me.y / BLOCK_SIZE)][me.x / BLOCK_SIZE]))
          me.y = Math.floor(meOld.y / BLOCK_SIZE) * BLOCK_SIZE
    }
@@ -130,7 +130,7 @@ function moveUp() {
       return
    else {
       if (mod < BLOCK_SIZE && !stop(map[me.y / BLOCK_SIZE - 1][Math.floor(me.x / BLOCK_SIZE)])) {
-         me.x -= MOVE_SPEED * deltaTime
+         me.x -= moveSpeed * deltaTime
          const newMod = me.x % (2 * BLOCK_SIZE)
          if (newMod > mod) {
             me.x = Math.floor(meOld.x / BLOCK_SIZE) * BLOCK_SIZE
@@ -138,7 +138,7 @@ function moveUp() {
          }
       }
       else if (mod > BLOCK_SIZE && !stop(map[me.y / BLOCK_SIZE - 1][Math.floor(me.x / BLOCK_SIZE) + 1])) {
-         me.x += MOVE_SPEED * deltaTime
+         me.x += moveSpeed * deltaTime
          const newMod = me.x % (2 * BLOCK_SIZE)
          if (newMod < mod) {
             me.x = Math.floor(me.x / BLOCK_SIZE) * BLOCK_SIZE
