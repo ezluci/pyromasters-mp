@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // returns true if you CANNOT GO through this block
 function stop(blockCode) {

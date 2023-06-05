@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const OFFSET_LEFT = 10
 const OFFSET_RIGHT = 10

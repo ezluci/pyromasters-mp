@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const socket = io()
 
@@ -30,6 +30,15 @@ socket.on('speedUpdate', (newSpeed) => {
 
 socket.on('switchKeys', () => {
    switchedKeys++
+
+   if (switchedKeys === 1) {
+      switch (lastPressed) {
+         case 'a':   lastPressed = 'd';   break;
+         case 's':   lastPressed = 'w';   break;
+         case 'd':   lastPressed = 'a';   break;
+         case 'w':   lastPressed = 's';   break;
+      }
+   }
 
    setTimeout(() => { switchedKeys--; }, ILLNESS_TIME)
 })

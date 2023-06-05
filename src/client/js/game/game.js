@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, lastPressed
 
@@ -112,12 +112,6 @@ document.onkeydown = (event) => {
 document.onkeyup = (event) => {
    let code = event.code
 
-   switch (lastPressed) {
-      case 'a':   lastPressed = 'd';   break;
-      case 's':   lastPressed = 'w';   break;
-      case 'd':   lastPressed = 'a';   break;
-      case 'w':   lastPressed = 's';   break;
-   }
    if (switchedKeys) {
       switch (code) {
          case 'KeyA':   code = 'KeyD'; break;
