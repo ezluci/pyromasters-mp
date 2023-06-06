@@ -43,9 +43,9 @@ socket.on('switchKeys', () => {
    setTimeout(() => { switchedKeys--; }, ILLNESS_TIME);
 })
 
-socket.on('shield+', () => {
-   hasShield++;
-   setTimeout(() => { hasShield--; }, SHIELD_TIME);
+socket.on('shield+', (color) => {
+   shields[color]++;
+   setTimeout(() => { shields[color]--; }, SHIELD_TIME);
 })
 
 socket.on('death', (color) => {

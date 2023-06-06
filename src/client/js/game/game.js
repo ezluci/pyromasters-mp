@@ -1,6 +1,6 @@
 'use strict';
 
-let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, hasShield, lastPressed;
+let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed;
 
 window.addEventListener('load', () => {
 
@@ -148,23 +148,23 @@ let lastFrameTime
 
 const intervalID = setInterval(() => {
    if (imagesLoaded === 18) {
-      clearInterval(intervalID)
+      clearInterval(intervalID);
 
       const intervalID2 = setInterval(() => {
          if (map[0]) {
-            clearInterval(intervalID2)
+            clearInterval(intervalID2);
 
             // starting game loop
-            document.querySelector('#loading').hidden = true
-            lastFrameTime = performance.now()
-            moveSpeed = MOVE_SPEEDS[0]
-            switchedKeys = 0
-            hasShield = 0;
-            window.requestAnimationFrame(gameloop)
+            document.querySelector('#loading').hidden = true;
+            lastFrameTime = performance.now();
+            moveSpeed = MOVE_SPEEDS[0];
+            switchedKeys = 0;
+            shields = {white: 0, black: 0, orange: 0, green: 0};
+            window.requestAnimationFrame(gameloop);
          }
-      }, 40)
+      }, 40);
    }
-}, 40)
+}, 40);
 
 
 function gameloop() {
@@ -275,14 +275,17 @@ function gameloop() {
       }
    
    // draw players
-   for (let i = 0; i < 4; ++i) {
-      if (indexToColor(i) === myColor)
-         continue;
-      drawPlayer(plrImg[indexToColor(i)], coords[indexToColor(i)].x, coords[indexToColor(i)].y);
-   }
+   ['white', 'black', 'orange', 'green'].forEach(color => {
+      if (color === myColor)
+         return;
+      drawPlayer(plrImg[color], coords[color].x, coords[color].y);
+      if (shields[color])
+         drawPlayer(shieldImg, coords[color].x, coords[color].y);
+   });
+
    if (myColor !== 'spectator') {
       drawPlayer(plrImg[myColor], me.x, me.y);
-      if (hasShield)
+      if (shields[myColor])
          drawPlayer(shieldImg, me.x, me.y);
    }
    

@@ -124,7 +124,7 @@ io.on('connection', (socket) => {
       }
       else if (map[y][x] === BLOCK.POWER_SHIELD) {
          ROOMS.get(room)[color].shield ++;
-         socket.emit('shield+');
+         io.to(room).emit('shield+', color);
          setTimeout(() => {
             if (ROOMS.get(room)?.[color]?.selected)
                ROOMS.get(room)[color].shield --;
