@@ -3,9 +3,9 @@
 const http = require('http')
 const PORT = process.env.PORT || 3000
 const socketio = require('socket.io')
-const URL = require('node:url')
-const path = require('node:path')
-const fs = require('node:fs')
+const URL = require('url')
+const path = require('path')
+const fs = require('fs')
 
 const server = http.createServer((req, res) => {
    const reqURL = new URL.URL(req.url, 'a://a.a')
@@ -268,6 +268,8 @@ io.on('connection', (socket) => {
             setTimeout(() => {
 
                /// GAME STARTS HERE!
+               if (! ROOMS.get(room))
+                  return;
 
                io.to(room).emit('room_status', `game running.`);
                ROOMS.get(room).status = ROOM_STATUS.RUNNING;
