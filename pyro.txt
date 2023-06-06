@@ -1,0 +1,32 @@
+!! POWER_BOMBPLUS: maximum 4
+!! POWER_BOMBLENGTH: 2 4 6 8 10 ...
+~~ POWER_KICKBOMBS
+!! POWER_SPEED:
+      orig: 5 -> 8 -> 10
+      my:   0.17 -> 0.279 -> 0.337
+!! POWER_SHIELD:
+      orig: 250 time  = 250 FRAMES. 25 fps so 10 SECONDS!
+      my:   10 seconds
+!! POWER_BOMBTIME:
+      orig: 100 -> 90 -> 80 -> 70 frames
+      my:   4000 -> 3600 -> 3200 -> 2800 ms
+?? POWER_SWITCHPLAYER:
+!! POWER_ILLNESS:
+      orig: 250 time all
+      my:   10 seconds
+~~ POWER_BONUS
+
+
+25fps original !!!!!!!!
+FIRE_TIME = 400ms !!
+
+frame 8, 14: musics, taunts.
+frame 23: game
+
+
+bug: start game, wait a sec, reenter the room. the countdown should be stopped but it's still going.
+bug: place a bomb right before the match is starting. it will explode when the game is running
+bug: while in WAITING, place a bomb, and change player color. you will have 2 bombs.
+bug: ;place bomb; not working when keys are reversed..
+Bug: daca ai 4 bombe: pui bombă, iei putere, bam ai 5
+Add better bomb explosion

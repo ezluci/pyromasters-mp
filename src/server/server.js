@@ -436,7 +436,7 @@ io.on('connection', (socket) => {
                if (fire.wasBlock === false || rand <= 7)
                   newBlock = BLOCK.NO;
                else {
-                  const rand=10//const rand = Math.floor(Math.random() * 14);
+                  const rand = Math.floor(Math.random() * 14);
                   if (rand === 0 || rand === 1 || rand === 2 || rand === 3)
                      newBlock = BLOCK.POWER_BOMBLENGTH;
                   else if (rand === 4)
