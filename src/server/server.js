@@ -138,8 +138,21 @@ io.on('connection', (socket) => {
             ROOMS.get(room)[color].bombTimeIndex ++;
          }
       }
-      else if (map[y][x] === BLOCK.POWER_SWITCHPLAYER) { // wip
-         
+      else if (map[y][x] === BLOCK.POWER_SWITCHPLAYER) {
+         const otherPlayers = [];
+         ['white', 'black', 'orange', 'green'].forEach(otherColor => {
+            if (ROOMS.get(room)[otherColor].selected && ! ROOMS.get(room)[otherColor].dead && otherColor !== color)
+               otherPlayers.push(otherColor);
+         });
+
+         const randIdx = Math.floor(Math.random() * otherPlayers.length);
+         const randColor = otherPlayers[randIdx];
+
+         let coordsMe = ROOMS.get(room)[color].coords;
+         let coordsYo = ROOMS.get(room)[randColor].coords;
+         [coordsMe, coordsYo] = [coordsYo, coordsMe];
+
+         io.to(room).emit('switchPlayers', color, randColor);
       }
       else if (map[y][x] === BLOCK.POWER_ILLNESS) {
          const rand = Math.floor(Math.random() * 2);
@@ -423,7 +436,7 @@ io.on('connection', (socket) => {
                if (fire.wasBlock === false || rand <= 7)
                   newBlock = BLOCK.NO;
                else {
-                  const rand = Math.floor(Math.random() * 14);
+                  const rand=10//const rand = Math.floor(Math.random() * 14);
                   if (rand === 0 || rand === 1 || rand === 2 || rand === 3)
                      newBlock = BLOCK.POWER_BOMBLENGTH;
                   else if (rand === 4)

@@ -48,6 +48,10 @@ socket.on('shield+', (color) => {
    setTimeout(() => { shields[color]--; }, SHIELD_TIME);
 })
 
+socket.on('switchPlayers', (color1, color2) => {
+   [coords[color1], coords[color2]] = [coords[color2], coords[color1]];
+})
+
 socket.on('death', (color) => {
    if (myColor === color) {
       myColor = 'spectator';
