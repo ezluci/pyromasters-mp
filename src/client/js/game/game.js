@@ -1,17 +1,18 @@
 'use strict';
 
-let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, lastPressed
+let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, hasShield, lastPressed;
 
 window.addEventListener('load', () => {
 
-canvas = document.querySelector('#canvas')
-ctx = canvas.getContext('2d')
+canvas = document.querySelector('#canvas');
+ctx = canvas.getContext('2d');
 
 
-let imagesLoaded = 0
-let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined}
-let blockFixedImg, blockImg, bombImg, fireImg
-const powersImg = {}
+let imagesLoaded = 0;
+let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined};
+let shieldImg;
+let blockFixedImg, blockImg, bombImg, fireImg;
+const powersImg = {};
 
 loadImage('assets/players/white.png').then(image => {
    plrImg['white'] = image
@@ -27,6 +28,10 @@ loadImage('assets/players/orange.png').then(image => {
 })
 loadImage('assets/players/green.png').then(image => {
    plrImg['green'] = image
+   imagesLoaded ++
+})
+loadImage('assets/players/shield.png').then(image => {
+   shieldImg = image
    imagesLoaded ++
 })
 loadImage('assets/blocks/fixed.jpg').then(image => {
@@ -142,7 +147,7 @@ coords = {
 let lastFrameTime
 
 const intervalID = setInterval(() => {
-   if (imagesLoaded === 17) {
+   if (imagesLoaded === 18) {
       clearInterval(intervalID)
 
       const intervalID2 = setInterval(() => {
@@ -154,6 +159,7 @@ const intervalID = setInterval(() => {
             lastFrameTime = performance.now()
             moveSpeed = MOVE_SPEEDS[0]
             switchedKeys = 0
+            hasShield = 0;
             window.requestAnimationFrame(gameloop)
          }
       }, 40)
@@ -235,51 +241,56 @@ function gameloop() {
    // draw map blocks
    for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-         if (map[y][x] === BLOCK.NO)
-            ;
-         else if (map[y][x] === BLOCK.NORMAL)
-            drawBlock(blockImg, x, y)
-         else if (map[y][x] === BLOCK.BOMB)
-            drawBlock(bombImg, x, y)
-         else if (map[y][x] === BLOCK.FIRE)
-            drawBlock(fireImg, x, y)
-         else if (map[y][x] === BLOCK.FIXED)
-            drawBlock(blockFixedImg, x, y)
-         
-         else if (map[y][x] === BLOCK.POWER_BOMBPLUS)
-            drawBlock(powersImg.bombplus, x, y)
-         else if (map[y][x] === BLOCK.POWER_BOMBLENGTH)
-            drawBlock(powersImg.bomblength, x, y)
-         else if (map[y][x] === BLOCK.POWER_SPEED)
-            drawBlock(powersImg.speed, x, y)
-         else if (map[y][x] === BLOCK.POWER_SHIELD)
-            drawBlock(powersImg.shield, x, y)
-         else if (map[y][x] === BLOCK.POWER_KICKBOMBS)
-            drawBlock(powersImg.kickbombs, x, y)
-         else if (map[y][x] === BLOCK.POWER_BOMBTIME)
-            drawBlock(powersImg.bombtime, x, y)
-         else if (map[y][x] === BLOCK.POWER_SWITCHPLAYER)
-            drawBlock(powersImg.switchplayer, x, y)
-         else if (map[y][x] === BLOCK.POWER_ILLNESS)
-            drawBlock(powersImg.illness, x, y)
-         else if (map[y][x] === BLOCK.POWER_BONUS)
-            drawBlock(powersImg.bonus, x, y)
+         switch (map[y][x]) {
+            case BLOCK.NO:
+               break;
+            case BLOCK.NORMAL:
+               drawBlock(blockImg, x, y); break;
+            case BLOCK.BOMB:
+               drawBlock(bombImg, x, y);  break;
+            case BLOCK.FIRE:
+               drawBlock(fireImg, x, y);  break;
+            case BLOCK.FIXED:
+               drawBlock(blockFixedImg, x, y);  break;
+            
+            case BLOCK.POWER_BOMBPLUS:
+               drawBlock(powersImg.bombplus, x, y);   break;
+            case BLOCK.POWER_BOMBLENGTH:
+               drawBlock(powersImg.bomblength, x, y); break;
+            case BLOCK.POWER_SPEED:
+               drawBlock(powersImg.speed, x, y);   break;
+            case BLOCK.POWER_SHIELD:
+               drawBlock(powersImg.shield, x, y);  break;
+            case BLOCK.POWER_KICKBOMBS:
+               drawBlock(powersImg.kickbombs, x, y);  break;
+            case BLOCK.POWER_BOMBTIME:
+               drawBlock(powersImg.bombtime, x, y);   break;
+            case BLOCK.POWER_SWITCHPLAYER:
+               drawBlock(powersImg.switchplayer, x, y);  break;
+            case BLOCK.POWER_ILLNESS:
+               drawBlock(powersImg.illness, x, y); break;
+            case BLOCK.POWER_BONUS:
+               drawBlock(powersImg.bonus, x, y);   break;
+         }
       }
    
    // draw players
    for (let i = 0; i < 4; ++i) {
       if (indexToColor(i) === myColor)
          continue;
-      drawPlayer(plrImg[indexToColor(i)], coords[indexToColor(i)].x, coords[indexToColor(i)].y)
+      drawPlayer(plrImg[indexToColor(i)], coords[indexToColor(i)].x, coords[indexToColor(i)].y);
    }
-   if (myColor !== 'spectator')
-      drawPlayer(plrImg[myColor], me.x, me.y)
+   if (myColor !== 'spectator') {
+      drawPlayer(plrImg[myColor], me.x, me.y);
+      if (hasShield)
+         drawPlayer(shieldImg, me.x, me.y);
+   }
    
-   ctx.fillStyle = 'gray'
-   ctx.font = '30px serif'
-   ctx.fillText(`FPS: ${Math.floor(FPS)}, deltaTime: ${deltaTime.toFixed(1)}`, 20, 23)
+   ctx.fillStyle = 'gray';
+   ctx.font = '30px serif';
+   ctx.fillText(`FPS: ${Math.floor(FPS)}, deltaTime: ${deltaTime.toFixed(1)}`, 20, 23);
    
-   window.requestAnimationFrame(gameloop)
+   window.requestAnimationFrame(gameloop);
 }
 
 })
