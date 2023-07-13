@@ -56,16 +56,16 @@
    <label hidden for="fps">Enter fps limit:</label>
    <input hidden value="60" id="fps">
 
-   <div id="select-color">
+   <div id="select-color" style="color: black; font-weight: bold;">
       <u><b><i>
          <span style="color: red;">Select</span>
          <span style="color: aqua;">color</span>
          <span style="color: blue;">here:</span></i></b></u>
-      <a onclick="socket.emit('selectColor', 'white', ()=>{myColor = 'white'})">White,</a>
-      <a onclick="socket.emit('selectColor', 'black', ()=>{myColor = 'black'})">Black,</a>
-      <a onclick="socket.emit('selectColor', 'orange', ()=>{myColor = 'orange'})">Orange,</a>
-      <a onclick="socket.emit('selectColor', 'green', ()=>{myColor = 'green'})">Green,</a>
-      <a onclick="socket.emit('selectColor', 'spectator', ()=>{myColor = 'spectator'})">Spectator</a>
+      <a href="#" style="background-color: white;" onclick="socket.emit('selectColor', 'white', ()=>{myColor = 'white'})">WHITE</a>
+      <a href="#" style="background-color: black; color: white;" onclick="socket.emit('selectColor', 'black', ()=>{myColor = 'black'})">BLACK</a>
+      <a href="#" style="background-color: orange;" onclick="socket.emit('selectColor', 'orange', ()=>{myColor = 'orange'})">ORANGE</a>
+      <a href="#" style="background-color: green;" onclick="socket.emit('selectColor', 'green', ()=>{myColor = 'green'})">GREEN</a>
+      <a href="#" style="background-color: gray;" onclick="socket.emit('selectColor', 'spectator', ()=>{myColor = 'spectator'})">SPECTATOR</a>
    </div>
 
    <p>You can move with W A S D. Place bombs with P.</p>

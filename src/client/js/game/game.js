@@ -159,7 +159,12 @@ const intervalID = setInterval(() => {
             lastFrameTime = performance.now();
             moveSpeed = MOVE_SPEEDS[0];
             switchedKeys = 0;
-            shields = {white: 0, black: 0, orange: 0, green: 0};
+            shields = {
+               white: {val: false, timeout: null},
+               black: {val: false, timeout: null},
+               orange:{val: false, timeout: null},
+               green: {val: false, timeout: null}
+            };
             window.requestAnimationFrame(gameloop);
          }
       }, 40);
@@ -279,13 +284,13 @@ function gameloop() {
       if (color === myColor)
          return;
       drawPlayer(plrImg[color], coords[color].x, coords[color].y);
-      if (shields[color])
+      if (shields[color].val)
          drawPlayer(shieldImg, coords[color].x, coords[color].y);
    });
 
    if (myColor !== 'spectator') {
       drawPlayer(plrImg[myColor], me.x, me.y);
-      if (shields[myColor])
+      if (shields[myColor].val)
          drawPlayer(shieldImg, me.x, me.y);
    }
    

@@ -101,122 +101,236 @@ io.on('connection', (socket) => {
             (deadlyBlock2.x !== INEXISTENT_POS.x && map[deadlyBlock2.y][deadlyBlock2.x] === BLOCK.FIRE))
    }
 
+// -------------- GETTERS and SETTERS --------------
+
+   function getSpeedIndex() {
+      return ROOMS.get(room)[color].moveSpeedIndex;
+   }
+
+   function setSpeedIndex(index) {
+      if ( !(0 <= index && index < MOVE_SPEEDS.length) )
+         return;
+      ROOMS.get(room)[color].moveSpeedIndex = index;
+      socket.emit('speedUpdate', MOVE_SPEEDS[index]);
+   }
+
+   function getShield() {
+      return ROOMS.get(room)[color].shield;
+   }
+
+   function setShield0() {
+      const plr = ROOMS.get(room)[color];
+      if (plr.shieldTimeout) {
+         clearTimeout(plr.shieldTimeout);
+      }
+
+      io.to(room).emit('shield0', color);
+      plr.shield = false;
+   }
+
+   function setShield1() {
+      const plr = ROOMS.get(room)[color];
+      if (plr.shieldTimeout) {
+         clearTimeout(plr.shieldTimeout);
+      }
+
+      io.to(room).emit('shield1', color);
+      plr.shield = true;
+      plr.shieldTimeout = setTimeout(() => {
+         if (plr)
+            plr.shield = false;
+      }, SHIELD_TIME);
+   }
+
+// -------------- POWERUP FUNCTIONS --------------
+
+   function collectPowerupBombplus() {
+      if (ROOMS.get(room)[color].bombs < 4)
+         ROOMS.get(room)[color].bombs ++
+   }
+
+   function collectPowerupBomblength() {
+      ROOMS.get(room)[color].bombLength += 2
+   }
+
+   function collectPowerupSpeed() {
+      setSpeedIndex(getSpeedIndex() + 1);
+   }
+
+   function collectPowerupShield() {
+      setShield1();
+   }
+
+   function collectPowerupKickbombs() { // WIP
+      
+   }
+
+   function collectPowerupBombtime() {
+      if (ROOMS.get(room)[color].bombTimeIndex < BOMB_TIMES.length - 1) {
+         ROOMS.get(room)[color].bombTimeIndex ++;
+      }
+   }
+
+   function collectPowerupSwitchplayer() {
+      const otherPlayers = [];
+      ['white', 'black', 'orange', 'green'].forEach(otherColor => {
+         if (ROOMS.get(room)[otherColor].selected && ! ROOMS.get(room)[otherColor].dead && otherColor !== color)
+            otherPlayers.push(otherColor);
+      });
+
+      if (otherPlayers.length === 0)
+         return;
+      
+      const randIdx = Math.floor(Math.random() * otherPlayers.length);
+      const randColor = otherPlayers[randIdx];
+
+      let coordsMe = ROOMS.get(room)[color].coords;
+      let coordsYo = ROOMS.get(room)[randColor].coords;
+      [coordsMe, coordsYo] = [coordsYo, coordsMe];
+
+      io.to(room).emit('switchPlayers', color, randColor);
+   }
+
+   function collectPowerupIllness() {
+      const rand = Math.floor(Math.random() * 2);
+      
+      switch (rand) {
+         case 0:
+            socket.emit('switchKeys');
+            break;
+         case 1:
+            ROOMS.get(room)[color].sick ++;
+            tryPlaceBombFunc();
+            setTimeout(() => {
+               if (ROOMS.get(room)?.[color]?.selected)
+                  ROOMS.get(room)[color].sick --;
+            }, ILLNESS_TIME);
+            break;
+      }
+   }
+
 
    function collectPowerup(x, y) {
       if ( !(0 <= x && x < BLOCKS_HORIZONTALLY && 0 <= y && y < BLOCKS_VERTICALLY) )
          return;
       
       if (!isPowerup(map[y][x]))
-         return
+         return;
+      
+      const plr = ROOMS.get(room)[color];
 
       if (map[y][x] === BLOCK.POWER_BOMBPLUS) {
-         if (ROOMS.get(room)[color].bombs < 4)
-            ROOMS.get(room)[color].bombs ++
+         collectPowerupBombplus();
       }
       else if (map[y][x] === BLOCK.POWER_BOMBLENGTH) {
-         ROOMS.get(room)[color].bombLength += 2
+         collectPowerupBomblength();
       }
       else if (map[y][x] === BLOCK.POWER_SPEED) {
-         if (ROOMS.get(room)[color].moveSpeedIndex < MOVE_SPEEDS.length - 1) {
-            ROOMS.get(room)[color].moveSpeedIndex ++
-            socket.emit('speedUpdate', MOVE_SPEEDS[ROOMS.get(room)[color].moveSpeedIndex])
-         }
+         collectPowerupSpeed();
       }
       else if (map[y][x] === BLOCK.POWER_SHIELD) {
-         ROOMS.get(room)[color].shield ++;
-         io.to(room).emit('shield+', color);
-         setTimeout(() => {
-            if (ROOMS.get(room)?.[color]?.selected)
-               ROOMS.get(room)[color].shield --;
-         }, SHIELD_TIME);
+         collectPowerupShield();
       }
-      else if (map[y][x] === BLOCK.POWER_KICKBOMBS) { // wip
-         
+      else if (map[y][x] === BLOCK.POWER_KICKBOMBS) {
+         collectPowerupKickbombs();
       }
       else if (map[y][x] === BLOCK.POWER_BOMBTIME) {
-         if (ROOMS.get(room)[color].bombTimeIndex < BOMB_TIMES.length - 1) {
-            ROOMS.get(room)[color].bombTimeIndex ++;
-         }
+         collectPowerupBombtime();
       }
       else if (map[y][x] === BLOCK.POWER_SWITCHPLAYER) {
-         const otherPlayers = [];
-         ['white', 'black', 'orange', 'green'].forEach(otherColor => {
-            if (ROOMS.get(room)[otherColor].selected && ! ROOMS.get(room)[otherColor].dead && otherColor !== color)
-               otherPlayers.push(otherColor);
-         });
-
-         const randIdx = Math.floor(Math.random() * otherPlayers.length);
-         const randColor = otherPlayers[randIdx];
-
-         let coordsMe = ROOMS.get(room)[color].coords;
-         let coordsYo = ROOMS.get(room)[randColor].coords;
-         [coordsMe, coordsYo] = [coordsYo, coordsMe];
-
-         io.to(room).emit('switchPlayers', color, randColor);
+         collectPowerupSwitchplayer();
       }
       else if (map[y][x] === BLOCK.POWER_ILLNESS) {
-         const rand = Math.floor(Math.random() * 2);
-         
-         switch (rand) {
-            case 0:
-               socket.emit('switchKeys');
-               break;
-            case 1:
-               ROOMS.get(room)[color].sick ++;
-               tryPlaceBombFunc();
-               setTimeout(() => {
-                  if (ROOMS.get(room)?.[color]?.selected)
-                     ROOMS.get(room)[color].sick --;
-               }, ILLNESS_TIME);
-               break;
-         }
+         collectPowerupIllness();
       }
       else if (map[y][x] === BLOCK.POWER_BONUS) { // wip
-         
+         const rand = Math.floor(Math.random() * 11);
+
+         switch (rand) {
+            case 0:
+               collectPowerupBomblength();
+               break;
+            case 1:
+               collectPowerupBombplus();
+               break;
+            case 2:
+               collectPowerupKickbombs();
+               break;
+            case 3:  case 4:
+               collectPowerupIllness();
+               break;
+            case 5:
+               collectPowerupSpeed();
+               break;
+            case 6:
+               collectPowerupShield();
+               break;
+            case 7:
+               collectPowerupBombtime();
+               break;
+            case 8:
+               collectPowerupSwitchplayer();
+               break;
+            case 9: // LOSE all powers
+               setSpeedIndex(0);
+               plr.bombs = 1;
+               plr.bombTimeIndex = 0;
+               plr.bombLength = 2;
+               // plr.kickBombs = 0;  // need event
+               setShield0();
+               break;
+            case 10: // GAIN all powers
+               setSpeedIndex(2);
+               plr.bombs = 4;
+               plr.bombTimeIndex = 3;
+               plr.bombLength = 16;
+               // plr.kickBombs = true;
+               setShield1();
+               break;
       }
    
       io.to(room).emit('mapUpdates', [{x, y, block: BLOCK.NO}]);
       map[y][x] = BLOCK.NO;
    }
 
-
+// -------------- SOCKET EVENTS --------------
 
    socket.on('playerJoined', (username1, room1, callback) => {
       if (!username1) {
-         socket.emit('error', 'playerJoined: invalid username. DISCONNECTED.')
-         socket.disconnect()
-         return
+         socket.emit('error', 'playerJoined: invalid username. DISCONNECTED.');
+         socket.disconnect();
+         return;
       }
       if (!room1) {
-         socket.emit('error', 'playerJoined: invalid room. DISCONNECTED.')
-         socket.disconnect()
-         return
+         socket.emit('error', 'playerJoined: invalid room. DISCONNECTED.');
+         socket.disconnect();
+         return;
       }
 
-      username = username1
-      room = room1
-      color = 'spectator'
-      isOwner = !(io.sockets.adapter.rooms.get(room))
+      username = username1;
+      room = room1;
+      color = 'spectator';
+      isOwner = !(io.sockets.adapter.rooms.get(room));
 
       if (isOwner) {
-         const map = []
+         const map = [];
          for (let i = 0; i < BLOCKS_VERTICALLY; ++i) {
             map[i] = []
             for (let j = 0; j < BLOCKS_HORIZONTALLY; ++j) {
                if (i % 2 == 1 && j % 2 == 1)
-                  map[i][j] = BLOCK.FIXED
+                  map[i][j] = BLOCK.FIXED;
                else
-                  map[i][j] = BLOCK.NO
+                  map[i][j] = BLOCK.NO;
             }
          }
 
 
          ROOMS.set(room, {
             owner: username,
-            white: {username: undefined, coords: Object.assign(DEFAULT_POS['white']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, selected: false},
-            black: {username: undefined, coords: Object.assign(DEFAULT_POS['black']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, selected: false},
-            orange: {username: undefined, coords: Object.assign(DEFAULT_POS['orange']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, selected: false},
-            green: {username: undefined, coords: Object.assign(DEFAULT_POS['green']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, selected: false},
+            white: {username: undefined, coords: Object.assign(DEFAULT_POS['white']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
+            black: {username: undefined, coords: Object.assign(DEFAULT_POS['black']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
+            orange:{username: undefined, coords: Object.assign(DEFAULT_POS['orange']),bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
+            green: {username: undefined, coords: Object.assign(DEFAULT_POS['green']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
             map: map,
             players: new Map(),
             status: ROOM_STATUS.WAITING

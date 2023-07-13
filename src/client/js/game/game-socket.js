@@ -43,9 +43,22 @@ socket.on('switchKeys', () => {
    setTimeout(() => { switchedKeys--; }, ILLNESS_TIME);
 })
 
-socket.on('shield+', (color) => {
-   shields[color]++;
-   setTimeout(() => { shields[color]--; }, SHIELD_TIME);
+socket.on('shield0', (color) => {
+   if (shields[color].timeout)
+      clearTimeout(shields[color].timeout);
+   
+   shields[color].timeout = null;
+   shields[color].val = false;
+})
+
+socket.on('shield1', (color) => {
+   if (shields[color].timeout)
+      clearTimeout(shields[color].timeout);
+   
+   shields[color].val = true;
+   shields[color].timeout = setTimeout(() => {
+      shields[color].val = false;
+   }, SHIELD_TIME);
 })
 
 socket.on('switchPlayers', (color1, color2) => {
