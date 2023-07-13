@@ -1,4 +1,19 @@
 {
+  "name": "pyromasters-multiplayer",
+  "description": "some gameplay:",
+  "version": "0.1.0",
+  "main": "./src/server/server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ezluci/pyromasters-multiplayer.git"
+  },
+  "author": "ezluci",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ezluci/pyromasters-multiplayer/issues"
+  },
+  "homepage": "https://github.com/ezluci/pyromasters-multiplayer#readme",
   "dependencies": {
     "http": "^0.0.1-security",
     "socket.io": "^4.6.1"

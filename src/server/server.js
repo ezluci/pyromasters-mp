@@ -243,7 +243,7 @@ io.on('connection', (socket) => {
       else if (map[y][x] === BLOCK.POWER_ILLNESS) {
          collectPowerupIllness();
       }
-      else if (map[y][x] === BLOCK.POWER_BONUS) { // wip
+      else if (map[y][x] === BLOCK.POWER_BONUS) {
          const rand = Math.floor(Math.random() * 11);
 
          switch (rand) {
