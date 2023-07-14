@@ -287,6 +287,7 @@ io.on('connection', (socket) => {
                // plr.kickBombs = true;
                setShield1();
                break;
+         }
       }
    
       io.to(room).emit('mapUpdates', [{x, y, block: BLOCK.NO}]);

@@ -16,6 +16,8 @@ socket.on('player~', (oldUsername, username, color, isOwner) => {
 
 socket.on('room_status', (msg) => {
    document.querySelector('#room-status').innerText = msg;
+   if (msg === 'game running.')
+      menuAudio.stop();
 })
 
 socket.on('mapUpdates', (blocks) => {

@@ -1,90 +1,96 @@
 'use strict';
 
 let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed;
-
+let menuAudio;
 window.addEventListener('load', () => {
 
 canvas = document.querySelector('#canvas');
 ctx = canvas.getContext('2d');
 
 
-let imagesLoaded = 0;
+let LOADED_COUNT = 0;
 let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined};
 let shieldImg;
 let blockFixedImg, blockImg, bombImg, fireImg;
 const powersImg = {};
+menuAudio = new Howl({
+   src: ['assets/sounds/menu.mp3'],
+   loop: true,
+   volume: 0.25,
+   autoplay: true,
+});
 
-loadImage('assets/players/white.png').then(image => {
-   plrImg['white'] = image
-   imagesLoaded ++
+loadImage('assets/images/players/white.png').then(image => {
+   plrImg['white'] = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/players/black.png').then(image => {
-   plrImg['black'] = image
-   imagesLoaded ++
+loadImage('assets/images/players/black.png').then(image => {
+   plrImg['black'] = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/players/orange.png').then(image => {
-   plrImg['orange'] = image
-   imagesLoaded ++
+loadImage('assets/images/players/orange.png').then(image => {
+   plrImg['orange'] = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/players/green.png').then(image => {
-   plrImg['green'] = image
-   imagesLoaded ++
+loadImage('assets/images/players/green.png').then(image => {
+   plrImg['green'] = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/players/shield.png').then(image => {
-   shieldImg = image
-   imagesLoaded ++
+loadImage('assets/images/players/shield.png').then(image => {
+   shieldImg = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/blocks/fixed.png').then(image => {
-   blockFixedImg = image
-   imagesLoaded ++
+loadImage('assets/images/blocks/fixed.png').then(image => {
+   blockFixedImg = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/blocks/normal.png').then(image => {
-   blockImg = image
-   imagesLoaded ++
+loadImage('assets/images/blocks/normal.png').then(image => {
+   blockImg = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/blocks/bomb.png').then(image => {
-   bombImg = image
-   imagesLoaded ++
+loadImage('assets/images/blocks/bomb.png').then(image => {
+   bombImg = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/blocks/fire.png').then(image => {
-   fireImg = image
-   imagesLoaded ++
+loadImage('assets/images/blocks/fire.png').then(image => {
+   fireImg = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/blocks/power_bombplus.png').then(image => {
-   powersImg.bombplus = image
-   imagesLoaded ++
+loadImage('assets/images/blocks/power_bombplus.png').then(image => {
+   powersImg.bombplus = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/blocks/power_bomblength.png').then(image => {
-   powersImg.bomblength = image
-   imagesLoaded ++
+loadImage('assets/images/blocks/power_bomblength.png').then(image => {
+   powersImg.bomblength = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/blocks/power_speed.png').then(image => {
-   powersImg.speed = image
-   imagesLoaded ++
+loadImage('assets/images/blocks/power_speed.png').then(image => {
+   powersImg.speed = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/blocks/power_shield.png').then(image => {
-   powersImg.shield = image
-   imagesLoaded ++
+loadImage('assets/images/blocks/power_shield.png').then(image => {
+   powersImg.shield = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/blocks/power_kickbombs.png').then(image => {
-   powersImg.kickbombs = image
-   imagesLoaded ++
+loadImage('assets/images/blocks/power_kickbombs.png').then(image => {
+   powersImg.kickbombs = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/blocks/power_bombtime.png').then(image => {
-   powersImg.bombtime = image
-   imagesLoaded ++
+loadImage('assets/images/blocks/power_bombtime.png').then(image => {
+   powersImg.bombtime = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/blocks/power_switchplayer.png').then(image => {
-   powersImg.switchplayer = image
-   imagesLoaded ++
+loadImage('assets/images/blocks/power_switchplayer.png').then(image => {
+   powersImg.switchplayer = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/blocks/power_illness.png').then(image => {
-   powersImg.illness = image
-   imagesLoaded ++
+loadImage('assets/images/blocks/power_illness.png').then(image => {
+   powersImg.illness = image;
+   LOADED_COUNT ++;
 })
-loadImage('assets/blocks/power_bonus.png').then(image => {
-   powersImg.bonus = image
-   imagesLoaded ++
+loadImage('assets/images/blocks/power_bonus.png').then(image => {
+   powersImg.bonus = image;
+   LOADED_COUNT ++;
 })
 
 
@@ -147,7 +153,7 @@ coords = {
 let lastFrameTime
 
 const intervalID = setInterval(() => {
-   if (imagesLoaded === 18) {
+   if (LOADED_COUNT === 18) {
       clearInterval(intervalID);
 
       const intervalID2 = setInterval(() => {
@@ -179,6 +185,7 @@ function gameloop() {
    // !!! maybe limit deltatime to 50..?
    lastFrameTime = currentTime
    const FPS = 1000 / deltaTime
+
 
 
    /// UPDATES
@@ -232,7 +239,8 @@ function gameloop() {
       if (meOld.x !== me.x || meOld.y !== me.y)
          socket.emit('coords', me)
    }
-   
+
+
 
    /// DRAWING
 
@@ -297,6 +305,14 @@ function gameloop() {
    ctx.fillStyle = 'gray';
    ctx.font = '30px serif';
    ctx.fillText(`FPS: ${Math.floor(FPS)}, deltaTime: ${deltaTime.toFixed(1)}`, 20, 23);
+
+
+
+   /// AUDIO
+   if (menuAudio.currentTime < 0.2 || menuAudio.currentTime > 4) {
+      menuAudio.currentTime = 0.2;
+   }
+
    
    window.requestAnimationFrame(gameloop);
 }
