@@ -308,12 +308,6 @@ function gameloop() {
 
 
 
-   /// AUDIO
-   if (menuAudio.currentTime < 0.2 || menuAudio.currentTime > 4) {
-      menuAudio.currentTime = 0.2;
-   }
-
-   
    window.requestAnimationFrame(gameloop);
 }
 
