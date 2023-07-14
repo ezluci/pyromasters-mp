@@ -34,11 +34,11 @@ loadImage('assets/players/shield.png').then(image => {
    shieldImg = image
    imagesLoaded ++
 })
-loadImage('assets/blocks/fixed.jpg').then(image => {
+loadImage('assets/blocks/fixed.png').then(image => {
    blockFixedImg = image
    imagesLoaded ++
 })
-loadImage('assets/blocks/normal.jpg').then(image => {
+loadImage('assets/blocks/normal.png').then(image => {
    blockImg = image
    imagesLoaded ++
 })
