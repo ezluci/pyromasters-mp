@@ -2,6 +2,9 @@
 
 let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed;
 let menuAudio;
+let gameTime = 0;
+
+
 window.addEventListener('load', () => {
 
 canvas = document.querySelector('#canvas');
@@ -13,6 +16,7 @@ let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'gree
 let shieldImg;
 let blockFixedImg, blockImg, bombImg, fireImg;
 const powersImg = {};
+
 menuAudio = new Howl({
    src: ['assets/sounds/menu.mp3'],
    loop: true,
@@ -302,11 +306,15 @@ function gameloop() {
          drawPlayer(shieldImg, me.x, me.y);
    }
    
+   // draw fps
    ctx.fillStyle = 'gray';
    ctx.font = '30px serif';
    ctx.fillText(`FPS: ${Math.floor(FPS)}, deltaTime: ${deltaTime.toFixed(1)}`, 20, 23);
 
-
+   // draw gametime
+   const m = Math.floor(gameTime / 60).toString();
+   const s = Math.floor(gameTime % 60).toString().padStart(2, '0');
+   ctx.fillText(`${m}:${s}`, 750, 23);
 
    window.requestAnimationFrame(gameloop);
 }

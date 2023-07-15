@@ -87,3 +87,7 @@ socket.on('error', (msg) => {
    addLog(`ERROR FROM SERVER: ${msg}`);
    console.error(`ERROR FROM SERVER: ${msg}`);
 })
+
+socket.on('gameTime', (time) => {
+   gameTime = time;
+})
