@@ -51,6 +51,8 @@
 
    <ul id="player-list" style="display: inline-block; background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; font-size: 30px;"></ul>
 
+   <button onclick="menuAudio.stop()">mute menu music</button>
+
    <div id="start-game">
       <button id="start-button" onclick="socket.emit('tryStart')">Start game</button>
       <span id="room-status" style="color: red;"></span>

@@ -17,7 +17,7 @@ socket.on('player~', (oldUsername, username, color, isOwner) => {
 socket.on('room_status', (msg) => {
    document.querySelector('#room-status').innerText = msg;
    if (msg === 'game running.')
-      menuAudio.stop();
+      menuSound.stop();
 })
 
 socket.on('mapUpdates', (blocks) => {
@@ -90,4 +90,12 @@ socket.on('error', (msg) => {
 
 socket.on('gameTime', (time) => {
    gameTime = time;
+
+   if (time === 5)
+      hurrySound[0].play();
+   if (time === 3)
+      hurrySound[Math.floor(Math.random() * (hurrySound.length - 1)) + 1].play();
+   
+   if (time % 20 === 16)
+      tauntSound[Math.floor(Math.random() * tauntSound.length)].play();
 })

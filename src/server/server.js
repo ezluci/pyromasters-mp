@@ -405,7 +405,7 @@ io.on('connection', (socket) => {
                   }
                   
                   ROOMS.get(room).gameTime --;
-                  socket.emit('gameTime', ROOMS.get(room).gameTime);
+                  io.to(room).emit('gameTime', ROOMS.get(room).gameTime);
                }, 1000);
 
                // set coordinates for each color

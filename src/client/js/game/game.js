@@ -1,7 +1,7 @@
 'use strict';
 
 let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed;
-let menuAudio;
+let menuSound, hurrySound = [], tauntSound = [];
 let gameTime = 0;
 
 
@@ -17,12 +17,35 @@ let shieldImg;
 let blockFixedImg, blockImg, bombImg, fireImg;
 const powersImg = {};
 
-menuAudio = new Howl({
+// loading sounds
+
+menuSound = new Howl({
    src: ['assets/sounds/menu.mp3'],
    loop: true,
    volume: 0.25,
    autoplay: true,
 });
+
+hurrySound.push(new Howl({
+   src: ['assets/sounds/hurry.mp3'],
+   volume: .5
+}));
+
+for (let i = 1; i <= 5; ++i) {
+   hurrySound.push(new Howl({
+      src: [`assets/sounds/hurry${i}.mp3`],
+      volume: .5
+   }));
+}
+
+for (let i = 1; i <= 13; ++i) {
+   tauntSound.push(new Howl({
+      src: [`assets/sounds/taunt${i}.mp3`],
+      volume: .5
+   }));
+}
+
+// loading images
 
 loadImage('assets/images/players/white.png').then(image => {
    plrImg['white'] = image;
@@ -315,6 +338,13 @@ function gameloop() {
    const m = Math.floor(gameTime / 60).toString();
    const s = Math.floor(gameTime % 60).toString().padStart(2, '0');
    ctx.fillText(`${m}:${s}`, 750, 23);
+
+
+
+   /// SOUND
+
+   // some sounds are handled in  game-socket.js -> gameTime.  WEIRD RIGHT???????
+
 
    window.requestAnimationFrame(gameloop);
 }
