@@ -19,7 +19,7 @@ socket.on('player~', (oldUsername, username, color, isOwner) => {
 socket.on('room_status', (msg) => {
    document.querySelector('#room-status').innerText = msg;
    if (msg === 'game running.')
-      menuSound.stop();
+      sounds.menu.stop();
 })
 
 
@@ -92,21 +92,21 @@ socket.on('mapUpdates', (blocks) => {
    blocks.forEach(({x, y, block, details}) => {
       if (block === BLOCK.BOMB)
          if (details.sick)
-            dropBombSickSound.play();
+            sounds.dropBombSick.play();
          else
-            dropBombSound.play();
+            sounds.dropBomb.play();
       
       if (block === BLOCK.FIRE)
          anyNewFires = true;
 
       if (isPowerup(map[y][x]) && block === BLOCK.NO)
-         powerupSound.play();
+         sounds.powerup.play();
       
       map[y][x] = block;
    });
 
    if (anyNewFires)
-      explodeBombSound[Math.floor(Math.random() * explodeBombSound.length)].play();
+      sounds.explodeBomb[Math.floor(Math.random() * sounds.explodeBomb.length)].play();
 })
 
 
@@ -114,21 +114,18 @@ socket.on('gameTime', (time) => {
    gameTime = time;
 
    if (time === 5)
-      hurrySound[0].play();
+      sounds.hurry[0].play();
    if (time === 3)
-      hurrySound[Math.floor(Math.random() * (hurrySound.length - 1)) + 1].play();
+      sounds.hurry[Math.floor(Math.random() * (sounds.hurry.length - 1)) + 1].play();
    
    if (time % 20 === 16)
-      tauntSound[Math.floor(Math.random() * tauntSound.length)].play();
+      sounds.taunt[Math.floor(Math.random() * sounds.taunt.length)].play();
 })
 
 
-socket.on('bonusall', () => {
-   bonusAllSound.play();
-})
-
-socket.on('bonuslost', () => {
-   bonusLostSound.play();
+socket.on('playsound', (sound) => {
+   console.log(sound);
+   sounds[sound].play();
 })
 
 

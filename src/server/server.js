@@ -244,7 +244,7 @@ io.on('connection', (socket) => {
          collectPowerupIllness();
       }
       else if (map[y][x] === BLOCK.POWER_BONUS) {
-         const rand = Math.random() < 0.5 ? 9 : 10; // const rand = Math.floor(Math.random() * 11);
+         const rand = Math.floor(Math.random() * 11);
 
          switch (rand) {
             case 0:
@@ -278,7 +278,7 @@ io.on('connection', (socket) => {
                plr.bombLength = 2;
                // plr.kickBombs = 0;  // need event in order to transmit to the player
                setShield0();
-               socket.emit('bonuslost');
+               io.to(room).emit('playsound', 'bonusLost');
                break;
             case 10: // BonusALL
                setSpeedIndex(2);
@@ -287,7 +287,7 @@ io.on('connection', (socket) => {
                plr.bombLength = 16;
                // plr.kickBombs = true;
                setShield1();
-               socket.emit('bonusall');
+               io.to(room).emit('playsound', 'bonusAll');
                break;
          }
       }

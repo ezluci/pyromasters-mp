@@ -51,7 +51,23 @@
 
    <ul id="player-list" style="display: inline-block; background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; font-size: 30px;"></ul>
 
-   <button onclick="menuSound.stop()">mute menu music</button>
+   <br>set volume:
+   <input type="range" min="0" max="100" value="30" id="volumeSlider">
+
+   <script>
+      const slider = document.querySelector('#volumeSlider');
+      slider.addEventListener('input', () => {
+         Object.values(sounds).forEach((sound) => {
+            if (Array.isArray(sound)) {
+               sound.forEach((sound) => {
+                  sound.volume(slider.value / 100);
+               })
+            }
+            else
+               sound.volume(slider.value / 100);
+         });
+      });
+   </script>
 
    <div id="start-game">
       <button id="start-button" onclick="socket.emit('tryStart')">Start game</button>

@@ -8,6 +8,7 @@ let shieldImg;
 let blockFixedImg, blockImg, bombImg, fireImg;
 const powersImg = {};
 
+const sounds = {};
 let menuSound, hurrySound = [], tauntSound = [], dropBombSound, dropBombSickSound, explodeBombSound = [], powerupSound, bonusAllSound, bonusLostSound;
 
 
@@ -20,60 +21,66 @@ ctx = canvas.getContext('2d');
 
 // loading sounds
 
-menuSound = new Howl({
+const vol = slider.value / 100; // the slider from game.html
+
+sounds.menu = new Howl({
    src: ['assets/sounds/menu.mp3'],
    loop: true,
-   volume: 0.25,
+   volume: vol,
    autoplay: true,
 });
 
-hurrySound.push(new Howl({
+sounds.hurry = [];
+sounds.hurry.push(new Howl({
    src: ['assets/sounds/hurry.mp3'],
-   volume: .5
+   volume: vol
 }));
 
 for (let i = 1; i <= 5; ++i) {
-   hurrySound.push(new Howl({
+   sounds.hurry.push(new Howl({
       src: [`assets/sounds/hurry${i}.mp3`],
-      volume: .5
+      volume: vol
    }));
 }
 
+sounds.taunt = [];
 for (let i = 1; i <= 13; ++i) {
-   tauntSound.push(new Howl({
+   sounds.taunt.push(new Howl({
       src: [`assets/sounds/taunt${i}.mp3`],
-      volume: .5
+      volume: vol
    }));
 }
 
-dropBombSound = new Howl({
+sounds.dropBomb = new Howl({
    src: ['assets/sounds/dropbomb.mp3'],
-   volume: .5
-});
-dropBombSickSound = new Howl({
-   src: ['assets/sounds/dropbombsick.mp3'],
-   volume: .5
+   volume: vol
 });
 
+sounds.dropBombSick = new Howl({
+   src: ['assets/sounds/dropbombsick.mp3'],
+   volume: vol
+});
+
+sounds.explodeBomb = [];
 for (let i = 1; i <= 4; ++i)
-   explodeBombSound.push(new Howl({
+   sounds.explodeBomb.push(new Howl({
       src: [`assets/sounds/explode${i}.mp3`],
-      volume: .5
+      volume: vol
    }));
 
-powerupSound = new Howl({
+sounds.powerup = new Howl({
    src: ['assets/sounds/powerup.mp3'],
-   volume: .5
+   volume: vol
 });
 
-bonusAllSound = new Howl({
+sounds.bonusAll = new Howl({
    src: ['assets/sounds/bonusall.mp3'],
-   volume: .5
+   volume: vol
 });
 
-bonusLostSound = new Howl({
+sounds.bonusLost = new Howl({
    src: ['assets/sounds/bonuslost.mp3'],
-   volume: .5
+   volume: vol
 });
 
 
