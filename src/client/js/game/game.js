@@ -1,8 +1,14 @@
 'use strict';
 
+let LOADED_COUNT = 0, gameTime = 0;
 let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed;
-let menuSound, hurrySound = [], tauntSound = [];
-let gameTime = 0;
+
+let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined};
+let shieldImg;
+let blockFixedImg, blockImg, bombImg, fireImg;
+const powersImg = {};
+
+let menuSound, hurrySound = [], tauntSound = [], dropBombSound, dropBombSickSound, explodeBombSound = [], powerupSound, bonusAllSound, bonusLostSound;
 
 
 window.addEventListener('load', () => {
@@ -11,11 +17,6 @@ canvas = document.querySelector('#canvas');
 ctx = canvas.getContext('2d');
 
 
-let LOADED_COUNT = 0;
-let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined};
-let shieldImg;
-let blockFixedImg, blockImg, bombImg, fireImg;
-const powersImg = {};
 
 // loading sounds
 
@@ -44,6 +45,37 @@ for (let i = 1; i <= 13; ++i) {
       volume: .5
    }));
 }
+
+dropBombSound = new Howl({
+   src: ['assets/sounds/dropbomb.mp3'],
+   volume: .5
+});
+dropBombSickSound = new Howl({
+   src: ['assets/sounds/dropbombsick.mp3'],
+   volume: .5
+});
+
+for (let i = 1; i <= 4; ++i)
+   explodeBombSound.push(new Howl({
+      src: [`assets/sounds/explode${i}.mp3`],
+      volume: .5
+   }));
+
+powerupSound = new Howl({
+   src: ['assets/sounds/powerup.mp3'],
+   volume: .5
+});
+
+bonusAllSound = new Howl({
+   src: ['assets/sounds/bonusall.mp3'],
+   volume: .5
+});
+
+bonusLostSound = new Howl({
+   src: ['assets/sounds/bonuslost.mp3'],
+   volume: .5
+});
+
 
 // loading images
 
@@ -343,7 +375,8 @@ function gameloop() {
 
    /// SOUND
 
-   // some sounds are handled in  game-socket.js -> gameTime.  WEIRD RIGHT???????
+   // some sounds are handled in  game-socket.js.  WEIRD RIGHT???????
+   // update - actually all of the sounds are handled there uups
 
 
    window.requestAnimationFrame(gameloop);

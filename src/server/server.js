@@ -244,7 +244,7 @@ io.on('connection', (socket) => {
          collectPowerupIllness();
       }
       else if (map[y][x] === BLOCK.POWER_BONUS) {
-         const rand = Math.floor(Math.random() * 11);
+         const rand = Math.random() < 0.5 ? 9 : 10; // const rand = Math.floor(Math.random() * 11);
 
          switch (rand) {
             case 0:
@@ -271,21 +271,23 @@ io.on('connection', (socket) => {
             case 8:
                collectPowerupSwitchplayer();
                break;
-            case 9: // LOSE all powers
+            case 9: // BonusLOST
                setSpeedIndex(0);
                plr.bombs = 1;
                plr.bombTimeIndex = 0;
                plr.bombLength = 2;
-               // plr.kickBombs = 0;  // need event
+               // plr.kickBombs = 0;  // need event in order to transmit to the player
                setShield0();
+               socket.emit('bonuslost');
                break;
-            case 10: // GAIN all powers
+            case 10: // BonusALL
                setSpeedIndex(2);
                plr.bombs = 4;
                plr.bombTimeIndex = 3;
                plr.bombLength = 16;
                // plr.kickBombs = true;
                setShield1();
+               socket.emit('bonusall');
                break;
          }
       }
@@ -336,7 +338,7 @@ io.on('connection', (socket) => {
             players: new Map(),
             gameTime: null,
             status: ROOM_STATUS.WAITING
-         })
+         });
       }
       
       map = ROOMS.get(room).map
@@ -394,13 +396,13 @@ io.on('connection', (socket) => {
                socket.emit('gameTime', ROOMS.get(room).gameTime);
 
                // gameTime handling
-               let intervalId = setInterval(() => {
+               let gameTime_intervalId = setInterval(() => {
                   if (! ROOMS.get(room)) {
-                     clearInterval(intervalId);
+                     clearInterval(gameTime_intervalId);
                      return;
                   }
-                  if (ROOMS.get(room).gameTime === 0) { // possible bug
-                     clearInterval(intervalId);
+                  if (ROOMS.get(room).gameTime === 0) { // possible bug im not sure
+                     clearInterval(gameTime_intervalId);
                      return;
                   }
                   
@@ -504,14 +506,18 @@ io.on('connection', (socket) => {
       if (ROOMS.get(room)[color].bombs === 0)
          return; // no bombs left
       
-      io.to(room).emit('mapUpdates', [{x, y, block: BLOCK.BOMB}]);
+      io.to(room).emit('mapUpdates', [{x, y, block: BLOCK.BOMB, details: {sick: ROOMS.get(room)[color].sick}}]);
       map[y][x] = BLOCK.BOMB;
       ROOMS.get(room)[color].bombs --;
 
       const bombLength = ROOMS.get(room)[color].bombLength;
-   
+      const roomStatus = ROOMS.get(room).status;
+
       setTimeout(() => {
          if (! ROOMS.get(room))
+            return;
+         
+         if (ROOMS.get(room).status !== roomStatus)
             return;
          
          const fires = [];
@@ -544,7 +550,7 @@ io.on('connection', (socket) => {
    
          fires.forEach((fire) => {
             map[fire.y][fire.x] = BLOCK.FIRE;
-         })
+         });
    
          io.to(room).emit('mapUpdates', fires);
 
@@ -559,10 +565,13 @@ io.on('connection', (socket) => {
                ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
                ROOMS.get(room).players.get(username).coords = Object.assign(INEXISTENT_POS);
             }
-         })
+         });
 
          setTimeout(() => {
             if (! ROOMS.get(room))
+               return;
+            
+            if (ROOMS.get(room).status !== roomStatus)
                return;
             
             fires.forEach((fire) => {
@@ -595,7 +604,7 @@ io.on('connection', (socket) => {
    
                fire.block = newBlock;
                map[fire.y][fire.x] = newBlock;
-            })
+            });
    
             io.to(room).emit('mapUpdates', fires);
    

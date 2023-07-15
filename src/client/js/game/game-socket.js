@@ -2,6 +2,7 @@
 
 const socket = io();
 
+
 socket.on('player+', (username, color, isOwner) => {
    addPlayerToList(username, color, isOwner);
 })
@@ -14,21 +15,18 @@ socket.on('player~', (oldUsername, username, color, isOwner) => {
    changePlayerFromList(oldUsername, username, color, isOwner);
 })
 
+
 socket.on('room_status', (msg) => {
    document.querySelector('#room-status').innerText = msg;
    if (msg === 'game running.')
       menuSound.stop();
 })
 
-socket.on('mapUpdates', (blocks) => {
-   blocks.forEach(({x, y, block}) => {
-      map[y][x] = block;
-   });
-})
 
 socket.on('speedUpdate', (newSpeed) => {
    moveSpeed = newSpeed;
 })
+
 
 socket.on('switchKeys', () => {
    switchedKeys++;
@@ -44,6 +42,7 @@ socket.on('switchKeys', () => {
 
    setTimeout(() => { switchedKeys--; }, ILLNESS_TIME);
 })
+
 
 socket.on('shield0', (color) => {
    if (shields[color].timeout)
@@ -63,9 +62,11 @@ socket.on('shield1', (color) => {
    }, SHIELD_TIME);
 })
 
+
 socket.on('switchPlayers', (color1, color2) => {
    [coords[color1], coords[color2]] = [coords[color2], coords[color1]];
 })
+
 
 socket.on('death', (color) => {
    if (myColor === color) {
@@ -75,18 +76,39 @@ socket.on('death', (color) => {
    coords[color] = INEXISTENT_POS;
 })
 
+
 socket.on('coords', (color, coords1) => {
    coords[color] = coords1;
 })
+
 
 socket.on('map', (map1) => { // a 2d array
    map = map1;
 })
 
-socket.on('error', (msg) => {
-   addLog(`ERROR FROM SERVER: ${msg}`);
-   console.error(`ERROR FROM SERVER: ${msg}`);
+socket.on('mapUpdates', (blocks) => {
+   let anyNewFires = false; // maybe you can play each sound for each bomb exploded. not a big difference but yeah.
+
+   blocks.forEach(({x, y, block, details}) => {
+      if (block === BLOCK.BOMB)
+         if (details.sick)
+            dropBombSickSound.play();
+         else
+            dropBombSound.play();
+      
+      if (block === BLOCK.FIRE)
+         anyNewFires = true;
+
+      if (isPowerup(map[y][x]) && block === BLOCK.NO)
+         powerupSound.play();
+      
+      map[y][x] = block;
+   });
+
+   if (anyNewFires)
+      explodeBombSound[Math.floor(Math.random() * explodeBombSound.length)].play();
 })
+
 
 socket.on('gameTime', (time) => {
    gameTime = time;
@@ -98,4 +120,19 @@ socket.on('gameTime', (time) => {
    
    if (time % 20 === 16)
       tauntSound[Math.floor(Math.random() * tauntSound.length)].play();
+})
+
+
+socket.on('bonusall', () => {
+   bonusAllSound.play();
+})
+
+socket.on('bonuslost', () => {
+   bonusLostSound.play();
+})
+
+
+socket.on('error', (msg) => {
+   addLog(`ERROR FROM SERVER: ${msg}`);
+   console.error(`ERROR FROM SERVER: ${msg}`);
 })
