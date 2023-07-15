@@ -1,7 +1,7 @@
 {
   "name": "pyromasters-multiplayer",
   "description": "some gameplay:",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "main": "./src/server/server.js",
   "repository": {
     "type": "git",
