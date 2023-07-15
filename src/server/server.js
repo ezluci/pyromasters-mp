@@ -334,6 +334,7 @@ io.on('connection', (socket) => {
             green: {username: undefined, coords: Object.assign(DEFAULT_POS['green']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
             map: map,
             players: new Map(),
+            gameTime: null,
             status: ROOM_STATUS.WAITING
          })
       }
@@ -388,6 +389,24 @@ io.on('connection', (socket) => {
 
                io.to(room).emit('room_status', `game running.`);
                ROOMS.get(room).status = ROOM_STATUS.RUNNING;
+               
+               ROOMS.get(room).gameTime = 2*60;
+               socket.emit('gameTime', ROOMS.get(room).gameTime);
+
+               // gameTime handling
+               let intervalId = setInterval(() => {
+                  if (! ROOMS.get(room)) {
+                     clearInterval(intervalId);
+                     return;
+                  }
+                  if (ROOMS.get(room).gameTime === 0) { // possible bug
+                     clearInterval(intervalId);
+                     return;
+                  }
+                  
+                  ROOMS.get(room).gameTime --;
+                  socket.emit('gameTime', ROOMS.get(room).gameTime);
+               }, 1000);
 
                // set coordinates for each color
                ['white', 'black', 'orange', 'green'].forEach(color => {
