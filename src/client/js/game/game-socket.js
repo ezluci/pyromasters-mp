@@ -73,6 +73,7 @@ socket.on('death', (color) => {
       myColor = 'spectator';
       me = INEXISTENT_POS;
    }
+   sounds.dead[Math.floor(Math.random() * sounds.dead.length)].play();
    coords[color] = INEXISTENT_POS;
 })
 
@@ -124,7 +125,6 @@ socket.on('gameTime', (time) => {
 
 
 socket.on('playsound', (sound) => {
-   console.log(sound);
    sounds[sound].play();
 })
 

@@ -47,6 +47,7 @@ io.on('connection', (socket) => {
 
    let username, room, color, isOwner, map
    let tryPlaceBombFunc
+   const intervalIDS = new Set();
 
 
    function detailsOkCheck() {
@@ -140,6 +141,7 @@ io.on('connection', (socket) => {
          if (plr)
             plr.shield = false;
       }, SHIELD_TIME);
+      intervalIDS.add(plr.shieldTimeout);
    }
 
 // -------------- POWERUP FUNCTIONS --------------
@@ -201,10 +203,12 @@ io.on('connection', (socket) => {
          case 1:
             ROOMS.get(room)[color].sick ++;
             tryPlaceBombFunc();
-            setTimeout(() => {
+            const id = setTimeout(() => {
                if (ROOMS.get(room)?.[color]?.selected)
                   ROOMS.get(room)[color].sick --;
             }, ILLNESS_TIME);
+            intervalIDS.add(id);
+
             break;
       }
    }
@@ -379,11 +383,11 @@ io.on('connection', (socket) => {
       ROOMS.get(room).status = ROOM_STATUS.STARTING;
       
       io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 3`);
-      setTimeout(() => {
+      const id3 = setTimeout(() => {
          io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 2`);
-         setTimeout(() => {
+         const id2 = setTimeout(() => {
             io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 1`);
-            setTimeout(() => {
+            const id1 = setTimeout(() => {
 
                /// GAME STARTS HERE!
                if (! ROOMS.get(room))
@@ -409,6 +413,8 @@ io.on('connection', (socket) => {
                   ROOMS.get(room).gameTime --;
                   io.to(room).emit('gameTime', ROOMS.get(room).gameTime);
                }, 1000);
+
+               intervalIDS.add(gameTime_intervalId);
 
                // set coordinates for each color
                ['white', 'black', 'orange', 'green'].forEach(color => {
@@ -442,15 +448,18 @@ io.on('connection', (socket) => {
                         if (!canDraw)
                            map[y][x] = BLOCK.NO;
                         else
-                           map[y][x] = (Math.random() < .67 ? BLOCK.NORMAL : BLOCK.NO);
+                           map[y][x] = (Math.random() < .7 ? BLOCK.NORMAL : BLOCK.NO); // need to check the original code here!!
                      }
                   }
                }
 
                io.to(room).emit('map', map);
             }, 1000);
+            intervalIDS.add(id1);
          }, 1000);
+         intervalIDS.add(id2);
       }, 1000);
+      intervalIDS.add(id3);
    })
 
 
@@ -513,7 +522,7 @@ io.on('connection', (socket) => {
       const bombLength = ROOMS.get(room)[color].bombLength;
       const roomStatus = ROOMS.get(room).status;
 
-      setTimeout(() => {
+      const id1 = setTimeout(() => {
          if (! ROOMS.get(room))
             return;
          
@@ -567,7 +576,7 @@ io.on('connection', (socket) => {
             }
          });
 
-         setTimeout(() => {
+         const id2 = setTimeout(() => {
             if (! ROOMS.get(room))
                return;
             
@@ -623,8 +632,10 @@ io.on('connection', (socket) => {
             if (ROOMS.get(room)[color].sick)
                tryPlaceBombFunc();
          }, FIRE_TIME);
+         intervalIDS.add(id2);
 
       }, BOMB_TIMES[ROOMS.get(room)[color].bombTimeIndex]);
+      intervalIDS.add(id1);
    }
 
    socket.on('tryPlaceBomb', () => {
@@ -680,6 +691,9 @@ io.on('connection', (socket) => {
 
       if (!io.sockets.adapter.rooms.get(room)) { // room empty
          ROOMS.delete(room);
+         intervalIDS.forEach((id) => {
+            clearInterval(id);
+         });
       } else {
          if (color !== 'spectator') {
             if (ROOMS.get(room).status !== ROOM_STATUS.WAITING) {

@@ -9,7 +9,6 @@ let blockFixedImg, blockImg, bombImg, fireImg;
 const powersImg = {};
 
 const sounds = {};
-let menuSound, hurrySound = [], tauntSound = [], dropBombSound, dropBombSickSound, explodeBombSound = [], powerupSound, bonusAllSound, bonusLostSound;
 
 
 window.addEventListener('load', () => {
@@ -82,6 +81,14 @@ sounds.bonusLost = new Howl({
    src: ['assets/sounds/bonuslost.mp3'],
    volume: vol
 });
+
+sounds.dead = [];
+for (let i = 1; i <= 5; ++i) {
+   sounds.dead.push(new Howl({
+      src: [`assets/sounds/dead${i}.mp3`],
+      volume: vol
+   }));
+}
 
 
 // loading images
