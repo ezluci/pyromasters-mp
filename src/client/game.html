@@ -22,13 +22,13 @@
 
    <script>
       const params = new URLSearchParams(window.location.search);
-      const username = params.get('username');
-      const room = params.get('room');
+      const usernameHTML = params.get('username');
+      const roomHTML = params.get('room');
       
-      if (!username || !room)
+      if (!usernameHTML || !roomHTML)
          window.open('https://www.google.com/search?q=a+venit+alex')
       else
-         socket.emit('playerJoined', username, room, (players, colorsCoords, map1) => {
+         socket.emit('playerJoined', usernameHTML, roomHTML, (players, colorsCoords, map1, roomStatus) => {
             map = map1
             
             players.forEach( ({username, color, isOwner}) => {
@@ -38,6 +38,9 @@
             Object.keys(colorsCoords).forEach((color) => {
                coords[color] = colorsCoords[color]
             })
+
+            if (roomStatus === ROOM_STATUS.WAITING || roomStatus === ROOM_STATUS.STARTING)
+               sounds.menu.play();
          })
    </script>
 </head>
@@ -83,11 +86,11 @@
          <span style="color: red;">Select</span>
          <span style="color: aqua;">color</span>
          <span style="color: blue;">here:</span></i></b></u>
-      <a href="#" style="background-color: white;" onclick="socket.emit('selectColor', 'white', ()=>{myColor = 'white'})">WHITE</a>
-      <a href="#" style="background-color: black; color: white;" onclick="socket.emit('selectColor', 'black', ()=>{myColor = 'black'})">BLACK</a>
-      <a href="#" style="background-color: orange;" onclick="socket.emit('selectColor', 'orange', ()=>{myColor = 'orange'})">ORANGE</a>
-      <a href="#" style="background-color: green;" onclick="socket.emit('selectColor', 'green', ()=>{myColor = 'green'})">GREEN</a>
-      <a href="#" style="background-color: gray;" onclick="socket.emit('selectColor', 'spectator', ()=>{myColor = 'spectator'})">SPECTATOR</a>
+      <a href="#" style="background-color: white;" onclick="socket.emit('selectColor', 'white')">WHITE</a>
+      <a href="#" style="background-color: black; color: white;" onclick="socket.emit('selectColor', 'black')">BLACK</a>
+      <a href="#" style="background-color: orange;" onclick="socket.emit('selectColor', 'orange')">ORANGE</a>
+      <a href="#" style="background-color: green;" onclick="socket.emit('selectColor', 'green')">GREEN</a>
+      <a href="#" style="background-color: gray;" onclick="socket.emit('selectColor', 'spectator')">SPECTATOR</a>
    </div>
 
    <p>You can move with W A S D. Place bombs with P.</p>

@@ -1,7 +1,7 @@
 'use strict';
 
 let LOADED_COUNT = 0, gameTime = 0;
-let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed;
+let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed, CAN_MOVE = false;
 
 let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined};
 let shieldImg;
@@ -25,8 +25,7 @@ const vol = slider.value / 100; // the slider from game.html
 sounds.menu = new Howl({
    src: ['assets/sounds/menu.mp3'],
    loop: true,
-   volume: vol,
-   autoplay: true,
+   volume: vol
 });
 
 sounds.hurry = [];
@@ -263,7 +262,7 @@ function gameloop() {
 
    /// UPDATES
 
-   if (myColor !== 'spectator') {
+   if (CAN_MOVE) {
       me = coords[myColor]
       meOld = {x: me.x, y: me.y}
 
@@ -389,7 +388,7 @@ function gameloop() {
 
    /// SOUND
 
-   // some sounds are handled in  game-socket.js.  WEIRD RIGHT???????
+   // some sounds are handled in  game-socket.js and in game.html.  WEIRD RIGHT???????
    // update - actually all of the sounds are handled there uups
 
 

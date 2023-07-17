@@ -48,10 +48,13 @@ const DEFAULT_POS = {
 const ROOM_STATUS = {
    WAITING: 'waiting',
    STARTING: 'starting',
-   RUNNING: 'running'
+   RUNNING: 'running',
+   ENDED: 'ended'
 }
 
-const ILLNESS = {
+const END_SCREEN_TIMEOUT = 5000;
+
+const ILLNESS = { // not used?
    SWITCH_KEYS: 0,
    SICK: 1
 }
@@ -63,6 +66,6 @@ try { // only for the nodejs server
       MIN_X, MIN_Y, MAX_X, MAX_Y,
       BLOCK,
       INEXISTENT_POS, DEFAULT_POS,
-      ROOM_STATUS
+      ROOM_STATUS, END_SCREEN_TIMEOUT
    }
 } catch (e) {}

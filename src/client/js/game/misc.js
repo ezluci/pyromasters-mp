@@ -1,14 +1,5 @@
 'use strict';
 
-// this function transforms an index 0..4 to a color.
-function indexToColor(idx) {
-   if (idx === 0) return 'white'
-   if (idx === 1) return 'black'
-   if (idx === 2) return 'orange'
-   if (idx === 3) return 'green'
-   console.error('?')
-}
-
 function isPowerup(blockCode) {
    return 5 <= blockCode && blockCode <= 13
 }

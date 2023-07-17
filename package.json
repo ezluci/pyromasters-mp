@@ -1,7 +1,7 @@
 {
   "name": "pyromasters-multiplayer",
-  "description": "some gameplay:",
-  "version": "0.1.6",
+  "description": "The old game Pyromasters, available on MoFunZone.com since 2006, now multiplayer!",
+  "version": "0.2.1",
   "main": "./src/server/server.js",
   "repository": {
     "type": "git",

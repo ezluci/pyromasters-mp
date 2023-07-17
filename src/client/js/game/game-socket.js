@@ -13,13 +13,26 @@ socket.on('player-', (username) => {
 
 socket.on('player~', (oldUsername, username, color, isOwner) => {
    changePlayerFromList(oldUsername, username, color, isOwner);
+
+   if (username === usernameHTML) {
+      myColor = color;
+      if (color !== 'spectator')
+         CAN_MOVE = true;
+      else
+         CAN_MOVE = false;
+   }
 })
 
 
 socket.on('room_status', (msg) => {
-   document.querySelector('#room-status').innerText = msg;
-   if (msg === 'game running.')
+   document.querySelector('#room-status').innerText = 'room status: ' + msg;
+   if (msg === 'running') {
+      if (myColor !== 'spectator')
+         CAN_MOVE = true;
       sounds.menu.stop();
+   }
+   if (msg === 'ended')
+      sounds.menu.play();
 })
 
 
@@ -70,8 +83,8 @@ socket.on('switchPlayers', (color1, color2) => {
 
 socket.on('death', (color) => {
    if (myColor === color) {
-      myColor = 'spectator';
       me = INEXISTENT_POS;
+      CAN_MOVE = false;
    }
    sounds.dead[Math.floor(Math.random() * sounds.dead.length)].play();
    coords[color] = INEXISTENT_POS;
@@ -126,6 +139,14 @@ socket.on('gameTime', (time) => {
 
 socket.on('playsound', (sound) => {
    sounds[sound].play();
+})
+
+
+socket.on('endscreen', (color) => {
+   if (!color)
+      addLog('Draw! Press \'Start game\' to play again.');
+   else
+      addLog(`${color.slice(0, 1).toUpperCase() + color.slice(1)} won! Press \'Start game\' to play again.`);
 })
 
 

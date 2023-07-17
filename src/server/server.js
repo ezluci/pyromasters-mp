@@ -25,7 +25,7 @@ const {
    BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BLOCK_SIZE, BLOCK_SAFE_PX, MOVE_SPEEDS, FIRE_TIME, ILLNESS_TIME, SHIELD_TIME, BOMB_TIMES,
    BLOCK,
    INEXISTENT_POS, DEFAULT_POS,
-   ROOM_STATUS
+   ROOM_STATUS, END_SCREEN_TIMEOUT
 } = require('./consts')()
 
 // returns true if you CANNOT GO through this block
@@ -49,6 +49,7 @@ io.on('connection', (socket) => {
    let tryPlaceBombFunc
    const intervalIDS = new Set();
 
+// -------------- SOME FUNCTIONS --------------
 
    function detailsOkCheck() {
       if (!username) {
@@ -102,6 +103,119 @@ io.on('connection', (socket) => {
             (deadlyBlock2.x !== INEXISTENT_POS.x && map[deadlyBlock2.y][deadlyBlock2.x] === BLOCK.FIRE))
    }
 
+
+   function START_GAME() {
+      if (! ROOMS.get(room))
+         return;
+
+      intervalIDS.forEach(id => { clearInterval(id) });
+      intervalIDS.clear();
+
+      setRoomStatus(ROOM_STATUS.RUNNING);
+               
+      ROOMS.get(room).gameTime = 2*60;
+      socket.emit('gameTime', ROOMS.get(room).gameTime);
+
+      // gameTime handling
+      let gameTime_intervalId = setInterval(() => {
+         if (! ROOMS.get(room)) {
+            clearInterval(gameTime_intervalId);
+            return;
+         }
+         if (ROOMS.get(room).gameTime === 0) { // possible bug im not sure
+            clearInterval(gameTime_intervalId);
+            return;
+         }
+         
+         ROOMS.get(room).gameTime --;
+         io.to(room).emit('gameTime', ROOMS.get(room).gameTime);
+      }, 1000);
+
+      intervalIDS.add(gameTime_intervalId);
+
+      // set stats for each color
+      ['white', 'black', 'orange', 'green'].forEach(color => {
+         if (ROOMS.get(room)[color].selected === false) {
+            ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
+            ROOMS.get(room)[color].dead = true;
+         } else {
+            ROOMS.get(room)[color].coords = Object.assign(DEFAULT_POS[color]);
+            ROOMS.get(room)[color].dead = false;
+            // set other stats, not only bomb
+            ROOMS.get(room)[color].bombs = 1;
+            ROOMS.get(room).players.get(ROOMS.get(room)[color].username).coords = Object.assign(DEFAULT_POS[color]);
+         }
+         io.to(room).emit('coords', color, ROOMS.get(room)[color].coords);
+      })
+
+      // generate map
+      for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
+         for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
+            if (y % 2 == 1 && x % 2 == 1) {
+               map[y][x] = BLOCK.FIXED;
+            } else {
+               let canDraw = true;
+               [
+                  [0, 0], [0, 1], [1, 0],
+                  [0, BLOCKS_HORIZONTALLY-2], [0, BLOCKS_HORIZONTALLY-1], [1, BLOCKS_HORIZONTALLY-1],
+                  [BLOCKS_VERTICALLY-2, 0], [BLOCKS_VERTICALLY-1, 0], [BLOCKS_VERTICALLY-1, 1],
+                  [BLOCKS_VERTICALLY-2, BLOCKS_HORIZONTALLY-1], [BLOCKS_VERTICALLY-1, BLOCKS_HORIZONTALLY-1], [BLOCKS_VERTICALLY-1, BLOCKS_HORIZONTALLY-2]
+               ].forEach(coordBlocked => {
+                  if (y == coordBlocked[0] && x == coordBlocked[1])
+                     canDraw = false;
+               })
+
+               if (!canDraw)
+                  map[y][x] = BLOCK.NO;
+               else
+                  map[y][x] = (Math.random() < .7 ? BLOCK.NORMAL : BLOCK.NO); // need to check the original code here!!
+            }
+         }
+      }
+
+      io.to(room).emit('map', map);
+   }
+
+
+   function countNotDead() {
+      let cnt = 0;
+      ['white', 'black', 'orange', 'green'].forEach((color) => {
+         if (! ROOMS.get(room)[color].dead)
+            cnt++;
+      });
+      return cnt;
+   }
+
+   function countSelected() {
+      let cnt = 0;
+      ['white', 'black', 'orange', 'green'].forEach((color) => {
+         if (ROOMS.get(room)[color].selected)
+            cnt++;
+      });
+      return cnt;
+   }
+
+
+   function showEndScreen() {
+      if (! ROOMS.get(room))
+         return;
+      
+      if (getRoomStatus() !== ROOM_STATUS.RUNNING)
+         return;
+      
+      const notDead = [];
+      ['white', 'black', 'orange', 'green'].forEach((color) => {
+         if (! ROOMS.get(room)[color].dead)
+            notDead.push(color);
+      });
+
+      if (notDead.length >= 2)
+         return;
+
+      io.to(room).emit('endscreen', notDead[0]);
+      setRoomStatus(ROOM_STATUS.ENDED);
+   }
+
 // -------------- GETTERS and SETTERS --------------
 
    function getSpeedIndex() {
@@ -142,6 +256,15 @@ io.on('connection', (socket) => {
             plr.shield = false;
       }, SHIELD_TIME);
       intervalIDS.add(plr.shieldTimeout);
+   }
+
+   function setRoomStatus(status) {
+      io.to(room).emit('room_status', status);
+      ROOMS.get(room).status = status;
+   }
+
+   function getRoomStatus() {
+      return ROOMS.get(room).status;
    }
 
 // -------------- POWERUP FUNCTIONS --------------
@@ -319,10 +442,13 @@ io.on('connection', (socket) => {
       color = 'spectator';
       isOwner = !(io.sockets.adapter.rooms.get(room));
 
+      socket.join(room)
+      socket.to(room).emit('player+', username, color, isOwner)
+
       if (isOwner) {
          const map = [];
          for (let i = 0; i < BLOCKS_VERTICALLY; ++i) {
-            map[i] = []
+            map[i] = [];
             for (let j = 0; j < BLOCKS_HORIZONTALLY; ++j) {
                if (i % 2 == 1 && j % 2 == 1)
                   map[i][j] = BLOCK.FIXED;
@@ -346,15 +472,13 @@ io.on('connection', (socket) => {
       }
       
       map = ROOMS.get(room).map
-
-      ROOMS.get(room).players.set(username, {color, isOwner, coords: Object.assign(INEXISTENT_POS)})
+      socket.emit('room_status', getRoomStatus());
+      ROOMS.get(room).players.set(username, {color, isOwner})
 
       // TODO: what if the owner leaves?
       
       console.log(`connected:    ${socket.id}, {username: ${username}, room: ${room}, isOwner: ${isOwner}}`)
       
-      socket.join(room)
-      socket.to(room).emit('player+', username, color, isOwner)
 
       const players1 = []
       ROOMS.get(room).players.forEach(({color, isOwner}, username) => {
@@ -366,7 +490,7 @@ io.on('connection', (socket) => {
          colorsCoords[color] = ROOMS.get(room)[color].coords
       })
 
-      callback(players1, colorsCoords, ROOMS.get(room).map)
+      callback(players1, colorsCoords, ROOMS.get(room).map, getRoomStatus());
    })
 
 
@@ -374,87 +498,26 @@ io.on('connection', (socket) => {
       if (!detailsOkCheck())
          return;
       
-      if (ROOMS.get(room).status !== ROOM_STATUS.WAITING)
-         return socket.emit('error', 'tryStart: Room is not in WAITING status.');
+      if (getRoomStatus() === ROOM_STATUS.STARTING)
+         return socket.emit('error', 'tryStart: Room is in STARTING status.');
+      
+      if (getRoomStatus() === ROOM_STATUS.STARTING)
+         return socket.emit('error', 'tryStart: Room is in STARTING status.');
       
       if (!isOwner)
          return socket.emit('error', 'tryStart: You are not the owner of this room!');
-
-      ROOMS.get(room).status = ROOM_STATUS.STARTING;
       
-      io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 3`);
+      if (countSelected() === 0)
+         return socket.emit('error', 'tryStart: You can\'t start the game with NO PLAYERS, silly!');
+
+      setRoomStatus(ROOM_STATUS.STARTING);
+      
+      io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 3s`);
       const id3 = setTimeout(() => {
-         io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 2`);
+         io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 2s`);
          const id2 = setTimeout(() => {
-            io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 1`);
-            const id1 = setTimeout(() => {
-
-               /// GAME STARTS HERE!
-               if (! ROOMS.get(room))
-                  return;
-
-               io.to(room).emit('room_status', `game running.`);
-               ROOMS.get(room).status = ROOM_STATUS.RUNNING;
-               
-               ROOMS.get(room).gameTime = 2*60;
-               socket.emit('gameTime', ROOMS.get(room).gameTime);
-
-               // gameTime handling
-               let gameTime_intervalId = setInterval(() => {
-                  if (! ROOMS.get(room)) {
-                     clearInterval(gameTime_intervalId);
-                     return;
-                  }
-                  if (ROOMS.get(room).gameTime === 0) { // possible bug im not sure
-                     clearInterval(gameTime_intervalId);
-                     return;
-                  }
-                  
-                  ROOMS.get(room).gameTime --;
-                  io.to(room).emit('gameTime', ROOMS.get(room).gameTime);
-               }, 1000);
-
-               intervalIDS.add(gameTime_intervalId);
-
-               // set coordinates for each color
-               ['white', 'black', 'orange', 'green'].forEach(color => {
-                  if (ROOMS.get(room)[color].selected === false) {
-                     ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
-                  } else {
-                     ROOMS.get(room)[color].coords = Object.assign(DEFAULT_POS[color]);
-                     ROOMS.get(room)[color].bombs = 1;
-                     ROOMS.get(room).players.get(ROOMS.get(room)[color].username).coords = Object.assign(DEFAULT_POS[color]);
-                  }
-                  io.to(room).emit('coords', color, ROOMS.get(room)[color].coords);
-               })
-
-               // generate map
-               for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
-                  for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-                     if (y % 2 == 1 && x % 2 == 1) {
-                        map[y][x] = BLOCK.FIXED;
-                     } else {
-                        let canDraw = true;
-                        [
-                           [0, 0], [0, 1], [1, 0],
-                           [0, BLOCKS_HORIZONTALLY-2], [0, BLOCKS_HORIZONTALLY-1], [1, BLOCKS_HORIZONTALLY-1],
-                           [BLOCKS_VERTICALLY-2, 0], [BLOCKS_VERTICALLY-1, 0], [BLOCKS_VERTICALLY-1, 1],
-                           [BLOCKS_VERTICALLY-2, BLOCKS_HORIZONTALLY-1], [BLOCKS_VERTICALLY-1, BLOCKS_HORIZONTALLY-1], [BLOCKS_VERTICALLY-1, BLOCKS_HORIZONTALLY-2]
-                        ].forEach(coordBlocked => {
-                           if (y == coordBlocked[0] && x == coordBlocked[1])
-                              canDraw = false;
-                        })
-
-                        if (!canDraw)
-                           map[y][x] = BLOCK.NO;
-                        else
-                           map[y][x] = (Math.random() < .7 ? BLOCK.NORMAL : BLOCK.NO); // need to check the original code here!!
-                     }
-                  }
-               }
-
-               io.to(room).emit('map', map);
-            }, 1000);
+            io.to(room).emit('room_status', `'${username}' started the countdown. game starts in 1s`);
+            const id1 = setTimeout(START_GAME, 1000);
             intervalIDS.add(id1);
          }, 1000);
          intervalIDS.add(id2);
@@ -463,11 +526,11 @@ io.on('connection', (socket) => {
    })
 
 
-   socket.on('selectColor', (newColor, callback) => {
+   socket.on('selectColor', (newColor) => {
       if (!detailsOkCheck())
          return;
       
-      if (ROOMS.get(room).status !== ROOM_STATUS.WAITING)
+      if (getRoomStatus() !== ROOM_STATUS.WAITING)
          return socket.emit('error', 'selectColor: Room is not in WAITING status.');
       
       if (newColor !== 'spectator' && newColor !== 'white' && newColor !== 'black' && newColor !== 'orange' && newColor !== 'green')
@@ -479,6 +542,7 @@ io.on('connection', (socket) => {
       if (color !== 'spectator') {
          ROOMS.get(room)[color].coords = Object.assign(DEFAULT_POS[color]);
          ROOMS.get(room)[color].selected = false;
+         ROOMS.get(room)[color].dead = true;
          io.to(room).emit('coords', color, Object.assign(DEFAULT_POS[color]));
       }
       if (newColor !== 'spectator') {
@@ -489,8 +553,6 @@ io.on('connection', (socket) => {
 
       color = newColor;
       io.to(room).emit('player~', username, username, color, isOwner);
-
-      callback();
    })
 
 
@@ -501,7 +563,7 @@ io.on('connection', (socket) => {
       if (color === 'spectator')
          return socket.emit('error', 'tryPlaceBomb: You are a spectator.');
       if (ROOMS.get(room)[color].dead)
-         return socket.emit('error', 'tryPlaceBomb: Player is \'dead\'');
+         return socket.emit('error', 'tryPlaceBomb: You are \'dead\'');
       
       const x = Math.round(ROOMS.get(room)[color].coords.x / BLOCK_SIZE);
       const y = Math.round(ROOMS.get(room)[color].coords.y / BLOCK_SIZE);
@@ -520,13 +582,13 @@ io.on('connection', (socket) => {
       ROOMS.get(room)[color].bombs --;
 
       const bombLength = ROOMS.get(room)[color].bombLength;
-      const roomStatus = ROOMS.get(room).status;
+      const roomStatus = getRoomStatus();
 
       const id1 = setTimeout(() => {
          if (! ROOMS.get(room))
             return;
          
-         if (ROOMS.get(room).status !== roomStatus)
+         if (getRoomStatus() !== roomStatus)
             return;
          
          const fires = [];
@@ -567,12 +629,14 @@ io.on('connection', (socket) => {
             if (! ROOMS.get(room)[color].selected || ROOMS.get(room)[color].dead)
                return;
             
-            if (ROOMS.get(room).status === ROOM_STATUS.RUNNING && !ROOMS.get(room)[color].shield && onFireCheck(color)) {
+            if (getRoomStatus() === ROOM_STATUS.RUNNING && !ROOMS.get(room)[color].shield && onFireCheck(color)) {
                io.to(room).emit('death', color);
 
                ROOMS.get(room)[color].dead = true;
                ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
-               ROOMS.get(room).players.get(username).coords = Object.assign(INEXISTENT_POS);
+
+               if (countNotDead() <= 1)
+                  intervalIDS.add( setTimeout(showEndScreen, END_SCREEN_TIMEOUT) );
             }
          });
 
@@ -580,7 +644,7 @@ io.on('connection', (socket) => {
             if (! ROOMS.get(room))
                return;
             
-            if (ROOMS.get(room).status !== roomStatus)
+            if (getRoomStatus() !== roomStatus)
                return;
             
             fires.forEach((fire) => {
@@ -656,17 +720,20 @@ io.on('connection', (socket) => {
          return socket.emit('error', 'coords: Player is \'dead\'');
    
       // check if player dies to bombfire
-      if (ROOMS.get(room).status === ROOM_STATUS.RUNNING && !ROOMS.get(room)[color].shield && onFireCheck(color)) {
+      if (getRoomStatus() === ROOM_STATUS.RUNNING && !ROOMS.get(room)[color].shield && onFireCheck(color)) {
          io.to(room).emit('death', color);
          ROOMS.get(room)[color].dead = true;
          ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
-         ROOMS.get(room).players.get(username).coords = Object.assign(INEXISTENT_POS);
+
+         if (countNotDead() <= 1) {
+            intervalIDS.add( setTimeout(showEndScreen, END_SCREEN_TIMEOUT) );
+         }
+
          return;
       }
    
       socket.to(room).emit('coords', color, coords);
       ROOMS.get(room)[color].coords = coords;
-      ROOMS.get(room).players.get(username).coords = coords;
 
       // check if player collected some powerup
       const x = ROOMS.get(room)[color].coords.x;
@@ -696,14 +763,20 @@ io.on('connection', (socket) => {
          });
       } else {
          if (color !== 'spectator') {
-            if (ROOMS.get(room).status !== ROOM_STATUS.WAITING) {
+            if (getRoomStatus() !== ROOM_STATUS.WAITING && getRoomStatus() !== ROOM_STATUS.STARTING) {
                io.to(room).emit('coords', color, INEXISTENT_POS);
                ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
                ROOMS.get(room)[color].selected = false;
+               ROOMS.get(room)[color].dead = true;
+               if (countNotDead() <= 1)
+                  intervalIDS.add( setTimeout(showEndScreen, END_SCREEN_TIMEOUT) );
             } else {
                io.to(room).emit('coords', color, DEFAULT_POS[color]);
                ROOMS.get(room)[color].coords = Object.assign(DEFAULT_POS[color]);
                ROOMS.get(room)[color].selected = false;
+               ROOMS.get(room)[color].dead = true;
+               if (countNotDead() <= 1)
+                  intervalIDS.add( setTimeout(showEndScreen, END_SCREEN_TIMEOUT) );
             }
          }
       }
