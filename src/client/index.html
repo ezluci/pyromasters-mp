@@ -11,17 +11,17 @@
       <input style="height: 30px;" id="username" name="username">
 
       <br>
+
       <label for="room">Room</label>
       <input style="height: 30px;" id="room" name="room">
 
       <br>
-      <input style="height: 200px; width: 200px; background-image: url(/assets/images/ok.jpg); font-size: 20px; color: green;" type="submit" onclick="
-         const username = document.querySelector('#username').value
-         const room = document.querySelector('#room').value
+      
+      <input style="height: 200px; width: 200px; font-size: 20px; color: green;" type="submit" onclick="
+         const username = document.querySelector('#username').value;
+         const room = document.querySelector('#room').value;
          if (!username || !room)
-            window.open('https://www.google.com/search?q=a+venit+alex', '_self')
-         else
-            window.open(`${window.location.host}/?username=${username}&room=${room}`, '_self')
+            document.body.innerHTML += 'put a username and a room dummy<br>';
       ">
    </form>
 </body>

@@ -25,22 +25,19 @@
       const usernameHTML = params.get('username');
       const roomHTML = params.get('room');
       
-      if (!usernameHTML || !roomHTML)
-         window.open('https://www.google.com/search?q=a+venit+alex')
-      else
-         socket.emit('playerJoined', usernameHTML, roomHTML, (players, colorsCoords, map1, roomStatus) => {
-            map = map1
-            
-            players.forEach( ({username, color, isOwner}) => {
-               addPlayerToList(username, color, isOwner)
-            });
+      socket.emit('playerJoined', usernameHTML, roomHTML, (players, colorsCoords, map1, roomStatus) => {
+         map = map1
+         
+         players.forEach( ({username, color, isOwner}) => {
+            addPlayerToList(username, color, isOwner)
+         });
 
-            Object.keys(colorsCoords).forEach((color) => {
-               coords[color] = colorsCoords[color]
-            })
+         Object.keys(colorsCoords).forEach((color) => {
+            coords[color] = colorsCoords[color]
+         })
 
-            if (roomStatus === ROOM_STATUS.WAITING || roomStatus === ROOM_STATUS.STARTING || roomStatus === ROOM_STATUS.ENDED)
-               sounds.menu.play();
+         if (roomStatus === ROOM_STATUS.WAITING || roomStatus === ROOM_STATUS.STARTING || roomStatus === ROOM_STATUS.ENDED)
+            sounds.menu.play();
          })
    </script>
 </head>

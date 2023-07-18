@@ -1,12 +1,13 @@
 'use strict';
 
 let LOADED_COUNT = 0, gameTime = 0;
-let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed, CAN_MOVE = false;
+let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed, CAN_MOVE = false, END_SCREEN = null;
 
 let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined};
 let shieldImg;
 let blockFixedImg, blockImg, bombImg, fireImg;
 const backgrounds = [];
+const endscreens = {};
 const powersImg = {};
 
 const sounds = {};
@@ -183,8 +184,32 @@ loadImage('assets/images/blocks/power_bonus.png').then(image => {
    powersImg.bonus = image;
    LOADED_COUNT ++;
 })
+
+// backgrounds
 loadImage('assets/images/backgrounds/bricktown.jpg').then(image => {
    backgrounds.push(image);
+   LOADED_COUNT ++;
+});
+
+// endscreens
+loadImage('assets/images/endscreens/draw.jpg').then(image => {
+   endscreens.draw = image;
+   LOADED_COUNT ++;
+});
+loadImage('assets/images/endscreens/white.jpg').then(image => {
+   endscreens.white = image;
+   LOADED_COUNT ++;
+});
+loadImage('assets/images/endscreens/black.jpg').then(image => {
+   endscreens.black = image;
+   LOADED_COUNT ++;
+});
+loadImage('assets/images/endscreens/orange.jpg').then(image => {
+   endscreens.orange = image;
+   LOADED_COUNT ++;
+});
+loadImage('assets/images/endscreens/green.jpg').then(image => {
+   endscreens.green = image;
    LOADED_COUNT ++;
 });
 
@@ -248,7 +273,7 @@ coords = {
 let lastFrameTime
 
 const intervalID = setInterval(() => {
-   if (LOADED_COUNT === 19) {
+   if (LOADED_COUNT === 24) {
       clearInterval(intervalID);
 
       const intervalID2 = setInterval(() => {
@@ -271,6 +296,77 @@ const intervalID = setInterval(() => {
       }, 40);
    }
 }, 40);
+
+
+
+function DRAW_game() {
+
+   ctx.fillStyle = '#203d37'
+   ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+   ctx.fillStyle = 'rgba(131, 29, 29, 0.841)'
+   ctx.fillRect(OFFSET_LEFT, OFFSET_UP, canvas.width - OFFSET_LEFT - OFFSET_RIGHT, canvas.height - OFFSET_UP - OFFSET_DOWN)
+
+
+   // draw map blocks
+   for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
+      for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
+         switch (map[y][x]) {
+            case BLOCK.NO:
+               break;
+            case BLOCK.NORMAL:
+               drawBlock(blockImg, x, y); break;
+            case BLOCK.BOMB:
+               drawBlock(bombImg, x, y);  break;
+            case BLOCK.FIRE:
+               drawBlock(fireImg, x, y);  break;
+            case BLOCK.FIXED:
+               drawBlock(blockFixedImg, x, y);  break;
+            
+            case BLOCK.POWER_BOMBPLUS:
+               drawBlock(powersImg.bombplus, x, y);   break;
+            case BLOCK.POWER_BOMBLENGTH:
+               drawBlock(powersImg.bomblength, x, y); break;
+            case BLOCK.POWER_SPEED:
+               drawBlock(powersImg.speed, x, y);   break;
+            case BLOCK.POWER_SHIELD:
+               drawBlock(powersImg.shield, x, y);  break;
+            case BLOCK.POWER_KICKBOMBS:
+               drawBlock(powersImg.kickbombs, x, y);  break;
+            case BLOCK.POWER_BOMBTIME:
+               drawBlock(powersImg.bombtime, x, y);   break;
+            case BLOCK.POWER_SWITCHPLAYER:
+               drawBlock(powersImg.switchplayer, x, y);  break;
+            case BLOCK.POWER_ILLNESS:
+               drawBlock(powersImg.illness, x, y); break;
+            case BLOCK.POWER_BONUS:
+               drawBlock(powersImg.bonus, x, y);   break;
+         }
+      }
+   
+   // draw players
+   ['white', 'black', 'orange', 'green'].forEach(color => {
+      if (color === myColor)
+         return;
+      drawPlayer(plrImg[color], coords[color].x, coords[color].y);
+      if (shields[color].val)
+         drawPlayer(shieldImg, coords[color].x, coords[color].y);
+   });
+
+   if (myColor !== 'spectator') {
+      drawPlayer(plrImg[myColor], me.x, me.y);
+      if (shields[myColor].val)
+         drawPlayer(shieldImg, me.x, me.y);
+   }
+
+   // draw gametime
+   const m = Math.floor(gameTime / 60).toString();
+   const s = Math.floor(gameTime % 60).toString().padStart(2, '0');
+   ctx.fillStyle = 'gray';
+   ctx.font = '30px serif';
+   ctx.fillText(`${m}:${s}`, 750, 23);
+}
+
 
 
 function gameloop() {
@@ -339,73 +435,17 @@ function gameloop() {
 
    /// DRAWING
 
-   ctx.fillStyle = '#203d37'
-   ctx.fillRect(0, 0, canvas.width, canvas.height)
-
-   ctx.fillStyle = 'rgba(131, 29, 29, 0.841)'
-   ctx.fillRect(OFFSET_LEFT, OFFSET_UP, canvas.width - OFFSET_LEFT - OFFSET_RIGHT, canvas.height - OFFSET_UP - OFFSET_DOWN)
-
-
-   // draw map blocks
-   for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
-      for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-         switch (map[y][x]) {
-            case BLOCK.NO:
-               break;
-            case BLOCK.NORMAL:
-               drawBlock(blockImg, x, y); break;
-            case BLOCK.BOMB:
-               drawBlock(bombImg, x, y);  break;
-            case BLOCK.FIRE:
-               drawBlock(fireImg, x, y);  break;
-            case BLOCK.FIXED:
-               drawBlock(blockFixedImg, x, y);  break;
-            
-            case BLOCK.POWER_BOMBPLUS:
-               drawBlock(powersImg.bombplus, x, y);   break;
-            case BLOCK.POWER_BOMBLENGTH:
-               drawBlock(powersImg.bomblength, x, y); break;
-            case BLOCK.POWER_SPEED:
-               drawBlock(powersImg.speed, x, y);   break;
-            case BLOCK.POWER_SHIELD:
-               drawBlock(powersImg.shield, x, y);  break;
-            case BLOCK.POWER_KICKBOMBS:
-               drawBlock(powersImg.kickbombs, x, y);  break;
-            case BLOCK.POWER_BOMBTIME:
-               drawBlock(powersImg.bombtime, x, y);   break;
-            case BLOCK.POWER_SWITCHPLAYER:
-               drawBlock(powersImg.switchplayer, x, y);  break;
-            case BLOCK.POWER_ILLNESS:
-               drawBlock(powersImg.illness, x, y); break;
-            case BLOCK.POWER_BONUS:
-               drawBlock(powersImg.bonus, x, y);   break;
-         }
-      }
-   
-   // draw players
-   ['white', 'black', 'orange', 'green'].forEach(color => {
-      if (color === myColor)
-         return;
-      drawPlayer(plrImg[color], coords[color].x, coords[color].y);
-      if (shields[color].val)
-         drawPlayer(shieldImg, coords[color].x, coords[color].y);
-   });
-
-   if (myColor !== 'spectator') {
-      drawPlayer(plrImg[myColor], me.x, me.y);
-      if (shields[myColor].val)
-         drawPlayer(shieldImg, me.x, me.y);
+   if (!END_SCREEN)
+      DRAW_game();
+   else {
+      ctx.drawImage(endscreens[END_SCREEN], 0, 0, canvas.width, canvas.height);
    }
+
    
    // draw fps
    ctx.fillStyle = 'gray';
    ctx.font = '30px serif';
    ctx.fillText(`FPS: ${Math.floor(FPS)}, deltaTime: ${deltaTime.toFixed(1)}`, 20, 23);
-
-   // draw gametime
-   const m = Math.floor(gameTime / 60).toString();
-   const s = Math.floor(gameTime % 60).toString().padStart(2, '0');
-   ctx.fillText(`${m}:${s}`, 750, 23);
 
 
 
