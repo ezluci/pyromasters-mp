@@ -501,8 +501,8 @@ io.on('connection', (socket) => {
       if (getRoomStatus() === ROOM_STATUS.STARTING)
          return socket.emit('error', 'tryStart: Room is in STARTING status.');
       
-      if (getRoomStatus() === ROOM_STATUS.STARTING)
-         return socket.emit('error', 'tryStart: Room is in STARTING status.');
+      if (getRoomStatus() === ROOM_STATUS.RUNNING)
+         return socket.emit('error', 'tryStart: Room is in RUNNING status.');
       
       if (!isOwner)
          return socket.emit('error', 'tryStart: You are not the owner of this room!');

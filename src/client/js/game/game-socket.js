@@ -26,13 +26,11 @@ socket.on('player~', (oldUsername, username, color, isOwner) => {
 
 socket.on('room_status', (msg) => {
    document.querySelector('#room-status').innerText = 'room status: ' + msg;
-   if (msg === 'running') {
+   if (msg === ROOM_STATUS.RUNNING) {
       if (myColor !== 'spectator')
          CAN_MOVE = true;
       sounds.menu.stop();
    }
-   if (msg === 'ended')
-      sounds.menu.play();
 })
 
 
@@ -143,10 +141,14 @@ socket.on('playsound', (sound) => {
 
 
 socket.on('endscreen', (color) => {
-   if (!color)
+   if (!color) {
       addLog('Draw! Press \'Start game\' to play again.');
-   else
+      sounds.draw[Math.floor(Math.random() * sounds.draw.length)].play();
+   }
+   else {
       addLog(`${color.slice(0, 1).toUpperCase() + color.slice(1)} won! Press \'Start game\' to play again.`);
+      sounds.win[Math.floor(Math.random() * sounds.win.length)].play();
+   }
 })
 
 

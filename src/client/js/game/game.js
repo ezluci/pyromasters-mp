@@ -6,6 +6,7 @@ let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], m
 let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined};
 let shieldImg;
 let blockFixedImg, blockImg, bombImg, fireImg;
+const backgrounds = [];
 const powersImg = {};
 
 const sounds = {};
@@ -89,6 +90,24 @@ for (let i = 1; i <= 5; ++i) {
    }));
 }
 
+sounds.draw = [];
+for (let i = 1; i <= 5; ++i) {
+   sounds.draw.push(new Howl({
+      src: [`assets/sounds/draw${i}.mp3`],
+      volume: vol,
+      onend: () => { sounds.menu.play() }
+   }));
+}
+
+sounds.win = [];
+for (let i = 1; i <= 5; ++i) {
+   sounds.win.push(new Howl({
+      src: [`assets/sounds/win${i}.mp3`],
+      volume: vol,
+      onend: () => { sounds.menu.play() }
+   }));
+}
+
 
 // loading images
 
@@ -164,6 +183,10 @@ loadImage('assets/images/blocks/power_bonus.png').then(image => {
    powersImg.bonus = image;
    LOADED_COUNT ++;
 })
+loadImage('assets/images/backgrounds/bricktown.jpg').then(image => {
+   backgrounds.push(image);
+   LOADED_COUNT ++;
+});
 
 
 
@@ -225,7 +248,7 @@ coords = {
 let lastFrameTime
 
 const intervalID = setInterval(() => {
-   if (LOADED_COUNT === 18) {
+   if (LOADED_COUNT === 19) {
       clearInterval(intervalID);
 
       const intervalID2 = setInterval(() => {

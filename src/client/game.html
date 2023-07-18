@@ -39,7 +39,7 @@
                coords[color] = colorsCoords[color]
             })
 
-            if (roomStatus === ROOM_STATUS.WAITING || roomStatus === ROOM_STATUS.STARTING)
+            if (roomStatus === ROOM_STATUS.WAITING || roomStatus === ROOM_STATUS.STARTING || roomStatus === ROOM_STATUS.ENDED)
                sounds.menu.play();
          })
    </script>
