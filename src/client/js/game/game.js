@@ -5,7 +5,7 @@ let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], m
 
 let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined};
 let shieldImg;
-let blockFixedImg, blockImg, bombImg, fireImg;
+let blockPermanentImg, blockImg, bombImg, fireImg;
 const backgrounds = [];
 const endscreens = {};
 const powersImg = {};
@@ -132,8 +132,8 @@ loadImage('assets/images/players/shield.png').then(image => {
    shieldImg = image;
    LOADED_COUNT ++;
 })
-loadImage('assets/images/blocks/fixed.png').then(image => {
-   blockFixedImg = image;
+loadImage('assets/images/blocks/permanent.png').then(image => {
+   blockPermanentImg = image;
    LOADED_COUNT ++;
 })
 loadImage('assets/images/blocks/normal.png').then(image => {
@@ -146,6 +146,11 @@ loadImage('assets/images/blocks/bomb.png').then(image => {
 })
 loadImage('assets/images/blocks/fire.png').then(image => {
    fireImg = image;
+   LOADED_COUNT ++;
+})
+
+loadImage('assets/images/blocks/powerup.png').then(image => {
+   powersImg.main = image;
    LOADED_COUNT ++;
 })
 loadImage('assets/images/blocks/power_bombplus.png').then(image => {
@@ -273,7 +278,7 @@ coords = {
 let lastFrameTime
 
 const intervalID = setInterval(() => {
-   if (LOADED_COUNT === 24) {
+   if (LOADED_COUNT === 25) {
       clearInterval(intervalID);
 
       const intervalID2 = setInterval(() => {
@@ -317,29 +322,38 @@ function DRAW_game() {
             case BLOCK.NORMAL:
                drawBlock(blockImg, x, y); break;
             case BLOCK.BOMB:
-               drawBlock(bombImg, x, y);  break;
+               drawBlock(bombImg, x, y, 0);  break;
             case BLOCK.FIRE:
-               drawBlock(fireImg, x, y);  break;
-            case BLOCK.FIXED:
-               drawBlock(blockFixedImg, x, y);  break;
+               drawBlock(fireImg, x, y, 0);  break;
+            case BLOCK.PERMANENT:
+               drawBlock(blockPermanentImg, x, y);  break;
             
             case BLOCK.POWER_BOMBPLUS:
+               drawBlock(powersImg.main, x, y);
                drawBlock(powersImg.bombplus, x, y);   break;
             case BLOCK.POWER_BOMBLENGTH:
+               drawBlock(powersImg.main, x, y);
                drawBlock(powersImg.bomblength, x, y); break;
             case BLOCK.POWER_SPEED:
+               drawBlock(powersImg.main, x, y);
                drawBlock(powersImg.speed, x, y);   break;
             case BLOCK.POWER_SHIELD:
+               drawBlock(powersImg.main, x, y);
                drawBlock(powersImg.shield, x, y);  break;
             case BLOCK.POWER_KICKBOMBS:
+               drawBlock(powersImg.main, x, y);
                drawBlock(powersImg.kickbombs, x, y);  break;
             case BLOCK.POWER_BOMBTIME:
+               drawBlock(powersImg.main, x, y);
                drawBlock(powersImg.bombtime, x, y);   break;
             case BLOCK.POWER_SWITCHPLAYER:
+               drawBlock(powersImg.main, x, y);
                drawBlock(powersImg.switchplayer, x, y);  break;
             case BLOCK.POWER_ILLNESS:
+               drawBlock(powersImg.main, x, y);
                drawBlock(powersImg.illness, x, y); break;
             case BLOCK.POWER_BONUS:
+               drawBlock(powersImg.main, x, y);
                drawBlock(powersImg.bonus, x, y);   break;
          }
       }
@@ -362,7 +376,7 @@ function DRAW_game() {
    // draw gametime
    const m = Math.floor(gameTime / 60).toString();
    const s = Math.floor(gameTime % 60).toString().padStart(2, '0');
-   ctx.fillStyle = 'gray';
+   ctx.fillStyle = 'black';
    ctx.font = '30px serif';
    ctx.fillText(`${m}:${s}`, 750, 23);
 }
@@ -370,7 +384,7 @@ function DRAW_game() {
 
 
 function gameloop() {
-   // calculate deltaTime and FPS
+   // calculate FPS
    const currentTime = performance.now()
    deltaTime = currentTime - lastFrameTime
    // !!! maybe limit deltatime to 50..?
@@ -443,9 +457,9 @@ function gameloop() {
 
    
    // draw fps
-   ctx.fillStyle = 'gray';
+   ctx.fillStyle = 'black';
    ctx.font = '30px serif';
-   ctx.fillText(`FPS: ${Math.floor(FPS)}, deltaTime: ${deltaTime.toFixed(1)}`, 20, 23);
+   ctx.fillText(`FPS: ${Math.floor(FPS)}`, 20, 23);
 
 
 

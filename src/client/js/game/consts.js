@@ -24,7 +24,7 @@ const MAX_Y = BLOCK_SIZE * (BLOCKS_VERTICALLY - 1)
 const BLOCK = {
    NO: 0,   // nothing
    NORMAL: 1,  // a block that can be destroyed with bombs
-   FIXED: 2,   // a block that cannot be destroyed
+   PERMANENT: 2,   // a block that cannot be destroyed
    BOMB: 3, // a bomb
    FIRE: 4, // fire from bomb
    POWER_BOMBPLUS: 5,

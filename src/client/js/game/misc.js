@@ -1,18 +1,31 @@
 'use strict';
 
 function isPowerup(blockCode) {
-   return 5 <= blockCode && blockCode <= 13
+   return (5 <= blockCode && blockCode <= 13);
 }
 
 // this function draws a block using block coordinates => xB=0..15 and yB=0.11
-function drawBlock(block, xBlock, yBlock) {
-   ctx.drawImage(block, OFFSET_LEFT + xBlock * BLOCK_SIZE, OFFSET_UP + yBlock * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE)
+function drawBlock(block, xBlock, yBlock, manualOffset = 4) {
+   // 53x53
+   ctx.drawImage(
+      block,
+      OFFSET_LEFT + xBlock * BLOCK_SIZE + manualOffset,
+      OFFSET_UP + yBlock * BLOCK_SIZE + manualOffset,
+      BLOCK_SIZE - 2 * manualOffset,
+      BLOCK_SIZE - 2 * manualOffset
+   );
 }
 
 // this function draws a player using normal coordinates (NO OFFSET REQUIRED)
 function drawPlayer(img, x, y) { 
    // 53x78
-   ctx.drawImage(img, OFFSET_LEFT + x, OFFSET_UP + y - 25, 53, 78)
+   ctx.drawImage(
+      img,
+      OFFSET_LEFT + x,
+      OFFSET_UP + y - 25,
+      53,
+      78
+   );
 }
 
 function loadImage(src) {

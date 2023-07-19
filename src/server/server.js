@@ -133,7 +133,7 @@ io.on('connection', (socket) => {
 
       intervalIDS.add(gameTime_intervalId);
 
-      // set stats for each color
+      // set stats for each player
       ['white', 'black', 'orange', 'green'].forEach(color => {
          if (ROOMS.get(room)[color].selected === false) {
             ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
@@ -141,9 +141,13 @@ io.on('connection', (socket) => {
          } else {
             ROOMS.get(room)[color].coords = Object.assign(DEFAULT_POS[color]);
             ROOMS.get(room)[color].dead = false;
-            // set other stats, not only bomb
             ROOMS.get(room)[color].bombs = 1;
-            ROOMS.get(room).players.get(ROOMS.get(room)[color].username).coords = Object.assign(DEFAULT_POS[color]);
+            ROOMS.get(room)[color].bombTimeIndex = 0;
+            ROOMS.get(room)[color].bombLength = 2;
+            setSpeedIndex(0);
+            ROOMS.get(room)[color].sick = false;
+            setShield0();
+            ROOMS.get(room)[color].shieldTimeout = null;
          }
          io.to(room).emit('coords', color, ROOMS.get(room)[color].coords);
       })
@@ -152,7 +156,7 @@ io.on('connection', (socket) => {
       for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
          for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
             if (y % 2 == 1 && x % 2 == 1) {
-               map[y][x] = BLOCK.FIXED;
+               map[y][x] = BLOCK.PERMANENT;
             } else {
                let canDraw = true;
                [
@@ -437,6 +441,12 @@ io.on('connection', (socket) => {
          return;
       }
 
+      if (ROOMS.has(room1) && ROOMS.get(room1).players.has(username1)) {
+         socket.emit('error', 'playerJoined: A player with the same name already exists in this room. DISCONNECTED.');
+         socket.disconnect();
+         return;
+      }
+
       username = username1;
       room = room1;
       color = 'spectator';
@@ -451,7 +461,7 @@ io.on('connection', (socket) => {
             map[i] = [];
             for (let j = 0; j < BLOCKS_HORIZONTALLY; ++j) {
                if (i % 2 == 1 && j % 2 == 1)
-                  map[i][j] = BLOCK.FIXED;
+                  map[i][j] = BLOCK.PERMANENT;
                else
                   map[i][j] = BLOCK.NO;
             }
@@ -571,7 +581,7 @@ io.on('connection', (socket) => {
       if ( !(0 <= x && x <= BLOCKS_HORIZONTALLY && 0 <= y && y <= BLOCKS_VERTICALLY) )
          return socket.emit('error', 'tryPlaceBomb: x or y out of range.');
       
-      if (map[y][x] === BLOCK.FIRE || map[y][x] === BLOCK.BOMB || map[y][x] === BLOCK.FIXED || map[y][x] === BLOCK.NORMAL)
+      if (map[y][x] === BLOCK.FIRE || map[y][x] === BLOCK.BOMB || map[y][x] === BLOCK.PERMANENT || map[y][x] === BLOCK.NORMAL)
          return;
       
       if (ROOMS.get(room)[color].bombs === 0)
