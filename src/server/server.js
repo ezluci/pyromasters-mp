@@ -292,13 +292,16 @@ io.on('connection', (socket) => {
 
       // set stats for each player
       ['white', 'black', 'orange', 'green'].forEach(color => {
+         console.log()
          if (ROOMS.get(room)[color].selected === false) {
+            console.log(0);
             ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
             ROOMS.get(room)[color].dead = true;
          } else {
+            console.log(1);
             ROOMS.get(room)[color].coords = Object.assign(DEFAULT_POS[color]);
             ROOMS.get(room)[color].dead = false;
-            ROOMS.get(room)[color].bombs = 2;
+            ROOMS.get(room)[color].bombs = 1;
             ROOMS.get(room)[color].bombTimeIndex = 0;
             ROOMS.get(room)[color].bombLength = 2;
             setSpeedIndex(0);
