@@ -28,11 +28,6 @@ const {
    ROOM_STATUS, END_SCREEN_TIMEOUT
 } = require('./consts')()
 
-// returns true if you CANNOT GO through this block
-function stop(blockCode) {
-   return (blockCode !== BLOCK.NO && blockCode !== BLOCK.FIRE && blockCode !== BLOCK.BOMB && !isPowerup(blockCode))
-}
-
 function isPowerup(blockCode) {
    return 5 <= blockCode && blockCode <= 13
 }
@@ -104,6 +99,168 @@ io.on('connection', (socket) => {
    }
 
 
+   // this function doesn't check if there is a bomb at map[y][x].
+   function explodeBomb(x, y, bombLength, recursive = 0) {
+      
+      if (! ROOMS.get(room))
+         return;
+      
+      const roomStatus = getRoomStatus();
+      
+      function breakLoop(blockCode)
+         { return (blockCode === BLOCK.NORMAL || blockCode === BLOCK.PERMANENT || isPowerup(blockCode)); }
+      
+      let fires = [];
+
+      fires.push({x, y, block: BLOCK.FIRE, oldBlock: map[y][x]});
+      map[y][x] = BLOCK.NO;
+
+      for (let yy = y-1; yy >= Math.max(0, y - bombLength); --yy) {
+         if (map[yy][x] === BLOCK.BOMB) {
+            fires = fires.concat( explodeBomb(x, yy, bombLength, 1) );
+            break;
+         }
+         if (map[yy][x] !== BLOCK.PERMANENT)
+            fires.push({x: x, y: yy, block: BLOCK.FIRE, oldBlock: map[yy][x]});
+         if (breakLoop(map[yy][x]))
+            break;
+      }
+
+      for (let yy = y+1; yy <= Math.min(BLOCKS_VERTICALLY-1, y + bombLength); ++yy) {
+         if (map[yy][x] === BLOCK.BOMB) {
+            fires = fires.concat( explodeBomb(x, yy, bombLength, 1) );
+            break;
+         }
+         if (map[yy][x] !== BLOCK.PERMANENT)
+            fires.push({x: x, y: yy, block: BLOCK.FIRE, oldBlock: map[yy][x]});
+         if (breakLoop(map[yy][x]))
+            break;
+      }
+
+      for (let xx = x-1; xx >= Math.max(0, x - bombLength); --xx) {
+         if (map[y][xx] === BLOCK.BOMB) {
+            fires = fires.concat( explodeBomb(xx, y, bombLength, 1) );
+            break;
+         }
+         if (map[y][xx] !== BLOCK.PERMANENT)
+            fires.push({x: xx, y: y, block: BLOCK.FIRE, oldBlock: map[y][xx]});
+         if (breakLoop(map[y][xx]))
+            break;
+      }
+
+      for (let xx = x+1; xx <= Math.min(BLOCKS_HORIZONTALLY-1, x + bombLength); ++xx) {
+         if (map[y][xx] === BLOCK.BOMB) {
+            fires = fires.concat( explodeBomb(xx, y, bombLength, 1) );
+            break;
+         }
+         if (map[y][xx] !== BLOCK.PERMANENT)
+            fires.push({x: xx, y: y, block: BLOCK.FIRE, oldBlock: map[y][xx]});
+         if (breakLoop(map[y][xx]))
+            break;
+      }
+
+      if (recursive)
+         return fires;
+      
+      fires.forEach((fire) => {
+         map[fire.y][fire.x] = BLOCK.FIRE;
+      });
+
+      io.to(room).emit('mapUpdates', fires);
+
+      // kill people who are in fire
+      ['white', 'black', 'orange', 'green'].forEach(color => {
+         if (! ROOMS.get(room)[color].selected || ROOMS.get(room)[color].dead)
+            return;
+         
+         if (getRoomStatus() === ROOM_STATUS.RUNNING && !ROOMS.get(room)[color].shield && onFireCheck(color)) {
+            io.to(room).emit('death', color);
+
+            ROOMS.get(room)[color].dead = true;
+            ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
+
+            if (countNotDead() <= 1)
+               intervalIDS.add( setTimeout(showEndScreen, END_SCREEN_TIMEOUT) );
+         }
+      });
+
+      // removing fire
+      const id2 = setTimeout(() => {
+         if (! ROOMS.get(room))
+            return;
+         
+         if (getRoomStatus() !== roomStatus)
+            return;
+         
+         fires.forEach((fire) => {
+
+            let newBlock = BLOCK.NO;
+
+            if (fire.oldBlock === BLOCK.NORMAL)
+            {
+               const rand = Math.floor(Math.random() * 18);
+               if (rand > 7) {
+                  const rand = Math.floor(Math.random() * 14);
+                  if (rand === 0 || rand === 1 || rand === 2 || rand === 3)
+                     newBlock = BLOCK.POWER_BOMBLENGTH;
+                  else if (rand === 4)
+                     newBlock = BLOCK.POWER_BOMBPLUS;
+                  else if (rand === 5)
+                     newBlock = BLOCK.POWER_BOMBTIME;
+                  else if (rand === 6)
+                     newBlock = BLOCK.POWER_KICKBOMBS;
+                  else if (rand === 7 || rand === 8)
+                     newBlock = BLOCK.POWER_SPEED;
+                  else if (rand === 9)
+                     newBlock = BLOCK.POWER_SHIELD;
+                  else if (rand === 10)
+                     newBlock = BLOCK.POWER_SWITCHPLAYER;
+                  else if (rand === 11)
+                     newBlock = BLOCK.POWER_ILLNESS;
+                  else if (rand === 12 || rand === 13)
+                     newBlock = BLOCK.POWER_BONUS;
+               }
+
+               // collecting powerups
+               ['white', 'black', 'orange', 'green'].forEach(color => {
+                  if (! ROOMS.get(room)[color].selected || ROOMS.get(room)[color].dead)
+                     return;
+                  
+                  const xPlr = ROOMS.get(room)[color].coords.x;
+                  const yPlr = ROOMS.get(room)[color].coords.y;
+                  collectPowerup(Math.floor(xPlr / BLOCK_SIZE), Math.floor(yPlr / BLOCK_SIZE));
+                  collectPowerup(Math.ceil(xPlr / BLOCK_SIZE), Math.ceil(yPlr / BLOCK_SIZE));
+               });
+            }
+
+            fire.block = newBlock;
+            map[fire.y][fire.x] = newBlock;
+
+            if (fire.oldBlock === BLOCK.BOMB) {
+               const x = fire.x;
+               const y = fire.y;
+               const color = ROOMS.get(room).bombs.get(x*100 + y);
+
+               if (! ROOMS.get(room)[color].selected || ROOMS.get(room)[color].dead)
+                  return;
+
+               ROOMS.get(room)[color].bombs ++;
+
+               ROOMS.get(room).bombs.delete(x*100 + y);
+
+               // check if player is sick
+               if (ROOMS.get(room)[color].sick)
+                  tryPlaceBombFunc();
+            }
+         });
+
+         io.to(room).emit('mapUpdates', fires);
+
+      }, FIRE_TIME);
+      intervalIDS.add(id2);
+   }
+
+
    function START_GAME() {
       if (! ROOMS.get(room))
          return;
@@ -141,7 +298,7 @@ io.on('connection', (socket) => {
          } else {
             ROOMS.get(room)[color].coords = Object.assign(DEFAULT_POS[color]);
             ROOMS.get(room)[color].dead = false;
-            ROOMS.get(room)[color].bombs = 1;
+            ROOMS.get(room)[color].bombs = 2;
             ROOMS.get(room)[color].bombTimeIndex = 0;
             ROOMS.get(room)[color].bombLength = 2;
             setSpeedIndex(0);
@@ -476,6 +633,7 @@ io.on('connection', (socket) => {
             green: {username: undefined, coords: Object.assign(DEFAULT_POS['green']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
             map: map,
             players: new Map(),
+            bombs: new Map(),
             gameTime: null,
             status: ROOM_STATUS.WAITING
          });
@@ -484,8 +642,6 @@ io.on('connection', (socket) => {
       map = ROOMS.get(room).map
       socket.emit('room_status', getRoomStatus());
       ROOMS.get(room).players.set(username, {color, isOwner})
-
-      // TODO: what if the owner leaves?
       
       console.log(`connected:    ${socket.id}, {username: ${username}, room: ${room}, isOwner: ${isOwner}}`)
       
@@ -587,128 +743,23 @@ io.on('connection', (socket) => {
       if (ROOMS.get(room)[color].bombs === 0)
          return; // no bombs left
       
+      // placing the bomb
       io.to(room).emit('mapUpdates', [{x, y, block: BLOCK.BOMB, details: {sick: ROOMS.get(room)[color].sick}}]);
       map[y][x] = BLOCK.BOMB;
+      ROOMS.get(room).bombs.set(x*100 + y, color);
+
       ROOMS.get(room)[color].bombs --;
 
       const bombLength = ROOMS.get(room)[color].bombLength;
       const roomStatus = getRoomStatus();
 
       const id1 = setTimeout(() => {
-         if (! ROOMS.get(room))
-            return;
-         
          if (getRoomStatus() !== roomStatus)
             return;
-         
-         const fires = [];
-
-         fires.push({x, y, block: BLOCK.FIRE, wasBlock: false});
-         for (let yy = y-1; yy >= Math.max(0, y - bombLength); --yy) {
-            if (map[yy][x] === BLOCK.NORMAL || map[yy][x] === BLOCK.NO || isPowerup(map[yy][x]))
-               fires.push({x: x, y: yy, block: BLOCK.FIRE, wasBlock: (map[yy][x] === BLOCK.NORMAL)});
-            if (stop(map[yy][x]) || isPowerup(map[yy][x]))
-               break;
-         }
-         for (let yy = y+1; yy <= Math.min(BLOCKS_VERTICALLY-1, y + bombLength); ++yy) {
-            if (map[yy][x] === BLOCK.NORMAL || map[yy][x] === BLOCK.NO || isPowerup(map[yy][x]))
-               fires.push({x: x, y: yy, block: BLOCK.FIRE, wasBlock: (map[yy][x] === BLOCK.NORMAL)});
-            if (stop(map[yy][x]) || isPowerup(map[yy][x]))
-               break;
-         }
-         for (let xx = x-1; xx >= Math.max(0, x - bombLength); --xx) {
-            if (map[y][xx] === BLOCK.NORMAL || map[y][xx] === BLOCK.NO || isPowerup(map[y][xx]))
-               fires.push({x: xx, y: y, block: BLOCK.FIRE, wasBlock: (map[y][xx] === BLOCK.NORMAL)});
-            if (stop(map[y][xx]) || isPowerup(map[y][xx]))
-               break;
-         }
-         for (let xx = x+1; xx <= Math.min(BLOCKS_HORIZONTALLY-1, x + bombLength); ++xx) {
-            if (map[y][xx] === BLOCK.NORMAL || map[y][xx] === BLOCK.NO || isPowerup(map[y][xx]))
-               fires.push({x: xx, y: y, block: BLOCK.FIRE, wasBlock: (map[y][xx] === BLOCK.NORMAL)});
-            if (stop(map[y][xx]) || isPowerup(map[y][xx]))
-               break;
-         }
-   
-         fires.forEach((fire) => {
-            map[fire.y][fire.x] = BLOCK.FIRE;
-         });
-   
-         io.to(room).emit('mapUpdates', fires);
-
-         ['white', 'black', 'orange', 'green'].forEach(color => {
-            if (! ROOMS.get(room)[color].selected || ROOMS.get(room)[color].dead)
-               return;
-            
-            if (getRoomStatus() === ROOM_STATUS.RUNNING && !ROOMS.get(room)[color].shield && onFireCheck(color)) {
-               io.to(room).emit('death', color);
-
-               ROOMS.get(room)[color].dead = true;
-               ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
-
-               if (countNotDead() <= 1)
-                  intervalIDS.add( setTimeout(showEndScreen, END_SCREEN_TIMEOUT) );
-            }
-         });
-
-         const id2 = setTimeout(() => {
-            if (! ROOMS.get(room))
-               return;
-            
-            if (getRoomStatus() !== roomStatus)
-               return;
-            
-            fires.forEach((fire) => {
-               let newBlock;
-
-               const rand = Math.floor(Math.random() * 18);
-               if (fire.wasBlock === false || rand <= 7)
-                  newBlock = BLOCK.NO;
-               else {
-                  const rand = Math.floor(Math.random() * 14);
-                  if (rand === 0 || rand === 1 || rand === 2 || rand === 3)
-                     newBlock = BLOCK.POWER_BOMBLENGTH;
-                  else if (rand === 4)
-                     newBlock = BLOCK.POWER_BOMBPLUS;
-                  else if (rand === 5)
-                     newBlock = BLOCK.POWER_BOMBTIME;
-                  else if (rand === 6)
-                     newBlock = BLOCK.POWER_KICKBOMBS;
-                  else if (rand === 7 || rand === 8)
-                     newBlock = BLOCK.POWER_SPEED;
-                  else if (rand === 9)
-                     newBlock = BLOCK.POWER_SHIELD;
-                  else if (rand === 10)
-                     newBlock = BLOCK.POWER_SWITCHPLAYER;
-                  else if (rand === 11)
-                     newBlock = BLOCK.POWER_ILLNESS;
-                  else if (rand === 12 || rand === 13)
-                     newBlock = BLOCK.POWER_BONUS;
-               }
-   
-               fire.block = newBlock;
-               map[fire.y][fire.x] = newBlock;
-            });
-   
-            io.to(room).emit('mapUpdates', fires);
-   
-            if (! ROOMS.get(room)[color].selected || ROOMS.get(room)[color].dead)
-               return;
-
-            ROOMS.get(room)[color].bombs ++;
-
-            // collect powerups
-            const x = ROOMS.get(room)[color].coords.x;
-            const y = ROOMS.get(room)[color].coords.y;
-            collectPowerup(Math.floor(x / BLOCK_SIZE), Math.floor(y / BLOCK_SIZE));
-            collectPowerup(Math.ceil(x / BLOCK_SIZE), Math.ceil(y / BLOCK_SIZE));
-
-            // check if player is sick
-            if (ROOMS.get(room)[color].sick)
-               tryPlaceBombFunc();
-         }, FIRE_TIME);
-         intervalIDS.add(id2);
-
+         if (map[y][x] === BLOCK.BOMB)
+            explodeBomb(x, y, bombLength);
       }, BOMB_TIMES[ROOMS.get(room)[color].bombTimeIndex]);
+
       intervalIDS.add(id1);
    }
 
