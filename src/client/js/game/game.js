@@ -61,6 +61,11 @@ sounds.dropBombSick = new Howl({
    volume: vol
 });
 
+sounds.walldrop = new Howl({
+   src: ['assets/sounds/walldrop.mp3'],
+   volume: vol
+});
+
 sounds.explodeBomb = [];
 for (let i = 1; i <= 4; ++i)
    sounds.explodeBomb.push(new Howl({

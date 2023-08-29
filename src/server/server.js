@@ -56,7 +56,7 @@ io.on('connection', (socket) => {
    }
 
 
-   function onFireCheck(color) {
+   function onDeadlyBlockCheck(color) {
       const x = ROOMS.get(room)[color].coords.x
       const y = ROOMS.get(room)[color].coords.y
       
@@ -94,8 +94,8 @@ io.on('connection', (socket) => {
          console.log('?????/')
       }
 
-      return ((map[deadlyBlock1.y][deadlyBlock1.x] === BLOCK.FIRE) ||
-            (deadlyBlock2.x !== INEXISTENT_POS.x && map[deadlyBlock2.y][deadlyBlock2.x] === BLOCK.FIRE))
+      return ([BLOCK.FIRE, BLOCK.PERMANENT].includes(map[deadlyBlock1.y][deadlyBlock1.x]) ||
+            (deadlyBlock2.x !== INEXISTENT_POS.x && [BLOCK.FIRE, BLOCK.PERMANENT].includes(map[deadlyBlock2.y][deadlyBlock2.x])));
    }
 
 
@@ -173,7 +173,7 @@ io.on('connection', (socket) => {
          if (! ROOMS.get(room)[color].selected || ROOMS.get(room)[color].dead)
             return;
          
-         if (getRoomStatus() === ROOM_STATUS.RUNNING && !ROOMS.get(room)[color].shield && onFireCheck(color)) {
+         if (getRoomStatus() === ROOM_STATUS.RUNNING && !ROOMS.get(room)[color].shield && onDeadlyBlockCheck(color)) {
             io.to(room).emit('death', color);
 
             ROOMS.get(room)[color].dead = true;
@@ -270,35 +270,81 @@ io.on('connection', (socket) => {
 
       setRoomStatus(ROOM_STATUS.RUNNING);
                
-      ROOMS.get(room).gameTime = 2*60;
+      ROOMS.get(room).gameTime = 120 - 1;
       socket.emit('gameTime', ROOMS.get(room).gameTime);
 
       // gameTime handling
+      let xg = 0, yg = 0, xdir = 1, ydir = 0;
+      const filled = [];
+      for (let i = 0; i < BLOCKS_VERTICALLY; ++i) {
+         filled[i] = [];
+         for (let j = 0; j < BLOCKS_HORIZONTALLY; ++j)
+            filled[i][j] = false;
+      }
+
+      let endgame_blocks = 0;
+
       let gameTime_intervalId = setInterval(() => {
-         if (! ROOMS.get(room)) {
-            clearInterval(gameTime_intervalId);
+         if (! ROOMS.get(room))
             return;
-         }
-         if (ROOMS.get(room).gameTime === 0) { // possible bug im not sure
-            clearInterval(gameTime_intervalId);
-            return;
-         }
          
          ROOMS.get(room).gameTime --;
          io.to(room).emit('gameTime', ROOMS.get(room).gameTime);
+         
+         if (ROOMS.get(room).gameTime === 0) {
+            clearInterval(gameTime_intervalId);
+            gameTime_intervalId = setInterval(() => {
+               if (++endgame_blocks == BLOCKS_HORIZONTALLY * BLOCKS_VERTICALLY)
+                  clearInterval(gameTime_intervalId);
+               
+               let xn = xg + xdir;
+               let yn = yg + ydir;
+
+               if ( !(0 <= xn && xn < BLOCKS_HORIZONTALLY && 0 <= yn && yn < BLOCKS_VERTICALLY && !filled[yn][xn]) ) {
+                  [xdir, ydir] = [ydir, xdir];
+                  if (xdir)
+                     xdir *= -1;
+                  
+                  xn = xg + xdir;
+                  yn = yg + ydir;
+               }
+
+               filled[yg][xg] = true;
+               map[yg][xg] = BLOCK.PERMANENT;
+
+               io.to(room).emit('mapUpdates', [{x: xg, y: yg, block: BLOCK.PERMANENT}]);
+               io.to(room).emit('playsound', 'walldrop');
+
+               // check if anyone dies to this new block
+               ['white', 'black', 'orange', 'green'].forEach((color) => {
+                  if (!ROOMS.get(room)[color].dead && !ROOMS.get(room)[color].shield && onDeadlyBlockCheck(color)) {
+                     io.to(room).emit('death', color);
+                     ROOMS.get(room)[color].dead = true;
+                     ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
+   
+                     if (countNotDead() <= 1) {
+                        intervalIDS.add( setTimeout(showEndScreen, END_SCREEN_TIMEOUT) );
+                     }
+                  }
+               });
+               
+
+               [xg, yg] = [xn, yn];
+            }, 840); // 21/25 frames
+
+            intervalIDS.add(gameTime_intervalId);
+         }
+         
       }, 1000);
 
       intervalIDS.add(gameTime_intervalId);
 
       // set stats for each player
       ['white', 'black', 'orange', 'green'].forEach(color => {
-         console.log()
          if (ROOMS.get(room)[color].selected === false) {
-            console.log(0);
             ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
             ROOMS.get(room)[color].dead = true;
          } else {
-            console.log(1);
             ROOMS.get(room)[color].coords = Object.assign(DEFAULT_POS[color]);
             ROOMS.get(room)[color].dead = false;
             ROOMS.get(room)[color].bombs = 1;
@@ -784,7 +830,7 @@ io.on('connection', (socket) => {
          return socket.emit('error', 'coords: Player is \'dead\'');
    
       // check if player dies to bombfire
-      if (getRoomStatus() === ROOM_STATUS.RUNNING && !ROOMS.get(room)[color].shield && onFireCheck(color)) {
+      if (getRoomStatus() === ROOM_STATUS.RUNNING && !ROOMS.get(room)[color].shield && onDeadlyBlockCheck(color)) {
          io.to(room).emit('death', color);
          ROOMS.get(room)[color].dead = true;
          ROOMS.get(room)[color].coords = Object.assign(INEXISTENT_POS);
