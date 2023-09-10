@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
+   <link rel="stylesheet" href="css/index_css.css">
    <meta charset="UTF-8">
    <title>pyromasters-multiplayer - index.html</title>
 </head>
 
-<body style="background-color: black; color: white;">
+<body>
+   <img src="css/title.png">
    <form action="/game.html" autocomplete="off">
-      <label for="username">Username</label>
-      <input style="height: 30px;" id="username" name="username">
+      <h1 style="font-family: initial;">JOIN A GAME</h1>
+      <label for="username"> </label>
+      <input style="height: 30px;" id="username" name="username" placeholder="Username">
 
       <br>
 
-      <label for="room">Room</label>
-      <input style="height: 30px;" id="room" name="room">
+      <label for="room"> </label>
+      <input style="height: 30px;" id="room" name="room" placeholder="Room">
 
       <br>
       
-      <input style="height: 200px; width: 200px; font-size: 20px; color: green;" type="submit" onclick="
+      <button onclick="
          const username = document.querySelector('#username').value;
          const room = document.querySelector('#room').value;
          if (!username || !room)
-            document.body.innerHTML += 'put a username and a room dummy<br>';
-      ">
-   </form>
+            document.body.innerHTML += '<br>put a username and a room dummy';
+      ">START</button> </form>
 </body>
 </html>

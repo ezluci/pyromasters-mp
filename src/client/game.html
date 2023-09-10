@@ -42,7 +42,7 @@
    </script>
 </head>
 
-<body style="background-color: black; color: green; font-size: 20px">
+<body>
    <span id="loading" style="font-size: large; font-weight: bold;">LOADING...</span>
 
    <canvas id="canvas" width="815" height="620" style="display: inline-block;"></canvas>
@@ -82,12 +82,12 @@
       <u><b><i>
          <span style="color: red;">Select</span>
          <span style="color: aqua;">color</span>
-         <span style="color: blue;">here:</span></i></b></u>
-      <a href="#" style="background-color: white;" onclick="socket.emit('selectColor', 'white')">WHITE</a>
-      <a href="#" style="background-color: black; color: white;" onclick="socket.emit('selectColor', 'black')">BLACK</a>
-      <a href="#" style="background-color: orange;" onclick="socket.emit('selectColor', 'orange')">ORANGE</a>
-      <a href="#" style="background-color: green;" onclick="socket.emit('selectColor', 'green')">GREEN</a>
-      <a href="#" style="background-color: gray;" onclick="socket.emit('selectColor', 'spectator')">SPECTATOR</a>
+         <span style="color: blue;">here:</span></i></b></u><br>
+      <button id="white" class="color-button" onclick="socket.emit('selectColor', 'white')">WHITE</button>
+      <button id="black" class="color-button" onclick="socket.emit('selectColor', 'black')">BLACK</button>
+      <button id="orange" class="color-button" onclick="socket.emit('selectColor', 'orange')">ORANGE</button>
+      <button id="green" class="color-button" onclick="socket.emit('selectColor', 'green')">GREEN</buttton>
+      <button id="spectator" class="color-button" onclick="socket.emit('selectColor', 'spectator')">SPECTATOR</buttton>
    </div>
 
    <p>You can move with W A S D. Place bombs with P.</p>

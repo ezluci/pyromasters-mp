@@ -1,0 +1,17 @@
+body{
+    background-color: #222831;
+    color: #00ADB5;
+    text-align: center;
+}
+button{
+    border: solid; 
+    border-width: 4px; 
+    height: 178px; 
+    width: 178px;
+    font-size: 30px;
+    color: green;
+}   
+img{
+    margin-top: 25px;
+    margin-bottom: 40px;
+}
