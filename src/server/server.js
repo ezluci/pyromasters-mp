@@ -1,25 +1,20 @@
 'use strict';
 
-const http = require('http')
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 const socketio = require('socket.io')
-const URL = require('url')
+const http = require('http');
 const path = require('path')
-const fs = require('fs')
+const express = require('express')
 
-const server = http.createServer((req, res) => {
-   const reqURL = new URL.URL(req.url, 'a://a.a')
-   if (reqURL.pathname === '/' || reqURL.pathname === '')
-      reqURL.pathname = 'index.html'
-   const reqPath = path.join(__dirname, '..', 'client', reqURL.pathname)
-   
-   fs.readFile(reqPath, (err, data) => {
-      if (err instanceof Error)
-         res.end('404')
-      else
-         res.end(data)
-   })
-}).listen(parseInt(PORT), () => { console.log(`The server works on port ${PORT}.`) })
+const app = express();
+
+app.use(express.static('./src/client'));
+
+
+const server = http.createServer(app);
+server.listen(PORT, () => {
+   console.log('Listening on ' + PORT);
+});
 
 const {
    BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BLOCK_SIZE, BLOCK_SAFE_PX, MOVE_SPEEDS, FIRE_TIME, ILLNESS_TIME, SHIELD_TIME, BOMB_TIMES,
