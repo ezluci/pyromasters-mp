@@ -50,6 +50,7 @@ function playerJoined(username, room, callback, io, ROOMS, sok) {
          players: new Map(),
          bombs: new Map(),
          gameTime: null,
+         ranking: {},
          status: CONST.ROOM_STATUS.WAITING
       });
    }

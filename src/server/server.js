@@ -104,7 +104,8 @@ io.on('connection', (sok) => {
    }
 
    sok.showEndScreen = () => {
-      if (! ROOMS.get(sok.room))
+      const ROOM = ROOMS.get(sok.room);
+      if (!ROOM)
          return;
       
       if (sok.getRoomStatus() !== ROOM_STATUS.RUNNING)
@@ -112,14 +113,23 @@ io.on('connection', (sok) => {
       
       const notDead = [];
       ['white', 'black', 'orange', 'green'].forEach((color) => {
-         if (! ROOMS.get(sok.room)[color].dead)
+         if (!ROOM[color].dead)
             notDead.push(color);
       });
 
       if (notDead.length >= 2)
          return;
 
-      io.to(sok.room).emit('endscreen', notDead[0]);
+      const winnerColor = notDead[0];
+
+      if (winnerColor) {
+         const winnerName = ROOM[winnerColor].username;
+         if (!ROOM.ranking[winnerName])
+            ROOM.ranking[winnerName] = 0;
+         ROOM.ranking[winnerName] ++;
+      }
+
+      io.to(sok.room).emit('endscreen', winnerColor, ROOM.ranking);
       sok.setRoomStatus(ROOM_STATUS.ENDED);
    }
 

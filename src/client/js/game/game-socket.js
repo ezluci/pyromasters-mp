@@ -33,8 +33,9 @@ socket.on('room_status', (msg) => {
       sounds.menu.stop();
    }
 
-   if (msg === ROOM_STATUS.RUNNING)
+   if (msg === ROOM_STATUS.RUNNING) {
       END_SCREEN = null;
+   }
 })
 
 
@@ -144,7 +145,7 @@ socket.on('playsound', (sound) => {
 })
 
 
-socket.on('endscreen', (color) => {
+socket.on('endscreen', (color, ranking) => {
    if (!color) {
       addLog('Draw! Press \'Start game\' to play again.');
       sounds.draw[Math.floor(Math.random() * sounds.draw.length)].play();
@@ -158,6 +159,7 @@ socket.on('endscreen', (color) => {
       END_SCREEN = 'draw';
    else
       END_SCREEN = color;
+   RANKING = ranking;
 })
 
 

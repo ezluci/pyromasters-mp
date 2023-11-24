@@ -1,7 +1,7 @@
 'use strict';
 
 let LOADED_COUNT = 0, gameTime = 0;
-let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed, CAN_MOVE = false, END_SCREEN = null;
+let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed, CAN_MOVE = false, END_SCREEN = null, RANKING = null;
 
 let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined};
 let shieldImg;
@@ -458,6 +458,12 @@ function gameloop() {
       DRAW_game();
    else {
       ctx.drawImage(endscreens[END_SCREEN], 0, 0, canvas.width, canvas.height);
+      let k = 50;
+      Object.entries(RANKING).forEach(entry => {
+         const [player, wins] = entry;
+         ctx.fillText(`${player}: ${wins} wins`, 50, k);
+         k += 50;
+      });
    }
 
    
