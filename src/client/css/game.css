@@ -4,25 +4,28 @@
    touch-action: manipulation;
    user-select: none;
 }
+
 .color-button {
    border: solid;
-   border-color:rgb(125, 205, 207) ;
+   border-color: rgb(125, 205, 207) ;
    border-width: 3px; 
    margin: 5px;
-   width:150px;
+   width: 150px;
    border-radius: 10px;
    padding: 7px 12px;
    transition-duration:  0.5s;
    background-color: #393E46;
    color: #00ADB5;
 }
+
 #white:hover {
-background-color: white;
-color: rgb(29, 28, 28);
+   background-color: white;
+   color: rgb(29, 28, 28);
 }
+
 #black:hover {
    background-color: black;
-   color:aliceblue;
+   color: aliceblue;
 }
  
 #orange:hover{
