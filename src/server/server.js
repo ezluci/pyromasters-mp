@@ -28,6 +28,7 @@ function isPowerup(blockCode) {
 }
 
 const playerJoined_event = require('./events/playerJoined').playerJoined;
+const chat_event = require('./events/chat').chat;
 const tryStart_event = require('./events/tryStart').tryStart;
 const selectColor_event = require('./events/selectColor').selectColor;
 const tryPlaceBomb_event = require('./events/tryPlaceBomb').tryPlaceBomb;
@@ -512,6 +513,10 @@ io.on('connection', (sok) => {
 
    sok.on('playerJoined', (username, room, callback) => {
       playerJoined_event(username, room, callback, io, ROOMS, sok);
+   });
+
+   sok.on('chat', (msg) => {
+      chat_event(msg, io, ROOMS, sok);
    });
 
    sok.on('tryStart', () => {

@@ -163,6 +163,11 @@ socket.on('endscreen', (color, ranking) => {
 })
 
 
+socket.on('chat', (username, msg) => {
+   addChatMessage(username, msg);
+});
+
+
 socket.on('error', (msg) => {
    addLog(`ERROR FROM SERVER: ${msg}`);
    console.error(`ERROR FROM SERVER: ${msg}`);

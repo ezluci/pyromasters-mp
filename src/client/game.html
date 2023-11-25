@@ -45,6 +45,14 @@
 <body>
    <span id="loading" style="font-size: large; font-weight: bold;">LOADING...</span>
 
+   <div id="chat"></div>
+
+   <input id="chat-input">
+   <script>
+      const chatInput = document.querySelector('#chat-input');
+   </script>
+   <button id="chat-send-message" onclick="socket.emit('chat', chatInput.value);   chatInput.value = '';">Send msg</button>
+
    <canvas id="canvas" width="815" height="620" style="display: inline-block;"></canvas>
 
    <div id="log" style="display: inline; position: absolute;"></div>

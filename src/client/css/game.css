@@ -40,6 +40,14 @@
    background-color: grey;
    color: black;
 }
+
+#chat {
+   float: left;
+   min-width: 400px;
+   min-height: 80px;
+   background-color: black;
+}
+
 body {
    background-color: #222831;
    color: #00ADB5;
