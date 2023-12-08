@@ -22,7 +22,7 @@ function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
 
    for (let yy = y-1; yy >= Math.max(0, y - bombLength); --yy) {
       if (sok.map[yy][x] === CONST.BLOCK.BOMB) {
-         fires = fires.concat( explodeBomb(x, yy, bombLength, 1) );
+         fires = fires.concat( explodeBomb(x, yy, bombLength, 1, io, ROOMS, sok) );
          break;
       }
       if (sok.map[yy][x] !== CONST.BLOCK.PERMANENT)
@@ -33,7 +33,7 @@ function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
 
    for (let yy = y+1; yy <= Math.min(CONST.BLOCKS_VERTICALLY-1, y + bombLength); ++yy) {
       if (sok.map[yy][x] === CONST.BLOCK.BOMB) {
-         fires = fires.concat( explodeBomb(x, yy, bombLength, 1) );
+         fires = fires.concat( explodeBomb(x, yy, bombLength, 1, io, ROOMS, sok) );
          break;
       }
       if (sok.map[yy][x] !== CONST.BLOCK.PERMANENT)
@@ -44,7 +44,7 @@ function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
 
    for (let xx = x-1; xx >= Math.max(0, x - bombLength); --xx) {
       if (sok.map[y][xx] === CONST.BLOCK.BOMB) {
-         fires = fires.concat( explodeBomb(xx, y, bombLength, 1) );
+         fires = fires.concat( explodeBomb(xx, y, bombLength, 1, io, ROOMS, sok) );
          break;
       }
       if (sok.map[y][xx] !== CONST.BLOCK.PERMANENT)
@@ -55,7 +55,7 @@ function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
 
    for (let xx = x+1; xx <= Math.min(CONST.BLOCKS_HORIZONTALLY-1, x + bombLength); ++xx) {
       if (sok.map[y][xx] === CONST.BLOCK.BOMB) {
-         fires = fires.concat( explodeBomb(xx, y, bombLength, 1) );
+         fires = fires.concat( explodeBomb(xx, y, bombLength, 1, io, ROOMS, sok) );
          break;
       }
       if (sok.map[y][xx] !== CONST.BLOCK.PERMANENT)
@@ -155,7 +155,7 @@ function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
 
             // check if player is sick
             if (ROOMS.get(sok.room)[color].sick)
-               placeBomb();
+               sok.placeBomb();
          }
       });
 

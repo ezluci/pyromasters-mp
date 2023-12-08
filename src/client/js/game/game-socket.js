@@ -132,7 +132,7 @@ socket.on('gameTime', (time) => {
 
    if (time === 5)
       sounds.hurry[0].play();
-   if (time === 3)
+   if (time === 3)   
       sounds.hurry[Math.floor(Math.random() * (sounds.hurry.length - 1)) + 1].play();
    
    if (time % 20 === 16)

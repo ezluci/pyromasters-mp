@@ -41,11 +41,15 @@
    color: black;
 }
 
-#chat {
+#log {
    float: left;
    min-width: 400px;
    min-height: 80px;
+   max-width: 600px;
+   max-height: 600px;
+   overflow-y: scroll;
    background-color: black;
+   text-align: left;
 }
 
 body {

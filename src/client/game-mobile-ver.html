@@ -45,26 +45,17 @@
 <body>
    <span id="loading" style="font-size: large; font-weight: bold;">LOADING...</span>
 
-   <div id="log">
-      <div id="log-messages"></div>
+   <div id="chat"></div>
 
-      <input id="chat-input">
-      <button id="chat-send-message" onclick="socket.emit('chat', chatInput.value); chatInput.value = '';">Send msg</button>
-
-      <script>
-         const chatInput = document.querySelector('#chat-input');
-         chatInput.addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') {
-               event.preventDefault();
-               socket.emit('chat', chatInput.value);
-               chatInput.value = '';
-            }
-         });
-      </script>
-   </div>
-
+   <input id="chat-input">
+   <script>
+      const chatInput = document.querySelector('#chat-input');
+   </script>
+   <button id="chat-send-message" onclick="socket.emit('chat', chatInput.value);   chatInput.value = '';">Send msg</button>
 
    <canvas id="canvas" width="815" height="620" style="display: inline-block;"></canvas>
+
+   <div id="log" style="display: inline; position: absolute;"></div>
 
    <ul id="player-list" style="display: inline-block; background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; font-size: 30px;"></ul>
 
@@ -109,5 +100,11 @@
 
    <p>You can move with W A S D. Place bombs with P.</p>
    <p><b>!! If you use a dark theme extension, disable it.</b></p>
+
+   <button ontouchstart="keys.a = 1" ontouchend="keys.a = 0" class="android-button">LEFT <<<< (ANDROID)</button>
+   <button ontouchstart="keys.d = 1" ontouchend="keys.d = 0" class="android-button">RIGHT >>>> (ANDROID)</button>
+   <button ontouchstart="keys.w = 1" ontouchend="keys.w = 0" class="android-button">UP ^^^^ (ANDROID)</button>
+   <button ontouchstart="keys.s = 1" ontouchend="keys.s = 0" class="android-button">DOWN vvvv (ANDROID)</button>
+   <button ontouchstart="keys.p = 1" ontouchend="keys.p = 0" class="android-button">BOMB !!!! (ANDROID)</button>
 </body>
 </html>

@@ -1,4 +1,6 @@
-const CONST = require('../consts')()
+const CONST = require('../consts')();
+const startGame = require('../functions/startGame').startGame;
+
 
 function tryStart(io, ROOMS, sok) {
    if (!sok.detailsOkCheck())
@@ -29,7 +31,7 @@ function tryStart(io, ROOMS, sok) {
       io.to(sok.room).emit('room_status', `'${sok.username}' started the countdown. game starts in 2s`);
       const id2 = setTimeout(() => {
          io.to(sok.room).emit('room_status', `'${sok.username}' started the countdown. game starts in 1s`);
-         const id1 = setTimeout(sok.START_GAME, 1000);
+         const id1 = setTimeout(() => {startGame(io, ROOMS, sok);}, 1000);
          sok.intervalIDS.add(id1);
       }, 1000);
       sok.intervalIDS.add(id2);

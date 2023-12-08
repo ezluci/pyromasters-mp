@@ -1,7 +1,7 @@
 'use strict';
 
 let logElm
-waitForElm('#log').then((elm) => {logElm = elm})
+waitForElm('#log-messages').then((elm) => {logElm = elm})
 
 function addLog(msg) {
    const date = new Date()

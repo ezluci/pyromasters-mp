@@ -2,8 +2,6 @@
 
 let playerListElm;
 waitForElm('#player-list').then((elm) => {playerListElm = elm});
-let chatElm;
-waitForElm('#chat').then((elm) => {chatElm = elm});
 
 
 function addPlayerToList(username, color, isOwner) {
@@ -54,6 +52,6 @@ function changePlayerFromList(oldUsername, username, color, isOwner) {
 function addChatMessage(username, msg) {
    console.log(username, msg);
    const div = document.createElement('div');
-   div.innerText = `${username}: ${msg}`;
-   chatElm.append(div);
+   div.innerText = `Player ${username}: ${msg}`;
+   logElm.append(div);
 }

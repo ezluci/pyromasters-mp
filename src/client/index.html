@@ -8,23 +8,39 @@
 
 <body>
    <img src="assets/images/title.png">
-   <form action="game.html" autocomplete="off">
-      <h1 style="font-family: initial;">JOIN A GAME</h1>
-      <label for="username"> </label>
-      <input style="height: 30px;" id="username" name="username" placeholder="Username">
+   
+   <h1 style="font-family: initial;">JOIN A GAME</h1>
+   
+   <input style="height: 30px;" id="username" name="username" autocomplete="off" placeholder="Username">
+   <br>
+   <input style="height: 30px;" id="room" name="room" autocomplete="off" placeholder="Room">
+   <br>
 
-      <br>
-
-      <label for="room"> </label>
-      <input style="height: 30px;" id="room" name="room" placeholder="Room">
-
-      <br>
+   <script>
+      function getUsername() {
+         return document.querySelector('#username').value;
+      }
+      function getRoom() {
+         return document.querySelector('#room').value;
+      }
+   </script>
+   
+   <button onclick="
+      username = getUsername();
+      room = getRoom();
+      if (!username || !room)
+         document.body.innerHTML += '<br>put a username and a room dummy';
+      else
+         document.location.href = `game.html?username=${username}&room=${room}`;
+   ">PLAY PC</button>
       
-      <button onclick="
-         const username = document.querySelector('#username').value;
-         const room = document.querySelector('#room').value;
-         if (!username || !room)
-            document.body.innerHTML += '<br>put a username and a room dummy';
-      ">START</button> </form>
+   <button onclick="
+      username = getUsername();
+      room = getRoom();
+      if (!username || !room)
+         document.body.innerHTML += '<br>put a username and a room dummy';
+      else
+         document.location.href = `game-mobile-ver.html?username=${username}&room=${room}`;
+   ">PLAY MOBILE</button>
 </body>
 </html>
