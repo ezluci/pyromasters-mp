@@ -4,6 +4,7 @@ function isPowerup(blockCode) {
    return 5 <= blockCode && blockCode <= 13
 }
 
+
 // this function doesn't check if there is a bomb at map[y][x].
 function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
    
@@ -155,7 +156,7 @@ function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
 
             // check if player is sick
             if (ROOMS.get(sok.room)[color].sick)
-               sok.placeBomb();
+               placeBomb(io, ROOMS, sok);
          }
       });
 
@@ -165,4 +166,48 @@ function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
    sok.intervalIDS.add(id2);
 }
 
+
+function placeBomb(io, ROOMS, sok) {
+   if (!sok.detailsOkCheck())
+      return;
+   
+   if (sok.color === 'spectator')
+      return sok.emit('error', 'tryPlaceBomb: You are a spectator.');
+   if (ROOMS.get(sok.room)[sok.color].dead)
+      return sok.emit('error', 'tryPlaceBomb: You are \'dead\'');
+   
+   const x = Math.round(ROOMS.get(sok.room)[sok.color].coords.x / CONST.BLOCK_SIZE);
+   const y = Math.round(ROOMS.get(sok.room)[sok.color].coords.y / CONST.BLOCK_SIZE);
+   
+   if ( !(0 <= x && x <= CONST.BLOCKS_HORIZONTALLY && 0 <= y && y <= CONST.BLOCKS_VERTICALLY) )
+      return sok.emit('error', 'tryPlaceBomb: x or y out of range.');
+   
+   if (sok.map[y][x] === CONST.BLOCK.FIRE || sok.map[y][x] === CONST.BLOCK.BOMB || sok.map[y][x] === CONST.BLOCK.PERMANENT || sok.map[y][x] === CONST.BLOCK.NORMAL)
+      return;
+   
+   if (ROOMS.get(sok.room)[sok.color].bombs === 0)
+      return; // no bombs left
+   
+   // placing the bomb
+   io.to(sok.room).emit('mapUpdates', [{x, y, block: CONST.BLOCK.BOMB, details: {sick: ROOMS.get(sok.room)[sok.color].sick}}]);
+   sok.map[y][x] = CONST.BLOCK.BOMB;
+   ROOMS.get(sok.room).bombs.set(x*100 + y, sok.color);
+
+   ROOMS.get(sok.room)[sok.color].bombs --;
+
+   const bombLength = ROOMS.get(sok.room)[sok.color].bombLength;
+   const roomStatus = sok.getRoomStatus();
+
+   const id1 = setTimeout(() => {
+      if (sok.getRoomStatus() !== roomStatus)
+         return;
+      if (sok.map[y][x] === CONST.BLOCK.BOMB)
+         explodeBomb(x, y, bombLength, 0, io, ROOMS, sok);
+   }, CONST.BOMB_TIMES[ROOMS.get(sok.room)[sok.color].bombTimeIndex]);
+
+   sok.intervalIDS.add(id1);
+}
+
+
 module.exports.explodeBomb = explodeBomb;
+module.exports.placeBomb = placeBomb;

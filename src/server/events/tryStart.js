@@ -1,7 +1,6 @@
 const CONST = require('../consts')();
 const startGame = require('../functions/startGame').startGame;
 
-
 function tryStart(io, ROOMS, sok) {
    if (!sok.detailsOkCheck())
       return;
@@ -23,6 +22,9 @@ function tryStart(io, ROOMS, sok) {
    
    if (cntSelected === 0)
       return sok.emit('error', 'tryStart: You can\'t start the game with NO PLAYERS, silly!');
+
+   ROOMS.get(sok.room).bombs.clear();
+   sok.intervalIDS.clear();
 
    sok.setRoomStatus(CONST.ROOM_STATUS.STARTING);
    

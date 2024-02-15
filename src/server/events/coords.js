@@ -1,5 +1,7 @@
 const CONST = require('../consts')()
 
+const placeBomb = require('../functions/bombs').placeBomb;
+
 function coords(coords, io, ROOMS, sok) {
    if (!sok.detailsOkCheck())
       return;
@@ -33,7 +35,7 @@ function coords(coords, io, ROOMS, sok) {
 
    // check if player is sick
    if (ROOMS.get(sok.room)[sok.color].sick)
-      sok.placeBomb();
+      placeBomb(io, ROOMS, sok);
 }
 
 module.exports.coords = coords;

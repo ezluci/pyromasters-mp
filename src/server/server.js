@@ -35,7 +35,7 @@ const tryPlaceBomb_event = require('./events/tryPlaceBomb').tryPlaceBomb;
 const coords_event = require('./events/coords').coords;
 const disconnect_event = require('./events/disconnect').disconnect;
 
-const explodeBomb = require('./functions/explodeBomb').explodeBomb;
+const placeBomb = require('./functions/bombs').placeBomb;
 
 const io = new socketio.Server(server);
 
@@ -143,47 +143,6 @@ io.on('connection', (sok) => {
       return true
    }
 
-   sok.placeBomb = () => {
-      if (!sok.detailsOkCheck())
-         return;
-      
-      if (sok.color === 'spectator')
-         return sok.emit('error', 'tryPlaceBomb: You are a spectator.');
-      if (ROOMS.get(sok.room)[sok.color].dead)
-         return sok.emit('error', 'tryPlaceBomb: You are \'dead\'');
-      
-      const x = Math.round(ROOMS.get(sok.room)[sok.color].coords.x / BLOCK_SIZE);
-      const y = Math.round(ROOMS.get(sok.room)[sok.color].coords.y / BLOCK_SIZE);
-      
-      if ( !(0 <= x && x <= BLOCKS_HORIZONTALLY && 0 <= y && y <= BLOCKS_VERTICALLY) )
-         return sok.emit('error', 'tryPlaceBomb: x or y out of range.');
-      
-      if (sok.map[y][x] === BLOCK.FIRE || sok.map[y][x] === BLOCK.BOMB || sok.map[y][x] === BLOCK.PERMANENT || sok.map[y][x] === BLOCK.NORMAL)
-         return;
-      
-      if (ROOMS.get(sok.room)[sok.color].bombs === 0)
-         return; // no bombs left
-      
-      // placing the bomb
-      io.to(sok.room).emit('mapUpdates', [{x, y, block: BLOCK.BOMB, details: {sick: ROOMS.get(sok.room)[sok.color].sick}}]);
-      sok.map[y][x] = BLOCK.BOMB;
-      ROOMS.get(sok.room).bombs.set(x*100 + y, sok.color);
-
-      ROOMS.get(sok.room)[sok.color].bombs --;
-
-      const bombLength = ROOMS.get(sok.room)[sok.color].bombLength;
-      const roomStatus = sok.getRoomStatus();
-
-      const id1 = setTimeout(() => {
-         if (sok.getRoomStatus() !== roomStatus)
-            return;
-         if (sok.map[y][x] === BLOCK.BOMB)
-            explodeBomb(x, y, bombLength, 0, io, ROOMS, sok);
-      }, BOMB_TIMES[ROOMS.get(sok.room)[sok.color].bombTimeIndex]);
-
-      sok.intervalIDS.add(id1);
-   };
-
 
    sok.onDeadlyBlockCheck = (color) => {
       const x = ROOMS.get(sok.room)[color].coords.x
@@ -285,7 +244,7 @@ io.on('connection', (sok) => {
             break;
          case 1:
             ROOMS.get(sok.room)[sok.color].sick ++;
-            sok.placeBomb();
+            placeBomb(io, ROOMS, sok);
             const id = setTimeout(() => {
                if (ROOMS.get(sok.room)?.[sok.color]?.selected)
                   ROOMS.get(sok.room)[sok.color].sick --;
