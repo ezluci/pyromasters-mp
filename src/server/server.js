@@ -136,11 +136,21 @@ io.on('connection', (sok) => {
 
    sok.detailsOkCheck = () => {
       if (!sok.username) {
-         sok.emit('error', 'Server does not have socket details (username, room, etc.). Probably playerJoined was never emitted, or the server was restarted mid-game. DISCONNECTED.')
-         sok.disconnect()
-         return false
+         sok.emit('error', 'Server does not have socket details (username, room, etc.). Probably playerJoined was never emitted. DISCONNECTED.');
+         sok.disconnect();
+         return false;
       }
-      return true
+      if (!ROOMS.get(sok.room)) {
+         sok.emit('error', 'Room doesn\'t exist anymore. DISCONNECTED.');
+         sok.disconnect();
+         return false;
+      }
+      if (!ROOMS.get(sok.room).players.get(sok.username)) {
+         sok.emit('error', 'Player is not connected to this room. Refresh the page. DISCONNECTED.');
+         sok.disconnect();
+         return false;
+      }
+      return true;
    }
 
 

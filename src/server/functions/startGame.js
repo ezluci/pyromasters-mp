@@ -32,9 +32,9 @@ function startGame(io, ROOMS, sok) {
       
       if (ROOMS.get(sok.room).gameTime === 0) {
          clearInterval(gameTime_intervalId);
-         gameTime_intervalId = setInterval(() => {
+         let gameTime_intervalId2 = setInterval(() => {
             if (++endgame_blocks == CONST.BLOCKS_HORIZONTALLY * CONST.BLOCKS_VERTICALLY) {
-               clearInterval(gameTime_intervalId);
+               clearInterval(gameTime_intervalId2);
                return;
             }
             
@@ -73,7 +73,7 @@ function startGame(io, ROOMS, sok) {
             [xg, yg] = [xn, yn];
          }, 840); // 21/25 frames
 
-         sok.intervalIDS.add(gameTime_intervalId);
+         sok.intervalIDS.add(gameTime_intervalId2);
       }
       
    }, 1000);

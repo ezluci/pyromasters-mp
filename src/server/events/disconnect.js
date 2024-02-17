@@ -1,7 +1,9 @@
 const CONST = require('../consts')()
 
+const destroyRoom = require('../functions/destroyRoom').destroyRoom;
+
 function disconnect(io, ROOMS, sok) {
-   if (!sok.username || !sok.room)
+   if (!sok.detailsOkCheck())
       return;
    
    console.log(`disconnected: ${sok.id}, {username: ${sok.username}, room: ${sok.room}, isOwner: ${sok.isOwner}}`);
@@ -9,11 +11,10 @@ function disconnect(io, ROOMS, sok) {
    sok.to(sok.room).emit('player-', sok.username);
    ROOMS.get(sok.room).players.delete(sok.username);
 
-   if (!io.sockets.adapter.rooms.get(sok.room)) { // room empty
-      ROOMS.delete(sok.room);
-      sok.intervalIDS.forEach((id) => {
-         clearInterval(id);
-      });
+   if (!ROOMS.get(sok.room) || sok.isOwner) { // room empty or isOwner
+      destroyRoom(io, ROOMS, sok);
+      sok.disconnect();
+      return;
    } else {
       if (sok.color !== 'spectator') {
          if (sok.getRoomStatus() !== CONST.ROOM_STATUS.WAITING && sok.getRoomStatus() !== CONST.ROOM_STATUS.STARTING) {

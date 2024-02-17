@@ -22,7 +22,7 @@ function playerJoined(username, room, callback, io, ROOMS, sok) {
    sok.username = username;
    sok.room = room;
    sok.color = 'spectator';
-   sok.isOwner = !(io.sockets.adapter.rooms.get(sok.room));
+   sok.isOwner = !ROOMS.has(sok.room);
 
    sok.join(sok.room)
    sok.to(sok.room).emit('player+', sok.username, sok.color, sok.isOwner)
