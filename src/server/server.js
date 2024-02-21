@@ -36,6 +36,7 @@ const coords_event = require('./events/coords').coords;
 const disconnect_event = require('./events/disconnect').disconnect;
 
 const placeBomb = require('./functions/bombs').placeBomb;
+const { getSpeedIndex, setSpeedIndex, getShield, setShield0, setShield1 } = require('./functions/usefulSettersGetters');
 
 const io = new socketio.Server(server);
 
@@ -45,44 +46,7 @@ io.on('connection', (sok) => {
 
    sok.intervalIDS = new Set();
 
-   // useful getters and setters
 
-   sok.getSpeedIndex = () => {
-      return ROOMS.get(sok.room)[sok.color].moveSpeedIndex;
-   }
-   sok.setSpeedIndex = (index) => {
-      if ( !(0 <= index && index < MOVE_SPEEDS.length) )
-         return;
-      ROOMS.get(sok.room)[sok.color].moveSpeedIndex = index;
-      sok.emit('speedUpdate', MOVE_SPEEDS[index]);
-   }
-
-   sok.getShield = () => {
-      return ROOMS.get(sok.room)[sok.color].shield;
-   }
-   sok.setShield0 = () => {
-      const plr = ROOMS.get(sok.room)[sok.color];
-      if (plr.shieldTimeout) {
-         clearTimeout(plr.shieldTimeout);
-      }
-
-      io.to(sok.room).emit('shield0', sok.color);
-      plr.shield = false;
-   }
-   sok.setShield1 = () => {
-      const plr = ROOMS.get(sok.room)[sok.color];
-      if (plr.shieldTimeout) {
-         clearTimeout(plr.shieldTimeout);
-      }
-
-      io.to(sok.room).emit('shield1', sok.color);
-      plr.shield = true;
-      plr.shieldTimeout = setTimeout(() => {
-         if (plr)
-            plr.shield = false;
-      }, SHIELD_TIME);
-      sok.intervalIDS.add(plr.shieldTimeout);
-   }
 
    sok.getRoomStatus = () => {
       return ROOMS.get(sok.room).status;
@@ -208,11 +172,12 @@ io.on('connection', (sok) => {
    }
 
    function collectPowerupSpeed() {
-      sok.setSpeedIndex(sok.getSpeedIndex() + 1);
+      let currentIndex = getSpeedIndex(io, ROOMS, sok);
+      setSpeedIndex(currentIndex + 1, io, ROOMS, sok);
    }
 
    function collectPowerupShield() {
-      sok.setShield1();
+      setShield1(io, ROOMS, sok);
    }
 
    function collectPowerupKickbombs() { // Work In Progress
@@ -328,21 +293,21 @@ io.on('connection', (sok) => {
                collectPowerupSwitchplayer();
                break;
             case 9: // BonusLOST
-               sok.setSpeedIndex(0);
+               setSpeedIndex(0, io, ROOMS, sok);
                plr.bombs = 1;
                plr.bombTimeIndex = 0;
                plr.bombLength = 2;
                // plr.kickBombs = 0;  // need event in order to transmit to the player
-               sok.setShield0();
+               setShield0(io, ROOMS, sok);
                io.to(sok.room).emit('playsound', 'bonusLost');
                break;
             case 10: // BonusALL
-               sok.setSpeedIndex(2);
+               setSpeedIndex(2, io, ROOMS, sok);
                plr.bombs = 4;
                plr.bombTimeIndex = 3;
                plr.bombLength = 16;
                // plr.kickBombs = true;
-               sok.setShield1();
+               setShield1(io, ROOMS, sok);
                io.to(sok.room).emit('playsound', 'bonusAll');
                break;
          }

@@ -1,3 +1,5 @@
+'use strict';
+
 const CONST = require('../consts')();
 
 function destroyRoom(io, ROOMS, sok) {

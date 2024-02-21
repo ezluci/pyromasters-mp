@@ -1,3 +1,5 @@
+'use strict';
+
 const CONST = require('../consts')();
 const startGame = require('../functions/startGame').startGame;
 

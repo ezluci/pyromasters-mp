@@ -1,3 +1,5 @@
+'use strict';
+
 const CONST = require('../consts')()
 
 function playerJoined(username, room, callback, io, ROOMS, sok) {
@@ -42,10 +44,10 @@ function playerJoined(username, room, callback, io, ROOMS, sok) {
 
       ROOMS.set(sok.room, {
          owner: sok.username,
-         white: {username: undefined, coords: Object.assign(CONST.DEFAULT_POS['white']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
-         black: {username: undefined, coords: Object.assign(CONST.DEFAULT_POS['black']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
-         orange:{username: undefined, coords: Object.assign(CONST.DEFAULT_POS['orange']),bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
-         green: {username: undefined, coords: Object.assign(CONST.DEFAULT_POS['green']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
+         white: {username: undefined, sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['white']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
+         black: {username: undefined, sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['black']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
+         orange:{username: undefined, sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['orange']),bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
+         green: {username: undefined, sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['green']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
          map: map,
          players: new Map(),
          bombs: new Map(),

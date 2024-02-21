@@ -1,3 +1,5 @@
+'use strict';
+
 function chat(msg, io, ROOMS, sok) {
    if (!sok.detailsOkCheck())
       return;

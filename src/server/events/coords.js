@@ -1,3 +1,5 @@
+'use strict';
+
 const CONST = require('../consts')()
 
 const placeBomb = require('../functions/bombs').placeBomb;

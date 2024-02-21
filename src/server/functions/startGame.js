@@ -1,4 +1,8 @@
+'use strict';
+
 const CONST = require('../consts')();
+
+const { setSpeedIndex, setShield0 } = require('./usefulSettersGetters');
 
 function startGame(io, ROOMS, sok) {
    if (! ROOMS.get(sok.room))
@@ -91,9 +95,9 @@ function startGame(io, ROOMS, sok) {
          ROOMS.get(sok.room)[color].bombs = 1;
          ROOMS.get(sok.room)[color].bombTimeIndex = 0;
          ROOMS.get(sok.room)[color].bombLength = 2;
-         sok.setSpeedIndex(0);
+         setSpeedIndex(0, io, ROOMS, ROOMS.get(sok.room)[color].sok);
          ROOMS.get(sok.room)[color].sick = false;
-         sok.setShield0();
+         setShield0(io, ROOMS, sok, ROOMS.get(sok.room)[color].sok);
          ROOMS.get(sok.room)[color].shieldTimeout = null;
       }
       io.to(sok.room).emit('coords', color, ROOMS.get(sok.room)[color].coords);

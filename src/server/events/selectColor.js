@@ -1,3 +1,5 @@
+'use strict';
+
 const CONST = require('../consts')()
 
 function selectColor(newColor, io, ROOMS, sok) {
@@ -20,7 +22,7 @@ function selectColor(newColor, io, ROOMS, sok) {
       io.to(sok.room).emit('coords', sok.color, Object.assign(CONST.DEFAULT_POS[sok.color]));
    }
    if (newColor !== 'spectator') {
-      ROOMS.get(sok.room)[newColor] = {username: sok.username, coords: Object.assign(CONST.DEFAULT_POS[newColor]), bombs: 1, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: false, shield: false, selected: true};
+      ROOMS.get(sok.room)[newColor] = {username: sok.username, sok: sok, coords: Object.assign(CONST.DEFAULT_POS[newColor]), bombs: 1, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: false, shield: false, selected: true};
       io.to(sok.room).emit('coords', newColor, Object.assign(CONST.DEFAULT_POS[newColor]));
    }
    ROOMS.get(sok.room).players.get(sok.username).color = newColor;
