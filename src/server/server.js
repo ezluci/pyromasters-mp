@@ -44,8 +44,6 @@ const ROOMS = new Map(); // info about all rooms
 
 io.on('connection', (sok) => {
 
-   sok.intervalIDS = new Set();
-
 
 
    sok.getRoomStatus = () => {
@@ -88,7 +86,7 @@ io.on('connection', (sok) => {
       const winnerColor = notDead[0];
 
       if (winnerColor) {
-         const winnerName = ROOM[winnerColor].username;
+         const winnerName = ROOM[winnerColor].sok.username;
          if (!ROOM.ranking[winnerName])
             ROOM.ranking[winnerName] = 0;
          ROOM.ranking[winnerName] ++;
@@ -224,7 +222,7 @@ io.on('connection', (sok) => {
                if (ROOMS.get(sok.room)?.[sok.color]?.selected)
                   ROOMS.get(sok.room)[sok.color].sick --;
             }, ILLNESS_TIME);
-            sok.intervalIDS.add(id);
+            ROOMS.get(sok.room).intervalIDS.add(id);
 
             break;
       }

@@ -2,6 +2,8 @@
 
 const CONST = require('../consts')();
 
+const { getShield } = require('../functions/usefulSettersGetters');
+
 function isPowerup(blockCode) {
    return 5 <= blockCode && blockCode <= 13
 }
@@ -81,14 +83,14 @@ function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
       if (! ROOMS.get(sok.room)[color].selected || ROOMS.get(sok.room)[color].dead)
          return;
       
-      if (sok.getRoomStatus() === CONST.ROOM_STATUS.RUNNING && !ROOMS.get(sok.room)[color].shield && sok.onDeadlyBlockCheck(color)) {
+      if (sok.getRoomStatus() === CONST.ROOM_STATUS.RUNNING && !getShield(io, ROOMS, sok) && sok.onDeadlyBlockCheck(color)) {
          io.to(sok.room).emit('death', color);
 
          ROOMS.get(sok.room)[color].dead = true;
          ROOMS.get(sok.room)[color].coords = Object.assign(CONST.INEXISTENT_POS);
 
          if (sok.countNotDead() <= 1)
-            sok.intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
+            ROOMS.get(sok.room).intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
       }
    });
 
@@ -165,7 +167,7 @@ function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
       io.to(sok.room).emit('mapUpdates', fires);
 
    }, CONST.FIRE_TIME);
-   sok.intervalIDS.add(id2);
+   ROOMS.get(sok.room).intervalIDS.add(id2);
 }
 
 
@@ -207,7 +209,7 @@ function placeBomb(io, ROOMS, sok) {
          explodeBomb(x, y, bombLength, 0, io, ROOMS, sok);
    }, CONST.BOMB_TIMES[ROOMS.get(sok.room)[sok.color].bombTimeIndex]);
 
-   sok.intervalIDS.add(id1);
+   ROOMS.get(sok.room).intervalIDS.add(id1);
 }
 
 

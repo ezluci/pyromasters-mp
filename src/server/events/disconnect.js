@@ -25,14 +25,14 @@ function disconnect(io, ROOMS, sok) {
             ROOMS.get(sok.room)[sok.color].selected = false;
             ROOMS.get(sok.room)[sok.color].dead = true;
             if (sok.countNotDead() <= 1)
-               sok.intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
+               ROOMS.get(sok.room).intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
          } else {
             io.to(sok.room).emit('coords', sok.color, CONST.DEFAULT_POS[sok.color]);
             ROOMS.get(sok.room)[sok.color].coords = Object.assign(CONST.DEFAULT_POS[sok.color]);
             ROOMS.get(sok.room)[sok.color].selected = false;
             ROOMS.get(sok.room)[sok.color].dead = true;
             if (sok.countNotDead() <= 1)
-               sok.intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
+               ROOMS.get(sok.room).intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
          }
       }
    }
