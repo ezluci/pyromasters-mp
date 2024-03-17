@@ -4,6 +4,7 @@
    <link rel="stylesheet" href="./css/index.css">
    <meta charset="UTF-8">
    <title>pyromasters-multiplayer - index.html</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
@@ -32,15 +33,7 @@
          document.body.innerHTML += '<br>put a username and a room dummy';
       else
          document.location.href = `game.html?username=${username}&room=${room}`;
-   ">PLAY PC</button>
+   ">PLAY</button>
       
-   <button onclick="
-      username = getUsername();
-      room = getRoom();
-      if (!username || !room)
-         document.body.innerHTML += '<br>put a username and a room dummy';
-      else
-         document.location.href = `game-mobile-ver.html?username=${username}&room=${room}`;
-   ">PLAY MOBILE</button>
 </body>
 </html>

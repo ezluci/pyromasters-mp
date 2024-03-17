@@ -15,3 +15,16 @@ img {
     margin-top: 25px;
     margin-bottom: 40px;
 }
+   
+.mobilever{
+    display: none;
+}
+
+@media ( max-width:750px ){
+    .index {
+       display: none;
+    }
+    .mobilever {
+        display: block;
+    }
+    }
