@@ -13,33 +13,20 @@
    <script src="js/misc.js"></script>
    <script src="js/log.js"></script>
 
+   <script>
+      const DEFAULT_VOLUME = 20;
+
+      const params = new URLSearchParams(window.location.search);
+      const usernameHTML = params.get('username');
+      const roomHTML = params.get('room');
+   </script>
+   <script src="js/game/loadAssets.js"></script>
    <script src="js/game/index.js"></script>
    <script src="js/game/misc.js"></script>
    <script src="js/game/consts.js"></script>
    <script src="js/game/game-socket.js"></script>
    <script src="js/game/movement.js"></script>
-   <script src="js/game/game.js"></script>
 
-   <script>
-      const params = new URLSearchParams(window.location.search);
-      const usernameHTML = params.get('username');
-      const roomHTML = params.get('room');
-      
-      socket.emit('playerJoined', usernameHTML, roomHTML, (players, colorsCoords, map1, roomStatus) => {
-         map = map1
-         
-         players.forEach( ({username, color, isOwner}) => {
-            addPlayerToList(username, color, isOwner)
-         });
-
-         Object.keys(colorsCoords).forEach((color) => {
-            coords[color] = colorsCoords[color]
-         })
-
-         if (roomStatus === ROOM_STATUS.WAITING || roomStatus === ROOM_STATUS.STARTING || roomStatus === ROOM_STATUS.ENDED)
-            sounds.menu.play();
-         })
-   </script>
 </head>
 
 <body>
@@ -68,23 +55,32 @@
 
    <ul id="player-list" style="display: inline-block; background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; font-size: 30px;"></ul>
 
+
    <br>set volume:
-   <input type="range" min="0" max="100" value="30" id="volumeSlider">
 
    <script>
-      const slider = document.querySelector('#volumeSlider');
-      slider.addEventListener('input', () => {
+      const sliderEl = document.createElement('input');
+      document.body.appendChild(sliderEl);
+      sliderEl.type = 'range';
+      sliderEl.min = 0;
+      sliderEl.max = 100;
+      sliderEl.value = DEFAULT_VOLUME;
+
+      function updateAllSoundsVolume(sounds) {
          Object.values(sounds).forEach((sound) => {
             if (Array.isArray(sound)) {
-               sound.forEach((sound) => {
-                  sound.volume(slider.value / 100);
-               })
+               updateAllSoundsVolume(sound);
+            } else {
+               sound.volume(sliderEl.value / 100);
             }
-            else
-               sound.volume(slider.value / 100);
          });
-      });
+      }
+
+      updateAllSoundsVolume(sounds);
+
+      sliderEl.addEventListener('input', () => { updateAllSoundsVolume(sounds) });
    </script>
+
 
    <div id="start-game">
       <button id="start-button" onclick="socket.emit('tryStart')">Start game</button>
@@ -109,5 +105,7 @@
 
    <p>You can move with W A S D. Place bombs with P.</p>
    <p><b>!! If you use a dark theme extension, disable it.</b></p>
+
+   <script src="js/game/game.js"></script>
 </body>
 </html>

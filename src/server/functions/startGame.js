@@ -5,11 +5,12 @@ const CONST = require('../consts')();
 const { setSpeedIndex, setShield0 } = require('./usefulSettersGetters');
 
 function startGame(io, ROOMS, sok) {
-   if (! ROOMS.get(sok.room))
+   if (! ROOMS.get(sok.room)) {
       return;
+   }
 
-   sok.intervalIDS.forEach(id => { clearInterval(id) });
-   sok.intervalIDS.clear();
+   ROOMS.get(sok.room).intervalIDS.forEach(id => { clearInterval(id) });
+   ROOMS.get(sok.room).intervalIDS.clear();
 
    sok.setRoomStatus(CONST.ROOM_STATUS.RUNNING);
             
@@ -68,7 +69,7 @@ function startGame(io, ROOMS, sok) {
                   ROOMS.get(sok.room)[color].coords = Object.assign(CONST.INEXISTENT_POS);
 
                   if (sok.countNotDead() <= 1) {
-                     sok.intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
+                     ROOMS.get(sok.room).intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
                   }
                }
             });
@@ -77,12 +78,12 @@ function startGame(io, ROOMS, sok) {
             [xg, yg] = [xn, yn];
          }, 840); // 21/25 frames
 
-         sok.intervalIDS.add(gameTime_intervalId2);
+         ROOMS.get(sok.room).intervalIDS.add(gameTime_intervalId2);
       }
       
    }, 1000);
 
-   sok.intervalIDS.add(gameTime_intervalId);
+   ROOMS.get(sok.room).intervalIDS.add(gameTime_intervalId);
 
    // set stats for each player
    ['white', 'black', 'orange', 'green'].forEach(color => {
@@ -97,8 +98,7 @@ function startGame(io, ROOMS, sok) {
          ROOMS.get(sok.room)[color].bombLength = 2;
          setSpeedIndex(0, io, ROOMS, ROOMS.get(sok.room)[color].sok);
          ROOMS.get(sok.room)[color].sick = false;
-         setShield0(io, ROOMS, sok, ROOMS.get(sok.room)[color].sok);
-         ROOMS.get(sok.room)[color].shieldTimeout = null;
+         setShield0(io, ROOMS, ROOMS.get(sok.room)[color].sok);
       }
       io.to(sok.room).emit('coords', color, ROOMS.get(sok.room)[color].coords);
    })

@@ -14,13 +14,13 @@ function coords(coords, io, ROOMS, sok) {
       return sok.emit('error', 'coords: Player is \'dead\'');
 
    // check if player dies to bombfire
-   if (sok.getRoomStatus() === CONST.ROOM_STATUS.RUNNING && !ROOMS.get(sok.room)[sok.color].shield && sok.onDeadlyBlockCheck(sok.color)) {
+   if (sok.getRoomStatus() === CONST.ROOM_STATUS.RUNNING && !sok.shield && sok.onDeadlyBlockCheck(sok.color)) {
       io.to(sok.room).emit('death', sok.color);
       ROOMS.get(sok.room)[sok.color].dead = true;
       ROOMS.get(sok.room)[sok.color].coords = Object.assign(CONST.INEXISTENT_POS);
 
       if (sok.countNotDead() <= 1) {
-         sok.intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
+         ROOMS.get(sok.room).intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
       }
 
       return;

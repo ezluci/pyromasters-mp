@@ -2,6 +2,8 @@
 
 const CONST = require('../consts')()
 
+const { getSpeedIndex, setSpeedIndex, getShield, setShield0, setShield1 } = require('../functions/usefulSettersGetters');
+
 function selectColor(newColor, io, ROOMS, sok) {
    if (!sok.detailsOkCheck())
       return;
@@ -21,13 +23,16 @@ function selectColor(newColor, io, ROOMS, sok) {
       ROOMS.get(sok.room)[sok.color].dead = true;
       io.to(sok.room).emit('coords', sok.color, Object.assign(CONST.DEFAULT_POS[sok.color]));
    }
+   
+   sok.color = newColor;
    if (newColor !== 'spectator') {
-      ROOMS.get(sok.room)[newColor] = {username: sok.username, sok: sok, coords: Object.assign(CONST.DEFAULT_POS[newColor]), bombs: 1, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: false, shield: false, selected: true};
+      ROOMS.get(sok.room)[newColor] = {sok: sok, coords: Object.assign(CONST.DEFAULT_POS[newColor]), bombs: 1, bombTimeIndex: 0, bombLength: 2, sick: false, dead: false, shield: false, selected: true};
+      setShield0(io, ROOMS, sok);
+      setSpeedIndex(0, io, ROOMS, sok);
       io.to(sok.room).emit('coords', newColor, Object.assign(CONST.DEFAULT_POS[newColor]));
    }
    ROOMS.get(sok.room).players.get(sok.username).color = newColor;
 
-   sok.color = newColor;
    io.to(sok.room).emit('player~', sok.username, sok.username, sok.color, sok.isOwner);
 }
 

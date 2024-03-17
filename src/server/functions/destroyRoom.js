@@ -9,11 +9,11 @@ function destroyRoom(io, ROOMS, sok) {
    
    io.to(sok.room).emit('chat', sok.username, 'Owner left. Room deleted.');
 
-   ROOMS.delete(sok.room);
-   sok.intervalIDS.forEach((id) => {
+   ROOMS.get(sok.room).intervalIDS.forEach((id) => {
       clearInterval(id);
    });
-   sok.intervalIDS.clear();
+   ROOMS.get(sok.room).intervalIDS.clear();
+   ROOMS.delete(sok.room);
 }
 
 module.exports.destroyRoom = destroyRoom;

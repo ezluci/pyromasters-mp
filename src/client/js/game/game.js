@@ -1,227 +1,39 @@
 'use strict';
 
-let LOADED_COUNT = 0, gameTime = 0;
-let canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed, CAN_MOVE = false, END_SCREEN = null, RANKING = null;
-
-let plrImg = {'white': undefined, 'black': undefined, 'orange': undefined, 'green': undefined};
-let shieldImg;
-let blockPermanentImg, blockImg, bombImg, fireImg;
-const backgrounds = [];
-const endscreens = {};
-const powersImg = {};
-
-const sounds = {};
 
 
-window.addEventListener('load', () => {
+let gameTime = 0;
+var canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords = {}, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed, CAN_MOVE = false, END_SCREEN = null, RANKING = null;
+
+
+ASSETS_LOADING.then(() => {
+
+
+   
+
+socket.emit('playerJoined', usernameHTML, roomHTML, (players, colorsCoords, map1, roomStatus) => {
+   map = map1
+   
+   players.forEach( ({username, color, isOwner}) => {
+      addPlayerToList(username, color, isOwner)
+   });
+
+   Object.keys(colorsCoords).forEach((color) => {
+      coords[color] = colorsCoords[color]
+   })
+
+   if (roomStatus === ROOM_STATUS.WAITING || roomStatus === ROOM_STATUS.STARTING || roomStatus === ROOM_STATUS.ENDED)
+      sounds.menu.play();
+})
 
 canvas = document.querySelector('#canvas');
 ctx = canvas.getContext('2d');
 
 
 
-// loading sounds
-
-const vol = slider.value / 100; // the slider from game.html
-
-sounds.menu = new Howl({
-   src: ['assets/sounds/menu.mp3'],
-   loop: true,
-   volume: vol
-});
-
-sounds.hurry = [];
-sounds.hurry.push(new Howl({
-   src: ['assets/sounds/hurry.mp3'],
-   volume: vol
-}));
-
-for (let i = 1; i <= 5; ++i) {
-   sounds.hurry.push(new Howl({
-      src: [`assets/sounds/hurry${i}.mp3`],
-      volume: vol
-   }));
-}
-
-sounds.taunt = [];
-for (let i = 1; i <= 13; ++i) {
-   sounds.taunt.push(new Howl({
-      src: [`assets/sounds/taunt${i}.mp3`],
-      volume: vol
-   }));
-}
-
-sounds.dropBomb = new Howl({
-   src: ['assets/sounds/dropbomb.mp3'],
-   volume: vol
-});
-
-sounds.dropBombSick = new Howl({
-   src: ['assets/sounds/dropbombsick.mp3'],
-   volume: vol
-});
-
-sounds.walldrop = new Howl({
-   src: ['assets/sounds/walldrop.mp3'],
-   volume: vol
-});
-
-sounds.explodeBomb = [];
-for (let i = 1; i <= 4; ++i)
-   sounds.explodeBomb.push(new Howl({
-      src: [`assets/sounds/explode${i}.mp3`],
-      volume: vol
-   }));
-
-sounds.powerup = new Howl({
-   src: ['assets/sounds/powerup.mp3'],
-   volume: vol
-});
-
-sounds.bonusAll = new Howl({
-   src: ['assets/sounds/bonusall.mp3'],
-   volume: vol
-});
-
-sounds.bonusLost = new Howl({
-   src: ['assets/sounds/bonuslost.mp3'],
-   volume: vol
-});
-
-sounds.dead = [];
-for (let i = 1; i <= 5; ++i) {
-   sounds.dead.push(new Howl({
-      src: [`assets/sounds/dead${i}.mp3`],
-      volume: vol
-   }));
-}
-
-sounds.draw = [];
-for (let i = 1; i <= 5; ++i) {
-   sounds.draw.push(new Howl({
-      src: [`assets/sounds/draw${i}.mp3`],
-      volume: vol,
-      onend: () => { sounds.menu.play() }
-   }));
-}
-
-sounds.win = [];
-for (let i = 1; i <= 5; ++i) {
-   sounds.win.push(new Howl({
-      src: [`assets/sounds/win${i}.mp3`],
-      volume: vol,
-      onend: () => { sounds.menu.play() }
-   }));
-}
 
 
-// loading images
 
-loadImage('assets/images/players/white.png').then(image => {
-   plrImg['white'] = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/players/black.png').then(image => {
-   plrImg['black'] = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/players/orange.png').then(image => {
-   plrImg['orange'] = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/players/green.png').then(image => {
-   plrImg['green'] = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/players/shield.png').then(image => {
-   shieldImg = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/permanent.png').then(image => {
-   blockPermanentImg = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/normal.png').then(image => {
-   blockImg = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/bomb.png').then(image => {
-   bombImg = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/fire.png').then(image => {
-   fireImg = image;
-   LOADED_COUNT ++;
-})
-
-loadImage('assets/images/blocks/powerup.png').then(image => {
-   powersImg.main = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/power_bombplus.png').then(image => {
-   powersImg.bombplus = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/power_bomblength.png').then(image => {
-   powersImg.bomblength = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/power_speed.png').then(image => {
-   powersImg.speed = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/power_shield.png').then(image => {
-   powersImg.shield = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/power_kickbombs.png').then(image => {
-   powersImg.kickbombs = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/power_bombtime.png').then(image => {
-   powersImg.bombtime = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/power_switchplayer.png').then(image => {
-   powersImg.switchplayer = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/power_illness.png').then(image => {
-   powersImg.illness = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/power_bonus.png').then(image => {
-   powersImg.bonus = image;
-   LOADED_COUNT ++;
-})
-
-// backgrounds
-loadImage('assets/images/backgrounds/bricktown.jpg').then(image => {
-   backgrounds.push(image);
-   LOADED_COUNT ++;
-});
-
-// endscreens
-loadImage('assets/images/endscreens/draw.jpg').then(image => {
-   endscreens.draw = image;
-   LOADED_COUNT ++;
-});
-loadImage('assets/images/endscreens/white.jpg').then(image => {
-   endscreens.white = image;
-   LOADED_COUNT ++;
-});
-loadImage('assets/images/endscreens/black.jpg').then(image => {
-   endscreens.black = image;
-   LOADED_COUNT ++;
-});
-loadImage('assets/images/endscreens/orange.jpg').then(image => {
-   endscreens.orange = image;
-   LOADED_COUNT ++;
-});
-loadImage('assets/images/endscreens/green.jpg').then(image => {
-   endscreens.green = image;
-   LOADED_COUNT ++;
-});
 
 
 
@@ -282,28 +94,23 @@ coords = {
 }
 let lastFrameTime
 
-const intervalID = setInterval(() => {
-   if (LOADED_COUNT === 25) {
-      clearInterval(intervalID);
 
-      const intervalID2 = setInterval(() => {
-         if (map[0]) {
-            clearInterval(intervalID2);
+const intervalID2 = setInterval(() => {
+   if (map[0]) {
+      clearInterval(intervalID2);
 
-            // starting game loop
-            document.querySelector('#loading').hidden = true;
-            lastFrameTime = performance.now();
-            moveSpeed = MOVE_SPEEDS[0];
-            switchedKeys = 0;
-            shields = {
-               white: {val: false, timeout: null},
-               black: {val: false, timeout: null},
-               orange:{val: false, timeout: null},
-               green: {val: false, timeout: null}
-            };
-            window.requestAnimationFrame(gameloop);
-         }
-      }, 40);
+      // starting game loop
+      document.querySelector('#loading').hidden = true;
+      lastFrameTime = performance.now();
+      moveSpeed = MOVE_SPEEDS[0];
+      switchedKeys = 0;
+      shields = {
+         white: {val: false, timeout: null},
+         black: {val: false, timeout: null},
+         orange:{val: false, timeout: null},
+         green: {val: false, timeout: null}
+      };
+      window.requestAnimationFrame(gameloop);
    }
 }, 40);
 
@@ -325,41 +132,41 @@ function DRAW_game() {
             case BLOCK.NO:
                break;
             case BLOCK.NORMAL:
-               drawBlock(blockImg, x, y); break;
+               drawBlock(images.block, x, y); break;
             case BLOCK.BOMB:
-               drawBlock(bombImg, x, y, 0);  break;
+               drawBlock(images.bomb, x, y, 0);  break;
             case BLOCK.FIRE:
-               drawBlock(fireImg, x, y, 0);  break;
+               drawBlock(images.fire, x, y, 0);  break;
             case BLOCK.PERMANENT:
-               drawBlock(blockPermanentImg, x, y);  break;
+               drawBlock(images.blockPermanent, x, y);  break;
             
             case BLOCK.POWER_BOMBPLUS:
-               drawBlock(powersImg.main, x, y);
-               drawBlock(powersImg.bombplus, x, y);   break;
+               drawBlock(images.powers.main, x, y);
+               drawBlock(images.powers.bombplus, x, y);   break;
             case BLOCK.POWER_BOMBLENGTH:
-               drawBlock(powersImg.main, x, y);
-               drawBlock(powersImg.bomblength, x, y); break;
+               drawBlock(images.powers.main, x, y);
+               drawBlock(images.powers.bomblength, x, y); break;
             case BLOCK.POWER_SPEED:
-               drawBlock(powersImg.main, x, y);
-               drawBlock(powersImg.speed, x, y);   break;
+               drawBlock(images.powers.main, x, y);
+               drawBlock(images.powers.speed, x, y);   break;
             case BLOCK.POWER_SHIELD:
-               drawBlock(powersImg.main, x, y);
-               drawBlock(powersImg.shield, x, y);  break;
+               drawBlock(images.powers.main, x, y);
+               drawBlock(images.powers.shield, x, y);  break;
             case BLOCK.POWER_KICKBOMBS:
-               drawBlock(powersImg.main, x, y);
-               drawBlock(powersImg.kickbombs, x, y);  break;
+               drawBlock(images.powers.main, x, y);
+               drawBlock(images.powers.kickbombs, x, y);  break;
             case BLOCK.POWER_BOMBTIME:
-               drawBlock(powersImg.main, x, y);
-               drawBlock(powersImg.bombtime, x, y);   break;
+               drawBlock(images.powers.main, x, y);
+               drawBlock(images.powers.bombtime, x, y);   break;
             case BLOCK.POWER_SWITCHPLAYER:
-               drawBlock(powersImg.main, x, y);
-               drawBlock(powersImg.switchplayer, x, y);  break;
+               drawBlock(images.powers.main, x, y);
+               drawBlock(images.powers.switchplayer, x, y);  break;
             case BLOCK.POWER_ILLNESS:
-               drawBlock(powersImg.main, x, y);
-               drawBlock(powersImg.illness, x, y); break;
+               drawBlock(images.powers.main, x, y);
+               drawBlock(images.powers.illness, x, y); break;
             case BLOCK.POWER_BONUS:
-               drawBlock(powersImg.main, x, y);
-               drawBlock(powersImg.bonus, x, y);   break;
+               drawBlock(images.powers.main, x, y);
+               drawBlock(images.powers.bonus, x, y);   break;
          }
       }
    
@@ -367,15 +174,15 @@ function DRAW_game() {
    ['white', 'black', 'orange', 'green'].forEach(color => {
       if (color === myColor)
          return;
-      drawPlayer(plrImg[color], coords[color].x, coords[color].y);
+      drawPlayer(images.players[color], coords[color].x, coords[color].y);
       if (shields[color].val)
-         drawPlayer(shieldImg, coords[color].x, coords[color].y);
+         drawPlayer(images.shield, coords[color].x, coords[color].y);
    });
 
    if (myColor !== 'spectator') {
-      drawPlayer(plrImg[myColor], me.x, me.y);
+      drawPlayer(images.players[myColor], me.x, me.y);
       if (shields[myColor].val)
-         drawPlayer(shieldImg, me.x, me.y);
+         drawPlayer(images.shield, me.x, me.y);
    }
 
    // draw gametime
@@ -406,10 +213,7 @@ function gameloop() {
 
       // place bomb
       if (keys.p) {
-            // !!! ADD BETTER BOMB PLACEMENT.
-         const xx = Math.round(me.x / BLOCK_SIZE)
-         const yy = Math.round(me.y / BLOCK_SIZE)
-         socket.emit('tryPlaceBomb', xx, yy)
+         socket.emit('tryPlaceBomb');
       }
 
       // move
@@ -457,7 +261,7 @@ function gameloop() {
    if (!END_SCREEN)
       DRAW_game();
    else {
-      ctx.drawImage(endscreens[END_SCREEN], 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(images.endscreens[END_SCREEN], 0, 0, canvas.width, canvas.height);
       let k = 50;
       Object.entries(RANKING).forEach(entry => {
          const [player, wins] = entry;
@@ -482,5 +286,6 @@ function gameloop() {
 
    window.requestAnimationFrame(gameloop);
 }
+
 
 })

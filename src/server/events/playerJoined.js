@@ -25,6 +25,9 @@ function playerJoined(username, room, callback, io, ROOMS, sok) {
    sok.room = room;
    sok.color = 'spectator';
    sok.isOwner = !ROOMS.has(sok.room);
+   sok.shield = false;
+   sok.shieldTimeout = null;
+   sok.moveSpeedIndex = 0;
 
    sok.join(sok.room)
    sok.to(sok.room).emit('player+', sok.username, sok.color, sok.isOwner)
@@ -44,13 +47,14 @@ function playerJoined(username, room, callback, io, ROOMS, sok) {
 
       ROOMS.set(sok.room, {
          owner: sok.username,
-         white: {username: undefined, sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['white']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
-         black: {username: undefined, sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['black']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
-         orange:{username: undefined, sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['orange']),bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
-         green: {username: undefined, sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['green']), bombs: 0, bombTimeIndex: 0, bombLength: 2, moveSpeedIndex: 0, sick: false, dead: true, shield: false, shieldTimeout: null, selected: false},
+         white: {sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['white']), bombs: 0, bombTimeIndex: 0, bombLength: 2, sick: false, dead: true, selected: false},
+         black: {sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['black']), bombs: 0, bombTimeIndex: 0, bombLength: 2, sick: false, dead: true, selected: false},
+         orange:{sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['orange']),bombs: 0, bombTimeIndex: 0, bombLength: 2, sick: false, dead: true, selected: false},
+         green: {sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['green']), bombs: 0, bombTimeIndex: 0, bombLength: 2, sick: false, dead: true, selected: false},
          map: map,
          players: new Map(),
          bombs: new Map(),
+         intervalIDS: new Set(),
          gameTime: null,
          ranking: {},
          status: CONST.ROOM_STATUS.WAITING

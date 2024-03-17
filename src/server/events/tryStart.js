@@ -26,7 +26,8 @@ function tryStart(io, ROOMS, sok) {
       return sok.emit('error', 'tryStart: You can\'t start the game with NO PLAYERS, silly!');
 
    ROOMS.get(sok.room).bombs.clear();
-   sok.intervalIDS.clear();
+   ROOMS.get(sok.room).intervalIDS.forEach(id => { clearInterval(id) });
+   ROOMS.get(sok.room).intervalIDS.clear();
 
    sok.setRoomStatus(CONST.ROOM_STATUS.STARTING);
    
@@ -36,11 +37,11 @@ function tryStart(io, ROOMS, sok) {
       const id2 = setTimeout(() => {
          io.to(sok.room).emit('room_status', `'${sok.username}' started the countdown. game starts in 1s`);
          const id1 = setTimeout(() => {startGame(io, ROOMS, sok);}, 1000);
-         sok.intervalIDS.add(id1);
+         ROOMS.get(sok.room).intervalIDS.add(id1);
       }, 1000);
-      sok.intervalIDS.add(id2);
+      ROOMS.get(sok.room).intervalIDS.add(id2);
    }, 1000);
-   sok.intervalIDS.add(id3);
+   ROOMS.get(sok.room).intervalIDS.add(id3);
 }
 
 module.exports.tryStart = tryStart;
