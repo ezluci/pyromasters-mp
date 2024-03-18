@@ -15,9 +15,20 @@ function resetAnimation(animation) {
    animation.counter = 0;
 }
 
-function drawAnimation(animation, dx, dy) {
-   const spriteData = animation.data[animation.counter].rect;
-   ctx.drawImage(sprites.players.green.img, spriteData.x, spriteData.y, spriteData.w, spriteData.h, OFFSET_LEFT + dx, OFFSET_UP + dy - 25, 53, 78);
+function drawAnimation(animation, x, y) {
+   const spriteData = animation.data[animation.counter];
+   const trimmedRect = spriteData.trimmedRect;
+   const rect = spriteData.rect;
+
+   const sx = trimmedRect.x;
+   const sy = trimmedRect.y;
+   const sw = trimmedRect.w;
+   const sh = trimmedRect.h;
+   const dx = OFFSET_LEFT + x + (trimmedRect.x - rect.x);
+   const dy = OFFSET_UP + y + (trimmedRect.y - rect.y) - 25;
+   const dw = sw; // if the animations didn't match this exact resolution, this wouldn't work. you need percentages.
+   const dh = sh;
+   ctx.drawImage(sprites.players.green.img, sx, sy, sw, sh, dx, dy, dw, dh);
    nextAnimation(animation);
 }
 
