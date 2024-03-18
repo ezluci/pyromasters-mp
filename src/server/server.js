@@ -337,8 +337,8 @@ io.on('connection', (sok) => {
       tryPlaceBomb_event(io, ROOMS, sok);
    });
 
-   sok.on('coords', (coords) => {
-      coords_event(coords, io, ROOMS, sok);
+   sok.on('coords', (coords, animState) => {
+      coords_event(coords, animState, io, ROOMS, sok);
    });
 
    sok.on('disconnect', () => {

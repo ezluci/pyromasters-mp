@@ -215,6 +215,8 @@ function gameloop() {
       if (keys.d) keysPressed ++
       if (keys.w) keysPressed ++
 
+      const lastAnimState = sprites.players[myColor].state;
+
       if (keysPressed === 1) {
          if (keys.a)
             moveLeft()
@@ -244,8 +246,8 @@ function gameloop() {
       me.y = Math.max(MIN_Y, me.y)
       me.y = Math.min(MAX_Y, me.y)
 
-      if (meOld.x !== me.x || meOld.y !== me.y)
-         socket.emit('coords', me)
+      if (meOld.x !== me.x || meOld.y !== me.y || lastAnimState !== sprites.players[myColor].state)
+         socket.emit('coords', me, sprites.players[myColor].state)
    
       coords[myColor] = me;
    }

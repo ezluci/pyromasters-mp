@@ -94,8 +94,10 @@ socket.on('death', (color) => {
 })
 
 
-socket.on('coords', (color, coords1) => {
+socket.on('coords', (color, coords1, animState) => {
+   if (!animState)   animState = 'idle';
    coords[color] = coords1;
+   sprites.players[color].state = animState;
 })
 
 

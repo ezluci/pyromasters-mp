@@ -4,7 +4,7 @@ const CONST = require('../consts')()
 
 const placeBomb = require('../functions/bombs').placeBomb;
 
-function coords(coords, io, ROOMS, sok) {
+function coords(coords, animState, io, ROOMS, sok) {
    if (!sok.detailsOkCheck())
       return;
 
@@ -12,6 +12,8 @@ function coords(coords, io, ROOMS, sok) {
       return sok.emit('error', 'coords: You are a spectator.');
    if (ROOMS.get(sok.room)[sok.color].dead)
       return sok.emit('error', 'coords: Player is \'dead\'');
+   if (['front', 'back', 'left', 'right', 'idle'].findIndex(anim => anim == animState) == -1)
+      return sok.emit('error', 'coords: Invalid animation state.');
 
    // check if player dies to bombfire
    if (sok.getRoomStatus() === CONST.ROOM_STATUS.RUNNING && !sok.shield && sok.onDeadlyBlockCheck(sok.color)) {
@@ -26,7 +28,7 @@ function coords(coords, io, ROOMS, sok) {
       return;
    }
 
-   sok.to(sok.room).emit('coords', sok.color, coords);
+   sok.to(sok.room).emit('coords', sok.color, coords, animState);
    ROOMS.get(sok.room)[sok.color].coords = coords;
 
    // check if player collected some powerup
