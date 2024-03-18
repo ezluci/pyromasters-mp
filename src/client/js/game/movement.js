@@ -7,6 +7,9 @@ function stop(blockCode) {
 
 
 function moveLeft() {
+
+   sprites.players[myColor].state = 'left';
+   
    if (me.x === MIN_X)
       return
 
@@ -56,6 +59,9 @@ function moveLeft() {
 
 
 function moveDown() {
+
+   sprites.players[myColor].state = 'front';
+   
    if (me.y === MAX_Y)
       return
    
@@ -66,7 +72,7 @@ function moveDown() {
 
    if (BLOCK_SIZE - BLOCK_SAFE_PX <= mod && mod <= BLOCK_SIZE + BLOCK_SAFE_PX)
       return; // next to the player is a block. we don't move anything.
-
+   
    const A = {x: Math.floor(me.x / BLOCK_SIZE), y: Math.floor(me.y / BLOCK_SIZE)};
    const B = {x: Math.ceil(me.x / BLOCK_SIZE), y: Math.ceil(me.y / BLOCK_SIZE)};
    if (A.wasBomb = (map[A.y][A.x] === BLOCK.BOMB))
@@ -105,6 +111,9 @@ function moveDown() {
 
 
 function moveRight() {
+
+   sprites.players[myColor].state = 'right';
+   
    if (me.x === MAX_X)
       return
    
@@ -154,6 +163,9 @@ function moveRight() {
 
 
 function moveUp() {
+
+   sprites.players[myColor].state = 'back';
+
    if (me.y === MIN_Y)
       return
    
@@ -164,7 +176,7 @@ function moveUp() {
 
    if (BLOCK_SIZE - BLOCK_SAFE_PX <= mod && mod <= BLOCK_SIZE + BLOCK_SAFE_PX)
       return; // next to the player is a block. we don't move anything.
-
+   
    const A = {x: Math.floor(me.x / BLOCK_SIZE), y: Math.floor(me.y / BLOCK_SIZE)};
    const B = {x: Math.ceil(me.x / BLOCK_SIZE), y: Math.ceil(me.y / BLOCK_SIZE)};
    if (A.wasBomb = (map[A.y][A.x] === BLOCK.BOMB))

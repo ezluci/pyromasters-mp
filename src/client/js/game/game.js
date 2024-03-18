@@ -172,18 +172,10 @@ function DRAW_game() {
    
    // draw players
    ['white', 'black', 'orange', 'green'].forEach(color => {
-      if (color === myColor)
-         return;
-      drawPlayer(images.players[color], coords[color].x, coords[color].y);
+      drawAnimation(animations[color + '_' + sprites.players[color].state], coords[color].x, coords[color].y);
       if (shields[color].val)
          drawPlayer(images.shield, coords[color].x, coords[color].y);
    });
-
-   if (myColor !== 'spectator') {
-      drawPlayer(images.players[myColor], me.x, me.y);
-      if (shields[myColor].val)
-         drawPlayer(images.shield, me.x, me.y);
-   }
 
    // draw gametime
    const m = Math.floor(gameTime / 60).toString();
@@ -207,7 +199,7 @@ function gameloop() {
 
    /// UPDATES
 
-   if (CAN_MOVE) {
+   if (CAN_MOVE) { // variable changed in game-socket.js
       me = coords[myColor]
       meOld = {x: me.x, y: me.y}
 
@@ -243,6 +235,8 @@ function gameloop() {
          else if (lastPressed === 'w')
             moveUp()
       }
+      else
+         sprites.players[myColor].state = 'idle';
       
 
       me.x = Math.max(MIN_X, me.x)
@@ -252,6 +246,8 @@ function gameloop() {
 
       if (meOld.x !== me.x || meOld.y !== me.y)
          socket.emit('coords', me)
+   
+      coords[myColor] = me;
    }
 
 

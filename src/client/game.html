@@ -15,12 +15,33 @@
 
    <script>
       const DEFAULT_VOLUME = 20;
+      let LOADED_COUNT = 0;
 
       const params = new URLSearchParams(window.location.search);
       const usernameHTML = params.get('username');
       const roomHTML = params.get('room');
    </script>
+
+   <!-- LOADING ASSETS -->
    <script src="js/game/loadAssets.js"></script>
+   <script src="js/game/animations/loadAnimations.js"></script>
+   <script>
+      // create promise which checks if animations are loaded
+      const ASSETS_LOADING = new Promise((resolve) => {
+         const intvid = setInterval(() => {
+            if (LOADED_COUNT === 78) {
+               resolve();
+               clearInterval(intvid);
+            }
+         }, 60);
+      });
+
+      ASSETS_LOADING.then(() => {
+         console.log('All assets loaded');
+      });
+   </script>
+   <script src="js/game/animations/processAnimations.js"></script>
+
    <script src="js/game/index.js"></script>
    <script src="js/game/misc.js"></script>
    <script src="js/game/consts.js"></script>

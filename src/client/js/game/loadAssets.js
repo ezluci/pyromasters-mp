@@ -1,7 +1,5 @@
 'use strict';
 
-let LOADED_COUNT = 0;
-
 
 // loading sounds
 const sounds = {};
@@ -209,19 +207,4 @@ loadImage('assets/images/endscreens/orange.jpg').then(image => {
 loadImage('assets/images/endscreens/green.jpg').then(image => {
    images.endscreens.green = image;
    LOADED_COUNT ++;
-});
-
-
-
-const ASSETS_LOADING = new Promise((resolve) => {
-   const intvid = setInterval(() => {
-      if (LOADED_COUNT === 70) {
-         resolve();
-         clearInterval(intvid);
-      }
-   }, 60);
-});
-
-ASSETS_LOADING.then(() => {
-   console.log('All assets loaded');
 });
