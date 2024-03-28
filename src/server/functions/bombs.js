@@ -110,8 +110,8 @@ function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
          {
             const rand = Math.floor(Math.random() * 18);
             if (rand > 7) {
-               let rand = Math.floor(Math.random() * 14);
-               rand = 4;
+               const rand = Math.floor(Math.random() * 14);
+               
                if (rand === 0 || rand === 1 || rand === 2 || rand === 3)
                   newBlock = CONST.BLOCK.POWER_BOMBLENGTH;
                else if (rand === 4)
