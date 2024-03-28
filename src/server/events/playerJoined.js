@@ -63,7 +63,7 @@ function playerJoined(username, room, callback, io, ROOMS, sok) {
    
    sok.map = ROOMS.get(room).map;
    sok.emit('room_status', sok.getRoomStatus());
-   ROOMS.get(sok.room).players.set(sok.username, {color: sok.color, isOwner: sok.isOwner});
+   ROOMS.get(sok.room).players.set(sok.username, {color: sok.color, isOwner: sok.isOwner, sok: sok});
    
    console.log(`connected:    ${sok.id}, {username: ${sok.username}, room: ${sok.room}, isOwner: ${sok.isOwner}}`)
    

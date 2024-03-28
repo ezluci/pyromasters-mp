@@ -3,6 +3,7 @@
 const CONST = require('../consts')();
 
 const { setSpeedIndex, setShield0 } = require('./usefulSettersGetters');
+const { explodeBomb } = require('./bombs');
 
 function startGame(io, ROOMS, sok) {
    if (! ROOMS.get(sok.room)) {
@@ -13,8 +14,8 @@ function startGame(io, ROOMS, sok) {
    ROOMS.get(sok.room).intervalIDS.clear();
 
    sok.setRoomStatus(CONST.ROOM_STATUS.RUNNING);
-            
-   ROOMS.get(sok.room).gameTime = 120 - 1;
+
+   ROOMS.get(sok.room).gameTime = 120 - 1; // 2 minutes
    sok.emit('gameTime', ROOMS.get(sok.room).gameTime);
 
    // gameTime handling
@@ -25,6 +26,7 @@ function startGame(io, ROOMS, sok) {
       for (let j = 0; j < CONST.BLOCKS_HORIZONTALLY; ++j)
          filled[i][j] = false;
    }
+
 
    let endgame_blocks = 0;
 
@@ -38,6 +40,9 @@ function startGame(io, ROOMS, sok) {
       if (ROOMS.get(sok.room).gameTime === 0) {
          clearInterval(gameTime_intervalId);
          let gameTime_intervalId2 = setInterval(() => {
+            if (! ROOMS.get(sok.room))
+               return;
+      
             if (++endgame_blocks == CONST.BLOCKS_HORIZONTALLY * CONST.BLOCKS_VERTICALLY) {
                clearInterval(gameTime_intervalId2);
                return;
@@ -73,6 +78,17 @@ function startGame(io, ROOMS, sok) {
                   }
                }
             });
+
+            // check if any bomb explodes in this new block
+            if (ROOMS.get(sok.room).bombs.get(yg*100 + xg)) {
+               explodeBomb(xg, yg, ROOMS.get(sok.room)[sok.color].bombLength, false, io, ROOMS, sok);
+               const xsg = xg, ysg = yg;
+               const id = setTimeout(() => {
+                  sok.map[ysg][xsg] = CONST.BLOCK.PERMANENT;
+                  io.to(sok.room).emit('mapUpdates', [{x: xsg, y: ysg, block: CONST.BLOCK.PERMANENT}]);
+               }, CONST.FIRE_TIME);
+               ROOMS.get(sok.room).intervalIDS.add(id);
+            }
             
 
             [xg, yg] = [xn, yn];

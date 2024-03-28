@@ -20,7 +20,7 @@ const {
    BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BLOCK_SIZE, BLOCK_SAFE_PX, MOVE_SPEEDS, FIRE_TIME, ILLNESS_TIME, SHIELD_TIME, BOMB_TIMES,
    BLOCK,
    INEXISTENT_POS, DEFAULT_POS,
-   ROOM_STATUS, END_SCREEN_TIMEOUT
+   ROOM_STATUS
 } = require('./consts')()
 
 function isPowerup(blockCode) {
@@ -233,7 +233,7 @@ io.on('connection', (sok) => {
       if ( !(0 <= x && x < BLOCKS_HORIZONTALLY && 0 <= y && y < BLOCKS_VERTICALLY) )
          return;
       
-      if (!isPowerup(sok.map[y][x]))
+      if (!isPowerup(sok.map[y][x])) // 69
          return;
       
       const plr = ROOMS.get(sok.room)[sok.color];

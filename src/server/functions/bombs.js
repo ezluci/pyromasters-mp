@@ -110,7 +110,8 @@ function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
          {
             const rand = Math.floor(Math.random() * 18);
             if (rand > 7) {
-               const rand = Math.floor(Math.random() * 14);
+               let rand = Math.floor(Math.random() * 14);
+               rand = 4;
                if (rand === 0 || rand === 1 || rand === 2 || rand === 3)
                   newBlock = CONST.BLOCK.POWER_BOMBLENGTH;
                else if (rand === 4)
@@ -118,7 +119,7 @@ function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
                else if (rand === 5)
                   newBlock = CONST.BLOCK.POWER_BOMBTIME;
                else if (rand === 6)
-                  newBlock = CONST.BLOCK.POWER_KICKBOMBS;
+                  ;//newBlock = CONST.BLOCK.POWER_KICKBOMBS;
                else if (rand === 7 || rand === 8)
                   newBlock = CONST.BLOCK.POWER_SPEED;
                else if (rand === 9)
@@ -146,17 +147,19 @@ function explodeBomb(x, y, bombLength, recursive, io, ROOMS, sok) {
          fire.block = newBlock;
          sok.map[fire.y][fire.x] = newBlock;
 
-         if (fire.oldBlock === CONST.BLOCK.BOMB) {
+         if (fire.oldBlock === CONST.BLOCK.BOMB || fire.oldBlock === CONST.BLOCK.PERMANENT) {
             const x = fire.x;
             const y = fire.y;
-            const color = ROOMS.get(sok.room).bombs.get(x*100 + y);
+            const color = ROOMS.get(sok.room).bombs.get(y*100 + x);
 
             if (! ROOMS.get(sok.room)[color].selected || ROOMS.get(sok.room)[color].dead)
                return;
 
-            ROOMS.get(sok.room)[color].bombs ++;
+            if (ROOMS.get(sok.room)[color].bombs < 4) {
+               ROOMS.get(sok.room)[color].bombs ++;
+            }
 
-            ROOMS.get(sok.room).bombs.delete(x*100 + y);
+            ROOMS.get(sok.room).bombs.delete(y*100 + x);
 
             // check if player is sick
             if (ROOMS.get(sok.room)[color].sick)
@@ -195,7 +198,7 @@ function placeBomb(io, ROOMS, sok) {
    // placing the bomb
    io.to(sok.room).emit('mapUpdates', [{x, y, block: CONST.BLOCK.BOMB, details: {sick: ROOMS.get(sok.room)[sok.color].sick}}]);
    sok.map[y][x] = CONST.BLOCK.BOMB;
-   ROOMS.get(sok.room).bombs.set(x*100 + y, sok.color);
+   ROOMS.get(sok.room).bombs.set(y*100 + x, sok.color);
 
    ROOMS.get(sok.room)[sok.color].bombs --;
 

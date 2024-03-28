@@ -15,7 +15,6 @@ function disconnect(io, ROOMS, sok) {
 
    if (!ROOMS.get(sok.room) || sok.isOwner) { // room empty or isOwner
       destroyRoom(io, ROOMS, sok);
-      sok.disconnect();
       return;
    } else {
       if (sok.color !== 'spectator') {
