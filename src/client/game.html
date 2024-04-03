@@ -85,38 +85,30 @@
    </div>
 
    <p>You can move with W A S D. Place bombs with P.</p>
-   <p><b>!! If you use a dark theme extension, disable it.</b></p>
-<div class="row">
- <button class="movement" id="w" ontouchstart="keys.w = 1" ontouchend="keys.w = 0">
-   ▲
-</button>
-</div>
-<div class="row">
-<button class="movement" id="a" ontouchstart="keys.a = 1" ontouchend="keys.a = 0">
-   ◄
-</button>
-<button class="movement" id="d" ontouchstart="keys.d = 1" ontouchend="keys.d = 0">
-   ►
-</button>
-</div>
-<div class="row">
-<button class="movement" id="s" ontouchstart="keys.s = 1" ontouchend="keys.s = 0">
-   ▼
-</button>
-</div>
+ 
 </div>
 
 <div class="main">
    <canvas id="canvas" width="815" height="620" style="display: inline-block;"></canvas>
+</div>
+
+<div class="sidebar_right">
+   <div id="start-game">
+      <button id="start-button" onclick="socket.emit('tryStart')">Start game</button>
+      <span id="room-status" style="color: red;"></span>
+   </div>
+   <br>
+
+   <label hidden for="fps">Enter fps limit:</label>
+   <input hidden value="60" id="fps">
 
    <ul id="player-list" style="display: inline-block; background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; font-size: 30px;"></ul>
 
 
    <br>set volume:
-  
+  <input id="volume"> 
    <script>
-      const sliderEl = document.createElement('input');
-      document.body.appendChild(sliderEl);
+      const sliderEl = document.getElementById('volume');
       sliderEl.type = 'range';
       sliderEl.min = 0;
       sliderEl.max = 100;
@@ -138,19 +130,7 @@
    </script>
 </div>
 
-<div class="sidebar-right">
-   <div id="start-game">
-      <button id="start-button" onclick="socket.emit('tryStart')">Start game</button>
-      <span id="room-status" style="color: red;"></span>
-   </div>
-   <br>
-
-   <label hidden for="fps">Enter fps limit:</label>
-   <input hidden value="60" id="fps">
-
-</div>
-
    <script src="js/game/game.js"></script>
-   </main>
+
 </body>
 </html>

@@ -80,11 +80,10 @@ canvas {
 }
 
 .sidebar_right {
-   display: flex;
+   display:flex;
    flex-direction: column;
-   justify-content:between;
-   padding: 5%;
-   width: 20%;
+   padding: 3%;
+   width: 15%;
 }
 
 .movement{
@@ -93,25 +92,6 @@ canvas {
    margin: 0% 5%;
 }
 
-.row{
-   height: 10%;
-   width: 75%;
-   align-self: center;
-   display: flex;
-   justify-content: space-around;
-}
-
-
-.arrow {
-   border: solid black;
-   border-width: 0 3px 3px 0;
-   display: inline-block;
-   padding: 3px;
-   width: 20%;
-   height: 10%;
- }
- 
- 
 
 
 
