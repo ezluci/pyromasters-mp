@@ -54,4 +54,5 @@ function addChatMessage(username, msg) {
    const div = document.createElement('div');
    div.innerText = `Player ${username}: ${msg}`;
    logElm.append(div);
+   logElm.parentElement.scrollTop = logElm.parentElement.scrollHeight;
 }

@@ -4,7 +4,7 @@ function chat(msg, io, ROOMS, sok) {
    if (!sok.detailsOkCheck())
       return;
 
-   if (! /^[a-z0-9]+$/i.test(msg)) {
+   if (! /^[a-z 0-9]+$/i.test(msg)) {
       return;
    }
 
