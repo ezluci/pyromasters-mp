@@ -84,7 +84,6 @@ document.onkeyup = (event) => {
 }
 
 
-const fpsElem = document.querySelector('#fps') // currently not working
 myColor = 'spectator'
 coords = {
    'white': INEXISTENT_POS,
@@ -188,12 +187,10 @@ function DRAW_game() {
 
 
 function gameloop() {
-   // calculate FPS
+   // calculate deltaTime
    const currentTime = performance.now()
    deltaTime = currentTime - lastFrameTime
-   // !!! maybe limit deltatime to 50..?
    lastFrameTime = currentTime
-   const FPS = 1000 / deltaTime
 
 
 
@@ -267,14 +264,6 @@ function gameloop() {
          k += 50;
       });
    }
-
-   
-   // draw fps
-   ctx.fillStyle = 'black';
-   ctx.font = '30px serif';
-   ctx.fillText(`FPS: ${Math.floor(FPS)}`, 20, 23);
-
-
 
    /// SOUND
 
