@@ -3,6 +3,7 @@ body {
     color: #00ADB5;
     text-align: center;
 }
+
 button {
     border: solid; 
     border-width: 4px; 
@@ -11,20 +12,8 @@ button {
     font-size: 25px;
     color: green;
 }   
+
 img {
     margin-top: 25px;
     margin-bottom: 40px;
 }
-   
-.mobilever{
-    display: none;
-}
-
-@media ( max-width:750px ){
-    .index {
-       display: none;
-    }
-    .mobilever {
-        display: block;
-    }
-    }
