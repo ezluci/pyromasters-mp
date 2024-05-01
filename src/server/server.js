@@ -1,8 +1,8 @@
 'use strict';
 
-const PORT = process.env.PORT || 3000;
+require('dotenv').config();
 const socketio = require('socket.io')
-const http = require('http');
+const fs = require('fs');
 const path = require('path')
 const express = require('express')
 
@@ -10,11 +10,25 @@ const app = express();
 
 app.use(express.static('./src/client'));
 
-
-const server = http.createServer(app);
-server.listen(PORT, () => {
-   console.log('Listening on ' + PORT);
+console.log('running on http');
+let server = require('http').createServer(app);
+server.listen(process.env.PORT_HTTP, () => {
+   console.log('http listening on ' + process.env.PORT_HTTP);
 });
+
+const io = new socketio.Server(server);
+
+if (process.env.KEY) {
+   console.log('running on https');
+   const options = {
+      cert: fs.readFileSync(process.env.CERT),
+      key: fs.readFileSync(process.env.KEY)
+   };
+   server = require('https').createServer(options, (req, res) => {res.end(`move to http protocol (http://ezluci.com)`);});
+   server.listen(process.env.PORT_HTTPS, () => {
+      console.log('https listening on ' + process.env.PORT_HTTPS);
+   });
+}
 
 const {
    BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BLOCK_SIZE, BLOCK_SAFE_PX, MOVE_SPEEDS, FIRE_TIME, ILLNESS_TIME, SHIELD_TIME, BOMB_TIMES,
@@ -37,8 +51,6 @@ const disconnect_event = require('./events/disconnect').disconnect;
 
 const placeBomb = require('./functions/bombs').placeBomb;
 const { getSpeedIndex, setSpeedIndex, getShield, setShield0, setShield1 } = require('./functions/usefulSettersGetters');
-
-const io = new socketio.Server(server);
 
 const ROOMS = new Map(); // info about all rooms
 

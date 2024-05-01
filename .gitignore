@@ -1,4 +1,6 @@
 node_modules
 pyro.txt
+cert
 # wip
 spright
+.env

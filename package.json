@@ -14,6 +14,7 @@
   },
   "homepage": "https://github.com/ezluci/pyromasters-multiplayer#readme",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
     "http": "^0.0.1-security",
     "socket.io": "^4.6.1"
