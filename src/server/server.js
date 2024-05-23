@@ -8,6 +8,10 @@ const express = require('express')
 
 const app = express();
 
+app.use('*', (req, res, next) => {
+   console.log(new Date(), ' ', req.originalUrl);
+   next();
+});
 app.use(express.static('./src/client'));
 
 console.log('running on http');
@@ -18,7 +22,10 @@ server.listen(process.env.PORT_HTTP, () => {
 
 const io = new socketio.Server(server);
 
-if (process.env.KEY) {
+//   HTTPS SUPPORT
+//   COMMENT IF YOU DON'T WANT
+
+/* if (process.env.KEY) {
    console.log('running on https');
    const options = {
       cert: fs.readFileSync(process.env.CERT),
@@ -28,7 +35,10 @@ if (process.env.KEY) {
    server.listen(process.env.PORT_HTTPS, () => {
       console.log('https listening on ' + process.env.PORT_HTTPS);
    });
-}
+}*/
+
+//
+//
 
 const {
    BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BLOCK_SIZE, BLOCK_SAFE_PX, MOVE_SPEEDS, FIRE_TIME, ILLNESS_TIME, SHIELD_TIME, BOMB_TIMES,
