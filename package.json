@@ -20,6 +20,7 @@
     "socket.io": "^4.6.1"
   },
   "scripts": {
-    "start": "node ./src/server/server.js"
+    "start": "node ./src/server/server.js",
+    "startserver": "screen -L -Logfile ./logs.txt node ./src/server/server.js"
   }
 }
