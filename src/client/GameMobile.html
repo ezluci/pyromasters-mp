@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+   <meta charset="UTF-8">
+   
+   <title>pyromasters-multiplayer - GameMobile.html</title>
+
+   <link rel="stylesheet" href="/css/GameMobile.css">
+   
+   <script src="socket.io/socket.io.min.js"></script>
+   <script src="howler.js/howler.js"></script>
+
+   <script src="js/misc.js"></script>
+   <script src="js/log.js"></script>
+
+   <script>
+      const DEFAULT_VOLUME = 20;
+      let LOADED_COUNT = 0;
+
+      const params = new URLSearchParams(window.location.search);
+      const usernameHTML = params.get('username');
+      const roomHTML = params.get('room');
+   </script>
+
+   <!-- LOADING ASSETS -->
+   <script src="js/game/loadAssets.js"></script>
+   <script src="js/game/animations/loadAnimations.js"></script>
+   <script>
+      // create promise which checks if animations are loaded
+      const ASSETS_LOADING = new Promise((resolve) => {
+         const intvid = setInterval(() => {
+            if (LOADED_COUNT === 78) {
+               resolve();
+               clearInterval(intvid);
+            }
+         }, 60);
+      });
+
+      ASSETS_LOADING.then(() => {
+         console.log('All assets loaded');
+      });
+   </script>
+   <script src="js/game/animations/processAnimations.js"></script>
+
+   <script src="js/game/index.js"></script>
+   <script src="js/game/misc.js"></script>
+   <script src="js/game/consts.js"></script>
+   <script src="js/game/game-socket.js"></script>
+   <script src="js/game/movement.js"></script>
+</head>
+
+<body>
+   <main>
+      <div class="sidebar_left">
+         <span id="loading" style="font-size: large; font-weight: bold;">LOADING...</span>
+
+         <div id="log">
+            <div id="log-messages"></div>
+
+            <input id="chat-input">
+            <button id="chat-send-message" onclick="socket.emit('chat', chatInput.value); chatInput.value = '';">Send msg</button>
+
+            <script>
+               const chatInput = document.querySelector('#chat-input');
+               chatInput.addEventListener('keypress', (event) => {
+                  if (event.key === 'Enter') {
+                     event.preventDefault();
+                     socket.emit('chat', chatInput.value);
+                     chatInput.value = '';
+                  }
+               });
+               addLog('please rotate your device in landscape mode.')
+            </script>
+         </div>
+      
+         <div id="select-color" style="color: black; font-weight: bold;">
+            <u><b><i>
+               <span style="color: red;">Select</span>
+               <span style="color: aqua;">color</span>
+               <span style="color: blue;">here:</span></i></b></u><br>
+            <button id="white" class="color-button" onclick="socket.emit('selectColor', 'white')">WHITE</button>
+            <button id="black" class="color-button" onclick="socket.emit('selectColor', 'black')">BLACK</button>
+            <button id="orange" class="color-button" onclick="socket.emit('selectColor', 'orange')">ORANGE</button>
+            <button id="green" class="color-button" onclick="socket.emit('selectColor', 'green')">GREEN</buttton>
+            <button id="spectator" class="color-button" onclick="socket.emit('selectColor', 'spectator')">SPECTATOR</buttton>
+         </div>
+      </div>
+
+
+      <canvas id="canvas" width="815" height="620" style="display: inline-block;"></canvas>
+
+
+      <div class="sidebar_right">
+         <div id="start-game">
+            <button id="start-button" onclick="socket.emit('tryStart')">Start game</button>
+            <br>
+            <span id="room-status" style="color: red;"></span>
+         </div>
+
+         <ul id="player-list" style="display: inline-block; background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; font-size: 20px;"></ul>
+
+
+         <script>
+            const sliderEl = document.getElementById('volume');
+            sliderEl.type = 'range';
+            sliderEl.min = 0;
+            sliderEl.max = 100;
+            sliderEl.value = DEFAULT_VOLUME;
+
+            function updateAllSoundsVolume(sounds) {
+               Object.values(sounds).forEach((sound) => {
+                  if (Array.isArray(sound)) {
+                     updateAllSoundsVolume(sound);
+                  } else {
+                     sound.volume(sliderEl.value / 100);
+                  }
+               });
+            }
+
+            updateAllSoundsVolume(sounds);
+
+            sliderEl.addEventListener('input', () => { updateAllSoundsVolume(sounds) });
+         </script>
+
+         <br>
+         <button ontouchstart="keys.w = 1" ontouchend="keys.w = 0" class="android-button">^</button>
+         <br>
+         <button ontouchstart="keys.a = 1" ontouchend="keys.a = 0" class="android-button"><</button>
+         <button ontouchstart="keys.p = 1" ontouchend="keys.p = 0" class="android-button">BOMB</button>
+         <button ontouchstart="keys.d = 1" ontouchend="keys.d = 0" class="android-button">></button>
+         <br>
+         <button ontouchstart="keys.s = 1" ontouchend="keys.s = 0" class="android-button">v</button>
+      </div>
+   </main>
+
+   <script src="js/game/game.js"></script>
+
+   <br>
+   <br>
+   <footer style="left: 0; bottom: 0; width: 100%; background-color: gray; color: white; text-align: center; font-size: 16px;">
+      <span>You are on <a href="http://pyro.ezluci.com">pyro.ezluci.com</a>.</span> <br>
+      <span>My main website: <a href="http://ezluci.com">ezluci.com</a>.</span> <br> <br>
+      <span>This game is called Pyromasters Multiplayer.</span> <br>
+      <span>It was made by <a target="_blank" href="https://github.com/ezluci">ezluci</a> and <a target="_blank" href="https://github.com/stefmic22">stefmic22</a>.</span> <br>
+      <span>You can check its code <a target="_blank" href="https://github.com/ezluci/pyromasters-multiplayer">here</a>.</span>
+   </footer>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+   <link rel="stylesheet" href="./css/Lobby.css">
+   <meta charset="UTF-8">
+   <title>pyromasters-multiplayer - Lobby.html</title>
+   <script src="socket.io/socket.io.min.js"></script>
+</head>
+<body>
+    <main>
+        <header>
+            <img src="assets/images/title.png">
+        </header>
+        <div class="Tutorial">
+            <a class="button" href="#popup1">i</a>
+        </div>
+        
+        <div id="popup1" class="overlay">
+            <div class="popup">
+                <h2>Here i am</h2>
+                <a class="close" href="#">&times;</a>
+                <div class="content">
+                    Thank to pop me out of that button, but now i'm done so you can close this window.
+                </div>
+            </div>
+        </div>
+
+
+        <div class="Lobby">
+            <div class="Player">
+                <button class="PlayerButton">P1</button>
+                <h1 id="player-list"></h1>
+            </div>
+            <div class="Player">
+                <button class="PlayerButton">P2</button>
+                <h1 id="player-list"></h1>
+            </div>
+            <div class="Player">
+                <button class="PlayerButton">P3</button>
+                <h1 id="player-list"></h1>
+            </div>
+            <div class="Player">
+                <button class="PlayerButton">P4</button>
+                <h1 id="player-list"></h1>
+            </div>
+        </div>
+
+
+        <div class="footer">
+            <div class="SpectatorCount">
+                Spectators:
+            </div>
+            <button class="SpectatorBecome"></button>
+        </div>
+    </main>
+</body>
