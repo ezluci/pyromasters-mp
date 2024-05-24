@@ -32,8 +32,8 @@
    <button onclick="
       username = getUsername();
       room = getRoom();
-      if (!username || !room)
-         document.body.innerHTML += '<br>put a username and a room dummy';
+      if (! /^[a-zA-Z0-9]+$/i.test(username) || ! /^[a-zA-Z0-9]+$/i.test(room))
+         document.body.innerHTML += '<br>please use characters a-zA-Z0-9';
       else
          document.location.href = `Game${device==='mobile' ? 'Mobile' : 'PC'}.html?username=${username}&room=${room}`;
    ">PLAY</button>

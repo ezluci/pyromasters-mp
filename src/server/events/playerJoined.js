@@ -4,12 +4,12 @@ const CONST = require('../consts')()
 
 function playerJoined(username, room, callback, io, ROOMS, sok) {
    
-   if (! /^[a-z0-9]+$/i.test(username)) {
+   if (! /^[a-zA-Z0-9]+$/i.test(username)) {
       sok.emit('error', 'playerJoined: invalid username. DISCONNECTED.');
       sok.disconnect();
       return;
    }
-   if (! /^[a-z0-9]+$/i.test(room)) {
+   if (! /^[a-zA-Z0-9]+$/i.test(room)) {
       sok.emit('error', 'playerJoined: invalid room. DISCONNECTED.');
       sok.disconnect();
       return;
