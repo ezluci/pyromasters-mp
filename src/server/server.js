@@ -5,6 +5,7 @@ const socketio = require('socket.io')
 const fs = require('fs');
 const path = require('path')
 const express = require('express')
+const { resolveTemplates } = require('./templates.js');
 
 const app = express();
 
@@ -12,7 +13,25 @@ app.use('*', (req, res, next) => {
    console.log(new Date(), ' ', req.originalUrl);
    next();
 });
-app.use(express.static('./src/client'));
+
+function serveHTML(req, res, next) {
+   const url = req.url.split('?')[0];
+   const filePath = path.join(__dirname, '..', 'client', (url === '/' ? '/index.html' : url));
+   console.log(filePath);
+   if (!fs.existsSync(filePath)) {
+      res.send('404');
+      return;
+   }
+
+   const html = fs.readFileSync(filePath, { encoding: 'utf-8' });
+   res.set('Content-Type', 'text/html');
+   res.send(resolveTemplates(html));
+}
+
+app.get('*.html', serveHTML);
+app.get('/', serveHTML);
+
+app.use(express.static(path.join(__dirname, '..', 'client')));
 
 console.log('running on http');
 let server = require('http').createServer(app);

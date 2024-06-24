@@ -1,7 +1,7 @@
 {
   "name": "pyromasters-multiplayer",
   "description": "The old game Pyromasters, available on MoFunZone.com since 2006, now multiplayer!",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "main": "./src/server/server.js",
   "repository": {
     "type": "git",
@@ -15,12 +15,12 @@
   "homepage": "https://github.com/ezluci/pyromasters-multiplayer#readme",
   "dependencies": {
     "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
     "express": "^4.18.2",
     "http": "^0.0.1-security",
     "socket.io": "^4.6.1"
   },
   "scripts": {
-    "start": "node ./src/server/server.js",
-    "startserver": "screen -L -Logfile ./logs.txt node ./src/server/server.js"
+    "start": "node ./src/server/server.js"
   }
 }

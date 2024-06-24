@@ -32,22 +32,12 @@
    <button onclick="
       username = getUsername();
       room = getRoom();
-      if (! /^[a-zA-Z0-9]+$/i.test(username) || ! /^[a-zA-Z0-9]+$/i.test(room))
-         document.body.innerHTML += '<br>please use characters a-zA-Z0-9';
+      if (! /^[ -~]+$/i.test(username) || ! /^[ -~]+$/i.test(room))
+         document.body.innerHTML += '<br>please use printable ascii characters 🦆🦆';
       else
          document.location.href = `Game${device==='mobile' ? 'Mobile' : 'PC'}.html?username=${username}&room=${room}`;
    ">PLAY</button>
-      
 
-   <br>
-   <br>
-   <footer style="left: 0; bottom: 0; width: 100%; background-color: gray; color: white; text-align: center; font-size: 16px;">
-      <span>You are on <a href="http://pyro.ezluci.com">pyro.ezluci.com</a>.</span> <br>
-      <span>My main website: <a href="http://ezluci.com">ezluci.com</a>.</span> <br> <br>
-      <span>This game is called Pyromasters Multiplayer.</span> <br>
-      <span>It was made by <a target="_blank" href="https://github.com/ezluci">ezluci</a> and <a target="_blank" href="https://github.com/stefmic22">stefmic22</a>.</span> <br>
-      <span>You can check its code <a target="_blank" href="https://github.com/ezluci/pyromasters-multiplayer">here</a>.</span>
-   </footer>
-   
+   <%- footer %>
 </body>
 </html>

@@ -5,7 +5,7 @@
    
    <title>pyromasters-multiplayer - GamePC.html</title>
 
-   <link rel="stylesheet" href="/css/game.css">
+   <link rel="stylesheet" href="/css/GamePC.css">
    
    <script src="socket.io/socket.io.min.js"></script>
    <script src="howler.js/howler.js"></script>
@@ -50,15 +50,16 @@
 </head>
 
 <body>
-   <main>
-      <div class="sidebar_left">
-         <span id="loading" style="font-size: large; font-weight: bold;">LOADING...</span>
+   <span id="loading" style="font-size: large; font-weight: bold;">LOADING...</span>
+   <div id="main">
+      <div id="sidebar_left">
 
          <div id="log">
             <div id="log-messages"></div>
-
-            <input id="chat-input">
-            <button id="chat-send-message" onclick="socket.emit('chat', chatInput.value); chatInput.value = '';">Send msg</button>
+            <div id="log-buttons">
+               <input id="chat-input">
+               <button id="chat-send-message" onclick="socket.emit('chat', chatInput.value); chatInput.value = '';">Send</button>
+            </div>
 
             <script>
                const chatInput = document.querySelector('#chat-input');
@@ -71,76 +72,81 @@
                });
             </script>
          </div>
-      </div>
       
-      <div id="select-color" style="color: black; font-weight: bold;">
-         <u><b><i>
-            <span style="color: red;">Select</span>
-            <span style="color: aqua;">color</span>
-            <span style="color: blue;">here:</span></i></b></u><br>
-         <button id="white" class="color-button" onclick="socket.emit('selectColor', 'white')">WHITE</button>
-         <button id="black" class="color-button" onclick="socket.emit('selectColor', 'black')">BLACK</button>
-         <button id="orange" class="color-button" onclick="socket.emit('selectColor', 'orange')">ORANGE</button>
-         <button id="green" class="color-button" onclick="socket.emit('selectColor', 'green')">GREEN</buttton>
-         <button id="spectator" class="color-button" onclick="socket.emit('selectColor', 'spectator')">SPECTATOR</buttton>
+         <div id="select-color" style="color: black; font-weight: bold;">
+            <u><b><i>
+               <span style="color: red;">Select</span>
+               <span style="color: aqua;">color</span>
+               <span style="color: blue;">here:</span></i></b></u><br>
+            <button id="white" class="color-button" onclick="socket.emit('selectColor', 'white')">WHITE</button>
+            <button id="black" class="color-button" onclick="socket.emit('selectColor', 'black')">BLACK</button>
+            <button id="orange" class="color-button" onclick="socket.emit('selectColor', 'orange')">ORANGE</button>
+            <button id="green" class="color-button" onclick="socket.emit('selectColor', 'green')">GREEN</button>
+            <button id="spectator" class="color-button" onclick="socket.emit('selectColor', 'spectator')">SPECTATOR</button>
+
+            <p style="color: white;">Move with W A S D. Place bombs with P.</span>
+         </div>
       </div>
 
-      <p>You can move with W A S D. Place bombs with P.</p>
+
+      <div id="sidebar_middle">
+         <canvas id="canvas" width="815" height="620"></canvas>
+         <!-- canvas resize script at the end -->
+      </div>
+
+      <div id="sidebar_right">
+         <div id="start-game">
+            <span id="room-status" style="color: red;"></span>
+            <br>
+            <button id="start-button" onclick="socket.emit('tryStart')">Start game</button>
+         </div>
+         <br>
+
+         <label hidden for="fps">Enter fps limit:</label>
+         <input hidden value="60" id="fps">
+
+         <ul id="player-list" style="display: inline-block; background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; font-size: 30px;"></ul>
 
 
-   <canvas id="canvas" width="815" height="620" style="display: inline-block;"></canvas>
+         <br>set volume:
+         <input id="volume"> 
+         <script>
+            const sliderEl = document.getElementById('volume');
+            sliderEl.type = 'range';
+            sliderEl.min = 0;
+            sliderEl.max = 100;
+            sliderEl.value = DEFAULT_VOLUME;
 
-<div class="sidebar_right">
-   <div id="start-game">
-      <button id="start-button" onclick="socket.emit('tryStart')">Start game</button>
-      <br>
-      <span id="room-status" style="color: red;"></span>
-   </div>
-   <br>
-
-   <label hidden for="fps">Enter fps limit:</label>
-   <input hidden value="60" id="fps">
-
-   <ul id="player-list" style="display: inline-block; background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; font-size: 30px;"></ul>
-
-
-   <br>set volume:
-<input id="volume"> 
-   <script>
-      const sliderEl = document.getElementById('volume');
-      sliderEl.type = 'range';
-      sliderEl.min = 0;
-      sliderEl.max = 100;
-      sliderEl.value = DEFAULT_VOLUME;
-
-      function updateAllSoundsVolume(sounds) {
-         Object.values(sounds).forEach((sound) => {
-            if (Array.isArray(sound)) {
-               updateAllSoundsVolume(sound);
-            } else {
-               sound.volume(sliderEl.value / 100);
+            function updateAllSoundsVolume(sounds) {
+               Object.values(sounds).forEach((sound) => {
+                  if (Array.isArray(sound)) {
+                     updateAllSoundsVolume(sound);
+                  } else {
+                     sound.volume(sliderEl.value / 100);
+                  }
+               });
             }
-         });
-      }
 
-      updateAllSoundsVolume(sounds);
+            updateAllSoundsVolume(sounds);
 
-      sliderEl.addEventListener('input', () => { updateAllSoundsVolume(sounds) });
-   </script>
-</div>
-</main>
-
+            sliderEl.addEventListener('input', () => { updateAllSoundsVolume(sounds) });
+         </script>
+      </div>
+   </div>
+   
    <script src="js/game/game.js"></script>
+   <script>
+      const cv = document.querySelector('#canvas');
+      function updateCanvasSize() {
+         const w = cv.parentElement.offsetWidth;
+         const zoom = Math.min(w / cv.width, window.innerHeight / cv.height);
 
-   <br>
-   <br>
-   <footer style="left: 0; bottom: 0; width: 100%; background-color: gray; color: white; text-align: center; font-size: 16px;">
-      <span>You are on <a href="http://pyro.ezluci.com">pyro.ezluci.com</a>.</span> <br>
-      <span>My main website: <a href="http://ezluci.com">ezluci.com</a>.</span> <br> <br>
-      <span>This game is called Pyromasters Multiplayer.</span> <br>
-      <span>It was made by <a target="_blank" href="https://github.com/ezluci">ezluci</a> and <a target="_blank" href="https://github.com/stefmic22">stefmic22</a>.</span> <br>
-      <span>You can check its code <a target="_blank" href="https://github.com/ezluci/pyromasters-multiplayer">here</a>.</span>
-   </footer>
-
+         cv.style.zoom = zoom.toString();
+      }
+      updateCanvasSize();
+      window.addEventListener('resize', updateCanvasSize);
+   </script>
+   
+   <%- footer %>
 </body>
 </html>
