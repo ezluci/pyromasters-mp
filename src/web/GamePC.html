@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+   <meta charset="UTF-8">
+
+   <title>pyromasters-multiplayer - GamePC.html</title>
+
+   <link rel="stylesheet" href="/css/GamePC.css">
+
+   <script src="socket.io/socket.io.min.js"></script>
+   <script src="howler.js/howler.js"></script>
+
+   <script src="js/misc.js"></script>
+   <script src="js/log.js"></script>
+
+   <script>
+      const DEFAULT_VOLUME = 20;
+      let LOADED_COUNT = 0;
+
+      const params = new URLSearchParams(window.location.search);
+      const usernameHTML = params.get('username');
+      const roomHTML = params.get('room');
+   </script>
+
+   <!-- LOADING ASSETS -->
+   <script src="js/game/loadAssets.js"></script>
+   <script src="js/game/animations/loadAnimations.js"></script>
+   <script>
+      // create promise which checks if animations are loaded
+      const ASSETS_LOADING = new Promise((resolve) => {
+         const intvid = setInterval(() => {
+            if (LOADED_COUNT === 78) {
+               resolve();
+               clearInterval(intvid);
+            }
+         }, 60);
+      });
+
+      ASSETS_LOADING.then(() => {
+         console.log('All assets loaded');
+      });
+   </script>
+   <script src="js/game/animations/processAnimations.js"></script>
+
+   <script src="js/game/index.js"></script>
+   <script src="js/game/misc.js"></script>
+   <script src="js/game/consts.js"></script>
+   <script src="js/game/game-socket.js"></script>
+   <script src="js/game/movement.js"></script>
+</head>
+
+<body>
+   <span id="loading" style="font-size: large; font-weight: bold;">LOADING...</span>
+   <div id="main">
+      <div id="sidebar_left">
+
+         <div id="log">
+            <div id="log-messages"></div>
+            <div id="log-buttons">
+               <input id="chat-input">
+               <button id="chat-send-message" onclick="socket.emit('chat', chatInput.value); chatInput.value = '';">Send</button>
+            </div>
+
+            <script>
+               const chatInput = document.querySelector('#chat-input');
+               chatInput.addEventListener('keypress', (event) => {
+                  if (event.key === 'Enter') {
+                     event.preventDefault();
+                     socket.emit('chat', chatInput.value);
+                     chatInput.value = '';
+                  }
+               });
+            </script>
+         </div>
+
+         <div id="select-color" style="color: black; font-weight: bold;">
+            <u><b><i>
+                     <span style="color: red;">Select</span>
+                     <span style="color: aqua;">color</span>
+                     <span style="color: blue;">here:</span></i></b></u><br>
+            <button id="white" class="color-button" onclick="socket.emit('selectColor', 'white')">WHITE</button>
+            <button id="black" class="color-button" onclick="socket.emit('selectColor', 'black')">BLACK</button>
+            <button id="orange" class="color-button" onclick="socket.emit('selectColor', 'orange')">ORANGE</button>
+            <button id="green" class="color-button" onclick="socket.emit('selectColor', 'green')">GREEN</button>
+            <button id="spectator" class="color-button"
+               onclick="socket.emit('selectColor', 'spectator')">SPECTATOR</button>
+
+            <p style="color: white;">Move with W A S D. Place bombs with P.</span>
+         </div>
+      </div>
+
+
+      <div id="sidebar_middle">
+         <canvas id="canvas" width="815" height="620"></canvas>
+         <!-- canvas resize script at the end -->
+      </div>
+
+      <div id="sidebar_right">
+         <div id="start-game">
+            <span id="room-status" style="color: red;"></span>
+            <br>
+            <button id="start-button" onclick="socket.emit('tryStart')">Start game</button>
+         </div>
+         <br>
+
+         <label hidden for="fps">Enter fps limit:</label>
+         <input hidden value="60" id="fps">
+
+         <ul id="player-list" style="display: inline-block; background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; font-size: 30px;">
+         </ul>
+
+
+         <br>set volume:
+         <input id="volume">
+         <script>
+            const sliderEl = document.getElementById('volume');
+            sliderEl.type = 'range';
+            sliderEl.min = 0;
+            sliderEl.max = 100;
+            sliderEl.value = DEFAULT_VOLUME;
+
+            function updateAllSoundsVolume(sounds) {
+               Object.values(sounds).forEach((sound) => {
+                  if (Array.isArray(sound)) {
+                     updateAllSoundsVolume(sound);
+                  } else {
+                     sound.volume(sliderEl.value / 100);
+                  }
+               });
+            }
+
+            updateAllSoundsVolume(sounds);
+
+            sliderEl.addEventListener('input', () => { updateAllSoundsVolume(sounds) });
+         </script>
+      </div>
+   </div>
+
+   <script src="js/game/game.js"></script>
+   <script>
+      const cv = document.querySelector('#canvas');
+      function updateCanvasSize() {
+         const w = cv.parentElement.offsetWidth;
+         const zoom = Math.min(w / cv.width, window.innerHeight / cv.height);
+
+         cv.style.zoom = zoom.toString();
+      }
+      updateCanvasSize();
+      window.addEventListener('resize', updateCanvasSize);
+   </script>
+
+   <%- footer %>
+</body>
+
+</html>
