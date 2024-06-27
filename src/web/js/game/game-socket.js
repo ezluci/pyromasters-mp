@@ -1,6 +1,8 @@
 'use strict';
 
-const socket = io(window.location.hostname + ':<%= socket_port %>');
+const socket = io(
+   `${window.location.hostname==='localhost' ? 'http' : 'https'}://${window.location.hostname}:22822`
+);
 
 
 socket.on('player+', (username, color, isOwner) => {

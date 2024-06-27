@@ -1,6 +1,9 @@
-node_modules
-pyro.txt
-cert
-# wip
-spright
-.env
+/node_modules
+/.env
+/.vscode
+
+/pyro.txt
+
+/spright/*
+!/spright/pyromasters-multiplayer_config/
+!/spright/pyromasters-multiplayer_config/**

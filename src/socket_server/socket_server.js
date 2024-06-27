@@ -8,9 +8,11 @@ const http = require('http');
 require('dotenv').config();
 
 
+// this server needs to run through https.
+// i use nginx for this.
 const server = http.createServer();
 const io = new socketio.Server(server, {
-   cors: { origin: "*" }
+   cors: { origin: '*' }
 });
 // server.listen() is at the end of file
 
