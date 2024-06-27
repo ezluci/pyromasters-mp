@@ -1,5 +1,5 @@
-# pyromasters-multiplayer
+# pyromasters-mp
 
-This is the old game Pyromasters, available on MoFunZone.com since 2006, now multiplayer!
+This is **PyromastersMP**, inspired from the old game **Pyromasters** available on MoFunZone.com since 2006, now **multiplayer**!
 
-The site http://pyro.ezluci.com/ should be running right now.
+The site https://pyro.ezluci.com/ should be running right now.

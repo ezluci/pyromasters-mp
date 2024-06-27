@@ -1,18 +1,18 @@
 {
-  "name": "pyromasters-multiplayer",
+  "name": "pyromasters-mp",
   "description": "The old game Pyromasters, available on MoFunZone.com since 2006, now multiplayer!",
   "version": "0.5.1",
   "main": "./src/server/server.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ezluci/pyromasters-multiplayer.git"
+    "url": "git+https://github.com/ezluci/pyromasters-mp.git"
   },
   "author": "ezluci",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ezluci/pyromasters-multiplayer/issues"
+    "url": "https://github.com/ezluci/pyromasters-mp/issues"
   },
-  "homepage": "https://github.com/ezluci/pyromasters-multiplayer#readme",
+  "homepage": "https://github.com/ezluci/pyromasters-mp#readme",
   "dependencies": {
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
@@ -20,7 +20,5 @@
     "http": "^0.0.1-security",
     "socket.io": "^4.6.1"
   },
-  "scripts": {
-    "start": "node ./src/socket_server/server.js && node ./src/"
-  }
+  "scripts": {}
 }

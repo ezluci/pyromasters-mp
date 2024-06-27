@@ -5,5 +5,5 @@
 /pyro.txt
 
 /spright/*
-!/spright/pyromasters-multiplayer_config/
-!/spright/pyromasters-multiplayer_config/**
+!/spright/pyromasters-mp_config/
+!/spright/pyromasters-mp_config/**
