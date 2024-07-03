@@ -63,21 +63,12 @@ socket.on('switchKeys', () => {
 
 
 socket.on('shield0', (color) => {
-   if (shields[color].timeout)
-      clearTimeout(shields[color].timeout);
-   
-   shields[color].timeout = null;
+   // todo remove timeout shields[color].timeout = null;
    shields[color].val = false;
 })
 
 socket.on('shield1', (color) => {
-   if (shields[color].timeout)
-      clearTimeout(shields[color].timeout);
-   
    shields[color].val = true;
-   shields[color].timeout = setTimeout(() => {
-      shields[color].val = false;
-   }, SHIELD_TIME);
 })
 
 
@@ -96,10 +87,26 @@ socket.on('death', (color) => {
 })
 
 
-socket.on('coords', (color, coords1, animState) => {
-   if (!animState)   animState = 'idle';
-   coords[color] = coords1;
-   sprites.players[color].state = animState;
+socket.on('C', (coordsReceived) => {
+   ['white', 'black', 'orange', 'green'].forEach((color, idx) => {
+      if (color === myColor) {
+         return;
+      }
+      let animState = 'idle';
+      if (coordsReceived[idx][2] === 1) {
+         animState = 'front';
+      } else if (coordsReceived[idx][2] === 2) {
+         animState = 'back';
+      } else if (coordsReceived[idx][2] === 3) {
+         animState = 'left';
+      } else if (coordsReceived[idx][2] === 4) {
+         animState = 'right';
+      }
+
+      coords[color].x = coordsReceived[idx][0];
+      coords[color].y = coordsReceived[idx][1];
+      sprites.players[color].state = animState;
+   });
 })
 
 

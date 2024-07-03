@@ -14,6 +14,9 @@ function coords(coords, animState, io, sok) {
       return sok.emit('error', 'coords: Player is \'dead\'');
    if (['front', 'back', 'left', 'right', 'idle'].findIndex(anim => anim == animState) == -1)
       return sok.emit('error', 'coords: Invalid animation state.');
+   if (isNaN(coords.x) || isNaN(coords.y)) {
+      return sok.emit('error', 'coords: invalid coords');
+   }
 
    // check if player dies to bombfire
    if (sok.getRoomStatus() === CONST.ROOM_STATUS.RUNNING && !sok.shield && sok.onDeadlyBlockCheck(sok.color)) {
@@ -28,8 +31,10 @@ function coords(coords, animState, io, sok) {
       return;
    }
 
-   sok.to(sok.roomname).emit('coords', sok.color, coords, animState);
+   coords.x = Math.floor(coords.x);
+   coords.y = Math.floor(coords.y);
    sok.room[sok.color].coords = coords;
+   sok.room[sok.color].sok.animState = (animState === 'idle' ? 0 : animState === 'front' ? 1 : animState === 'back' ? 2 : animState === 'left' ? 3 : animState === 'right' ? 4 : -1);
 
    // check if player collected some powerup
    const x = sok.room[sok.color].coords.x;

@@ -30,6 +30,7 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
    sok.moveSpeedIndex = 0;
    sok.sick = false;
    sok.sickFalse_lastTick = null;
+   sok.animState = 0;
 
    sok.join(sok.roomname)
    sok.to(sok.roomname).emit('player+', sok.username, sok.color, sok.isOwner)

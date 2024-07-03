@@ -25,6 +25,12 @@ class Ticks {
          this.processAction(action);
       })
 
+      const coords = [];
+      ['white', 'black', 'orange', 'green'].forEach(color => {
+         coords.push([this.sok.room[color].coords.x, this.sok.room[color].coords.y, this.sok.room[color].sok?.animState]);
+      });
+      this.io.to(this.sok.roomname).emit('C', coords);
+
       const tickTime = new Date();
       if (tickTime - this.lastTickTime >= 16 * 2) {
          console.error(`${new Date()}  16tps loop running at ${tickTime - this.lastTickTime}tps!`);
