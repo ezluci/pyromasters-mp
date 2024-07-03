@@ -109,6 +109,12 @@ socket.on('C', (coordsReceived) => {
    });
 })
 
+socket.on('coords', (color, coords1, animState) => {
+   if (!animState)   animState = 'idle';
+   coords[color] = coords1;
+   sprites.players[color].state = animState;
+})
+
 
 socket.on('map', (map1) => { // a 2d array
    map = map1;
