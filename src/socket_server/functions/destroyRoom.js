@@ -10,7 +10,7 @@ function destroyRoom(io, ROOMS, sok) {
    io.to(sok.roomname).emit('chat', sok.username, 'Owner left. Room deleted.');
    
    sok.room.players.forEach(player => {
-      player.sok.disconnect();
+      player.disconnect();
    });
    sok.room.intervalIDS.forEach((id) => {
       clearInterval(id);

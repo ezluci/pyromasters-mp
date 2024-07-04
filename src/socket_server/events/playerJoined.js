@@ -24,13 +24,18 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
    sok.username = username;
    sok.roomname = roomname;
    sok.color = 'spectator';
+   sok.coords = { ...CONST.INEXISTENT_POS };
+   sok.bombs = 0;
+   sok.bombTimeIndex = 0;
+   sok.bombLength = 2;
+   sok.dead = false;
    sok.isOwner = !ROOMS.has(sok.roomname);
-   sok.shield = 0;
+   sok.shield = false;
    sok.shieldFalse_lastTick = null;
    sok.moveSpeedIndex = 0;
    sok.sick = false;
    sok.sickFalse_lastTick = null;
-   sok.animState = 0;
+   sok.animState = CONST.ANIMATION.IDLE;
 
    sok.join(sok.roomname)
    sok.to(sok.roomname).emit('player+', sok.username, sok.color, sok.isOwner)
@@ -50,10 +55,10 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
 
       ROOMS.set(sok.roomname, {
          owner: sok.username,
-         white: {sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['white']), bombs: 0, bombTimeIndex: 0, bombLength: 2, dead: true, selected: false},
-         black: {sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['black']), bombs: 0, bombTimeIndex: 0, bombLength: 2, dead: true, selected: false},
-         orange:{sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['orange']),bombs: 0, bombTimeIndex: 0, bombLength: 2, dead: true, selected: false},
-         green: {sok: undefined, coords: Object.assign(CONST.DEFAULT_POS['green']), bombs: 0, bombTimeIndex: 0, bombLength: 2, dead: true, selected: false},
+         white: undefined, // room[color] holds the socket object for a player
+         black: undefined,
+         orange: undefined,
+         green: undefined,
          map: map,
          players: new Map(),
          bombs: new Map(),
@@ -66,9 +71,8 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
 
    sok.room = ROOMS.get(sok.roomname);
    
-   sok.map = sok.room.map;
    sok.emit('room_status', sok.getRoomStatus());
-   sok.room.players.set(sok.username, {color: sok.color, isOwner: sok.isOwner, sok: sok});
+   sok.room.players.set(sok.username, sok);
    
    console.log(`connected:    ${sok.id}, {username: ${sok.username}, room: ${sok.roomname}, isOwner: ${sok.isOwner}}`)
    
@@ -77,13 +81,8 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
    sok.room.players.forEach(({color, isOwner}, username) => {
       players1.push({username, color, isOwner})
    });
-   
-   const colorsCoords = {};
-   ['white', 'black', 'orange', 'green'].forEach(color => {
-      colorsCoords[color] = sok.room[color].coords;
-   });
 
-   callback(players1, colorsCoords, sok.room.map, sok.getRoomStatus());
+   callback(players1, sok.room.map, sok.getRoomStatus());
 }
 
 module.exports.playerJoined = playerJoined;

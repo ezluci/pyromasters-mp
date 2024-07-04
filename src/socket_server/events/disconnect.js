@@ -15,21 +15,16 @@ function disconnect(io, ROOMS, sok) {
 
    if (!sok.room || sok.isOwner) { // room empty or isOwner
       destroyRoom(io, ROOMS, sok);
-      return;
    } else {
       if (sok.color !== 'spectator') {
          if (sok.getRoomStatus() !== CONST.ROOM_STATUS.WAITING && sok.getRoomStatus() !== CONST.ROOM_STATUS.STARTING) {
             io.to(sok.roomname).emit('coords', sok.color, CONST.INEXISTENT_POS);
-            sok.room[sok.color].coords = Object.assign(CONST.INEXISTENT_POS);
-            sok.room[sok.color].selected = false;
-            sok.room[sok.color].dead = true;
+            sok.room[sok.color] = undefined;
             if (sok.countNotDead() <= 1)
                sok.room.intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
          } else {
             io.to(sok.roomname).emit('coords', sok.color, CONST.DEFAULT_POS[sok.color]);
-            sok.room[sok.color].coords = Object.assign(CONST.DEFAULT_POS[sok.color]);
-            sok.room[sok.color].selected = false;
-            sok.room[sok.color].dead = true;
+            sok.room[sok.color] = undefined;
             if (sok.countNotDead() <= 1)
                sok.room.intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
          }

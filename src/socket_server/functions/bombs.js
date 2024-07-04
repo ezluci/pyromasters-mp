@@ -2,12 +2,6 @@
 
 const CONST = require('../consts')();
 
-const { getShield } = require('./usefulSettersGetters');
-
-function isPowerup(blockCode) {
-   return 5 <= blockCode && blockCode <= 13
-}
-
 
 // this function doesn't check if there is a bomb at map[y][x].
 function explodeBomb(x, y, bombLength, recursive, io, sok) {
@@ -18,54 +12,54 @@ function explodeBomb(x, y, bombLength, recursive, io, sok) {
    const roomStatus = sok.getRoomStatus();
    
    function breakLoop(blockCode)
-      { return (blockCode === CONST.BLOCK.NORMAL || blockCode === CONST.BLOCK.PERMANENT || isPowerup(blockCode)); }
+      { return (blockCode === CONST.BLOCK.NORMAL || blockCode === CONST.BLOCK.PERMANENT || (5 <= blockCode && blockCode <= 13)); }
    
    let fires = [];
 
-   fires.push({x, y, block: CONST.BLOCK.FIRE, oldBlock: sok.map[y][x]});
-   sok.map[y][x] = CONST.BLOCK.NO;
+   fires.push({x, y, block: CONST.BLOCK.FIRE, oldBlock: sok.room.map[y][x]});
+   sok.room.map[y][x] = CONST.BLOCK.NO;
 
    for (let yy = y-1; yy >= Math.max(0, y - bombLength); --yy) {
-      if (sok.map[yy][x] === CONST.BLOCK.BOMB) {
+      if (sok.room.map[yy][x] === CONST.BLOCK.BOMB) {
          fires = fires.concat( explodeBomb(x, yy, bombLength, 1, io, sok) );
          break;
       }
-      if (sok.map[yy][x] !== CONST.BLOCK.PERMANENT)
-         fires.push({x: x, y: yy, block: CONST.BLOCK.FIRE, oldBlock: sok.map[yy][x]});
-      if (breakLoop(sok.map[yy][x]))
+      if (sok.room.map[yy][x] !== CONST.BLOCK.PERMANENT)
+         fires.push({x: x, y: yy, block: CONST.BLOCK.FIRE, oldBlock: sok.room.map[yy][x]});
+      if (breakLoop(sok.room.map[yy][x]))
          break;
    }
 
    for (let yy = y+1; yy <= Math.min(CONST.BLOCKS_VERTICALLY-1, y + bombLength); ++yy) {
-      if (sok.map[yy][x] === CONST.BLOCK.BOMB) {
+      if (sok.room.map[yy][x] === CONST.BLOCK.BOMB) {
          fires = fires.concat( explodeBomb(x, yy, bombLength, 1, io, sok) );
          break;
       }
-      if (sok.map[yy][x] !== CONST.BLOCK.PERMANENT)
-         fires.push({x: x, y: yy, block: CONST.BLOCK.FIRE, oldBlock: sok.map[yy][x]});
-      if (breakLoop(sok.map[yy][x]))
+      if (sok.room.map[yy][x] !== CONST.BLOCK.PERMANENT)
+         fires.push({x: x, y: yy, block: CONST.BLOCK.FIRE, oldBlock: sok.room.map[yy][x]});
+      if (breakLoop(sok.room.map[yy][x]))
          break;
    }
 
    for (let xx = x-1; xx >= Math.max(0, x - bombLength); --xx) {
-      if (sok.map[y][xx] === CONST.BLOCK.BOMB) {
+      if (sok.room.map[y][xx] === CONST.BLOCK.BOMB) {
          fires = fires.concat( explodeBomb(xx, y, bombLength, 1, io, sok) );
          break;
       }
-      if (sok.map[y][xx] !== CONST.BLOCK.PERMANENT)
-         fires.push({x: xx, y: y, block: CONST.BLOCK.FIRE, oldBlock: sok.map[y][xx]});
-      if (breakLoop(sok.map[y][xx]))
+      if (sok.room.map[y][xx] !== CONST.BLOCK.PERMANENT)
+         fires.push({x: xx, y: y, block: CONST.BLOCK.FIRE, oldBlock: sok.room.map[y][xx]});
+      if (breakLoop(sok.room.map[y][xx]))
          break;
    }
 
    for (let xx = x+1; xx <= Math.min(CONST.BLOCKS_HORIZONTALLY-1, x + bombLength); ++xx) {
-      if (sok.map[y][xx] === CONST.BLOCK.BOMB) {
+      if (sok.room.map[y][xx] === CONST.BLOCK.BOMB) {
          fires = fires.concat( explodeBomb(xx, y, bombLength, 1, io, sok) );
          break;
       }
-      if (sok.map[y][xx] !== CONST.BLOCK.PERMANENT)
-         fires.push({x: xx, y: y, block: CONST.BLOCK.FIRE, oldBlock: sok.map[y][xx]});
-      if (breakLoop(sok.map[y][xx]))
+      if (sok.room.map[y][xx] !== CONST.BLOCK.PERMANENT)
+         fires.push({x: xx, y: y, block: CONST.BLOCK.FIRE, oldBlock: sok.room.map[y][xx]});
+      if (breakLoop(sok.room.map[y][xx]))
          break;
    }
 
@@ -73,21 +67,21 @@ function explodeBomb(x, y, bombLength, recursive, io, sok) {
       return fires;
    
    fires.forEach((fire) => {
-      sok.map[fire.y][fire.x] = CONST.BLOCK.FIRE;
+      sok.room.map[fire.y][fire.x] = CONST.BLOCK.FIRE;
    });
 
    io.to(sok.roomname).emit('mapUpdates', fires);
 
    // kill people who are in fire
    ['white', 'black', 'orange', 'green'].forEach(color => {
-      if (! sok.room[color].selected || sok.room[color].dead)
+      if (!sok.room[color] || sok.room[color].dead)
          return;
       
-      if (sok.getRoomStatus() === CONST.ROOM_STATUS.RUNNING && !getShield(io, sok) && sok.onDeadlyBlockCheck(color)) {
+      if (sok.getRoomStatus() === CONST.ROOM_STATUS.RUNNING && !sok.getShield(io, sok.room[color]) && sok.room[color].onDeadlyBlockCheck(color)) {
          io.to(sok.roomname).emit('death', color);
 
          sok.room[color].dead = true;
-         sok.room[color].coords = Object.assign(CONST.INEXISTENT_POS);
+         sok.room[color].coords = { ...CONST.INEXISTENT_POS };
 
          if (sok.countNotDead() <= 1)
             sok.room.intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
@@ -96,7 +90,7 @@ function explodeBomb(x, y, bombLength, recursive, io, sok) {
 
    // removing fire
    const id2 = setTimeout(() => {
-      if (! sok.room)
+      if (!sok.room)
          return;
       
       if (sok.getRoomStatus() !== roomStatus)
@@ -134,28 +128,28 @@ function explodeBomb(x, y, bombLength, recursive, io, sok) {
 
             // collecting powerups
             ['white', 'black', 'orange', 'green'].forEach(color => {
-               if (! sok.room[color].selected || sok.room[color].dead)
+               if (!sok.room[color] || sok.room[color].dead)
                   return;
                
-               const xPlr = sok.room[color].coords.x;
-               const yPlr = sok.room[color].coords.y;
-               sok.collectPowerup(Math.floor(xPlr / CONST.BLOCK_SIZE), Math.floor(yPlr / CONST.BLOCK_SIZE));
-               sok.collectPowerup(Math.ceil(xPlr / CONST.BLOCK_SIZE), Math.ceil(yPlr / CONST.BLOCK_SIZE));
+               const x = sok.room[color].x;
+               const y = sok.room[color].y;
+               sok.collectPowerup(Math.floor(x / CONST.BLOCK_SIZE), Math.floor(y / CONST.BLOCK_SIZE));
+               sok.collectPowerup(Math.ceil(x / CONST.BLOCK_SIZE), Math.floor(y / CONST.BLOCK_SIZE));
             });
          }
 
          fire.block = newBlock;
-         sok.map[fire.y][fire.x] = newBlock;
+         sok.room.map[fire.y][fire.x] = newBlock;
 
          if (fire.oldBlock === CONST.BLOCK.BOMB || fire.oldBlock === CONST.BLOCK.PERMANENT) {
             const x = fire.x;
             const y = fire.y;
             const color = sok.room.bombs.get(y*100 + x);
 
-            if (! sok.room[color].selected || sok.room[color].dead)
+            if (!sok.room[color] || sok.room[color].dead)
                return;
 
-            if (sok.room[color].bombs < 4) {
+            if (sok.bombs < 4) {
                sok.room[color].bombs ++;
             }
 
@@ -181,37 +175,38 @@ function placeBomb(io, sok) {
    
    if (sok.color === 'spectator')
       return sok.emit('error', 'tryPlaceBomb: You are a spectator.');
-   if (sok.room[sok.color].dead)
+   if (sok.dead)
       return sok.emit('error', 'tryPlaceBomb: You are \'dead\'');
    
-   const x = Math.round(sok.room[sok.color].coords.x / CONST.BLOCK_SIZE);
-   const y = Math.round(sok.room[sok.color].coords.y / CONST.BLOCK_SIZE);
+   const x = Math.round(sok.coords.x / CONST.BLOCK_SIZE);
+   const y = Math.round(sok.coords.y / CONST.BLOCK_SIZE);
    
    if ( !(0 <= x && x <= CONST.BLOCKS_HORIZONTALLY && 0 <= y && y <= CONST.BLOCKS_VERTICALLY) )
       return sok.emit('error', 'tryPlaceBomb: x or y out of range.');
    
-   if (sok.map[y][x] === CONST.BLOCK.FIRE || sok.map[y][x] === CONST.BLOCK.BOMB || sok.map[y][x] === CONST.BLOCK.PERMANENT || sok.map[y][x] === CONST.BLOCK.NORMAL)
+   if (sok.room.map[y][x] === CONST.BLOCK.FIRE || sok.room.map[y][x] === CONST.BLOCK.BOMB ||
+         sok.room.map[y][x] === CONST.BLOCK.PERMANENT || sok.room.map[y][x] === CONST.BLOCK.NORMAL)
       return;
    
-   if (sok.room[sok.color].bombs === 0)
+   if (sok.bombs === 0)
       return; // no bombs left
    
    // placing the bomb
    io.to(sok.roomname).emit('mapUpdates', [{x, y, block: CONST.BLOCK.BOMB, details: {sick: sok.sick}}]);
-   sok.map[y][x] = CONST.BLOCK.BOMB;
+   sok.room.map[y][x] = CONST.BLOCK.BOMB;
    sok.room.bombs.set(y*100 + x, sok.color);
 
-   sok.room[sok.color].bombs --;
+   sok.bombs --;
 
-   const bombLength = sok.room[sok.color].bombLength;
+   const bombLength = sok.bombLength;
    const roomStatus = sok.getRoomStatus();
 
    const id1 = setTimeout(() => {
       if (sok.getRoomStatus() !== roomStatus)
          return;
-      if (sok.map[y][x] === CONST.BLOCK.BOMB)
+      if (sok.room.map[y][x] === CONST.BLOCK.BOMB)
          explodeBomb(x, y, bombLength, 0, io, sok);
-   }, CONST.BOMB_TIMES[sok.room[sok.color].bombTimeIndex]);
+   }, CONST.BOMB_TIMES[sok.bombTimeIndex]);
 
    sok.room.intervalIDS.add(id1);
 }

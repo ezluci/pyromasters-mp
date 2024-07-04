@@ -11,16 +11,12 @@ ASSETS_LOADING.then(() => {
 
    
 
-socket.emit('playerJoined', usernameHTML, roomHTML, (players, colorsCoords, map1, roomStatus) => {
+socket.emit('playerJoined', usernameHTML, roomHTML, (players, map1, roomStatus) => {
    map = map1
    
    players.forEach( ({username, color, isOwner}) => {
       addPlayerToList(username, color, isOwner)
    });
-
-   Object.keys(colorsCoords).forEach((color) => {
-      coords[color] = colorsCoords[color]
-   })
 
    if (roomStatus === ROOM_STATUS.WAITING || roomStatus === ROOM_STATUS.STARTING || roomStatus === ROOM_STATUS.ENDED)
       sounds.menu.play();
@@ -86,10 +82,10 @@ document.onkeyup = (event) => {
 
 myColor = 'spectator'
 coords = {
-   'white': INEXISTENT_POS,
-   'black': INEXISTENT_POS,
-   'orange': INEXISTENT_POS,
-   'green': INEXISTENT_POS
+   'white': { ...INEXISTENT_POS },
+   'black': { ...INEXISTENT_POS },
+   'orange': { ...INEXISTENT_POS},
+   'green': { ...INEXISTENT_POS }
 }
 let lastFrameTime
 

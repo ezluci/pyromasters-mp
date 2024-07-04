@@ -54,6 +54,14 @@ const ROOM_STATUS = {
 
 const END_SCREEN_TIMEOUT = 5000;
 
+const ANIMATION = {
+   IDLE: 0,
+   FRONT: 1,
+   BACK: 2,
+   LEFT: 3,
+   RIGHT: 4
+}
+
 try { // only for the nodejs server
    module.exports = {
       OFFSET_LEFT, OFFSET_RIGHT, OFFSET_UP, OFFSET_DOWN,
@@ -61,6 +69,6 @@ try { // only for the nodejs server
       MIN_X, MIN_Y, MAX_X, MAX_Y,
       BLOCK,
       INEXISTENT_POS, DEFAULT_POS,
-      ROOM_STATUS, END_SCREEN_TIMEOUT
+      ROOM_STATUS, END_SCREEN_TIMEOUT, ANIMATION
    }
 } catch (e) {}

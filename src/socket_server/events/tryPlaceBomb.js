@@ -8,7 +8,7 @@ const { placeBomb, explodeBomb } = require('../functions/bombs');
 
 
 function tryPlaceBomb(io, sok) {
-   if (sok.room[sok.color].sick)
+   if (sok.sick)
       return; // the 'coords' event + collectPowerupSick()  will do the job here
    placeBomb(io, sok);
 }

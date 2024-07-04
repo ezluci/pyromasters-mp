@@ -18,10 +18,6 @@ socket.on('player~', (oldUsername, username, color, isOwner) => {
 
    if (username === usernameHTML) {
       myColor = color;
-      if (color !== 'spectator')
-         CAN_MOVE = true;
-      else
-         CAN_MOVE = false;
    }
 })
 
@@ -69,11 +65,6 @@ socket.on('shield0', (color) => {
 
 socket.on('shield1', (color) => {
    shields[color].val = true;
-})
-
-
-socket.on('switchPlayers', (color1, color2) => {
-   [coords[color1], coords[color2]] = [coords[color2], coords[color1]];
 })
 
 

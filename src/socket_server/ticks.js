@@ -1,7 +1,6 @@
 'use strict';
 
 const CONST = require('./consts')();
-const USG = require('./functions/usefulSettersGetters');
 const TICK_ACTIONS = require('./tick_actions');
 
 class Ticks {
@@ -25,9 +24,14 @@ class Ticks {
          this.processAction(action);
       })
 
+      // send coordinates to everyone
       const coords = [];
       ['white', 'black', 'orange', 'green'].forEach(color => {
-         coords.push([this.sok.room[color].coords.x, this.sok.room[color].coords.y, this.sok.room[color].sok?.animState]);
+         if (!this.sok.room[color]) {
+            coords.push([CONST.INEXISTENT_POS.x, CONST.INEXISTENT_POS.y, CONST.ANIMATION.IDLE]);
+         } else {
+            coords.push([this.sok.room[color].coords.x, this.sok.room[color].coords.y, this.sok.room[color].animState]);
+         }
       });
       this.io.to(this.sok.roomname).emit('C', coords);
 
@@ -44,9 +48,9 @@ class Ticks {
 
    processAction = (action) => {
       if (action.name === TICK_ACTIONS.SHIELD_FALSE) {
-         USG.setShieldFalse(this.io, this.sok.room[action.sok.color].sok);
+         this.sok.room[action.sok.color].setShieldFalse();
       } else if (action.name === TICK_ACTIONS.SICK_FALSE) {
-         USG.setSickFalse(this.io, this.sok.room[action.sok.color].sok);
+         this.sok.room[action.sok.color].setSickFalse();
       }
    };
 
