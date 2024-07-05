@@ -1,7 +1,7 @@
 'use strict';
 
 const CONST = require('../consts')();
-const startGame = require('../functions/startGame').startGame;
+const startGame = require('../functions/start-game').startGame;
 
 function tryStart(io, sok) {
    if (!sok.detailsOkCheck())

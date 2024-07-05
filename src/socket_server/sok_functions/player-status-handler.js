@@ -1,7 +1,7 @@
 'use strict';
 
 const CONST = require('../consts')();
-const TICK_ACTIONS = require('../tick_actions');
+const TICK_ACTIONS = require('../tick-actions');
 
 'use strict';
 

@@ -2,7 +2,7 @@
 
 const CONST = require('../consts')()
 
-const destroyRoom = require('../functions/destroyRoom').destroyRoom;
+const destroyRoom = require('../functions/destroy-room').destroyRoom;
 
 function disconnect(io, ROOMS, sok) {
    if (!sok.detailsOkCheck())

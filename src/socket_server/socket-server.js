@@ -15,11 +15,11 @@ const io = new socketio.Server(server, {
 // server.listen() is at the end of the file
 
 
-const playerJoined_event = require('./events/playerJoined.js').playerJoined;
+const playerJoined_event = require('./events/player-joined.js').playerJoined;
 const chat_event = require('./events/chat.js').chat;
-const tryStart_event = require('./events/tryStart.js').tryStart;
-const selectColor_event = require('./events/selectColor.js').selectColor;
-const tryPlaceBomb_event = require('./events/tryPlaceBomb.js').tryPlaceBomb;
+const tryStart_event = require('./events/try-start.js').tryStart;
+const selectColor_event = require('./events/select-color.js').selectColor;
+const tryPlaceBomb_event = require('./events/try-place-bomb.js').tryPlaceBomb;
 const coords_event = require('./events/coords.js').coords;
 const disconnect_event = require('./events/disconnect.js').disconnect;
 
@@ -30,12 +30,12 @@ io.on('connection', (sok) => {
 
    // ----- SOCKET METHODS -----
 
-   require('./sok_functions/room_status.js')(io, sok);
-   require('./sok_functions/show_end_screen.js')(io, sok);
-   require('./sok_functions/details_ok_check.js')(io, sok);
-   require('./sok_functions/count_not_dead.js')(io, sok);
-   require('./sok_functions/on_deadly_block_check.js')(io, sok);
-   require('./sok_functions/collect_powerups.js')(io, sok);
+   require('./sok_functions/room-status.js')(io, sok);
+   require('./sok_functions/show-end-screen.js')(io, sok);
+   require('./sok_functions/details-ok-check.js')(io, sok);
+   require('./sok_functions/count-not-dead.js')(io, sok);
+   require('./sok_functions/on-deadly-block-check.js')(io, sok);
+   require('./sok_functions/collect-powerups.js')(io, sok);
    require('./sok_functions/player-status-handler.js')(io, sok);
 
    // ----- SOCKET EVENTS -----
