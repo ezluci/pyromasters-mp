@@ -1,7 +1,8 @@
 'use strict';
 
+const protocol = (window.location.hostname==='localhost' || window.location.hostname.startsWith('192.168.0.') ? 'http' : 'https');
 const socket = io(
-   `${window.location.hostname==='localhost' ? 'http' : 'https'}://${window.location.hostname}:22822`
+   `${protocol}://${window.location.hostname}:22822`
 );
 
 
@@ -44,27 +45,25 @@ socket.on('speedUpdate', (newSpeed) => {
 
 socket.on('switchKeys', () => {
    switchedKeys++;
-
    if (switchedKeys === 1) {
-      switch (lastPressed) {
-         case 'a':   lastPressed = 'd';   break;
-         case 's':   lastPressed = 'w';   break;
-         case 'd':   lastPressed = 'a';   break;
-         case 'w':   lastPressed = 's';   break;
-      }
+      document.dispatchEvent(new CustomEvent('switchkeyschange'));
    }
 
-   setTimeout(() => { switchedKeys--; }, 10000);
+   setTimeout(() => {
+      switchedKeys--;
+      if (switchedKeys === 0) {
+         document.dispatchEvent(new CustomEvent('switchkeyschange'));
+      }
+   }, 10000);
 })
 
 
 socket.on('shield0', (color) => {
-   // todo remove timeout shields[color].timeout = null;
-   shields[color].val = false;
+   shields[color] = false;
 })
 
 socket.on('shield1', (color) => {
-   shields[color].val = true;
+   shields[color] = true;
 })
 
 

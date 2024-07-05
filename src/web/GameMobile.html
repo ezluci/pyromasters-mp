@@ -99,41 +99,19 @@
 
          <ul id="player-list" style="display: inline-block; background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; font-size: 20px;"></ul>
 
-
-         <script>
-            const sliderEl = document.getElementById('volume');
-            sliderEl.type = 'range';
-            sliderEl.min = 0;
-            sliderEl.max = 100;
-            sliderEl.value = DEFAULT_VOLUME;
-
-            function updateAllSoundsVolume(sounds) {
-               Object.values(sounds).forEach((sound) => {
-                  if (Array.isArray(sound)) {
-                     updateAllSoundsVolume(sound);
-                  } else {
-                     sound.volume(sliderEl.value / 100);
-                  }
-               });
-            }
-
-            updateAllSoundsVolume(sounds);
-
-            sliderEl.addEventListener('input', () => { updateAllSoundsVolume(sounds) });
-         </script>
-
          <br>
-         <button ontouchstart="keys.w = 1" ontouchend="keys.w = 0" class="android-button">^</button>
+         <button id="button-up" class="android-button">^</button>
          <br>
-         <button ontouchstart="keys.a = 1" ontouchend="keys.a = 0" class="android-button"><</button>
-         <button ontouchstart="keys.p = 1" ontouchend="keys.p = 0" class="android-button">BOMB</button>
-         <button ontouchstart="keys.d = 1" ontouchend="keys.d = 0" class="android-button">></button>
+         <button id="button-left" class="android-button"><</button>
+         <button id="button-bomb" class="android-button">BOMB</button>
+         <button id="button-right" class="android-button">></button>
          <br>
-         <button ontouchstart="keys.s = 1" ontouchend="keys.s = 0" class="android-button">v</button>
+         <button id="button-down" class="android-button">v</button>
       </div>
    </main>
 
    <script src="js/game/game.js"></script>
+   <script src="js/game/record-keys-phone.js"></script>
 
    <%- footer %>
 </body>

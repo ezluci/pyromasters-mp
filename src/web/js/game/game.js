@@ -28,70 +28,19 @@ ctx = canvas.getContext('2d');
 
 
 
-
-
-
-
-
-/// record key press events
 keys = {a:0, s:0, d:0, w:0, p:0}
-lastPressed = ''
-
-document.onkeydown = (event) => {
-   let code = event.code
-
-   if (switchedKeys) {
-      switch (code) {
-         case 'KeyA':   code = 'KeyD'; break;
-         case 'KeyS':   code = 'KeyW'; break;
-         case 'KeyD':   code = 'KeyA'; break;
-         case 'KeyW':   code = 'KeyS'; break;
-      }
-   }
-
-   switch (code) {
-      case 'KeyA':   keys.a = 1; lastPressed = 'a'; break;
-      case 'KeyS':   keys.s = 1; lastPressed = 's'; break;
-      case 'KeyD':   keys.d = 1; lastPressed = 'd'; break;
-      case 'KeyW':   keys.w = 1; lastPressed = 'w'; break;
-      case 'KeyP':   keys.p = 1; break;
-   }
-}
-
-document.onkeyup = (event) => {
-   let code = event.code
-
-   if (switchedKeys) {
-      switch (code) {
-         case 'KeyA':   code = 'KeyD'; break;
-         case 'KeyS':   code = 'KeyW'; break;
-         case 'KeyD':   code = 'KeyA'; break;
-         case 'KeyW':   code = 'KeyS'; break;
-      }
-   }
-
-   switch (code) {
-      case 'KeyA':   keys.a = 0; (lastPressed === 'a' ? lastPressed = '' :1); break;
-      case 'KeyS':   keys.s = 0; (lastPressed === 's' ? lastPressed = '' :1); break;
-      case 'KeyD':   keys.d = 0; (lastPressed === 'd' ? lastPressed = '' :1); break;
-      case 'KeyW':   keys.w = 0; (lastPressed === 'w' ? lastPressed = '' :1); break;
-      case 'KeyP':   keys.p = 0; break;
-   }
-}
-
-
 myColor = 'spectator'
 coords = {
    'white': { ...INEXISTENT_POS },
    'black': { ...INEXISTENT_POS },
-   'orange': { ...INEXISTENT_POS},
+   'orange': { ...INEXISTENT_POS },
    'green': { ...INEXISTENT_POS }
 }
 let lastFrameTime
 
 
 const intervalID2 = setInterval(() => {
-   if (map[0]) {
+   if (map[0]) { // wait for map[][]
       clearInterval(intervalID2);
 
       // starting game loop
@@ -100,10 +49,10 @@ const intervalID2 = setInterval(() => {
       moveSpeed = MOVE_SPEEDS[0];
       switchedKeys = 0;
       shields = {
-         white: {val: false, timeout: null},
-         black: {val: false, timeout: null},
-         orange:{val: false, timeout: null},
-         green: {val: false, timeout: null}
+         white: false,
+         black: false,
+         orange: false,
+         green: false
       };
       window.requestAnimationFrame(gameloop);
    }
@@ -168,7 +117,7 @@ function DRAW_game() {
    // draw players
    ['white', 'black', 'orange', 'green'].forEach(color => {
       drawAnimation(animations[color + '_' + sprites.players[color].state], coords[color].x, coords[color].y);
-      if (shields[color].val)
+      if (shields[color])
          drawPlayer(images.shield, coords[color].x, coords[color].y);
    });
 
