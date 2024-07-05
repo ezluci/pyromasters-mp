@@ -40,10 +40,9 @@ function tryStart(io, sok) {
       sok.room[color].bombTimeIndex = 0;
       sok.room[color].bombLength = 2;
       sok.room[color].dead = false;
-      sok.room[color].shield = false;
-      sok.room[color].shieldFalse_lastTick = null;
-      sok.room[color].moveSpeedIndex = 0;
-      sok.room[color].sick = false;
+      sok.room[color].setShieldFalse();
+      sok.room[color].setSpeedIndex(0);
+      sok.room[color].setSickFalse();
       sok.room[color].sickFalse_lastTick = null;
       sok.room[color].animState = CONST.ANIMATION.IDLE;
       io.to(sok.roomname).emit('coords', color, sok.room[color].coords, sok.room[color].animState);

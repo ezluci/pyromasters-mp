@@ -5,6 +5,8 @@ const TICK_ACTIONS = require('../tick-actions');
 
 'use strict';
 
+// speed, shield, sick
+
 module.exports = (io, sok) => {
 
    sok.getSpeedIndex = () => {
