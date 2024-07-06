@@ -25,15 +25,35 @@ socket.on('player~', (oldUsername, username, color, isOwner) => {
 
 socket.on('room_status', (msg) => {
    document.querySelector('#room-status').innerText = 'room status: ' + msg;
+   const selectColorsEl = document.querySelector('#select-color');
+   const canvasEl = document.querySelector('#canvas');
 
+   switch (msg) {
+      case ROOM_STATUS.WAITING:
+         selectColorsEl.hidden = false;
+         canvasEl.hidden = true;
+         break;
+      case ROOM_STATUS.STARTING:
+         selectColorsEl.hidden = true;
+         canvasEl.hidden = false;
+         break;
+      case ROOM_STATUS.RUNNING:
+         selectColorsEl.hidden = true;
+         canvasEl.hidden = false;
+         if (myColor !== 'spectator')
+            CAN_MOVE = true;
+         sounds.menu.stop();
+         END_SCREEN = null;
+         break;
+      case ROOM_STATUS.ENDED:
+         selectColorsEl.hidden = false;
+         canvasEl.hidden = false;
+         break;
+   }
    if (msg === ROOM_STATUS.RUNNING) {
-      if (myColor !== 'spectator')
-         CAN_MOVE = true;
-      sounds.menu.stop();
    }
 
    if (msg === ROOM_STATUS.RUNNING) {
-      END_SCREEN = null;
    }
 })
 
@@ -176,6 +196,6 @@ socket.on('chat', (username, msg) => {
 
 
 socket.on('error', (msg) => {
-   addLog(`ERROR FROM SERVER: ${msg}`);
-   console.error(`ERROR FROM SERVER: ${msg}`);
+   addLog(`ERROR: ${msg}`);
+   console.error(`ERROR: ${msg}`);
 })

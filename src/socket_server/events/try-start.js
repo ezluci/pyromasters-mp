@@ -23,10 +23,8 @@ function tryStart(io, sok) {
       }
    });
    
-   if (cntPlayers === 0)
+   if (cntPlayers === 0) {
       return sok.emit('error', 'tryStart: You can\'t start the game with NO PLAYERS, silly!');
-   else if (cntPlayers === 1) {
-      sok.emit('error', 'btw this game should be played in >2 players...');
    }
 
 
