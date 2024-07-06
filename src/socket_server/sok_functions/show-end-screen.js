@@ -7,8 +7,7 @@ module.exports = (io, sok) => {
       if (!sok.room)
          return;
       
-      if (sok.getRoomStatus() !== CONST.ROOM_STATUS.RUNNING)
-         return;
+      sok.room.ticks.endTickLoop();
       
       const notDead = [];
       ['white', 'black', 'orange', 'green'].forEach((color) => {

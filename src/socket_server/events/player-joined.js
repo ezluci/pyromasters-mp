@@ -70,6 +70,10 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
    }
 
    sok.room = ROOMS.get(sok.roomname);
+
+   if (sok.isOwner) {
+      sok.room.ticks = require('../ticks')(io, sok);
+   }
    
    sok.emit('room_status', sok.getRoomStatus());
    sok.room.players.set(sok.username, sok);

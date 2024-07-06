@@ -4,20 +4,42 @@ const CONST = require('./consts')();
 const TICK_ACTIONS = require('./tick-actions');
 
 class Ticks {
-
+   
+   // the tick loop is not started on object construction
    constructor(io, sok) {
       this.io = io;
       this.sok = sok;
+      this.tick = null; // the tick to be processed
+      this.tickActions = null;
+      this.intervalId = null;
+   }
+
+   startTickLoop() {
+      if (this.intervalId) {
+         console.log('tick loop already started, ignoring request');
+         return;
+      }
+
+      this.tick = 0;
+      this.tickActions = {};
       this.lastTickTime = new Date();
+
       this.runNextTick();
       this.intervalId = setInterval(() => {
          this.runNextTick();
       }, 16); // 62.5 ticks per second
    }
 
-
-   tick = 0; // the tick to be processed
-   tickActions = {};
+   endTickLoop() {
+      if (this.intervalId === null) {
+         console.log('tick loop already ended, ignoring request');
+      }
+      
+      clearInterval(this.intervalId);
+      this.tick = null;
+      this.tickActions = null;
+      this.intervalId = null;
+   }
 
    runNextTick = () => {
       this.tickActions[this.tick]?.forEach(action => {
@@ -37,7 +59,7 @@ class Ticks {
 
       const tickTime = new Date();
       if (tickTime - this.lastTickTime >= 16 * 2) {
-         console.error(`${new Date()}  16tps loop running at ${tickTime - this.lastTickTime}tps!`);
+         console.error(`${new Date()}  62.5tps loop running at ${Math.floor(1000 / (tickTime - this.lastTickTime))}tps!`);
       }
       this.lastTickTime = tickTime;
       this.tick ++;

@@ -10,13 +10,12 @@ function startGame(io, sok) {
       return;
    }
 
-   sok.room.ticks = require('../ticks')(io, sok);
-
    sok.room.intervalIDS.forEach(id => { clearInterval(id) });
    sok.room.intervalIDS.clear();
    sok.room.intervalIDS.add(sok.room.ticks.intervalId);
 
    sok.setRoomStatus(CONST.ROOM_STATUS.RUNNING);
+   sok.room.ticks.startTickLoop();
 
    sok.room.gameTime = 120 - 1; // 2 minutes
    sok.emit('gameTime', sok.room.gameTime);

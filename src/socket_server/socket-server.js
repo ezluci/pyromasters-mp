@@ -29,7 +29,7 @@ const ROOMS = new Map(); // info about all rooms
 io.on('connection', (sok) => {
 
    // ----- SOCKET METHODS -----
-
+   // these are some functions that will be attached to the sok object
    require('./sok_functions/room-status.js')(io, sok);
    require('./sok_functions/show-end-screen.js')(io, sok);
    require('./sok_functions/details-ok-check.js')(io, sok);
