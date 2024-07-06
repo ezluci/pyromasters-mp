@@ -1,3 +1,16 @@
+body {
+   background-color: #222831;
+   color: #00ADB5;
+   text-align: center;
+   touch-action: manipulation;
+}
+
+main {
+   display: flex;
+   justify-content: center;
+   gap: 5px;
+}
+
 .android-button {
    width: 60px;
    height: 60px;
@@ -48,19 +61,7 @@
    overflow-y: scroll;
    background-color: black;
    text-align: left;
-}
-
-body {
-   background-color: #222831;
-   color: #00ADB5;
-   font-size: 17px;
-   text-align: center;
-}
-
-main {
-   display: flex;
-   justify-content: center;
-   gap: 5px;
+   font-size: 15px;
 }
 
 .sidebar_left {

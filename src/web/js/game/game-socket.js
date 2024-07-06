@@ -69,11 +69,11 @@ socket.on('shield1', (color) => {
 
 socket.on('death', (color) => {
    if (myColor === color) {
-      me = INEXISTENT_POS;
+      me = { ...INEXISTENT_POS };
       CAN_MOVE = false;
    }
    sounds.dead[Math.floor(Math.random() * sounds.dead.length)].play();
-   coords[color] = INEXISTENT_POS;
+   coords[color] = { ...INEXISTENT_POS };
 })
 
 
