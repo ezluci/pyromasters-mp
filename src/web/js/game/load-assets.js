@@ -99,23 +99,6 @@ for (let i = 1; i <= 5; ++i) {
 // loading images
 const images = {};
 
-images.players = [];
-loadImage('assets/images/players/white.png').then(image => {
-   images.players['white'] = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/players/black.png').then(image => {
-   images.players['black'] = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/players/orange.png').then(image => {
-   images.players['orange'] = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/players/green.png').then(image => {
-   images.players['green'] = image;
-   LOADED_COUNT ++;
-})
 loadImage('assets/images/players/shield.png').then(image => {
    images.shield = image;
    LOADED_COUNT ++;

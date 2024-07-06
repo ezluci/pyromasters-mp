@@ -65,8 +65,11 @@ function DRAW_game() {
    ctx.fillStyle = '#203d37'
    ctx.fillRect(0, 0, canvas.width, canvas.height)
 
+   // background
    ctx.fillStyle = 'rgba(131, 29, 29, 0.841)'
    ctx.fillRect(OFFSET_LEFT, OFFSET_UP, canvas.width - OFFSET_LEFT - OFFSET_RIGHT, canvas.height - OFFSET_UP - OFFSET_DOWN)
+   // ctx.drawImage(images.backgrounds[0], OFFSET_LEFT, OFFSET_UP, canvas.width - OFFSET_LEFT - OFFSET_RIGHT, canvas.height - OFFSET_UP - OFFSET_DOWN);
+   
 
 
    // draw map blocks

@@ -16,6 +16,7 @@ function startGame(io, sok) {
 
    sok.setRoomStatus(CONST.ROOM_STATUS.RUNNING);
    sok.room.ticks.startTickLoop();
+   sok.room.intervalIDS.add(sok.room.ticks.intervalId);
 
    sok.room.gameTime = 120 - 1; // 2 minutes
    sok.emit('gameTime', sok.room.gameTime);
