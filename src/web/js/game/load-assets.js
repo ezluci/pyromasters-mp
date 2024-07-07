@@ -134,7 +134,7 @@ loadImage('assets/images/map_fourway/normal.jpg').then(image => {
    images.maps.fourway.block = image;
    LOADED_COUNT ++;
 })
-loadImage('assets/images/map_fourway/portal.webp').then(image => {
+loadImage('assets/images/map_fourway/portal.png').then(image => {
    images.maps.fourway.portal = image;
    LOADED_COUNT ++;
 })

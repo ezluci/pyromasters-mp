@@ -9,6 +9,7 @@ class Ticks {
    constructor(io, sok) {
       this.io = io;
       this.sok = sok;
+      this.TPS = 16;
       this.tick = null; // the tick to be processed
       this.tickActions = null;
       this.intervalId = null;
@@ -27,7 +28,7 @@ class Ticks {
       this.runNextTick();
       this.intervalId = setInterval(() => {
          this.runNextTick();
-      }, 16); // 62.5 ticks per second
+      }, this.TPS); // 62.5 ticks per second
    }
 
    endTickLoop() {
@@ -58,7 +59,7 @@ class Ticks {
       this.io.to(this.sok.roomname).emit('C', coords);
 
       const tickTime = new Date();
-      if (tickTime - this.lastTickTime >= 16 * 2) {
+      if (tickTime - this.lastTickTime >= this.TPS * 2) {
          console.error(`${new Date()}  62.5tps loop running at ${Math.floor(1000 / (tickTime - this.lastTickTime))}tps!`);
       }
       this.lastTickTime = tickTime;
@@ -78,6 +79,9 @@ class Ticks {
 
    // adds this action to 'ticks_after' ticks from now; this action is for sok (optional).
    addAction = (action, ticks_after, sok = '') => {
+      if (!this.tickActions) {
+         return;
+      }
       if (ticks_after < 0) {
          console.error('trying to add an action to a past tick');
          return;
@@ -90,6 +94,9 @@ class Ticks {
    };
 
    removeAction = (action, tick, sok = '') => {
+      if (!this.tickActions) {
+         return;
+      }
       const lastLength = this.tickActions[tick]?.length;
       this.tickActions[tick] = this.tickActions[tick].filter(action1 => action1.name === action.name && action1.sok === action.sok);
       if (this.tickActions[tick] === undefined || lastLength === this.tickActions[tick].length) {
