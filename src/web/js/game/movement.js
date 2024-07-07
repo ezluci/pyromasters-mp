@@ -2,7 +2,7 @@
 
 // returns true if you CANNOT GO through this block
 function stop(blockCode) {
-   return (blockCode !== BLOCK.NO && blockCode !== BLOCK.FIRE && !isPowerup(blockCode))
+   return (blockCode !== BLOCK.NO && blockCode !== BLOCK.PORTAL && blockCode !== BLOCK.FIRE && !isPowerup(blockCode))
 }
 
 

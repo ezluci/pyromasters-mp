@@ -26,19 +26,23 @@ socket.on('player~', (oldUsername, username, color, isOwner) => {
 socket.on('room_status', (msg) => {
    document.querySelector('#room-status').innerText = 'room status: ' + msg;
    const selectColorsEl = document.querySelector('#select-color');
+   const selectMapEl = document.querySelector('#select-map');
    const canvasEl = document.querySelector('#canvas');
 
    switch (msg) {
       case ROOM_STATUS.WAITING:
          selectColorsEl.hidden = false;
+         selectMapEl.hidden = false;
          canvasEl.hidden = true;
          break;
       case ROOM_STATUS.STARTING:
          selectColorsEl.hidden = true;
+         selectMapEl.hidden = true;
          canvasEl.hidden = false;
          break;
       case ROOM_STATUS.RUNNING:
          selectColorsEl.hidden = true;
+         selectMapEl.hidden = true;
          canvasEl.hidden = false;
          if (myColor !== 'spectator')
             CAN_MOVE = true;
@@ -47,13 +51,9 @@ socket.on('room_status', (msg) => {
          break;
       case ROOM_STATUS.ENDED:
          selectColorsEl.hidden = false;
+         selectMapEl.hidden = false;
          canvasEl.hidden = false;
          break;
-   }
-   if (msg === ROOM_STATUS.RUNNING) {
-   }
-
-   if (msg === ROOM_STATUS.RUNNING) {
    }
 })
 
@@ -78,12 +78,8 @@ socket.on('switchKeys', () => {
 })
 
 
-socket.on('shield0', (color) => {
-   shields[color] = false;
-})
-
-socket.on('shield1', (color) => {
-   shields[color] = true;
+socket.on('shield', (color, value) => {
+   shields[color] = value;
 })
 
 
@@ -97,6 +93,8 @@ socket.on('death', (color) => {
 })
 
 
+// these are coords received on every server tick.
+// ignores the coords for myColor.
 socket.on('C', (coordsReceived) => {
    ['white', 'black', 'orange', 'green'].forEach((color, idx) => {
       if (color === myColor) {
@@ -119,6 +117,8 @@ socket.on('C', (coordsReceived) => {
    });
 })
 
+// this event updates the coords, no matter what.
+// it doesn't check myColor.
 socket.on('coords', (color, coords1, animState) => {
    if (!animState)   animState = 'idle';
    coords[color] = coords1;
@@ -126,14 +126,15 @@ socket.on('coords', (color, coords1, animState) => {
 })
 
 
-socket.on('map', (map1) => { // a 2d array
-   map = map1;
-})
+socket.on('mapName', (mapName) => {
+   MAP_NAME = mapName;
+   document.dispatchEvent( new CustomEvent('mapnamechange') );
+});
 
-socket.on('mapUpdates', (blocks) => {
+socket.on('mapUpdates', (updates) => {
    let anyNewFires = false; // maybe you can play each sound for each bomb exploded. not a big difference but yeah.
 
-   blocks.forEach(({x, y, block, details}) => {
+   updates.forEach(({x, y, block, details}) => {
       if (block === BLOCK.BOMB)
          if (details.sick)
             sounds.dropBombSick.play();
@@ -151,7 +152,7 @@ socket.on('mapUpdates', (blocks) => {
 
    if (anyNewFires)
       sounds.explodeBomb[Math.floor(Math.random() * sounds.explodeBomb.length)].play();
-})
+});
 
 
 socket.on('gameTime', (time) => {

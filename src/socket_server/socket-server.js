@@ -30,13 +30,14 @@ io.on('connection', (sok) => {
 
    // ----- SOCKET METHODS -----
    // these are some functions that will be attached to the sok object
-   require('./sok_functions/room-status.js')(io, sok);
+   require('./sok_functions/room-handler.js')(io, sok);
    require('./sok_functions/show-end-screen.js')(io, sok);
    require('./sok_functions/details-ok-check.js')(io, sok);
    require('./sok_functions/count-not-dead.js')(io, sok);
    require('./sok_functions/on-deadly-block-check.js')(io, sok);
    require('./sok_functions/collect-powerups.js')(io, sok);
    require('./sok_functions/player-status-handler.js')(io, sok);
+   require('./sok_functions/generate-map.js')(io, sok);
 
    // ----- SOCKET EVENTS -----
 
@@ -48,8 +49,8 @@ io.on('connection', (sok) => {
       chat_event(msg, io, sok);
    });
 
-   sok.on('tryStart', () => {
-      tryStart_event(io, sok);
+   sok.on('tryStart', (mapName) => {
+      tryStart_event(mapName, io, sok);
    });
 
    sok.on('selectColor', (newColor) => {

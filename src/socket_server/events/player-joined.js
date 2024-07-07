@@ -41,25 +41,14 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
    sok.to(sok.roomname).emit('player+', sok.username, sok.color, sok.isOwner)
 
    if (sok.isOwner) {
-      const map = [];
-      for (let i = 0; i < CONST.BLOCKS_VERTICALLY; ++i) {
-         map[i] = [];
-         for (let j = 0; j < CONST.BLOCKS_HORIZONTALLY; ++j) {
-            if (i % 2 == 1 && j % 2 == 1)
-               map[i][j] = CONST.BLOCK.PERMANENT;
-            else
-               map[i][j] = CONST.BLOCK.NO;
-         }
-      }
-
-
       ROOMS.set(sok.roomname, {
          owner: sok.username,
-         white: undefined, // room[color] holds the socket object for a player
-         black: undefined,
-         orange: undefined,
-         green: undefined,
-         map: map,
+         white: null, // room[color] holds the socket object for a player
+         black: null,
+         orange: null,
+         green: null,
+         map: null,
+         mapName: null,
          players: new Map(),
          bombs: new Map(),
          intervalIDS: new Set(),
@@ -86,7 +75,7 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
       players1.push({username, color, isOwner})
    });
 
-   callback(players1, sok.room.map, sok.getRoomStatus());
+   callback(players1, sok.getMapName(), sok.getMap(), sok.getRoomStatus());
 }
 
 module.exports.playerJoined = playerJoined;

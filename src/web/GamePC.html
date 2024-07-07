@@ -26,21 +26,6 @@
    <!-- LOADING ASSETS -->
    <script src="js/game/load-assets.js"></script>
    <script src="js/game/animations/load-animations.js"></script>
-   <script>
-      // create promise which checks if animations are loaded
-      const ASSETS_LOADING = new Promise((resolve) => {
-         const intvid = setInterval(() => {
-            if (LOADED_COUNT === 74) {
-               resolve();
-               clearInterval(intvid);
-            }
-         }, 60);
-      });
-
-      ASSETS_LOADING.then(() => {
-         console.log('All assets loaded');
-      });
-   </script>
    <script src="js/game/animations/process-animations.js"></script>
 
    <script src="js/game/index.js"></script>
@@ -75,7 +60,7 @@
             </script>
          </div>
 
-         <div id="select-color" style="color: black; font-weight: bold;">
+         <div id="select-color" style="color: black; font-weight: bold;" hidden>
             <b><i>
                <span style="color: red;">Select</span>
                <span style="color: aqua;">color</span>
@@ -88,6 +73,16 @@
             <button id="green" class="color-button" onclick="socket.emit('selectColor', 'green')">GREEN</button>
             <button id="spectator" class="color-button"
                onclick="socket.emit('selectColor', 'spectator')">SPECTATOR</button>
+         </div>
+
+         <div id="select-map" hidden>
+            <b><i>
+               Select map here (owner only):
+            </i></b>
+            <select id="map-selected">
+               <option value="bricktown">Bricktown</option>
+               <option value="fourway" selected>Fourway</option>
+            </select>
          </div>
 
          <div id="tips">
@@ -105,7 +100,7 @@
          <div id="start-game">
             <span id="room-status" style="color: red;"></span>
             <br>
-            <button id="start-button" onclick="socket.emit('tryStart')">Start game</button>
+            <button id="start-button" onclick="socket.emit('tryStart', document.querySelector('#map-selected').value)">Start game</button>
          </div>
          <br>
 

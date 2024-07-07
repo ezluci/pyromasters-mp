@@ -3,8 +3,6 @@
 const CONST = require('../consts')();
 const TICK_ACTIONS = require('../tick-actions');
 
-'use strict';
-
 // speed, shield, sick
 
 module.exports = (io, sok) => {
@@ -28,7 +26,7 @@ module.exports = (io, sok) => {
 
    sok.setShieldFalse = () => {
       if (sok.shield) {
-         io.to(sok.roomname).emit('shield0', sok.color);
+         io.to(sok.roomname).emit('shield', sok.color, false);
          sok.room.ticks.removeAction(TICK_ACTIONS.SHIELD_FALSE, sok.shieldFalse_lastTick, sok);
          sok.shield = false;
          sok.shieldFalse_lastTick = null;
@@ -39,7 +37,7 @@ module.exports = (io, sok) => {
       if (sok.shield) {
          sok.room.ticks.removeAction(TICK_ACTIONS.SHIELD_FALSE, sok.shieldFalse_lastTick, sok);
       } else {
-         io.to(sok.roomname).emit('shield1', sok.color);
+         io.to(sok.roomname).emit('shield', sok.color, true);
          sok.shield = true;
       }
 

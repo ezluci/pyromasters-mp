@@ -3,16 +3,23 @@
 
 
 let gameTime = 0;
-var canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords = {}, keys, map = [], moveSpeed, switchedKeys, shields, lastPressed, CAN_MOVE = false, END_SCREEN = null, RANKING = null;
+var canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords = {}, keys, map, moveSpeed, switchedKeys, shields, lastPressed, CAN_MOVE = false, END_SCREEN = null, RANKING = null, MAP_NAME = null;
 
 
 ASSETS_LOADING.then(() => {
 
+map = [];
+for (let i = 0; i < BLOCKS_VERTICALLY; i += 1) {
+   map[i] = [];
+   for (let j = 0; j < BLOCKS_HORIZONTALLY; j += 1) {
+      map[i][j] = BLOCK.NO;
+   }
+}
 
-   
-
-socket.emit('playerJoined', usernameHTML, roomHTML, (players, map1, roomStatus) => {
-   map = map1
+socket.emit('playerJoined', usernameHTML, roomHTML, (players, mapName, map1, roomStatus) => {
+   if (map1)   map = map1
+   MAP_NAME = mapName;
+   document.dispatchEvent( new CustomEvent('mapnamechange') );
    
    players.forEach( ({username, color, isOwner}) => {
       addPlayerToList(username, color, isOwner)
@@ -39,24 +46,29 @@ coords = {
 let lastFrameTime
 
 
-const intervalID2 = setInterval(() => {
-   if (map[0]) { // wait for map[][]
-      clearInterval(intervalID2);
+// starting game loop
+const stopController = new AbortController();
+document.addEventListener(
+   'mapnamechange',
+   () => {
+      if (MAP_NAME) {
+         stopController.abort();
+         window.requestAnimationFrame(gameloop);
+      }
+   },
+   { signal: stopController.signal }
+);
 
-      // starting game loop
-      document.querySelector('#loading').hidden = true;
-      lastFrameTime = performance.now();
-      moveSpeed = MOVE_SPEEDS[0];
-      switchedKeys = 0;
-      shields = {
-         white: false,
-         black: false,
-         orange: false,
-         green: false
-      };
-      window.requestAnimationFrame(gameloop);
-   }
-}, 40);
+document.querySelector('#loading').hidden = true;
+lastFrameTime = performance.now();
+moveSpeed = MOVE_SPEEDS[0];
+switchedKeys = 0;
+shields = {
+   white: false,
+   black: false,
+   orange: false,
+   green: false
+};
 
 
 
@@ -65,57 +77,61 @@ function DRAW_game() {
    ctx.fillStyle = '#203d37'
    ctx.fillRect(0, 0, canvas.width, canvas.height)
 
-   // background
-   ctx.fillStyle = 'rgba(131, 29, 29, 0.841)'
-   ctx.fillRect(OFFSET_LEFT, OFFSET_UP, canvas.width - OFFSET_LEFT - OFFSET_RIGHT, canvas.height - OFFSET_UP - OFFSET_DOWN)
-   // ctx.drawImage(images.backgrounds[0], OFFSET_LEFT, OFFSET_UP, canvas.width - OFFSET_LEFT - OFFSET_RIGHT, canvas.height - OFFSET_UP - OFFSET_DOWN);
+   // draw background
+   ctx.drawImage(images.maps[MAP_NAME].background, OFFSET_LEFT, OFFSET_UP, canvas.width - OFFSET_LEFT - OFFSET_RIGHT, canvas.height - OFFSET_UP - OFFSET_DOWN);
    
 
 
    // draw map blocks
-   for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
-      for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-         switch (map[y][x]) {
-            case BLOCK.NO:
-               break;
-            case BLOCK.NORMAL:
-               drawBlock(images.block, x, y); break;
-            case BLOCK.BOMB:
-               drawBlock(images.bomb, x, y, 0);  break;
-            case BLOCK.FIRE:
-               drawBlock(images.fire, x, y, 0);  break;
-            case BLOCK.PERMANENT:
-               drawBlock(images.blockPermanent, x, y);  break;
+   if (map) {
+      for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
+         for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
+            if (MAP_NAME === 'fourway' && MAP_FOURWAY_PORTAL_POSITIONS.filter(({x: xx, y: yy}) => xx === x && yy === y).length === 1) {
+               drawBlock(images.maps[MAP_NAME].portal, x, y);
+            }
             
-            case BLOCK.POWER_BOMBPLUS:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.bombplus, x, y);   break;
-            case BLOCK.POWER_BOMBLENGTH:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.bomblength, x, y); break;
-            case BLOCK.POWER_SPEED:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.speed, x, y);   break;
-            case BLOCK.POWER_SHIELD:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.shield, x, y);  break;
-            case BLOCK.POWER_KICKBOMBS:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.kickbombs, x, y);  break;
-            case BLOCK.POWER_BOMBTIME:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.bombtime, x, y);   break;
-            case BLOCK.POWER_SWITCHPLAYER:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.switchplayer, x, y);  break;
-            case BLOCK.POWER_SICK:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.sick, x, y); break;
-            case BLOCK.POWER_BONUS:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.bonus, x, y);   break;
+            switch (map[y][x]) {
+               case BLOCK.NO:
+                  break;
+               case BLOCK.NORMAL:
+                  drawBlock(images.maps[MAP_NAME].block, x, y); break;
+               case BLOCK.BOMB:
+                  drawBlock(images.bomb, x, y, 0);  break;
+               case BLOCK.FIRE:
+                  drawBlock(images.fire, x, y, 0);  break;
+               case BLOCK.PERMANENT:
+                  drawBlock(images.maps[MAP_NAME].blockPermanent, x, y);  break;
+               
+               case BLOCK.POWER_BOMBPLUS:
+                  drawBlock(images.powers.main, x, y);
+                  drawBlock(images.powers.bombplus, x, y);   break;
+               case BLOCK.POWER_BOMBLENGTH:
+                  drawBlock(images.powers.main, x, y);
+                  drawBlock(images.powers.bomblength, x, y); break;
+               case BLOCK.POWER_SPEED:
+                  drawBlock(images.powers.main, x, y);
+                  drawBlock(images.powers.speed, x, y);   break;
+               case BLOCK.POWER_SHIELD:
+                  drawBlock(images.powers.main, x, y);
+                  drawBlock(images.powers.shield, x, y);  break;
+               case BLOCK.POWER_KICKBOMBS:
+                  drawBlock(images.powers.main, x, y);
+                  drawBlock(images.powers.kickbombs, x, y);  break;
+               case BLOCK.POWER_BOMBTIME:
+                  drawBlock(images.powers.main, x, y);
+                  drawBlock(images.powers.bombtime, x, y);   break;
+               case BLOCK.POWER_SWITCHPLAYER:
+                  drawBlock(images.powers.main, x, y);
+                  drawBlock(images.powers.switchplayer, x, y);  break;
+               case BLOCK.POWER_SICK:
+                  drawBlock(images.powers.main, x, y);
+                  drawBlock(images.powers.sick, x, y); break;
+               case BLOCK.POWER_BONUS:
+                  drawBlock(images.powers.main, x, y);
+                  drawBlock(images.powers.bonus, x, y);   break;
+            }
          }
-      }
+   }
    
    // draw players
    ['white', 'black', 'orange', 'green'].forEach(color => {
@@ -191,6 +207,39 @@ function gameloop() {
       me.y = Math.max(MIN_Y, me.y)
       me.y = Math.min(MAX_Y, me.y)
 
+      // check if the player went through any fourway portals
+      if (MAP_NAME === 'fourway' && (me.x === meOld.x || me.y === meOld.y) && (me.x !== meOld.x || me.y !== meOld.y)) {
+         let A, B, dif;
+         if (me.x !== meOld.x) {
+            A = me.x;
+            B = meOld.x;
+            dif = 1;
+         } else {
+            A = me.y;
+            B = meOld.y;
+            dif = 2;
+         }
+         if (A > B) {
+            [A, B] = [B, A];
+         }
+
+         let portalIdx = null;
+         MAP_FOURWAY_PORTAL_POSITIONS.forEach(({x, y}, idx) => {
+            x *= BLOCK_SIZE;
+            y *= BLOCK_SIZE;
+            if ((me.x === x && me.y === y) ||
+                  (dif === 1 && me.y === y && A < x && x < B) ||
+                  (dif === 2 && me.x === x && A < y && y < B)) {
+               portalIdx = idx;
+            }
+         });
+
+         if (portalIdx !== null) {
+            me.x = MAP_FOURWAY_NEXT_PORTAL[portalIdx].x * BLOCK_SIZE;
+            me.y = MAP_FOURWAY_NEXT_PORTAL[portalIdx].y * BLOCK_SIZE;
+         }
+      }
+
       if (meOld.x !== me.x || meOld.y !== me.y || lastAnimState !== sprites.players[myColor].state)
          socket.emit('coords', me, sprites.players[myColor].state)
    
@@ -200,7 +249,6 @@ function gameloop() {
 
 
    /// DRAWING
-
    if (!END_SCREEN)
       DRAW_game();
    else {

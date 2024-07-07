@@ -103,33 +103,6 @@ function startGame(io, sok) {
    }, 1000);
 
    sok.room.intervalIDS.add(gameTime_intervalId);
-
-   // generate map
-   for (let y = 0; y < CONST.BLOCKS_VERTICALLY; ++y) {
-      for (let x = 0; x < CONST.BLOCKS_HORIZONTALLY; ++x) {
-         if (y % 2 == 1 && x % 2 == 1) {
-            sok.room.map[y][x] = CONST.BLOCK.PERMANENT;
-         } else {
-            let canDraw = true;
-            [
-               [0, 0], [0, 1], [1, 0],
-               [0, CONST.BLOCKS_HORIZONTALLY-2], [0, CONST.BLOCKS_HORIZONTALLY-1], [1, CONST.BLOCKS_HORIZONTALLY-1],
-               [CONST.BLOCKS_VERTICALLY-2, 0], [CONST.BLOCKS_VERTICALLY-1, 0], [CONST.BLOCKS_VERTICALLY-1, 1],
-               [CONST.BLOCKS_VERTICALLY-2, CONST.BLOCKS_HORIZONTALLY-1], [CONST.BLOCKS_VERTICALLY-1, CONST.BLOCKS_HORIZONTALLY-1], [CONST.BLOCKS_VERTICALLY-1, CONST.BLOCKS_HORIZONTALLY-2]
-            ].forEach(coordBlocked => {
-               if (y == coordBlocked[0] && x == coordBlocked[1])
-                  canDraw = false;
-            })
-
-            if (!canDraw)
-               sok.room.map[y][x] = CONST.BLOCK.NO;
-            else
-               sok.room.map[y][x] = (Math.random() >= .2 ? CONST.BLOCK.NORMAL : CONST.BLOCK.NO);
-         }
-      }
-   }
-
-   io.to(sok.roomname).emit('map', sok.room.map);
 }
 
 module.exports.startGame = startGame;

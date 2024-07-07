@@ -28,5 +28,6 @@ module.exports = (io, sok) => {
 
       io.to(sok.roomname).emit('endscreen', winnerColor, sok.room.ranking);
       sok.setRoomStatus(CONST.ROOM_STATUS.ENDED);
+      sok.setMapName(null);
    }
 };

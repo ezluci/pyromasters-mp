@@ -12,11 +12,11 @@ function selectColor(newColor, io, sok) {
    if (newColor !== 'spectator' && newColor !== 'white' && newColor !== 'black' && newColor !== 'orange' && newColor !== 'green')
       return sok.emit('error', 'selectColor: invalid color.');
    
-   if (newColor !== 'spectator' && sok.room[newColor] !== undefined)
+   if (newColor !== 'spectator' && sok.room[newColor] !== null)
       return sok.emit('error', 'selectColor: color already taken.');
    
    if (sok.color !== 'spectator') {
-      sok.room[sok.color] = undefined;
+      sok.room[sok.color] = null;
    }
    
    sok.color = newColor;

@@ -35,7 +35,8 @@ const BLOCK = {
    POWER_BOMBTIME: 10,
    POWER_SWITCHPLAYER: 11,
    POWER_SICK: 12,
-   POWER_BONUS: 13
+   POWER_BONUS: 13,
+   PORTAL: 14, // for 'fourway' map
 }
 
 const INEXISTENT_POS = {x: -100, y: -100}
@@ -62,6 +63,20 @@ const ANIMATION = {
    RIGHT: 4
 }
 
+const MAP_FOURWAY_PORTAL_POSITIONS = [
+   {x: 2, y: 2},
+   {x: 2, y: BLOCKS_VERTICALLY - 3},
+   {x: BLOCKS_HORIZONTALLY - 3, y: BLOCKS_VERTICALLY - 3},
+   {x: BLOCKS_HORIZONTALLY - 3, y: 2}
+];
+
+const MAP_FOURWAY_NEXT_PORTAL = [
+   {x: 2, y: BLOCKS_VERTICALLY - 3},
+   {x: BLOCKS_HORIZONTALLY - 3, y: BLOCKS_VERTICALLY - 3},
+   {x: BLOCKS_HORIZONTALLY - 3, y: 2},
+   {x: 2, y: 2}
+]
+
 try { // only for the nodejs server
    module.exports = {
       OFFSET_LEFT, OFFSET_RIGHT, OFFSET_UP, OFFSET_DOWN,
@@ -69,6 +84,6 @@ try { // only for the nodejs server
       MIN_X, MIN_Y, MAX_X, MAX_Y,
       BLOCK,
       INEXISTENT_POS, DEFAULT_POS,
-      ROOM_STATUS, END_SCREEN_TIMEOUT, ANIMATION
+      ROOM_STATUS, END_SCREEN_TIMEOUT, ANIMATION, MAP_FOURWAY_PORTAL_POSITIONS, MAP_FOURWAY_NEXT_PORTAL
    }
 } catch (e) {}

@@ -11,7 +11,7 @@ function explodeBomb(x, y, bombLength, recursive, io, sok) {
    
    const roomStatus = sok.getRoomStatus();
    
-   function breakLoop(blockCode)
+   function breakLoop(blockCode) // a block before/on which the fire should stop.
       { return (blockCode === CONST.BLOCK.NORMAL || blockCode === CONST.BLOCK.PERMANENT || (5 <= blockCode && blockCode <= 13)); }
    
    let fires = [];
@@ -187,6 +187,12 @@ function placeBomb(io, sok) {
    if (sok.room.map[y][x] === CONST.BLOCK.FIRE || sok.room.map[y][x] === CONST.BLOCK.BOMB ||
          sok.room.map[y][x] === CONST.BLOCK.PERMANENT || sok.room.map[y][x] === CONST.BLOCK.NORMAL)
       return;
+   
+   if (sok.getMapName() === 'fourway') {
+      if (CONST.MAP_FOURWAY_PORTAL_POSITIONS.filter(({x: xx, y: yy}) => (xx === x && yy === y)).length === 1) {
+         return;
+      }
+   }
    
    if (sok.bombs === 0)
       return; // no bombs left

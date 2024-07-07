@@ -1,7 +1,8 @@
 'use strict';
 
 
-// loading sounds
+/// LOADING SOUNDS
+
 const sounds = {};
 
 sounds.menu = new Howl({
@@ -96,19 +97,52 @@ for (let i = 1; i <= 5; ++i) {
 
 
 
-// loading images
+/// LOADING IMAGES
+
 const images = {};
 
+images.maps = {};
+
+// loading map bricktown
+images.maps.bricktown = {};
+
+loadImage('assets/images/map_bricktown/background.jpg').then(image => {
+   images.maps.bricktown.background = image;
+   LOADED_COUNT ++;
+});
+loadImage('assets/images/map_bricktown/permanent.png').then(image => {
+   images.maps.bricktown.blockPermanent = image;
+   LOADED_COUNT ++;
+})
+loadImage('assets/images/map_bricktown/normal.png').then(image => {
+   images.maps.bricktown.block = image;
+   LOADED_COUNT ++;
+})
+
+// loading map fourway
+images.maps.fourway = {};
+
+loadImage('assets/images/map_fourway/background.jpg').then(image => {
+   images.maps.fourway.background = image;
+   LOADED_COUNT ++;
+});
+loadImage('assets/images/map_fourway/permanent.jpg').then(image => {
+   images.maps.fourway.blockPermanent = image;
+   LOADED_COUNT ++;
+})
+loadImage('assets/images/map_fourway/normal.jpg').then(image => {
+   images.maps.fourway.block = image;
+   LOADED_COUNT ++;
+})
+loadImage('assets/images/map_fourway/portal.webp').then(image => {
+   images.maps.fourway.portal = image;
+   LOADED_COUNT ++;
+})
+
+
+// loading misc
 loadImage('assets/images/players/shield.png').then(image => {
    images.shield = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/permanent.png').then(image => {
-   images.blockPermanent = image;
-   LOADED_COUNT ++;
-})
-loadImage('assets/images/blocks/normal.png').then(image => {
-   images.block = image;
    LOADED_COUNT ++;
 })
 loadImage('assets/images/blocks/bomb.png').then(image => {
@@ -162,13 +196,6 @@ loadImage('assets/images/blocks/power_bonus.png').then(image => {
    LOADED_COUNT ++;
 })
 
-// backgrounds
-images.backgrounds = [];
-loadImage('assets/images/backgrounds/bricktown.jpg').then(image => {
-   images.backgrounds.push(image);
-   LOADED_COUNT ++;
-});
-
 // endscreens
 images.endscreens = [];
 loadImage('assets/images/endscreens/draw.jpg').then(image => {
@@ -190,4 +217,19 @@ loadImage('assets/images/endscreens/orange.jpg').then(image => {
 loadImage('assets/images/endscreens/green.jpg').then(image => {
    images.endscreens.green = image;
    LOADED_COUNT ++;
+});
+
+
+// create promise which checks if animations are loaded
+const ASSETS_LOADING = new Promise((resolve) => {
+   const intvid = setInterval(() => {
+      if (LOADED_COUNT === 78) {
+         resolve();
+         clearInterval(intvid);
+      }
+   }, 60);
+});
+
+ASSETS_LOADING.then(() => {
+   console.log('All assets loaded');
 });

@@ -3,7 +3,7 @@
 const CONST = require('../consts')();
 const startGame = require('../functions/start-game').startGame;
 
-function tryStart(io, sok) {
+function tryStart(mapName, io, sok) {
    if (!sok.detailsOkCheck())
       return;
    
@@ -15,6 +15,10 @@ function tryStart(io, sok) {
    
    if (!sok.isOwner)
       return sok.emit('error', 'tryStart: You are not the owner of this room!');
+
+   if (mapName !== 'bricktown' && mapName !== 'fourway') {
+      return sok.emit('error', 'tryStart: invalid map name');
+   }
    
    let cntPlayers = 0;
    ['white', 'black', 'orange', 'green'].forEach((color) => {
@@ -26,7 +30,6 @@ function tryStart(io, sok) {
    if (cntPlayers === 0) {
       return sok.emit('error', 'tryStart: You can\'t start the game with NO PLAYERS, silly!');
    }
-
 
    /// set stats for each color
    ['white', 'black', 'orange', 'green'].forEach(color => {
@@ -45,7 +48,9 @@ function tryStart(io, sok) {
       sok.room[color].animState = CONST.ANIMATION.IDLE;
       io.to(sok.roomname).emit('coords', color, sok.room[color].coords, sok.room[color].animState);
    })
-   
+
+   sok.setMapName(mapName);
+   sok.setMap( sok.generateMap() );
 
 
    sok.room.bombs.clear();
