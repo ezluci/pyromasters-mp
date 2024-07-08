@@ -3,6 +3,9 @@
 lastPressed = ''; // we use this to determine the direction in case of 2 keys pressed
 
 document.onkeydown = (event) => {
+   if (document.activeElement === document.querySelector('#chat-input')) {
+      return;
+   }
    let code = event.code
 
    if (switchedKeys) {
