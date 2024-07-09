@@ -1,7 +1,7 @@
 'use strict';
 
 const CONST = require('./consts')();
-const TICK_ACTIONS = require('./tick-actions');
+
 
 class Ticks {
    
@@ -9,43 +9,40 @@ class Ticks {
    constructor(io, sok) {
       this.io = io;
       this.sok = sok;
-      this.TPS = 16;
+      this.TPS = 62.5;
+      this.MSPT = Math.round(1000 / this.TPS); // ms per tick
       this.tick = null; // the tick to be processed
-      this.tickActions = null;
+      this.tickFuncs = null;
       this.intervalId = null;
    }
 
    startTickLoop() {
       if (this.intervalId) {
-         console.log('tick loop already started, ignoring request');
+         console.warn('tick loop already started, ignoring request');
          return;
       }
 
       this.tick = 0;
-      this.tickActions = {};
+      this.tickFuncs = {};
       this.lastTickTime = new Date();
 
       this.runNextTick();
-      this.intervalId = setInterval(() => {
-         this.runNextTick();
-      }, this.TPS); // 62.5 ticks per second
+      this.intervalId = setInterval(this.runNextTick, this.MSPT);
    }
 
    endTickLoop() {
       if (this.intervalId === null) {
-         console.log('tick loop already ended, ignoring request');
+         console.warn('tick loop already ended, ignoring request');
       }
       
       clearInterval(this.intervalId);
       this.tick = null;
-      this.tickActions = null;
+      this.tickFuncs = null;
       this.intervalId = null;
    }
 
    runNextTick = () => {
-      this.tickActions[this.tick]?.forEach(action => {
-         this.processAction(action);
-      })
+      this.tickFuncs[this.tick]?.forEach(func => func());
 
       // send coordinates to everyone
       const coords = [];
@@ -59,48 +56,40 @@ class Ticks {
       this.io.to(this.sok.roomname).emit('C', coords);
 
       const tickTime = new Date();
-      if (tickTime - this.lastTickTime >= this.TPS * 2) {
-         console.error(`${new Date()}  62.5tps loop running at ${Math.floor(1000 / (tickTime - this.lastTickTime))}tps!`);
-      }
       this.lastTickTime = tickTime;
       this.tick ++;
    };
 
-
-   // 'action' is formed of {'name': a number from TICK_ACTIONS and 'sok': the player for which the action is (optional)}
-
-   processAction = (action) => {
-      if (action.name === TICK_ACTIONS.SHIELD_FALSE) {
-         this.sok.room[action.sok.color].setShieldFalse();
-      } else if (action.name === TICK_ACTIONS.SICK_FALSE) {
-         this.sok.room[action.sok.color].setSickFalse();
-      }
-   };
-
-   // adds this action to 'ticks_after' ticks from now; this action is for sok (optional).
-   addAction = (action, ticks_after, sok = '') => {
-      if (!this.tickActions) {
+   addFunc = (func, ticks_after) => {
+      if (!this.tickFuncs) {
          return;
       }
       if (ticks_after < 0) {
-         console.error('trying to add an action to a past tick');
+         console.error('trying to add a function to a past tick');
          return;
       }
+      ticks_after = Math.round(ticks_after);
 
-      if (this.tickActions[this.tick + ticks_after] === undefined) {
-         this.tickActions[this.tick + ticks_after] = [];
+      if (this.tickFuncs[this.tick + ticks_after] === undefined) {
+         this.tickFuncs[this.tick + ticks_after] = [];
       }
-      this.tickActions[this.tick + ticks_after].push({ name: action, sok: sok });
+      this.tickFuncs[this.tick + ticks_after].push(func);
    };
 
-   removeAction = (action, tick, sok = '') => {
-      if (!this.tickActions) {
+   removeFunc = (func, tick) => {
+      if (!this.tickFuncs) {
          return;
       }
-      const lastLength = this.tickActions[tick]?.length;
-      this.tickActions[tick] = this.tickActions[tick].filter(action1 => action1.name === action.name && action1.sok === action.sok);
-      if (this.tickActions[tick] === undefined || lastLength === this.tickActions[tick].length) {
-         console.error('trying to remove inexistent action');
+      tick = Math.round(tick);
+      if (this.tickFuncs[tick] === undefined) {
+         console.error('trying to remove an inexistent func');
+      }
+
+      const lastLength = this.tickFuncs[tick].length;
+      this.tickFuncs[tick] = this.tickFuncs[tick].filter(func1 => func !== func1);
+
+      if (lastLength === this.tickFuncs[tick].length) {
+         console.error('trying to remove an inexistent func');
       }
    }
 };

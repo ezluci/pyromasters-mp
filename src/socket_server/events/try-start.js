@@ -1,7 +1,6 @@
 'use strict';
 
 const CONST = require('../consts')();
-const startGame = require('../functions/start-game').startGame;
 
 function tryStart(mapName, io, sok) {
    if (!sok.detailsOkCheck())
@@ -62,19 +61,16 @@ function tryStart(mapName, io, sok) {
    sok.room.intervalIDS.forEach(id => { clearInterval(id) });
    sok.room.intervalIDS.clear();
 
-   sok.setRoomStatus(CONST.ROOM_STATUS.STARTING);
 
-   io.to(sok.roomname).emit('room_status', 'starting in 3s');
-   const id3 = setTimeout(() => {
-      io.to(sok.roomname).emit('room_status', 'starting in 2s');
-      const id2 = setTimeout(() => {
-         io.to(sok.roomname).emit('room_status', 'starting in 1s');
-         const id1 = setTimeout(() => {startGame(io, sok);}, 1000);
-         sok.room.intervalIDS.add(id1);
-      }, 1000);
-      sok.room.intervalIDS.add(id2);
-   }, 1000);
-   sok.room.intervalIDS.add(id3);
+   sok.room.ticks.startTickLoop();
+   sok.room.intervalIDS.add(sok.room.ticks.intervalId);
+
+
+   sok.room.ticks.addFunc(() => { sok.setRoomStatus(CONST.ROOM_STATUS.STARTING) }, sok.room.ticks.TPS * 0);
+   sok.room.ticks.addFunc(() => { sok.setRoomStatus('starting in 3s') }, sok.room.ticks.TPS * 0);
+   sok.room.ticks.addFunc(() => { sok.setRoomStatus('starting in 2s') }, sok.room.ticks.TPS * 1);
+   sok.room.ticks.addFunc(() => { sok.setRoomStatus('starting in 1s') }, sok.room.ticks.TPS * 2);
+   sok.room.ticks.addFunc(sok.startGame, sok.room.ticks.TPS * 3);
 }
 
 module.exports.tryStart = tryStart;

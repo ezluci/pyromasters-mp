@@ -38,6 +38,9 @@ io.on('connection', (sok) => {
    require('./sok_functions/collect-powerups.js')(io, sok);
    require('./sok_functions/player-status-handler.js')(io, sok);
    require('./sok_functions/generate-map.js')(io, sok);
+   require('./sok_functions/bombs.js')(io, sok);
+   require('./sok_functions/start-game.js')(io, sok);
+   require('./sok_functions/destroy-room.js')(io, ROOMS, sok);
 
    // ----- SOCKET EVENTS -----
 

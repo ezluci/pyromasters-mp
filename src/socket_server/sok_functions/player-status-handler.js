@@ -1,7 +1,6 @@
 'use strict';
 
 const CONST = require('../consts')();
-const TICK_ACTIONS = require('../tick-actions');
 
 // speed, shield, sick
 
@@ -27,7 +26,7 @@ module.exports = (io, sok) => {
    sok.setShieldFalse = () => {
       if (sok.shield) {
          io.to(sok.roomname).emit('shield', sok.color, false);
-         sok.room.ticks.removeAction(TICK_ACTIONS.SHIELD_FALSE, sok.shieldFalse_lastTick, sok);
+         sok.room.ticks.removeFunc(sok.setShieldFalse, sok.shieldFalse_lastTick);
          sok.shield = false;
          sok.shieldFalse_lastTick = null;
       }
@@ -35,13 +34,13 @@ module.exports = (io, sok) => {
 
    sok.setShieldTrue = () => {
       if (sok.shield) {
-         sok.room.ticks.removeAction(TICK_ACTIONS.SHIELD_FALSE, sok.shieldFalse_lastTick, sok);
+         sok.room.ticks.removeFunc(sok.setShieldFalse, sok.shieldFalse_lastTick);
       } else {
          io.to(sok.roomname).emit('shield', sok.color, true);
          sok.shield = true;
       }
 
-      sok.room.ticks.addAction(TICK_ACTIONS.SHIELD_FALSE, CONST.SHIELD_TIME_TICKS, sok);
+      sok.room.ticks.addFunc(sok.setShieldFalse, CONST.SHIELD_TIME_TICKS);
       sok.shieldFalse_lastTick = sok.room.ticks.tick + CONST.SHIELD_TIME_TICKS;
    }
 
@@ -53,7 +52,7 @@ module.exports = (io, sok) => {
    sok.setSickFalse = () => {
       if (sok.sick) {
          io.to(sok.roomname).emit('sick0', sok.color);
-         sok.room.ticks.removeAction(TICK_ACTIONS.SICK_FALSE, sok.sickFalse_lastTick, sok);
+         sok.room.ticks.removeFunc(sok.setSickFalse, sok.sickFalse_lastTick);
          sok.sick = false;
          sok.sickFalse_lastTick = null;
       }
@@ -61,13 +60,13 @@ module.exports = (io, sok) => {
 
    sok.setSickTrue = () => {
       if (sok.sick) {
-         sok.room.ticks.removeAction(TICK_ACTIONS.SICK_FALSE, sok.sickFalse_lastTick, sok);
+         sok.room.ticks.removeFunc(sok.setSickFalse, sok.sickFalse_lastTick);
       } else {
          io.to(sok.roomname).emit('sick1', sok.color);
          sok.sick = true;
       }
 
-      sok.room.ticks.addAction(TICK_ACTIONS.SICK_FALSE, CONST.SICK_TIME_TICKS, sok);
+      sok.room.ticks.addFunc(sok.setSickFalse, CONST.SICK_TIME_TICKS);
       sok.sickFalse_lastTick = sok.room.ticks.tick + CONST.SICK_TIME_TICKS;
    }
 };

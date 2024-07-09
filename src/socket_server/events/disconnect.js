@@ -2,8 +2,6 @@
 
 const CONST = require('../consts')()
 
-const destroyRoom = require('../functions/destroy-room').destroyRoom;
-
 function disconnect(io, ROOMS, sok) {
    if (!sok.detailsOkCheck())
       return;
@@ -14,7 +12,7 @@ function disconnect(io, ROOMS, sok) {
    sok.room.players.delete(sok.username);
 
    if (!sok.room || sok.isOwner) { // room empty or isOwner
-      destroyRoom(io, ROOMS, sok);
+      sok.destroyRoom();
    } else {
       if (sok.color !== 'spectator') {
          if (sok.getRoomStatus() !== CONST.ROOM_STATUS.WAITING && sok.getRoomStatus() !== CONST.ROOM_STATUS.STARTING) {
