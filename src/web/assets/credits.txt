@@ -23,7 +23,10 @@
 ./images/map_fourway/background.jpg - MoFunZone
 ./images/map_fourway/normal.jpg - MoFunZone
 ./images/map_fourway/permanent.jpg - MoFunZone
-./images/map_fourway/portal.png - https://static.wikia.nocookie.net/technicpack/images/9/9d/Portal.png/revision/latest?cb=20121110065624
+./images/map_fourway/portal.png - Sweatdog14
+./images/map_magneto/background.jpg - MoFunZone
+./images/map_magneto/normal.png - MoFunZone
+./images/map_magneto/permanent.png - MoFunZone
 ./images/players/shield.png - ezluci
 ./images/title.png - stefmic22
 ./sounds/bonusall.mp3 - MoFunZone

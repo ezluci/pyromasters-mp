@@ -139,6 +139,22 @@ loadImage('assets/images/map_fourway/portal.png').then(image => {
    LOADED_COUNT ++;
 })
 
+// loading map magneto
+images.maps.magneto = {};
+
+loadImage('assets/images/map_magneto/background.jpg').then(image => {
+   images.maps.magneto.background = image;
+   LOADED_COUNT ++;
+});
+loadImage('assets/images/map_magneto/permanent.png').then(image => {
+   images.maps.magneto.blockPermanent = image;
+   LOADED_COUNT ++;
+})
+loadImage('assets/images/map_magneto/normal.png').then(image => {
+   images.maps.magneto.block = image;
+   LOADED_COUNT ++;
+})
+
 
 // loading misc
 loadImage('assets/images/players/shield.png').then(image => {
@@ -223,7 +239,7 @@ loadImage('assets/images/endscreens/green.jpg').then(image => {
 // create promise which checks if animations are loaded
 const ASSETS_LOADING = new Promise((resolve) => {
    const intvid = setInterval(() => {
-      if (LOADED_COUNT === 78) {
+      if (LOADED_COUNT === 81) {
          resolve();
          clearInterval(intvid);
       }

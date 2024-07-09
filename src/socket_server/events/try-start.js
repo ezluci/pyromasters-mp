@@ -16,7 +16,12 @@ function tryStart(mapName, io, sok) {
    if (!sok.isOwner)
       return sok.emit('error', 'tryStart: You are not the owner of this room!');
 
-   if (mapName !== 'bricktown' && mapName !== 'fourway') {
+   const maps = ['bricktown', 'fourway', 'magneto'];
+   if (mapName === 'random') {
+      mapName = maps[Math.floor(Math.random() * maps.length)];
+   }
+   
+   if (maps.filter((map) => mapName === map).length === 0) {
       return sok.emit('error', 'tryStart: invalid map name');
    }
    
