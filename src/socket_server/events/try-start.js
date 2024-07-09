@@ -55,7 +55,7 @@ function tryStart(mapName, io, sok) {
 
    sok.setMapName(mapName);
    sok.setMap( sok.generateMap() );
-
+   sok.room.endgameBlocks = null;
 
    sok.room.bombs.clear();
    sok.room.intervalIDS.forEach(id => { clearInterval(id) });
@@ -70,7 +70,19 @@ function tryStart(mapName, io, sok) {
    sok.room.ticks.addFunc(() => { sok.setRoomStatus('starting in 3s') }, sok.room.ticks.TPS * 0);
    sok.room.ticks.addFunc(() => { sok.setRoomStatus('starting in 2s') }, sok.room.ticks.TPS * 1);
    sok.room.ticks.addFunc(() => { sok.setRoomStatus('starting in 1s') }, sok.room.ticks.TPS * 2);
-   sok.room.ticks.addFunc(sok.startGame, sok.room.ticks.TPS * 3);
+   sok.room.ticks.addFunc(() => { sok.setRoomStatus(CONST.ROOM_STATUS.RUNNING) }, sok.room.ticks.TPS * 3);
+
+   sok.room.gameTime = 120; // 2 minutes
+
+   for (let i = 0; i < sok.room.gameTime; i++) {
+      sok.room.ticks.addFunc(() => {
+         sok.room.gameTime --;
+         io.to(sok.roomname).emit('gameTime', sok.room.gameTime);
+      }, sok.room.ticks.TPS * (3 + i));
+   }
+   for (let i = 0; i < CONST.BLOCKS_HORIZONTALLY * CONST.BLOCKS_VERTICALLY; i++) {
+      sok.room.ticks.addFunc(sok.placeEndgameBlock, sok.room.ticks.TPS * (3 + sok.room.gameTime + 0.84 * i));
+   }
 }
 
 module.exports.tryStart = tryStart;
