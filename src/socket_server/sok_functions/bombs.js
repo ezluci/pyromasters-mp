@@ -85,7 +85,7 @@ module.exports = (io, sok) => {
             sok.room[color].coords = { ...CONST.INEXISTENT_POS };
 
             if (sok.countNotDead() <= 1)
-               sok.room.intervalIDS.add( setTimeout(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT) );
+               sok.room.ticks.addFunc(sok.showEndScreen, sok.room.ticks.TPS * CONST.END_SCREEN_TIMEOUT / 1000);
          }
       });
 
