@@ -7,8 +7,7 @@ function stop(blockCode) {
 
 
 function moveLeft() {
-
-   sprites.players[myColor].state = 'left';
+   changeAnimation(myColor, 'left');
    
    if (me.x === MIN_X)
       return
@@ -59,8 +58,7 @@ function moveLeft() {
 
 
 function moveDown() {
-
-   sprites.players[myColor].state = 'front';
+   changeAnimation(myColor, 'front');
    
    if (me.y === MAX_Y)
       return
@@ -111,8 +109,7 @@ function moveDown() {
 
 
 function moveRight() {
-
-   sprites.players[myColor].state = 'right';
+   changeAnimation(myColor, 'right');
    
    if (me.x === MAX_X)
       return
@@ -163,8 +160,7 @@ function moveRight() {
 
 
 function moveUp() {
-
-   sprites.players[myColor].state = 'back';
+   changeAnimation(myColor, 'back');
 
    if (me.y === MIN_Y)
       return

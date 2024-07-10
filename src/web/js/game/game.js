@@ -198,8 +198,9 @@ function gameloop() {
          else if (lastPressed === 'w')
             moveUp()
       }
-      else
-         sprites.players[myColor].state = 'idle';
+      else {
+         changeAnimation(myColor, 'idle');
+      }
       
 
       me.x = Math.max(MIN_X, me.x)

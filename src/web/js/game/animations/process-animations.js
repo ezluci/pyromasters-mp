@@ -29,7 +29,15 @@ function drawAnimation(animation, x, y) {
    const dw = sw; // if the animations didn't match this exact resolution, this wouldn't work. you need percentages.
    const dh = sh;
    ctx.drawImage(sprites.players.green.img, sx, sy, sw, sh, dx, dy, dw, dh);
+   // honestly i have no idea why putting green works ^ but i dont really care so im gonna let it like this.
    nextAnimation(animation);
+}
+
+function changeAnimation(color, animName) {
+   if (sprites.players[color].state !== animName) {
+      resetAnimation(animations[color + '_' + animName]);
+   }
+   sprites.players[color].state = animName;
 }
 
 

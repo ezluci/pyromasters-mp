@@ -111,9 +111,12 @@ socket.on('C', (coordsReceived) => {
          animState = 'right';
       }
 
+      if (sprites.players[color].state !== animState) {
+         changeAnimation(color, animState);
+      }
+
       coords[color].x = coordsReceived[idx][0];
       coords[color].y = coordsReceived[idx][1];
-      sprites.players[color].state = animState;
    });
 })
 
@@ -122,7 +125,9 @@ socket.on('C', (coordsReceived) => {
 socket.on('coords', (color, coords1, animState) => {
    if (!animState)   animState = 'idle';
    coords[color] = coords1;
-   sprites.players[color].state = animState;
+   if (sprites.players[color].state !== animState) {
+      changeAnimation(color, animState);
+   }
 })
 
 
