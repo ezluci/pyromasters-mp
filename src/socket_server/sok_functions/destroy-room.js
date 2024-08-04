@@ -1,6 +1,6 @@
 'use strict';
 
-const CONST = require('../consts')();
+const CONST = require('../consts');
 
 module.exports = (io, ROOMS, sok) => {
    sok.destroyRoom = () => {

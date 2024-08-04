@@ -1,6 +1,6 @@
 'use strict';
 
-const CONST = require('../consts')();
+const CONST = require('../consts');
 
 function tryStart(mapName, io, sok) {
    if (!sok.detailsOkCheck())

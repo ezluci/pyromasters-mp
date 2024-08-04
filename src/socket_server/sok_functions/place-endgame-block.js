@@ -1,6 +1,6 @@
 'use strict';
 
-const CONST = require('../consts')();
+const CONST = require('../consts');
 
 let xg, yg, xdir, ydir, filled;
 

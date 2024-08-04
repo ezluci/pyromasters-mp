@@ -1,6 +1,6 @@
 'use strict';
 
-const CONST = require('../consts')()
+const CONST = require('../consts')
 
 function disconnect(io, ROOMS, sok) {
    if (!sok.detailsOkCheck())

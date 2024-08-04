@@ -1,6 +1,6 @@
 'use strict';
 
-const CONST = require('../consts')();
+const CONST = require('../consts');
 
 const BLK = CONST.BLOCK_SIZE;
 const BLK_SAFE = CONST.BLOCK_SAFE_PX;

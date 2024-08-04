@@ -1,6 +1,6 @@
 'use strict';
 
-const CONST = require('../consts')()
+const CONST = require('../consts')
 
 function playerJoined(username, roomname, callback, io, ROOMS, sok) {
    
