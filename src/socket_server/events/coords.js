@@ -16,19 +16,6 @@ function coords(coords, animState, io, sok) {
       return sok.emit('error', 'coords: invalid coords');
    }
 
-   // check if player dies to bombfire
-   if (sok.getRoomStatus() === CONST.ROOM_STATUS.RUNNING && !sok.shield && sok.onDeadlyBlockCheck(sok.color)) {
-      io.to(sok.roomname).emit('death', sok.color);
-      sok.dead = true;
-      sok.coords = { ...CONST.INEXISTENT_POS };
-
-      if (sok.countNotDead() <= 1) {
-         sok.room.ticks.addFunc(sok.showEndScreen, sok.room.ticks.TPS * CONST.END_SCREEN_TIMEOUT / 1000);
-      }
-
-      return;
-   }
-
    coords.x = Math.floor(coords.x);
    coords.y = Math.floor(coords.y);
    sok.coords = coords;

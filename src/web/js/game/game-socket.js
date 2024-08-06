@@ -139,24 +139,38 @@ socket.on('mapName', (mapName) => {
 socket.on('mapUpdates', (updates) => {
    let anyNewFires = false; // maybe you can play each sound for each bomb exploded. not a big difference but yeah.
 
-   updates.forEach(({x, y, block, details}) => {
-      if (block === BLOCK.BOMB)
-         if (details.sick)
-            sounds.dropBombSick.play();
-         else
-            sounds.dropBomb.play();
-      
-      if (block === BLOCK.FIRE)
-         anyNewFires = true;
-
+   updates.forEach(({x, y, block}) => {
       if (isPowerup(map[y][x]) && block === BLOCK.NO)
          sounds.powerup.play();
       
       map[y][x] = block;
    });
+});
 
-   if (anyNewFires)
+socket.on('addBomb', (x, y) => {
+   bombs.push({x, y});
+   sounds.dropBomb.play();
+});
+socket.on('deleteBomb', (x, y) => {
+   const index = bombs.findIndex(bomb => bomb.x === x && bomb.y === y);
+   if (index !== -1) {
+      bombs.splice(index, 1);
+   }
+});
+
+let lastBombfireTime = performance.now(); // =[
+socket.on('addBombfire', (x, y) => {
+   bombfires.push({x, y});
+   if (performance.now() - lastBombfireTime > 100) {
+      lastBombfireTime = performance.now();
       sounds.explodeBomb[Math.floor(Math.random() * sounds.explodeBomb.length)].play();
+   }
+});
+socket.on('deleteBombfire', (x, y) => {
+   const index = bombfires.findIndex(bombfire => bombfire.x === x && bombfire.y === y);
+   if (index !== -1) {
+      bombfires.splice(index, 1);
+   }
 });
 
 

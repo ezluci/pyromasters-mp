@@ -26,22 +26,21 @@ module.exports = (io, sok) => {
    sok.setShieldFalse = () => {
       if (sok.shield) {
          io.to(sok.roomname).emit('shield', sok.color, false);
-         sok.room.ticks.removeFunc(sok.setShieldFalse, sok.shieldFalse_lastTick);
+         sok.room.ticks.removeFunc(sok.shieldFalse_tickId);
          sok.shield = false;
-         sok.shieldFalse_lastTick = null;
+         sok.shieldFalse_tickId = null;
       }
    }
 
    sok.setShieldTrue = () => {
       if (sok.shield) {
-         sok.room.ticks.removeFunc(sok.setShieldFalse, sok.shieldFalse_lastTick);
+         sok.room.ticks.removeFunc(sok.shieldFalse_tickId);
       } else {
          io.to(sok.roomname).emit('shield', sok.color, true);
          sok.shield = true;
       }
 
-      sok.room.ticks.addFunc(sok.setShieldFalse, CONST.SHIELD_TIME_TICKS);
-      sok.shieldFalse_lastTick = sok.room.ticks.tick + CONST.SHIELD_TIME_TICKS;
+      sok.shieldFalse_tickId = sok.room.ticks.addFunc(sok.setShieldFalse, CONST.SHIELD_TIME_TICKS);
    }
 
 
@@ -52,21 +51,20 @@ module.exports = (io, sok) => {
    sok.setSickFalse = () => {
       if (sok.sick) {
          io.to(sok.roomname).emit('sick0', sok.color);
-         sok.room.ticks.removeFunc(sok.setSickFalse, sok.sickFalse_lastTick);
+         sok.room.ticks.removeFunc(sok.sickFalse_tickId);
          sok.sick = false;
-         sok.sickFalse_lastTick = null;
+         sok.sickFalse_tickId = null;
       }
    }
 
    sok.setSickTrue = () => {
       if (sok.sick) {
-         sok.room.ticks.removeFunc(sok.setSickFalse, sok.sickFalse_lastTick);
+         sok.room.ticks.removeFunc(sok.sickFalse_tickId);
       } else {
          io.to(sok.roomname).emit('sick1', sok.color);
          sok.sick = true;
       }
 
-      sok.room.ticks.addFunc(sok.setSickFalse, CONST.SICK_TIME_TICKS);
-      sok.sickFalse_lastTick = sok.room.ticks.tick + CONST.SICK_TIME_TICKS;
+      sok.sickFalse_tickId = sok.room.ticks.addFunc(sok.setSickFalse, CONST.SICK_TIME_TICKS);
    }
 };

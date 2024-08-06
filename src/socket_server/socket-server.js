@@ -41,6 +41,7 @@ io.on('connection', (sok) => {
    require('./sok_functions/bombs.js')(io, sok);
    require('./sok_functions/destroy-room.js')(io, ROOMS, sok);
    require('./sok_functions/place-endgame-block.js')(io, sok);
+   require('./sok_functions/run-every-tick.js')(io, sok);
 
    // ----- SOCKET EVENTS -----
 

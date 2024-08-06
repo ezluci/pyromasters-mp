@@ -44,7 +44,17 @@ module.exports = (io, sok) => {
          return;  // he's messing with the coords =[
       }
 
-      return ([CONST.BLOCK.FIRE, CONST.BLOCK.PERMANENT].includes(sok.room.map[deadlyBlock1.y][deadlyBlock1.x]) ||
-            (deadlyBlock2.x !== CONST.INEXISTENT_POS.x && [CONST.BLOCK.FIRE, CONST.BLOCK.PERMANENT].includes(sok.room.map[deadlyBlock2.y][deadlyBlock2.x])));
+      let death = (sok.room.map[deadlyBlock1.y][deadlyBlock1.x] === CONST.BLOCK.PERMANENT ||
+            (deadlyBlock2.x !== CONST.INEXISTENT_POS.x && sok.room.map[deadlyBlock2.y][deadlyBlock2.x] === CONST.BLOCK.PERMANENT));
+      ['white', 'black', 'orange', 'green'].forEach(color => {
+         if (sok.room.bombfires.has(deadlyBlock1.x, deadlyBlock1.y, sok.room[color])) {
+            death = true;
+         }
+         if (sok.room.bombfires.has(deadlyBlock2.x, deadlyBlock2.y, sok.room[color])) {
+            death = true;
+         }
+      });
+      
+      return death;
    }
 };

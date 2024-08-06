@@ -1,6 +1,7 @@
 'use strict';
 
-const CONST = require('../consts')
+const CONST = require('../consts');
+const MultiMap = require('../multimap.js');
 
 function playerJoined(username, roomname, callback, io, ROOMS, sok) {
    
@@ -31,10 +32,10 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
    sok.dead = false;
    sok.isOwner = !ROOMS.has(sok.roomname);
    sok.shield = false;
-   sok.shieldFalse_lastTick = null;
+   sok.shieldFalse_tickId = null;
    sok.moveSpeedIndex = 0;
    sok.sick = false;
-   sok.sickFalse_lastTick = null;
+   sok.sickFalse_tickId = null;
    sok.animState = CONST.ANIMATION.IDLE;
 
    sok.join(sok.roomname)
@@ -50,7 +51,8 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
          map: null,
          mapName: null,
          players: new Map(),
-         bombs: new Map(),
+         bombs: new MultiMap(), // key is {x, y}
+         bombfires: new MultiMap(), // key is {x, y, fireowner}
          intervalIDS: new Set(),
          gameTime: null,
          ranking: {},

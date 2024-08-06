@@ -57,7 +57,6 @@ function tryStart(mapName, io, sok) {
    sok.setMap( sok.generateMap() );
    sok.room.endgameBlocks = null;
 
-   sok.room.bombs.clear();
    sok.room.intervalIDS.forEach(id => { clearInterval(id) });
    sok.room.intervalIDS.clear();
 

@@ -3,7 +3,7 @@
 
 
 let gameTime = 0;
-var canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords = {}, keys, map, moveSpeed, switchedKeys, shields, lastPressed, CAN_MOVE = false, END_SCREEN = null, RANKING = null, MAP_NAME = null;
+var canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords = {}, keys, map, moveSpeed, switchedKeys, shields, lastPressed, CAN_MOVE = false, END_SCREEN = null, RANKING = null, MAP_NAME = null, bombs = [], bombfires = [];
 
 
 ASSETS_LOADING.then(() => {
@@ -95,10 +95,6 @@ function DRAW_game() {
                   break;
                case BLOCK.NORMAL:
                   drawBlock(images.maps[MAP_NAME].block, x, y); break;
-               case BLOCK.BOMB:
-                  drawBlock(images.bomb, x, y, 0);  break;
-               case BLOCK.FIRE:
-                  drawBlock(images.fire, x, y, 0);  break;
                case BLOCK.PERMANENT:
                   drawBlock(images.maps[MAP_NAME].blockPermanent, x, y);  break;
                
@@ -131,6 +127,9 @@ function DRAW_game() {
                   drawBlock(images.powers.bonus, x, y);   break;
             }
          }
+         
+         bombs.forEach(({x, y}) => {drawBlock(images.bomb, x, y, 0)});
+         bombfires.forEach(({x, y}) => drawBlock(images.fire, x, y, 0));
    }
    
    // draw players
@@ -253,6 +252,8 @@ function gameloop() {
    if (!END_SCREEN)
       DRAW_game();
    else {
+      bombs = [];
+      bombfires = [];
       ctx.drawImage(images.endscreens[END_SCREEN], 0, 0, canvas.width, canvas.height);
       let k = 50;
       Object.entries(RANKING).forEach(entry => {

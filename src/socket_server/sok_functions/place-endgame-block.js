@@ -1,6 +1,7 @@
 'use strict';
 
 const CONST = require('../consts');
+const MultiMap = require('../multimap.js');
 
 let xg, yg, xdir, ydir, filled;
 
@@ -57,7 +58,7 @@ module.exports = (io, sok) => {
       });
 
       // check if any bomb explodes in this new block
-      if (sok.room.bombs.get(yg*100 + xg)) { // this needs to go away asap
+      /*if (sok.room.bombs.get(yg*100 + xg)) { // this needs to go away asap
          sok.explodeBomb(xg, yg, sok.bombLength, false, io, sok); // bug!
          const xsg = xg, ysg = yg;
          const id = setTimeout(() => {
@@ -65,7 +66,7 @@ module.exports = (io, sok) => {
             io.to(sok.roomname).emit('mapUpdates', [{x: xsg, y: ysg, block: CONST.BLOCK.PERMANENT}]);
          }, CONST.FIRE_TIME);
          sok.room.intervalIDS.add(id);
-      }
+      }*/
 
       [xg, yg] = [xn, yn];
    }

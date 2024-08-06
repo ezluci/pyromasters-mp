@@ -13,6 +13,7 @@ module.exports = (io, ROOMS, sok) => {
       sok.room.players.forEach(player => {
          player.disconnect();
       });
+      sok.room.ticks.endTickLoop();
       sok.room.intervalIDS.forEach((id) => {
          clearInterval(id);
       });

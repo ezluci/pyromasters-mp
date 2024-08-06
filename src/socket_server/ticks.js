@@ -2,6 +2,22 @@
 
 const CONST = require('./consts');
 
+/*
+ breakdown of the tick class:
+ 
+ the tick loop is started on game start, and ended on game end (when the end screen is shown).
+ 
+ you use addFunc to add a function that's gonna run at a certain tick in the future.
+ this addFunc will return an id. this id is useful for when you want to REMOVE this
+ function from the tick 'queue' (tickFuncs array).
+ 
+ for example, you added a function that's gonna explode a specific bomb after 200 ticks.
+ but what if that bomb explodes before that tick, from other causes? then you remove the
+ initial function, so the bomb does not explode twice.
+ 
+ tbh this tick class is complicated to use, but i hope it won't need any more
+ modifications from now on.
+*/
 
 class Ticks {
    
@@ -11,88 +27,91 @@ class Ticks {
       this.sok = sok;
       this.TPS = 62.5;
       this.MSPT = Math.round(1000 / this.TPS); // ms per tick
+      
       this.tick = null; // the tick to be processed
-      this.tickFuncs = null;
-      this.intervalId = null;
+      this.tickIds = null; // tickIds[tick] = [the funcIds to be processed]
+      this.funcIdCounter = null;
+      this.funcs = null; // funcs[id] = {func, tick}
+      
+      this.tickLoopIntervalId = null;
    }
 
    startTickLoop() {
-      if (this.intervalId) {
+      if (this.tickLoopIntervalId) {
          console.warn('tick loop already started, ignoring request');
          return;
       }
 
       this.tick = 0;
-      this.tickFuncs = {};
+      this.tickIds = {};
+      this.funcIdCounter = 0;
+      this.funcs = {};
+      
       this.lastTickTime = new Date();
 
       this.runNextTick();
-      this.intervalId = setInterval(this.runNextTick, this.MSPT);
+      this.tickLoopIntervalId = setInterval(this.runNextTick, this.MSPT);
    }
 
    endTickLoop() {
-      if (this.intervalId === null) {
+      if (this.tickLoopIntervalId === null) {
          console.warn('tick loop already ended, ignoring request');
       }
       
-      clearInterval(this.intervalId);
+      clearInterval(this.tickLoopIntervalId);
       this.tick = null;
-      this.tickFuncs = null;
-      this.intervalId = null;
+      this.tickIds = null;
+      this.funcIdCounter = null;
+      this.funcs = null;
+      this.tickLoopIntervalId = null;
    }
 
    runNextTick = () => {
-      this.tickFuncs[this.tick]?.forEach(func => func());
+      this.tickIds[this.tick]?.forEach(funcId => this.funcs[funcId].func());
 
-      // send coordinates to everyone
-      const coords = [];
-      ['white', 'black', 'orange', 'green'].forEach(color => {
-         if (!this.sok.room[color]) {
-            coords.push([CONST.INEXISTENT_POS.x, CONST.INEXISTENT_POS.y, CONST.ANIMATION.IDLE]);
-         } else {
-            coords.push([this.sok.room[color].coords.x, this.sok.room[color].coords.y, this.sok.room[color].animState]);
-         }
-      });
-      this.io.to(this.sok.roomname).emit('C', coords);
-
-      const tickTime = new Date();
-      this.lastTickTime = tickTime;
+      this.sok.runEveryTick();
+      
+      // console.log(new Date() - this.lastTickTime);
+      this.lastTickTime = new Date();
       this.tick ++;
    };
 
    addFunc = (func, ticks_after) => {
-      if (!this.tickFuncs) {
-         return;
-      }
       if (ticks_after < 0) {
          console.error('trying to add a function to a past tick');
          return;
       }
+      
       ticks_after = Math.round(ticks_after);
-
-      if (this.tickFuncs[this.tick + ticks_after] === undefined) {
-         this.tickFuncs[this.tick + ticks_after] = [];
+      const newTick = this.tick + ticks_after;
+      const funcId = this.funcIdCounter;
+      this.funcs[funcId] = { func: func, tick: newTick };
+      
+      if (this.tickIds[newTick] === undefined) {
+         this.tickIds[newTick] = [];
       }
-      this.tickFuncs[this.tick + ticks_after].push(func);
+      this.tickIds[newTick].push(funcId);
+      
+      this.funcIdCounter ++;
+      return funcId;
    };
 
-   removeFunc = (func, tick) => {
-      if (!this.tickFuncs) {
-         return;
-      }
-      tick = Math.round(tick);
-      if (this.tickFuncs[tick] === undefined) {
-         console.error('trying to remove an inexistent func');
+   removeFunc = (funcId) => {
+      const tick = this.funcs[funcId].tick;
+      if (this.tickIds[tick] === undefined) {
+         console.error('trying to remove an inexistent funcId');
       }
 
-      const lastLength = this.tickFuncs[tick].length;
-      this.tickFuncs[tick] = this.tickFuncs[tick].filter(func1 => func !== func1);
-
-      if (lastLength === this.tickFuncs[tick].length) {
-         console.error('trying to remove an inexistent func');
+      const lastLength = this.tickIds[tick].length;
+      const index = this.tickIds[tick].indexOf(funcId);
+      if (index !== -1) {
+         this.tickIds[tick].splice(index, 1);
+      } else {
+         console.error('trying to remove an inexistent funcId');
       }
    }
 };
+
 
 module.exports = (io, sok) => {
    return new Ticks(io, sok);

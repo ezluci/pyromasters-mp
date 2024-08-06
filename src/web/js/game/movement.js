@@ -1,8 +1,11 @@
 'use strict';
 
-// returns true if you CANNOT GO through this block
-function stop(blockCode) {
-   return (blockCode !== BLOCK.NO && blockCode !== BLOCK.PORTAL && blockCode !== BLOCK.FIRE && !isPowerup(blockCode))
+// returns true if you CANNOT GO through these coordinates (there is a thing at these coords)
+function stop(x, y) {
+   return (
+      map[y][x] === BLOCK.NORMAL || map[y][x] === BLOCK.PERMANENT ||
+      bombs.filter(({x: xb, y: yb}) => x === xb && y === yb).length === 1
+   );
 }
 
 
@@ -12,7 +15,7 @@ function moveLeft() {
    if (me.x === MIN_X)
       return
 
-   if (me.x % BLOCK_SIZE === 0 && me.y % BLOCK_SIZE === 0 && stop(map[me.y / BLOCK_SIZE][me.x / BLOCK_SIZE - 1]))
+   if (me.x % BLOCK_SIZE === 0 && me.y % BLOCK_SIZE === 0 && stop(me.x / BLOCK_SIZE - 1, me.y / BLOCK_SIZE))
       return
 
    const mod = me.y % (2 * BLOCK_SIZE)
@@ -21,18 +24,20 @@ function moveLeft() {
       return; // next to the player is a block. we don't move anything.
    
    const A = {x: Math.floor(me.x / BLOCK_SIZE), y: Math.floor(me.y / BLOCK_SIZE)};
+   A.bombs = bombs.filter(({x: xb, y: yb}) => !(A.x === xb && A.y === yb));
+   A.wasBomb = A.bombs.length !== bombs.length;
    const B = {x: Math.ceil(me.x / BLOCK_SIZE), y: Math.ceil(me.y / BLOCK_SIZE)};
-   if (A.wasBomb = (map[A.y][A.x] === BLOCK.BOMB))
-      map[A.y][A.x] = BLOCK.NO;
-   if (B.wasBomb = (map[B.y][B.x] === BLOCK.BOMB))
-      map[B.y][B.x] = BLOCK.NO;
+   B.bombs = bombs.filter(({x: xb, y: yb}) => !(B.x === xb && B.y === yb));
+   B.wasBomb = B.bombs.length !== bombs.length;
+   if (A.wasBomb) bombs = A.bombs;
+   if (B.wasBomb) bombs = B.bombs;
 
    if (mod === 0) {
       me.x -= moveSpeed * deltaTime
-      if (me.x < MIN_X || stop(map[me.y / BLOCK_SIZE][Math.floor(me.x / BLOCK_SIZE)]))
+      if (me.x < MIN_X || stop(Math.floor(me.x / BLOCK_SIZE), me.y / BLOCK_SIZE))
          me.x = Math.floor(meOld.x / BLOCK_SIZE) * BLOCK_SIZE
    } else {
-      if (mod < BLOCK_SIZE && !stop(map[Math.floor(me.y / BLOCK_SIZE)][me.x / BLOCK_SIZE - 1])) {
+      if (mod < BLOCK_SIZE && !stop(me.x / BLOCK_SIZE - 1, Math.floor(me.y / BLOCK_SIZE))) {
          me.y -= moveSpeed * deltaTime
          const newMod = me.y % (2 * BLOCK_SIZE)
          if (newMod > mod) {
@@ -40,7 +45,7 @@ function moveLeft() {
             me.y = Math.floor(meOld.y / BLOCK_SIZE) * BLOCK_SIZE
          }
       }
-      else if (mod > BLOCK_SIZE && !stop(map[Math.floor(me.y / BLOCK_SIZE) + 1][me.x / BLOCK_SIZE - 1])) {
+      else if (mod > BLOCK_SIZE && !stop(me.x / BLOCK_SIZE - 1, Math.floor(me.y / BLOCK_SIZE) + 1)) {
          me.y += moveSpeed * deltaTime
          const newMod = me.y % (2 * BLOCK_SIZE)
          if (newMod < mod) {
@@ -50,10 +55,8 @@ function moveLeft() {
       }
    }
 
-   if (A.wasBomb)
-      map[A.y][A.x] = BLOCK.BOMB;
-   if (B.wasBomb)
-      map[B.y][B.x] = BLOCK.BOMB;
+   if (A.wasBomb) bombs.push({x: A.x, y: A.y})
+   if (B.wasBomb) bombs.push({x: B.x, y: B.y})
 }
 
 
@@ -63,7 +66,7 @@ function moveDown() {
    if (me.y === MAX_Y)
       return
    
-   if (me.x % BLOCK_SIZE === 0 && me.y % BLOCK_SIZE === 0 && stop(map[me.y / BLOCK_SIZE + 1][me.x / BLOCK_SIZE]))
+   if (me.x % BLOCK_SIZE === 0 && me.y % BLOCK_SIZE === 0 && stop(me.x / BLOCK_SIZE, me.y / BLOCK_SIZE + 1))
       return
    
    const mod = me.x % (2 * BLOCK_SIZE)
@@ -72,18 +75,20 @@ function moveDown() {
       return; // next to the player is a block. we don't move anything.
    
    const A = {x: Math.floor(me.x / BLOCK_SIZE), y: Math.floor(me.y / BLOCK_SIZE)};
+   A.bombs = bombs.filter(({x: xb, y: yb}) => !(A.x === xb && A.y === yb));
+   A.wasBomb = A.bombs.length !== bombs.length;
    const B = {x: Math.ceil(me.x / BLOCK_SIZE), y: Math.ceil(me.y / BLOCK_SIZE)};
-   if (A.wasBomb = (map[A.y][A.x] === BLOCK.BOMB))
-      map[A.y][A.x] = BLOCK.NO;
-   if (B.wasBomb = (map[B.y][B.x] === BLOCK.BOMB))
-      map[B.y][B.x] = BLOCK.NO;
+   B.bombs = bombs.filter(({x: xb, y: yb}) => !(B.x === xb && B.y === yb));
+   B.wasBomb = B.bombs.length !== bombs.length;
+   if (A.wasBomb) bombs = A.bombs;
+   if (B.wasBomb) bombs = B.bombs;
    
    if (mod === 0) {
       me.y += moveSpeed * deltaTime
-      if (me.y > MAX_Y || stop(map[Math.floor(me.y / BLOCK_SIZE) + 1][me.x / BLOCK_SIZE]))
+      if (me.y > MAX_Y || stop(me.x / BLOCK_SIZE, Math.floor(me.y / BLOCK_SIZE) + 1))
          me.y = Math.floor(meOld.y / BLOCK_SIZE + 1) * BLOCK_SIZE
    } else {
-      if (mod < BLOCK_SIZE && !stop(map[me.y / BLOCK_SIZE + 1][Math.floor(me.x / BLOCK_SIZE)])) {
+      if (mod < BLOCK_SIZE && !stop(Math.floor(me.x / BLOCK_SIZE), me.y / BLOCK_SIZE + 1)) {
          me.x -= moveSpeed * deltaTime
          const newMod = me.x % (2 * BLOCK_SIZE)
          if (newMod > mod) {
@@ -91,7 +96,7 @@ function moveDown() {
             me.y += 2 * BLOCK_SIZE - newMod
          }
       }
-      else if (mod > BLOCK_SIZE && !stop(map[me.y / BLOCK_SIZE + 1][Math.floor(me.x / BLOCK_SIZE) + 1])) {
+      else if (mod > BLOCK_SIZE && !stop(Math.floor(me.x / BLOCK_SIZE) + 1, me.y / BLOCK_SIZE + 1)) {
          me.x += moveSpeed * deltaTime
          const newMod = me.x % (2 * BLOCK_SIZE)
          if (newMod < mod) {
@@ -101,10 +106,8 @@ function moveDown() {
       }
    }
 
-   if (A.wasBomb)
-      map[A.y][A.x] = BLOCK.BOMB;
-   if (B.wasBomb)
-      map[B.y][B.x] = BLOCK.BOMB;
+   if (A.wasBomb) bombs.push({x: A.x, y: A.y})
+   if (B.wasBomb) bombs.push({x: B.x, y: B.y})
 }
 
 
@@ -114,7 +117,7 @@ function moveRight() {
    if (me.x === MAX_X)
       return
    
-   if (me.x % BLOCK_SIZE === 0 && me.y % BLOCK_SIZE === 0 && stop(map[me.y / BLOCK_SIZE][me.x / BLOCK_SIZE + 1]))
+   if (me.x % BLOCK_SIZE === 0 && me.y % BLOCK_SIZE === 0 && stop(me.x / BLOCK_SIZE + 1, me.y / BLOCK_SIZE))
       return
    
    const mod = me.y % (2 * BLOCK_SIZE)
@@ -123,18 +126,20 @@ function moveRight() {
       return; // next to the player is a block. we don't move anything.
 
    const A = {x: Math.floor(me.x / BLOCK_SIZE), y: Math.floor(me.y / BLOCK_SIZE)};
+   A.bombs = bombs.filter(({x: xb, y: yb}) => !(A.x === xb && A.y === yb));
+   A.wasBomb = A.bombs.length !== bombs.length;
    const B = {x: Math.ceil(me.x / BLOCK_SIZE), y: Math.ceil(me.y / BLOCK_SIZE)};
-   if (A.wasBomb = (map[A.y][A.x] === BLOCK.BOMB))
-      map[A.y][A.x] = BLOCK.NO;
-   if (B.wasBomb = (map[B.y][B.x] === BLOCK.BOMB))
-      map[B.y][B.x] = BLOCK.NO;
+   B.bombs = bombs.filter(({x: xb, y: yb}) => !(B.x === xb && B.y === yb));
+   B.wasBomb = B.bombs.length !== bombs.length;
+   if (A.wasBomb) bombs = A.bombs;
+   if (B.wasBomb) bombs = B.bombs;
    
    if (mod === 0) {
       me.x += moveSpeed * deltaTime
-      if (me.x > MAX_X || stop(map[me.y / BLOCK_SIZE][Math.floor(me.x / BLOCK_SIZE) + 1]))
+      if (me.x > MAX_X || stop(Math.floor(me.x / BLOCK_SIZE) + 1, me.y / BLOCK_SIZE))
          me.x = Math.floor(meOld.x / BLOCK_SIZE + 1) * BLOCK_SIZE
    } else {
-      if (mod < BLOCK_SIZE && !stop(map[Math.floor(me.y / BLOCK_SIZE)][me.x / BLOCK_SIZE + 1])) {
+      if (mod < BLOCK_SIZE && !stop(me.x / BLOCK_SIZE + 1, Math.floor(me.y / BLOCK_SIZE))) {
          me.y -= moveSpeed * deltaTime
          const newMod = me.y % (2 * BLOCK_SIZE)
          if (newMod > mod) {
@@ -142,7 +147,7 @@ function moveRight() {
             me.y = Math.floor(meOld.y / BLOCK_SIZE) * BLOCK_SIZE
          }
       }
-      else if (mod > BLOCK_SIZE && !stop(map[Math.floor(me.y / BLOCK_SIZE) + 1][me.x / BLOCK_SIZE + 1])) {
+      else if (mod > BLOCK_SIZE && !stop(me.x / BLOCK_SIZE + 1, Math.floor(me.y / BLOCK_SIZE) + 1)) {
          me.y += moveSpeed * deltaTime
          const newMod = me.y % (2 * BLOCK_SIZE)
          if (newMod < mod) {
@@ -152,10 +157,8 @@ function moveRight() {
       }
    }
 
-   if (A.wasBomb)
-      map[A.y][A.x] = BLOCK.BOMB;
-   if (B.wasBomb)
-      map[B.y][B.x] = BLOCK.BOMB;
+   if (A.wasBomb) bombs.push({x: A.x, y: A.y})
+   if (B.wasBomb) bombs.push({x: B.x, y: B.y})
 }
 
 
@@ -165,7 +168,7 @@ function moveUp() {
    if (me.y === MIN_Y)
       return
    
-   if (me.x % BLOCK_SIZE === 0 && me.y % BLOCK_SIZE === 0 && stop(map[me.y / BLOCK_SIZE - 1][me.x / BLOCK_SIZE]))
+   if (me.x % BLOCK_SIZE === 0 && me.y % BLOCK_SIZE === 0 && stop(me.x / BLOCK_SIZE, me.y / BLOCK_SIZE - 1))
       return
    
    const mod = me.x % (2 * BLOCK_SIZE)
@@ -174,18 +177,20 @@ function moveUp() {
       return; // next to the player is a block. we don't move anything.
    
    const A = {x: Math.floor(me.x / BLOCK_SIZE), y: Math.floor(me.y / BLOCK_SIZE)};
+   A.bombs = bombs.filter(({x: xb, y: yb}) => !(A.x === xb && A.y === yb));
+   A.wasBomb = A.bombs.length !== bombs.length;
    const B = {x: Math.ceil(me.x / BLOCK_SIZE), y: Math.ceil(me.y / BLOCK_SIZE)};
-   if (A.wasBomb = (map[A.y][A.x] === BLOCK.BOMB))
-      map[A.y][A.x] = BLOCK.NO;
-   if (B.wasBomb = (map[B.y][B.x] === BLOCK.BOMB))
-      map[B.y][B.x] = BLOCK.NO;
+   B.bombs = bombs.filter(({x: xb, y: yb}) => !(B.x === xb && B.y === yb));
+   B.wasBomb = B.bombs.length !== bombs.length;
+   if (A.wasBomb) bombs = A.bombs;
+   if (B.wasBomb) bombs = B.bombs;
    
    if (mod === 0) {
       me.y -= moveSpeed * deltaTime
-      if (me.y < MIN_Y || stop(map[Math.floor(me.y / BLOCK_SIZE)][me.x / BLOCK_SIZE]))
+      if (me.y < MIN_Y || stop(me.x / BLOCK_SIZE, Math.floor(me.y / BLOCK_SIZE)))
          me.y = Math.floor(meOld.y / BLOCK_SIZE) * BLOCK_SIZE
    } else {
-      if (mod < BLOCK_SIZE && !stop(map[me.y / BLOCK_SIZE - 1][Math.floor(me.x / BLOCK_SIZE)])) {
+      if (mod < BLOCK_SIZE && !stop(Math.floor(me.x / BLOCK_SIZE), me.y / BLOCK_SIZE - 1)) {
          me.x -= moveSpeed * deltaTime
          const newMod = me.x % (2 * BLOCK_SIZE)
          if (newMod > mod) {
@@ -193,7 +198,7 @@ function moveUp() {
             me.y -= 2 * BLOCK_SIZE - newMod
          }
       }
-      else if (mod > BLOCK_SIZE && !stop(map[me.y / BLOCK_SIZE - 1][Math.floor(me.x / BLOCK_SIZE) + 1])) {
+      else if (mod > BLOCK_SIZE && !stop(Math.floor(me.x / BLOCK_SIZE) + 1, me.y / BLOCK_SIZE - 1)) {
          me.x += moveSpeed * deltaTime
          const newMod = me.x % (2 * BLOCK_SIZE)
          if (newMod < mod) {
@@ -203,8 +208,6 @@ function moveUp() {
       }
    }
 
-   if (A.wasBomb)
-      map[A.y][A.x] = BLOCK.BOMB;
-   if (B.wasBomb)
-      map[B.y][B.x] = BLOCK.BOMB;
+   if (A.wasBomb) bombs.push({x: A.x, y: A.y})
+   if (B.wasBomb) bombs.push({x: B.x, y: B.y})
 }
