@@ -55,7 +55,7 @@ class Ticks {
 
    endTickLoop() {
       if (this.tickLoopIntervalId === null) {
-         console.warn('tick loop already ended, ignoring request');
+         return console.warn('tick loop already ended, ignoring request');
       }
       
       clearInterval(this.tickLoopIntervalId);
@@ -78,8 +78,7 @@ class Ticks {
 
    addFunc = (func, ticks_after) => {
       if (ticks_after < 0) {
-         console.error('trying to add a function to a past tick');
-         return;
+         return console.error('trying to add a function to a past tick');
       }
       
       ticks_after = Math.round(ticks_after);
@@ -99,7 +98,7 @@ class Ticks {
    removeFunc = (funcId) => {
       const tick = this.funcs[funcId].tick;
       if (this.tickIds[tick] === undefined) {
-         console.error('trying to remove an inexistent funcId');
+         return console.error('trying to remove an inexistent funcId');
       }
 
       const lastLength = this.tickIds[tick].length;
@@ -107,7 +106,7 @@ class Ticks {
       if (index !== -1) {
          this.tickIds[tick].splice(index, 1);
       } else {
-         console.error('trying to remove an inexistent funcId');
+         return console.error('trying to remove an inexistent funcId');
       }
    }
 };

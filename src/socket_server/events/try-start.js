@@ -35,20 +35,22 @@ function tryStart(mapName, io, sok) {
       return sok.emit('error', 'tryStart: You can\'t start the game with NO PLAYERS, silly!');
    }
 
+   sok.room.selectedPlayersInitial = 0;
    /// set stats for each color
    ['white', 'black', 'orange', 'green'].forEach(color => {
       if (!sok.room[color]) {
          return;
       }
+      sok.room.selectedPlayersInitial ++;
+      
       sok.room[color].coords = { ...CONST.DEFAULT_POS[color] };
       sok.room[color].bombs = 1;
       sok.room[color].bombTimeIndex = 0;
       sok.room[color].bombLength = 2;
       sok.room[color].dead = false;
       sok.room[color].setShieldFalse();
-      sok.room[color].setSpeedIndex(0);
       sok.room[color].setSickFalse();
-      sok.room[color].sickFalse_lastTick = null;
+      sok.room[color].setSpeedIndex(0);
       sok.room[color].animState = CONST.ANIMATION.IDLE;
       io.to(sok.roomname).emit('coords', color, sok.room[color].coords, sok.room[color].animState);
    })
@@ -56,13 +58,10 @@ function tryStart(mapName, io, sok) {
    sok.setMapName(mapName);
    sok.setMap( sok.generateMap() );
    sok.room.endgameBlocks = null;
-
-   sok.room.intervalIDS.forEach(id => { clearInterval(id) });
-   sok.room.intervalIDS.clear();
+   sok.room.endscreen_tickId = null;
 
 
    sok.room.ticks.startTickLoop();
-   sok.room.intervalIDS.add(sok.room.ticks.intervalId);
 
 
    sok.room.ticks.addFunc(() => { sok.setRoomStatus(CONST.ROOM_STATUS.STARTING) }, sok.room.ticks.TPS * 0);

@@ -4,21 +4,18 @@ const CONST = require('../consts');
 
 module.exports = (io, sok) => {
    sok.showEndScreen = () => {
-      if (!sok.room)
-         return;
+      if (sok.countNotDead() >= 2) {
+         return console.error('showEndScreen ignored');
+      }
       
       sok.room.ticks.endTickLoop();
       
-      const notDead = [];
+      let winnerColor = null;
       ['white', 'black', 'orange', 'green'].forEach((color) => {
          if (sok.room[color] && !sok.room[color].dead)
-            notDead.push(color);
+            winnerColor = color;
       });
 
-      if (notDead.length >= 2)
-         return;
-
-      const winnerColor = notDead[0];
       if (winnerColor) {
          const winnerName = sok.room[winnerColor].username;
          if (!sok.room.ranking[winnerName])

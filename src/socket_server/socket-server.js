@@ -19,7 +19,6 @@ const playerJoined_event = require('./events/player-joined.js').playerJoined;
 const chat_event = require('./events/chat.js').chat;
 const tryStart_event = require('./events/try-start.js').tryStart;
 const selectColor_event = require('./events/select-color.js').selectColor;
-const tryPlaceBomb_event = require('./events/try-place-bomb.js').tryPlaceBomb;
 const coords_event = require('./events/coords.js').coords;
 const disconnect_event = require('./events/disconnect.js').disconnect;
 
@@ -34,7 +33,7 @@ io.on('connection', (sok) => {
    require('./sok_functions/show-end-screen.js')(io, sok);
    require('./sok_functions/details-ok-check.js')(io, sok);
    require('./sok_functions/count-not-dead.js')(io, sok);
-   require('./sok_functions/on-deadly-block-check.js')(io, sok);
+   require('./sok_functions/is-dying.js')(io, sok);
    require('./sok_functions/collect-powerups.js')(io, sok);
    require('./sok_functions/player-status-handler.js')(io, sok);
    require('./sok_functions/generate-map.js')(io, sok);
@@ -62,7 +61,7 @@ io.on('connection', (sok) => {
    });
 
    sok.on('tryPlaceBomb', () => {
-      tryPlaceBomb_event(io, sok);
+      sok.placeBomb();
    });
 
    sok.on('coords', (coords, animState) => {

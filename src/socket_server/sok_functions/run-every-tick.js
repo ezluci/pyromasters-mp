@@ -4,6 +4,7 @@ const CONST = require('../consts');
 
 module.exports = (io, sok) => {
    sok.runEveryTick = () => {
+      
       // send coordinates to everyone
       const coords = [];
       ['white', 'black', 'orange', 'green'].forEach(color => {
@@ -15,20 +16,38 @@ module.exports = (io, sok) => {
       });
       io.to(sok.roomname).emit('C', coords);
       
-      // kill people who are in fire
+      // check deaths
       ['white', 'black', 'orange', 'green'].forEach(color => {
          if (!sok.room[color] || sok.room[color].dead)
             return;
          
-         if (!sok.room[color].getShield() && sok.room[color].onDeadlyBlockCheck(color)) {
+         if (sok.room[color].isDying()) {
             io.to(sok.roomname).emit('death', color);
 
             sok.room[color].dead = true;
             sok.room[color].coords = { ...CONST.INEXISTENT_POS };
-
-            if (sok.countNotDead() <= 1)
-               sok.room.ticks.addFunc(sok.showEndScreen, sok.room.ticks.TPS * CONST.END_SCREEN_TIMEOUT / 1000);
          }
       });
+      
+      // check players who are sick
+      ['white', 'black', 'orange', 'green'].forEach(color => {
+         if (sok.room[color]?.sick) {
+            sok.placeBomb();
+         }
+      });
+      
+      // collect powerups
+      ['white', 'black', 'orange', 'green'].forEach(color => {
+         if (!sok.room[color] || sok.room[color].dead) {
+            return;
+         }
+         sok.room[color].collectPowerup(Math.floor(sok.room[color].coords.x / CONST.BLOCK_SIZE), Math.floor(sok.room[color].coords.y / CONST.BLOCK_SIZE));
+         sok.room[color].collectPowerup(Math.ceil(sok.room[color].coords.x / CONST.BLOCK_SIZE), Math.ceil(sok.room[color].coords.y / CONST.BLOCK_SIZE));
+      });
+      
+      // prepare endscreen
+      if (!sok.room.endscreen_tickId && sok.countNotDead() <= 1 && sok.countNotDead() !== sok.room.selectedPlayersInitial) {
+         sok.room.endscreen_tickId = sok.room.ticks.addFunc(sok.showEndScreen, CONST.END_SCREEN_TIMEOUT / sok.room.ticks.MSPT);
+      }
    };
 }

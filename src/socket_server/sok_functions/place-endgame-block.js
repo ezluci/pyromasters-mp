@@ -6,6 +6,7 @@ const MultiMap = require('../multimap.js');
 let xg, yg, xdir, ydir, filled;
 
 module.exports = (io, sok) => {
+   
    sok.placeEndgameBlock = () => {
       if (sok.room.endgameBlocks === null) {
          xg = 0;
@@ -43,30 +44,6 @@ module.exports = (io, sok) => {
 
       io.to(sok.roomname).emit('mapUpdates', [{x: xg, y: yg, block: CONST.BLOCK.PERMANENT}]);
       io.to(sok.roomname).emit('playsound', 'walldrop');
-
-      // check if anyone dies to this new block
-      ['white', 'black', 'orange', 'green'].forEach((color) => {
-         if (sok.room[color] && !sok.room[color].dead && !sok.room[color].shield && sok.onDeadlyBlockCheck(color)) {
-            io.to(sok.roomname).emit('death', color);
-            sok.room[color].dead = true;
-            sok.room[color].coords = { ...CONST.INEXISTENT_POS };
-
-            if (sok.countNotDead() <= 1) {
-               sok.room.ticks.addFunc(sok.showEndScreen, sok.room.ticks.TPS * CONST.END_SCREEN_TIMEOUT / 1000);
-            }
-         }
-      });
-
-      // check if any bomb explodes in this new block
-      /*if (sok.room.bombs.get(yg*100 + xg)) { // this needs to go away asap
-         sok.explodeBomb(xg, yg, sok.bombLength, false, io, sok); // bug!
-         const xsg = xg, ysg = yg;
-         const id = setTimeout(() => {
-            sok.room.map[ysg][xsg] = CONST.BLOCK.PERMANENT;
-            io.to(sok.roomname).emit('mapUpdates', [{x: xsg, y: ysg, block: CONST.BLOCK.PERMANENT}]);
-         }, CONST.FIRE_TIME);
-         sok.room.intervalIDS.add(id);
-      }*/
 
       [xg, yg] = [xn, yn];
    }

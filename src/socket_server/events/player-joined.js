@@ -26,14 +26,14 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
    sok.roomname = roomname;
    sok.color = 'spectator';
    sok.coords = { ...CONST.INEXISTENT_POS };
-   sok.bombs = 0;
-   sok.bombTimeIndex = 0;
-   sok.bombLength = 2;
+   sok.bombs = null;
+   sok.bombTimeIndex = null;
+   sok.bombLength = null;
    sok.dead = false;
    sok.isOwner = !ROOMS.has(sok.roomname);
    sok.shield = false;
    sok.shieldFalse_tickId = null;
-   sok.moveSpeedIndex = 0;
+   sok.moveSpeedIndex = null;
    sok.sick = false;
    sok.sickFalse_tickId = null;
    sok.animState = CONST.ANIMATION.IDLE;
@@ -53,8 +53,9 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
          players: new Map(),
          bombs: new MultiMap(), // key is {x, y}
          bombfires: new MultiMap(), // key is {x, y, fireowner}
-         intervalIDS: new Set(),
          gameTime: null,
+         endscreen_tickId: null,
+         endgameBlocks: null,
          ranking: {},
          status: CONST.ROOM_STATUS.WAITING
       });

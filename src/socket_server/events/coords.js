@@ -20,14 +20,6 @@ function coords(coords, animState, io, sok) {
    coords.y = Math.floor(coords.y);
    sok.coords = coords;
    sok.animState = (animState === 'idle' ? 0 : animState === 'front' ? 1 : animState === 'back' ? 2 : animState === 'left' ? 3 : animState === 'right' ? 4 : -1);
-
-   // check if player collected some powerup
-   sok.collectPowerup(Math.floor(sok.coords.x / CONST.BLOCK_SIZE), Math.floor(sok.coords.y / CONST.BLOCK_SIZE));
-   sok.collectPowerup(Math.ceil(sok.coords.x / CONST.BLOCK_SIZE), Math.ceil(sok.coords.y / CONST.BLOCK_SIZE));
-
-   // check if player is sick
-   if (sok.sick)
-      sok.placeBomb();
 }
 
 module.exports.coords = coords;

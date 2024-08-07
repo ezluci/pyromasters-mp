@@ -14,10 +14,6 @@ module.exports = (io, ROOMS, sok) => {
          player.disconnect();
       });
       sok.room.ticks.endTickLoop();
-      sok.room.intervalIDS.forEach((id) => {
-         clearInterval(id);
-      });
-      sok.room.intervalIDS.clear();
       ROOMS.delete(sok.roomname);
    }
 }

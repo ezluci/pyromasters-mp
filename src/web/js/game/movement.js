@@ -24,13 +24,15 @@ function moveLeft() {
       return; // next to the player is a block. we don't move anything.
    
    const A = {x: Math.floor(me.x / BLOCK_SIZE), y: Math.floor(me.y / BLOCK_SIZE)};
-   A.bombs = bombs.filter(({x: xb, y: yb}) => !(A.x === xb && A.y === yb));
-   A.wasBomb = A.bombs.length !== bombs.length;
    const B = {x: Math.ceil(me.x / BLOCK_SIZE), y: Math.ceil(me.y / BLOCK_SIZE)};
-   B.bombs = bombs.filter(({x: xb, y: yb}) => !(B.x === xb && B.y === yb));
-   B.wasBomb = B.bombs.length !== bombs.length;
-   if (A.wasBomb) bombs = A.bombs;
-   if (B.wasBomb) bombs = B.bombs;
+   
+   let oldLength = bombs.length;
+   bombs = bombs.filter(({x: xb, y: yb}) => !(A.x === xb && A.y === yb));
+   if (oldLength !== bombs.length)  A.wasBomb = true;
+   
+   oldLength = bombs.length;
+   bombs = bombs.filter(({x: xb, y: yb}) => !(B.x === xb && B.y === yb));
+   if (oldLength !== bombs.length)  B.wasBomb = true;
 
    if (mod === 0) {
       me.x -= moveSpeed * deltaTime
@@ -75,13 +77,15 @@ function moveDown() {
       return; // next to the player is a block. we don't move anything.
    
    const A = {x: Math.floor(me.x / BLOCK_SIZE), y: Math.floor(me.y / BLOCK_SIZE)};
-   A.bombs = bombs.filter(({x: xb, y: yb}) => !(A.x === xb && A.y === yb));
-   A.wasBomb = A.bombs.length !== bombs.length;
    const B = {x: Math.ceil(me.x / BLOCK_SIZE), y: Math.ceil(me.y / BLOCK_SIZE)};
-   B.bombs = bombs.filter(({x: xb, y: yb}) => !(B.x === xb && B.y === yb));
-   B.wasBomb = B.bombs.length !== bombs.length;
-   if (A.wasBomb) bombs = A.bombs;
-   if (B.wasBomb) bombs = B.bombs;
+   
+   let oldLength = bombs.length;
+   bombs = bombs.filter(({x: xb, y: yb}) => !(A.x === xb && A.y === yb));
+   if (oldLength !== bombs.length)  A.wasBomb = true;
+   
+   oldLength = bombs.length;
+   bombs = bombs.filter(({x: xb, y: yb}) => !(B.x === xb && B.y === yb));
+   if (oldLength !== bombs.length)  B.wasBomb = true;
    
    if (mod === 0) {
       me.y += moveSpeed * deltaTime
@@ -126,13 +130,15 @@ function moveRight() {
       return; // next to the player is a block. we don't move anything.
 
    const A = {x: Math.floor(me.x / BLOCK_SIZE), y: Math.floor(me.y / BLOCK_SIZE)};
-   A.bombs = bombs.filter(({x: xb, y: yb}) => !(A.x === xb && A.y === yb));
-   A.wasBomb = A.bombs.length !== bombs.length;
    const B = {x: Math.ceil(me.x / BLOCK_SIZE), y: Math.ceil(me.y / BLOCK_SIZE)};
-   B.bombs = bombs.filter(({x: xb, y: yb}) => !(B.x === xb && B.y === yb));
-   B.wasBomb = B.bombs.length !== bombs.length;
-   if (A.wasBomb) bombs = A.bombs;
-   if (B.wasBomb) bombs = B.bombs;
+   
+   let oldLength = bombs.length;
+   bombs = bombs.filter(({x: xb, y: yb}) => !(A.x === xb && A.y === yb));
+   if (oldLength !== bombs.length)  A.wasBomb = true;
+   
+   oldLength = bombs.length;
+   bombs = bombs.filter(({x: xb, y: yb}) => !(B.x === xb && B.y === yb));
+   if (oldLength !== bombs.length)  B.wasBomb = true;
    
    if (mod === 0) {
       me.x += moveSpeed * deltaTime
@@ -177,13 +183,15 @@ function moveUp() {
       return; // next to the player is a block. we don't move anything.
    
    const A = {x: Math.floor(me.x / BLOCK_SIZE), y: Math.floor(me.y / BLOCK_SIZE)};
-   A.bombs = bombs.filter(({x: xb, y: yb}) => !(A.x === xb && A.y === yb));
-   A.wasBomb = A.bombs.length !== bombs.length;
    const B = {x: Math.ceil(me.x / BLOCK_SIZE), y: Math.ceil(me.y / BLOCK_SIZE)};
-   B.bombs = bombs.filter(({x: xb, y: yb}) => !(B.x === xb && B.y === yb));
-   B.wasBomb = B.bombs.length !== bombs.length;
-   if (A.wasBomb) bombs = A.bombs;
-   if (B.wasBomb) bombs = B.bombs;
+   
+   let oldLength = bombs.length;
+   bombs = bombs.filter(({x: xb, y: yb}) => !(A.x === xb && A.y === yb));
+   if (oldLength !== bombs.length)  A.wasBomb = true;
+   
+   oldLength = bombs.length;
+   bombs = bombs.filter(({x: xb, y: yb}) => !(B.x === xb && B.y === yb));
+   if (oldLength !== bombs.length)  B.wasBomb = true;
    
    if (mod === 0) {
       me.y -= moveSpeed * deltaTime

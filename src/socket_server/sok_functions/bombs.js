@@ -170,20 +170,8 @@ module.exports = (io, sok) => {
          }
          sok.room.map[y][x] = newBlock;
          io.to(sok.roomname).emit('mapUpdates', [{ x, y, block: newBlock }]);
-
-         // collecting powerups
-         ['white', 'black', 'orange', 'green'].forEach(color => {
-            if (!sok.room[color] || sok.room[color].dead)
-               return;
-            
-            const x = sok.room[color].x;
-            const y = sok.room[color].y;
-            sok.room[color].collectPowerup(Math.floor(x / CONST.BLOCK_SIZE), Math.floor(y / CONST.BLOCK_SIZE));
-            sok.room[color].collectPowerup(Math.ceil(x / CONST.BLOCK_SIZE), Math.floor(y / CONST.BLOCK_SIZE));
-         });
       }
 
-      
       io.to(sok.roomname).emit('removeBombfire', x, y);
 
       if (!sok.room[sok.color] || sok.dead)
@@ -191,11 +179,6 @@ module.exports = (io, sok) => {
 
       if (sok.bombs < 4 && bombfire.wasBomb) {
          sok.bombs ++;
-      }
-
-      // check if player is sick
-      if (sok.sick) {
-         sok.placeBomb();
       }
 
       sok.room.bombfires.delete(x, y, sok);
