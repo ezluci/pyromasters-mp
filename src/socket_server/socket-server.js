@@ -63,6 +63,10 @@ io.on('connection', (sok) => {
    sok.on('tryPlaceBomb', () => {
       sok.placeBomb();
    });
+   
+   sok.on('kickbomb', (x, y, xvel, yvel) => {
+      sok.kickBomb(x, y, xvel, yvel);
+   });
 
    sok.on('coords', (coords, animState) => {
       coords_event(coords, animState, io, sok);

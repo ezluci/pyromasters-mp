@@ -157,6 +157,13 @@ socket.on('deleteBomb', (x, y) => {
       bombs.splice(index, 1);
    }
 });
+socket.on('updateBomb', (xOld, yOld, x, y) => {
+   const index = bombs.findIndex(bomb => bomb.x === xOld && bomb.y === yOld);
+   if (index !== -1) {
+      bombs.splice(index, 1);
+   }
+   bombs.push({x, y});
+});
 
 let lastBombfireTime = performance.now(); // =[
 socket.on('addBombfire', (x, y) => {

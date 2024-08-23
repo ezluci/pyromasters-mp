@@ -96,6 +96,9 @@ class Ticks {
    };
 
    removeFunc = (funcId) => {
+      if (!this.tickLoopIntervalId) {
+         return console.warn('removefunc on ended tickloop');
+      }
       const tick = this.funcs[funcId].tick;
       if (this.tickIds[tick] === undefined) {
          return console.error('trying to remove an inexistent funcId');

@@ -30,6 +30,7 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
    sok.bombTimeIndex = null;
    sok.bombLength = null;
    sok.dead = false;
+   sok.kickBombs = null;
    sok.isOwner = !ROOMS.has(sok.roomname);
    sok.shield = false;
    sok.shieldFalse_tickId = null;
@@ -51,7 +52,8 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
          map: null,
          mapName: null,
          players: new Map(),
-         bombs: new MultiMap(), // key is {x, y}
+         bombs: new Map(), // key is {bombId}
+         bombIdCounter: null,
          bombfires: new MultiMap(), // key is {x, y, fireowner}
          gameTime: null,
          endscreen_tickId: null,

@@ -3,8 +3,21 @@
 const CONST = require('../consts');
 const MultiMap = require('../multimap.js');
 
+function isPowerup(blockCode) {
+   return (5 <= blockCode && blockCode <= 13);
+}
 
 module.exports = (io, sok) => {
+   
+   sok.getBombIdByCoords = (x, y) => {
+      let id = null;
+      sok.room.bombs.forEach((bomb, bombId) => {
+         if (Math.round(bomb.x) === x && Math.round(bomb.y) === y) {
+            id = bombId;
+         }
+      });
+      return id;
+   };
    
    sok.placeBomb = () => {
       if (!sok.detailsOkCheck())
@@ -18,15 +31,20 @@ module.exports = (io, sok) => {
       const x = Math.round(sok.coords.x / CONST.BLOCK_SIZE);
       const y = Math.round(sok.coords.y / CONST.BLOCK_SIZE);
       
-      if ( !(0 <= x && x <= CONST.BLOCKS_HORIZONTALLY && 0 <= y && y <= CONST.BLOCKS_VERTICALLY) )
+      if ( !(0 <= x && x < CONST.BLOCKS_HORIZONTALLY && 0 <= y && y < CONST.BLOCKS_VERTICALLY) )
          return sok.emit('error', 'tryPlaceBomb: x or y out of range.');
       
       if (sok.room.bombfires.has(x, y, 'white') || sok.room.bombfires.has(x, y, 'black') ||
             sok.room.bombfires.has(x, y, 'orange') || sok.room.bombfires.has(x, y, 'green')) {
          return;
       }
-      if (sok.room.bombs.has(x, y) || sok.room.map[y][x] === CONST.BLOCK.PERMANENT || sok.room.map[y][x] === CONST.BLOCK.NORMAL)
+      
+      if (sok.room.map[y][x] === CONST.BLOCK.PERMANENT || sok.room.map[y][x] === CONST.BLOCK.NORMAL)
          return;
+      
+      if (sok.getBombIdByCoords(x, y)) {
+         return;
+      }
       
       if (sok.getMapName() === 'fourway') {
          if (CONST.MAP_FOURWAY_PORTAL_POSITIONS.filter(({x: xx, y: yy}) => (xx === x && yy === y)).length === 1) {
@@ -43,38 +61,40 @@ module.exports = (io, sok) => {
          io.to(sok.roomname).emit('playsound', 'dropBombSick');
       }
       
+      const bombId = sok.room.bombIdCounter;
       const tickFuncId = sok.room.ticks.addFunc(
-         () => sok.explodeBomb(x, y, false),
+         () => sok.explodeBomb(bombId, false),
          CONST.BOMB_TIMES[sok.bombTimeIndex] / sok.room.ticks.MSPT
       );
       
-      sok.room.bombs.set(x, y, { owner: sok, length: sok.bombLength, tickFuncId });
+      sok.room.bombs.set(sok.room.bombIdCounter, { x, y, xvel: 0, yvel: 0, owner: sok, length: sok.bombLength, tickFuncId });
+      sok.room.bombIdCounter ++;
       sok.bombs --;
    }
    
    
    // this function doesn't check if there is a bomb at map[y][x].
-   sok.explodeBomb = (x, y, recursive) => {
-      if (! sok.room)
-         return;
-      
+   sok.explodeBomb = (bombId, recursive) => {
       function breakLoop(blockCode) // a block before/on which the fire should stop.
          { return (blockCode === CONST.BLOCK.NORMAL || blockCode === CONST.BLOCK.PERMANENT || (5 <= blockCode && blockCode <= 13)); }
       
-      const bomb = sok.room.bombs.get(x, y);
+      const bomb = sok.room.bombs.get(bombId);
       const bombLength = bomb.length;
       sok.room.ticks.removeFunc(bomb.tickFuncId);
-      sok.room.bombs.delete(x, y);
-      io.to(sok.roomname).emit('deleteBomb', x, y);
+      sok.room.bombs.delete(bombId);
+      io.to(sok.roomname).emit('deleteBomb', bomb.x, bomb.y);
       
+      const x = Math.round(bomb.x);
+      const y = Math.round(bomb.y);
       let fires = [];
 
       fires.push({x, y, owner: bomb.owner, oldBlock: sok.room.map[y][x], wasBomb: true});
       sok.room.map[y][x] = CONST.BLOCK.NO;
 
+      let tmpId;
       for (let yy = y-1; yy >= Math.max(0, y - bombLength); --yy) {
-         if (sok.room.bombs.has(x, yy)) {
-            fires = fires.concat( sok.explodeBomb(x, yy, bombLength, true) );
+         if (tmpId = sok.getBombIdByCoords(x, yy)) {
+            fires = fires.concat( sok.explodeBomb(tmpId, bombLength, true) );
             break;
          }
          if (sok.room.map[yy][x] !== CONST.BLOCK.PERMANENT)
@@ -84,8 +104,8 @@ module.exports = (io, sok) => {
       }
 
       for (let yy = y+1; yy <= Math.min(CONST.BLOCKS_VERTICALLY-1, y + bombLength); ++yy) {
-         if (sok.room.bombs.has(x, yy)) {
-            fires = fires.concat( sok.explodeBomb(x, yy, bombLength, true) );
+         if (tmpId = sok.getBombIdByCoords(x, yy)) {
+            fires = fires.concat( sok.explodeBomb(tmpId, bombLength, true) );
             break;
          }
          if (sok.room.map[yy][x] !== CONST.BLOCK.PERMANENT)
@@ -95,8 +115,8 @@ module.exports = (io, sok) => {
       }
 
       for (let xx = x-1; xx >= Math.max(0, x - bombLength); --xx) {
-         if (sok.room.bombs.has(xx, y)) {
-            fires = fires.concat( sok.explodeBomb(xx, y, bombLength, true) );
+         if (tmpId = sok.getBombIdByCoords(xx, y)) {
+            fires = fires.concat( sok.explodeBomb(tmpId, bombLength, true) );
             break;
          }
          if (sok.room.map[y][xx] !== CONST.BLOCK.PERMANENT)
@@ -106,8 +126,8 @@ module.exports = (io, sok) => {
       }
 
       for (let xx = x+1; xx <= Math.min(CONST.BLOCKS_HORIZONTALLY-1, x + bombLength); ++xx) {
-         if (sok.room.bombs.has(xx, y)) {
-            fires = fires.concat( sok.explodeBomb(xx, y, bombLength, true) );
+         if (tmpId = sok.getBombIdByCoords(xx, y)) {
+            fires = fires.concat( sok.explodeBomb(tmpId, bombLength, true) );
             break;
          }
          if (sok.room.map[y][xx] !== CONST.BLOCK.PERMANENT)
@@ -170,9 +190,10 @@ module.exports = (io, sok) => {
          }
          sok.room.map[y][x] = newBlock;
          io.to(sok.roomname).emit('mapUpdates', [{ x, y, block: newBlock }]);
+      } else if (isPowerup(bombfire.oldBlock)) {
+         sok.room.map[y][x] = CONST.BLOCK.NO;
+         io.to(sok.roomname).emit('mapUpdates', [{ x, y, block: CONST.BLOCK.NO }]);
       }
-
-      io.to(sok.roomname).emit('removeBombfire', x, y);
 
       if (!sok.room[sok.color] || sok.dead)
          return;
@@ -180,7 +201,20 @@ module.exports = (io, sok) => {
       if (sok.bombs < 4 && bombfire.wasBomb) {
          sok.bombs ++;
       }
-
-      sok.room.bombfires.delete(x, y, sok);
    }
+   
+   
+   sok.kickBomb = (x, y, xvel, yvel) => {
+      const bombId = sok.getBombIdByCoords(x, y);
+      if (bombId === null) {
+         return console.error('kickbomb bombid is null');
+      }
+      if (!sok.kickBombs || sok.room.mapName === 'magneto') {
+         return;
+      }
+      
+      const bomb = sok.room.bombs.get(bombId);
+      bomb.xvel = xvel;
+      bomb.yvel = yvel;
+   };
 }

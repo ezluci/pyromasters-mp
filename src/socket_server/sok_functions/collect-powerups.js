@@ -21,8 +21,8 @@ module.exports = (io, sok) => {
       sok.setShieldTrue(io, sok);
    }
 
-   function collectPowerupKickbombs() { // Work In Progress
-      
+   function collectPowerupKickbombs() {
+      sok.kickBombs = true;
    }
 
    function collectPowerupBombtime() {
@@ -126,7 +126,7 @@ module.exports = (io, sok) => {
                sok.bombs = 1;
                sok.bombTimeIndex = 0;
                sok.bombLength = 2;
-               // sok.kickBombs = 0;
+               sok.kickBombs = false;
                sok.setShieldFalse(io, sok);
                io.to(sok.roomname).emit('playsound', 'bonusLost');
                break;
@@ -135,7 +135,7 @@ module.exports = (io, sok) => {
                sok.bombs = 4;
                sok.bombTimeIndex = 3;
                sok.bombLength = 16;
-               // sok.kickBombs = true;
+               sok.kickBombs = true;
                sok.setShieldTrue(io, sok);
                io.to(sok.roomname).emit('playsound', 'bonusAll');
                break;

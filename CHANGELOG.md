@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0] - 2024-08-23
+
+- Added kick bombs powerup.
+- Fixed a bug with ticks that crashed the server.
+- Fixed a bug where the bombfire doesn't destroy powerups on map.
+- Fixed a small bug that allowed you to place bombs outside the map.
+
 ## [0.8.2] - 2024-08-07
 
 - Added CHANGELOG.md

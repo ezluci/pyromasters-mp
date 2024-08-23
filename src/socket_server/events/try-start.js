@@ -48,6 +48,7 @@ function tryStart(mapName, io, sok) {
       sok.room[color].bombTimeIndex = 0;
       sok.room[color].bombLength = 2;
       sok.room[color].dead = false;
+      sok.room[color].kickBombs = false;
       sok.room[color].setShieldFalse();
       sok.room[color].setSickFalse();
       sok.room[color].setSpeedIndex(0);
@@ -59,6 +60,7 @@ function tryStart(mapName, io, sok) {
    sok.setMap( sok.generateMap() );
    sok.room.endgameBlocks = null;
    sok.room.endscreen_tickId = null;
+   sok.room.bombIdCounter = 0;
 
 
    sok.room.ticks.startTickLoop();
