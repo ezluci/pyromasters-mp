@@ -6,6 +6,21 @@ module.exports = (io, sok) => {
    // this function needs to know the map name
    sok.generateMap = () => {
       const map = [];
+      
+      if (sok.getMapName() === 'testmap:)') {
+         for (let y = 0; y < CONST.BLOCKS_VERTICALLY; ++y) {
+            map[y] = [];
+            for (let x = 0; x < CONST.BLOCKS_HORIZONTALLY; ++x) {
+               if (y % 2 == 1 && x % 2 == 1) {
+                  map[y][x] = CONST.BLOCK.PERMANENT;
+               } else {
+                  map[y][x] = CONST.BLOCK.NO;
+               }
+            }
+         }
+         map[4][4] = CONST.BLOCK.POWER_SHIELD;
+         return map;
+      }
 
       for (let y = 0; y < CONST.BLOCKS_VERTICALLY; ++y) {
          map[y] = [];

@@ -132,6 +132,9 @@ socket.on('coords', (color, coords1, animState) => {
 
 
 socket.on('mapName', (mapName) => {
+   if (mapName === 'testmap:)') {
+      mapName = 'bricktown';
+   }
    MAP_NAME = mapName;
    document.dispatchEvent( new CustomEvent('mapnamechange') );
 });
@@ -147,22 +150,22 @@ socket.on('mapUpdates', (updates) => {
    });
 });
 
-socket.on('addBomb', (x, y) => {
-   bombs.push({x, y});
+socket.on('addBomb', (bombId, x, y) => {
+   bombs.push({x, y, bombId});
    sounds.dropBomb.play();
 });
-socket.on('deleteBomb', (x, y) => {
-   const index = bombs.findIndex(bomb => bomb.x === x && bomb.y === y);
+socket.on('deleteBomb', (bombId) => {
+   const index = bombs.findIndex(bomb => bomb.bombId === bombId);
    if (index !== -1) {
       bombs.splice(index, 1);
    }
 });
-socket.on('updateBomb', (xOld, yOld, x, y) => {
-   const index = bombs.findIndex(bomb => bomb.x === xOld && bomb.y === yOld);
+socket.on('updateBomb', (bombId, x, y) => {
+   const index = bombs.findIndex(bomb => bomb.bombId === bombId);
    if (index !== -1) {
       bombs.splice(index, 1);
    }
-   bombs.push({x, y});
+   bombs.push({x, y, bombId});
 });
 
 let lastBombfireTime = performance.now(); // =[

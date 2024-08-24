@@ -128,7 +128,7 @@ function DRAW_game() {
             }
          }
          
-         bombs.forEach(({x, y}) => {drawBlock(images.bomb, x, y, 0)});
+         bombs.forEach(({x, y, bombId}) => {drawBlock(images.bomb, x, y, 0)});
          bombfires.forEach(({x, y}) => drawBlock(images.fire, x, y, 0));
    }
    

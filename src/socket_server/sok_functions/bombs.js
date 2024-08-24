@@ -56,19 +56,19 @@ module.exports = (io, sok) => {
          return; // no bombs left
       
       // placing the bomb
-      io.to(sok.roomname).emit('addBomb', x, y);
-      if (sok.sick) {
-         io.to(sok.roomname).emit('playsound', 'dropBombSick');
-      }
-      
       const bombId = sok.room.bombIdCounter;
       const tickFuncId = sok.room.ticks.addFunc(
          () => sok.explodeBomb(bombId, false),
          CONST.BOMB_TIMES[sok.bombTimeIndex] / sok.room.ticks.MSPT
       );
-      
       sok.room.bombs.set(sok.room.bombIdCounter, { x, y, xvel: 0, yvel: 0, owner: sok, length: sok.bombLength, tickFuncId });
       sok.room.bombIdCounter ++;
+      
+      io.to(sok.roomname).emit('addBomb', bombId, x, y);
+      if (sok.sick) {
+         io.to(sok.roomname).emit('playsound', 'dropBombSick');
+      }
+      
       sok.bombs --;
    }
    
@@ -82,7 +82,7 @@ module.exports = (io, sok) => {
       const bombLength = bomb.length;
       sok.room.ticks.removeFunc(bomb.tickFuncId);
       sok.room.bombs.delete(bombId);
-      io.to(sok.roomname).emit('deleteBomb', bomb.x, bomb.y);
+      io.to(sok.roomname).emit('deleteBomb', bombId);
       
       const x = Math.round(bomb.x);
       const y = Math.round(bomb.y);
@@ -144,7 +144,7 @@ module.exports = (io, sok) => {
          let wasBomb = fire.wasBomb;
          if (oldBombfire) {
             sok.room.ticks.removeFunc(oldBombfire.tickFuncId);
-            wasBomb = oldBombfire.wasBomb;
+            wasBomb = Math.max(wasBomb, oldBombfire.wasBomb);
          } else {
             io.to(sok.roomname).emit('addBombfire', fire.x, fire.y);
          }
@@ -204,16 +204,15 @@ module.exports = (io, sok) => {
    }
    
    
-   sok.kickBomb = (x, y, xvel, yvel) => {
-      const bombId = sok.getBombIdByCoords(x, y);
-      if (bombId === null) {
-         return console.error('kickbomb bombid is null');
+   sok.kickBomb = (bombId, xvel, yvel) => {
+      const bomb = sok.room.bombs.get(bombId);
+      if (!bomb) {
+         return console.error(`kickbomb bombid not good ${bombId}`);
       }
-      if (!sok.kickBombs || sok.room.mapName === 'magneto') {
+      if (!sok.kickBombs || sok.getMapName() === 'magneto') {
          return;
       }
       
-      const bomb = sok.room.bombs.get(bombId);
       bomb.xvel = xvel;
       bomb.yvel = yvel;
    };

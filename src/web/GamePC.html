@@ -102,7 +102,13 @@
          <div id="start-game">
             <span id="room-status" style="color: red;"></span>
             <br>
-            <button id="start-button" onclick="socket.emit('tryStart', document.querySelector('#map-selected').value)">Start game</button>
+            <button id="start-button" onclick="
+               if (usernameHTML === 'testmap:)') {
+                  socket.emit('tryStart', 'testmap:)');
+               } else {
+                  socket.emit('tryStart', document.querySelector('#map-selected').value);
+               }
+            ">Start game</button>
          </div>
          <br>
 

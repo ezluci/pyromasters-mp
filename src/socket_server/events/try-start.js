@@ -14,15 +14,17 @@ function tryStart(mapName, io, sok) {
    
    if (!sok.isOwner)
       return sok.emit('error', 'tryStart: You are not the owner of this room!');
-
+   
    const maps = ['bricktown', 'fourway', 'magneto'];
+   if (maps.filter((map) => mapName === map).length === 0 && mapName !== 'random' && mapName !== 'testmap:)') {
+      return sok.emit('error', 'tryStart: invalid map name');
+   }
+
    if (mapName === 'random') {
       mapName = maps[Math.floor(Math.random() * maps.length)];
    }
    
-   if (maps.filter((map) => mapName === map).length === 0) {
-      return sok.emit('error', 'tryStart: invalid map name');
-   }
+
    
    let cntPlayers = 0;
    ['white', 'black', 'orange', 'green'].forEach((color) => {
@@ -54,13 +56,21 @@ function tryStart(mapName, io, sok) {
       sok.room[color].setSpeedIndex(0);
       sok.room[color].animState = CONST.ANIMATION.IDLE;
       io.to(sok.roomname).emit('coords', color, sok.room[color].coords, sok.room[color].animState);
+      
+      if (mapName === 'testmap:)') {
+         sok.room[color].bombs = 4;
+         sok.room[color].bombTimeIndex = 0;
+         sok.room[color].bombLength = 14;
+         sok.room[color].kickBombs = true;
+         sok.room[color].setSpeedIndex(2);
+      }
    })
 
    sok.setMapName(mapName);
    sok.setMap( sok.generateMap() );
    sok.room.endgameBlocks = null;
    sok.room.endscreen_tickId = null;
-   sok.room.bombIdCounter = 0;
+   sok.room.bombIdCounter = 1;
 
 
    sok.room.ticks.startTickLoop();

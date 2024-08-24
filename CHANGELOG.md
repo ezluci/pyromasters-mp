@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.9.1] - 2024-08-24
+
+- Created a new 'hidden' map for testing purposes.
+- The player now can't walk through kickedbombs.
+- The kickedbombs now destroy any powerups along their path; They also stop when encountering any players.
+- The kickedbombs now explode when they go into bombfire.
+- The client now has access to the bombId for each bomb.
+- Fixed a bug where you can place two bombs in the beginning.
+
 ## [0.9.0] - 2024-08-23
 
 - Added kick bombs powerup.
