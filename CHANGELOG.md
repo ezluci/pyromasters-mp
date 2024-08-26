@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.9.2] - 2024-08-26
+
+- Implemented additional rules for username/room input and resolved related bugs.
+- Rankings now work even after color changes.
+- 'Ended' room status is now the same with 'waiting'; fixed a bug where you can spam the 'start game' button
+- Fixed a bug where the client crashes sometimes when he is a spectator.
+- Fixed a bug related to sick bombs.
+- Fixed yet another issue with kicked bombs.
+
 ## [0.9.1] - 2024-08-24
 
 - Created a new 'hidden' map for testing purposes.

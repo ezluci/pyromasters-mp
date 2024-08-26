@@ -33,7 +33,6 @@ socket.on('room_status', (msg) => {
       case ROOM_STATUS.WAITING:
          selectColorsEl.hidden = false;
          selectMapEl.hidden = false;
-         canvasEl.hidden = true;
          break;
       case ROOM_STATUS.STARTING:
          selectColorsEl.hidden = true;
@@ -44,15 +43,9 @@ socket.on('room_status', (msg) => {
          selectColorsEl.hidden = true;
          selectMapEl.hidden = true;
          canvasEl.hidden = false;
-         if (myColor !== 'spectator')
-            CAN_MOVE = true;
+         CAN_MOVE = (myColor !== 'spectator');
          sounds.menu.stop();
          END_SCREEN = null;
-         break;
-      case ROOM_STATUS.ENDED:
-         selectColorsEl.hidden = false;
-         selectMapEl.hidden = false;
-         canvasEl.hidden = false;
          break;
    }
 })
@@ -203,6 +196,7 @@ socket.on('playsound', (sound) => {
 
 
 socket.on('endscreen', (color, ranking) => {
+   document.querySelector('#canvas').hidden = false;
    if (!color) {
       addLog('Draw! Press \'Start game\' to play again.');
       sounds.draw[Math.floor(Math.random() * sounds.draw.length)].play();

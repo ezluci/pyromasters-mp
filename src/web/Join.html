@@ -32,10 +32,15 @@
    <button onclick="
       username = getUsername();
       room = getRoom();
-      if (! /^[ -~]+$/i.test(username) || ! /^[ -~]+$/i.test(room))
+      if (!username || !room) {
+         document.body.innerHTML += '<br>please put something ...';
+      } else if (username.length > 15 || room.length > 15) {
+         document.body.innerHTML += '<br> max 15 characters :(';
+      } else if (! /^[ -~]{1,15}$/.test(username) || ! /^[ -~]{1,15}$/.test(room)) {
          document.body.innerHTML += '<br>please use printable ascii characters 🦆🦆';
-      else
-         document.location.href = `Game${device==='mobile' ? 'Mobile' : 'PC'}.html?username=${username}&room=${room}`;
+      }  else {
+         document.location.href = `Game${device==='mobile' ? 'Mobile' : 'PC'}.html?username=${encodeURIComponent(username)}&room=${encodeURIComponent(room)}`;
+      }
    ">PLAY</button>
 
    <%- footer %>

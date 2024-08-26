@@ -37,7 +37,7 @@ module.exports = (io, sok) => {
       // check players who are sick
       ['white', 'black', 'orange', 'green'].forEach(color => {
          if (sok.room[color]?.sick) {
-            sok.placeBomb();
+            sok.room[color].placeBomb();
          }
       });
       
@@ -61,6 +61,7 @@ module.exports = (io, sok) => {
             let checkBlock = null;
             if (bomb.xvel) {
                oldCoords.y = Math.round(oldCoords.y);
+               newCoords.y = Math.round(newCoords.y);
                checkBlock = {};
                checkBlock.y = oldCoords.y;
                if (bomb.xvel === 1) {
@@ -73,6 +74,7 @@ module.exports = (io, sok) => {
                }
             } else if (bomb.yvel) {
                oldCoords.x = Math.round(oldCoords.x);
+               newCoords.x = Math.round(newCoords.x);
                checkBlock = {};
                checkBlock.x = oldCoords.x;
                if (bomb.yvel === 1) {

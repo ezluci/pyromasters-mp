@@ -50,8 +50,7 @@ const DEFAULT_POS = {
 const ROOM_STATUS = {
    WAITING: 'waiting',
    STARTING: 'starting',
-   RUNNING: 'running',
-   ENDED: 'ended'
+   RUNNING: 'running'
 }
 
 const END_SCREEN_TIMEOUT = 5000;

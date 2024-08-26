@@ -25,7 +25,7 @@ socket.emit('playerJoined', usernameHTML, roomHTML, (players, mapName, map1, roo
       addPlayerToList(username, color, isOwner)
    });
 
-   if (roomStatus === ROOM_STATUS.WAITING || roomStatus === ROOM_STATUS.STARTING || roomStatus === ROOM_STATUS.ENDED)
+   if (roomStatus === ROOM_STATUS.WAITING || roomStatus === ROOM_STATUS.STARTING)
       sounds.menu.play();
 })
 
@@ -256,9 +256,8 @@ function gameloop() {
       bombfires = [];
       ctx.drawImage(images.endscreens[END_SCREEN], 0, 0, canvas.width, canvas.height);
       let k = 50;
-      Object.entries(RANKING).forEach(entry => {
-         const [player, wins] = entry;
-         ctx.fillText(`${player}: ${wins} wins`, 50, k);
+      RANKING.forEach(({username, wins}) => {
+         ctx.fillText(`${username}: ${wins} wins`, 50, k);
          k += 50;
       });
    }

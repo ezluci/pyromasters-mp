@@ -6,8 +6,8 @@ function selectColor(newColor, io, sok) {
    if (!sok.detailsOkCheck())
       return;
    
-   if (sok.getRoomStatus() !== CONST.ROOM_STATUS.WAITING && sok.getRoomStatus() !== CONST.ROOM_STATUS.ENDED)
-      return sok.emit('error', 'selectColor: Room is not in WAITING||ENDED status.');
+   if (sok.getRoomStatus() !== CONST.ROOM_STATUS.WAITING)
+      return sok.emit('error', 'selectColor: Room is not in WAITING status.');
    
    if (newColor !== 'spectator' && newColor !== 'white' && newColor !== 'black' && newColor !== 'orange' && newColor !== 'green')
       return sok.emit('error', 'selectColor: invalid color.');

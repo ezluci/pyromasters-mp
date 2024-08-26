@@ -5,19 +5,19 @@ const MultiMap = require('../multimap.js');
 
 function playerJoined(username, roomname, callback, io, ROOMS, sok) {
    
-   if (! /^[ -~]+$/i.test(username)) {
+   if (! /^[ -~]{1,15}$/.test(username)) {
       sok.emit('error', 'playerJoined: invalid username. DISCONNECTED.');
       sok.disconnect();
       return;
    }
-   if (! /^[ -~]+$/i.test(roomname)) {
-      sok.emit('error', 'playerJoined: invalid room. DISCONNECTED.');
+   if (! /^[ -~]{1,15}$/.test(roomname)) {
+      sok.emit('error', 'playerJoined: invalid room name. DISCONNECTED.');
       sok.disconnect();
       return;
    }
 
    if (ROOMS.has(roomname) && ROOMS.get(roomname).players.has(username)) {
-      sok.emit('error', 'playerJoined: A player with the same name already exists in this room. DISCONNECTED.');
+      sok.emit('error', 'playerJoined: A player with the same name is already in this room. DISCONNECTED.');
       sok.disconnect();
       return;
    }
@@ -38,6 +38,7 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
    sok.sick = false;
    sok.sickFalse_tickId = null;
    sok.animState = CONST.ANIMATION.IDLE;
+   sok.wins = 0;
 
    sok.join(sok.roomname)
    sok.to(sok.roomname).emit('player+', sok.username, sok.color, sok.isOwner)
@@ -58,7 +59,6 @@ function playerJoined(username, roomname, callback, io, ROOMS, sok) {
          gameTime: null,
          endscreen_tickId: null,
          endgameBlocks: null,
-         ranking: {},
          status: CONST.ROOM_STATUS.WAITING
       });
    }

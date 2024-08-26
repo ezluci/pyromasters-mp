@@ -50,7 +50,6 @@ function changePlayerFromList(oldUsername, username, color, isOwner) {
 
 
 function addChatMessage(username, msg) {
-   console.log(logElm);
    const div = document.createElement('div');
    div.innerText = `Player ${username}: ${msg}`;
    logElm.append(div);

@@ -17,14 +17,19 @@ module.exports = (io, sok) => {
       });
 
       if (winnerColor) {
-         const winnerName = sok.room[winnerColor].username;
-         if (!sok.room.ranking[winnerName])
-            sok.room.ranking[winnerName] = 0;
-         sok.room.ranking[winnerName] ++;
+         const winner = sok.room[winnerColor];
+         winner.wins ++;
       }
 
-      io.to(sok.roomname).emit('endscreen', winnerColor, sok.room.ranking);
-      sok.setRoomStatus(CONST.ROOM_STATUS.ENDED);
+      const ranking = [];
+      ['white', 'black', 'orange', 'green'].forEach((color) => {
+         if (sok.room[color]) {
+            ranking.push({ username: sok.room[color].username, wins: sok.room[color].wins });
+         }
+      });
+
+      io.to(sok.roomname).emit('endscreen', winnerColor, ranking);
+      sok.setRoomStatus(CONST.ROOM_STATUS.WAITING);
       sok.setMapName(null);
    }
 };
