@@ -26,11 +26,18 @@ module.exports = (io, sok) => {
          if (!sok.room[color] || sok.room[color].dead)
             return;
          
-         if (sok.room[color].isDying()) {
+         const deathStatus = sok.room[color].isDying();
+         if (deathStatus) {
             io.to(sok.roomname).emit('death', color);
 
             sok.room[color].dead = true;
             sok.room[color].coords = { ...CONST.INEXISTENT_POS };
+
+            deathStatus.forEach(assistColor => {
+               if (assistColor !== color) {
+                  sok.room[assistColor].kills ++;
+               }
+            });
          }
       });
       

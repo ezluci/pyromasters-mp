@@ -256,8 +256,8 @@ function gameloop() {
       bombfires = [];
       ctx.drawImage(images.endscreens[END_SCREEN], 0, 0, canvas.width, canvas.height);
       let k = 50;
-      RANKING.forEach(({username, wins}) => {
-         ctx.fillText(`${username}: ${wins} wins`, 50, k);
+      RANKING.forEach(({username, wins, kills}) => {
+         ctx.fillText(`${username}: ${wins} wins      ${kills} kills`, 50, k);
          k += 50;
       });
    }

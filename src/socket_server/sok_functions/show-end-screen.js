@@ -24,7 +24,7 @@ module.exports = (io, sok) => {
       const ranking = [];
       ['white', 'black', 'orange', 'green'].forEach((color) => {
          if (sok.room[color]) {
-            ranking.push({ username: sok.room[color].username, wins: sok.room[color].wins });
+            ranking.push({ username: sok.room[color].username, wins: sok.room[color].wins, kills: sok.room[color].kills });
          }
       });
 

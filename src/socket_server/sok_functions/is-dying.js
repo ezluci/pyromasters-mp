@@ -6,6 +6,7 @@ const BLK = CONST.BLOCK_SIZE;
 const BLK_SAFE = CONST.BLOCK_SAFE_PX;
 
 module.exports = (io, sok) => {
+   // return FALSE or an array of 'colors' (who assisted to the kill). the array means TRUE.
    sok.isDying = () => {
       if (sok.getShield()) {
          return false;
@@ -45,21 +46,29 @@ module.exports = (io, sok) => {
             deadBlk2 = {x: Math.floor(x / BLK) + 1, y: y / BLK}
          }
       } else {
-         return;  // he's messing with the coords =[
+         return false;  // he's messing with the coords =[
       }
 
-      let death = (sok.room.map[deadBlk1.y][deadBlk1.x] === CONST.BLOCK.PERMANENT ||
+      const deathByBlocks = (sok.room.map[deadBlk1.y][deadBlk1.x] === CONST.BLOCK.PERMANENT ||
                sok.room.map[deadBlk2.y]?.[deadBlk2.x] === CONST.BLOCK.PERMANENT);
       
-      ['white', 'black', 'orange', 'green'].forEach(color => {
-         if (sok.room.bombfires.has(deadBlk1.x, deadBlk1.y, sok.room[color])) {
-            death = true;
+      const assistColors = [];
+      ['white', 'black', 'orange', 'green'].forEach(assistColor => {
+         let assisted = false;
+         if (sok.room.bombfires.has(deadBlk1.x, deadBlk1.y, sok.room[assistColor])) {
+            assisted = true;
          }
-         if (sok.room.bombfires.has(deadBlk2.x, deadBlk2.y, sok.room[color])) {
-            death = true;
+         if (sok.room.bombfires.has(deadBlk2.x, deadBlk2.y, sok.room[assistColor])) {
+            assisted = true;
+         }
+         if (assisted) {
+            assistColors.push(assistColor);
          }
       });
       
-      return death;
+      if (!deathByBlocks && assistColors.length === 0) {
+         return false;
+      }
+      return assistColors;
    }
 };

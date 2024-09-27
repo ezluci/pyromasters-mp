@@ -69,6 +69,7 @@
 ./sounds/taunt7.mp3 - MoFunZone
 ./sounds/taunt8.mp3 - MoFunZone
 ./sounds/taunt9.mp3 - MoFunZone
+./sounds/teleport.mp3 - MoFunZone
 ./sounds/walldrop.mp3 - MoFunZone
 ./sounds/win1.mp3 - MoFunZone
 ./sounds/win2.mp3 - MoFunZone

@@ -32,6 +32,11 @@ for (let i = 1; i <= 13; ++i) {
    }));
 }
 
+sounds.teleport = new Howl({
+   src: ['assets/sounds/teleport.mp3'],
+   onload: () => { LOADED_COUNT ++ }
+});
+
 sounds.dropBomb = new Howl({
    src: ['assets/sounds/dropbomb.mp3'],
    onload: () => { LOADED_COUNT ++ }
@@ -239,7 +244,7 @@ loadImage('assets/images/endscreens/green.jpg').then(image => {
 // create promise which checks if animations are loaded
 const ASSETS_LOADING = new Promise((resolve) => {
    const intvid = setInterval(() => {
-      if (LOADED_COUNT === 81) {
+      if (LOADED_COUNT === 82) {
          resolve();
          clearInterval(intvid);
       }
