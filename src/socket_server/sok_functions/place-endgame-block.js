@@ -38,6 +38,11 @@ module.exports = (io, sok) => {
          xn = xg + xdir;
          yn = yg + ydir;
       }
+      
+      const bombId = sok.getBombIdByCoords(xg, yg);
+      if (bombId) {
+         sok.explodeBomb(bombId, false);
+      }
 
       filled[yg][xg] = true;
       sok.room.map[yg][xg] = CONST.BLOCK.PERMANENT;
