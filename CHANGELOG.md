@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.3] - 2024-09-30
+
+- Bombs now explode when a 'permanent' block is placed on top.
+- Added kill count for each player.
+- The endgame blocks now stop when the game is finished.
+- Fixed a stupid bug with the endgame mixing up with other rooms.
+
 ## [0.9.2] - 2024-08-26
 
 - Implemented additional rules for username/room input and resolved related bugs.
