@@ -1,1 +1,0 @@
-// <%- consts_file %>

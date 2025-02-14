@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.10.0] - 2025-02-14
+
+- Rewrote the socket server from JavaScript to TypeScript.
+- Username and roomname are transmited through query parameters now; no more intermediary socket event.
+- Speed and bombcount now store the actual values instead of indexes.
+
 ## [0.9.3] - 2024-09-30
 
 - Bombs now explode when a 'permanent' block is placed on top.

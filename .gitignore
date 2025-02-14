@@ -2,8 +2,10 @@
 /.env
 /.vscode
 
-/pyro.txt
+/socket_server/dist/
 
 /spright/*
 !/spright/pyromasters-mp_config/
 !/spright/pyromasters-mp_config/**
+
+/pyro.txt
