@@ -144,6 +144,8 @@ function DRAW_game() {
 
 
 
+let lastBombTime = -10000;
+
 function gameloop() {
    // calculate deltaTime
    const currentTime = performance.now()
@@ -159,8 +161,9 @@ function gameloop() {
       meOld = {x: me.x, y: me.y}
 
       // place bomb
-      if (keys.p) {
+      if (keys.p && currentTime - lastBombTime > 100) {
          socket.emit('tryPlaceBomb');
+         lastBombTime = currentTime;
       }
 
       // move

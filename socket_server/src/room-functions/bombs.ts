@@ -88,8 +88,6 @@ export function generate_explodeBomb(room: Room): (bombId: number, recursive: bo
          return fires;
       
       fires.forEach((fire: Flame) => {
-         let wasBomb: boolean = fire.wasBomb;
-
          const oldBombfire = room.flames.get(fire.x)?.get(fire.y)?.get(fire.owner);
          if (oldBombfire) {
             if (!oldBombfire.tickFuncId) {
@@ -97,7 +95,7 @@ export function generate_explodeBomb(room: Room): (bombId: number, recursive: bo
             }
             room.ticks.removeFunc(oldBombfire.tickFuncId);
             if (oldBombfire.wasBomb) {
-               wasBomb = true;
+               fire.wasBomb = true;
             }
          } else {
             io.to(room.name).emit('addBombfire', fire.x, fire.y);

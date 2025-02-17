@@ -1,7 +1,6 @@
 import { Socket } from "socket.io";
 import { Room } from "../room";
 import { RoomStatus } from "../game-types";
-import { DEFAULT_POS } from "../game-consts";
 
 export function disconnect(rooms: Map<string, Room>, sok: Socket): void {
    const io = sok.nsp.server;
