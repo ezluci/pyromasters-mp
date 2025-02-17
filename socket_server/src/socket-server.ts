@@ -1,18 +1,4 @@
-import { Socket } from 'socket.io';
-
-
-const socketio = require('socket.io');
-const http = require('http');
-require('dotenv').config({ path: '../.env' });
-
-// this server needs to run through https.
-// i use nginx for this.
-const server = http.createServer();
-const io = new socketio.Server(server, {
-   cors: { origin: '*' }
-});
-// server.listen() is at the end of the file
-
+import { Server, Socket } from 'socket.io';
 
 import { playerJoined } from "./player-joined";
 import { Room } from "./room";
@@ -27,7 +13,45 @@ import { coords as coords_event } from "./events/coords";
 import { disconnect as disconnect_event } from "./events/disconnect";
 import { selectColor as selectColor_event } from "./events/select-color";
 import { tryStart as tryStart_event } from "./events/try-start";
-import { Animation, Color, Coord } from './game-types';
+import { Animation, Color } from './game-types';
+
+import http from 'http';
+import dotenv from 'dotenv';
+import { readdirSync } from 'fs';
+import path from 'path';
+
+dotenv.config({ path: '../.env' });
+
+// this server needs to run through https.
+// i use nginx for this.
+const server = http.createServer();
+const io = new Server(server, {
+   cors: { origin: '*' }
+});
+// server.listen() is at the end of the file
+
+
+// read sound names and store them in an array. play-sound.ts uses this array
+const soundNames: string[] = readdirSync(path.join('..', 'sounds-unbundled', 'sounds'));
+export const sounds: { [key: string]: number } = {};
+
+soundNames.forEach(soundName => {
+   const parts_1 = soundName.split('.');
+   if (parts_1.length !== 2) {
+      console.error(`sound name format not good ${soundName}`);
+      return;
+   }
+   const nameFull = parts_1[0];
+   const parts_2 = nameFull.split('_');
+   if (parts_2.length > 2) {
+      console.error(`sound name format not good ${soundName}`);
+      return;
+   }
+   if (typeof sounds[parts_2[0]] !== 'number') {
+      sounds[parts_2[0]] = 0;
+   }
+   sounds[parts_2[0]] += 1;
+});
 
 
 const rooms = new Map<string, Room>(); // info about all rooms by name

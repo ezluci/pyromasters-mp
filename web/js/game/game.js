@@ -259,13 +259,6 @@ function gameloop() {
       });
    }
 
-
-   /// SOUND
-
-   // some sounds are handled in  game-socket.js and in game.html.  WEIRD RIGHT???????
-   // update - actually all of the sounds are handled there uups
-
-
    window.requestAnimationFrame(gameloop);
 }
 

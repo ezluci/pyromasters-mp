@@ -129,20 +129,12 @@
             sliderEl.min = 0;
             sliderEl.max = 100;
             sliderEl.value = DEFAULT_VOLUME;
+            
+            ASSETS_LOADING.then(() => {
+               audio.volume(sliderEl.value / 100);
 
-            function updateAllSoundsVolume(sounds) {
-               Object.values(sounds).forEach((sound) => {
-                  if (Array.isArray(sound)) {
-                     updateAllSoundsVolume(sound);
-                  } else {
-                     sound.volume(sliderEl.value / 100);
-                  }
-               });
-            }
-
-            updateAllSoundsVolume(sounds);
-
-            sliderEl.addEventListener('input', () => { updateAllSoundsVolume(sounds) });
+               sliderEl.addEventListener('input', () => { audio.volume(sliderEl.value / 100) });
+            })
          </script>
       </div>
    </div>

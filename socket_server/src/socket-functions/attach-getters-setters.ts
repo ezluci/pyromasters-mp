@@ -7,7 +7,7 @@ function getSpeed(sok: Socket): number {
 
 function setSpeed(sok: Socket, value: number): void {
    if (!MOVE_SPEEDS.includes(value)) {
-      console.error('wrong speed');
+      console.error(`wrong speed ${value}`);
       return;
    }
    if (value !== sok._speed) {
@@ -22,7 +22,7 @@ function getBombTime(sok: Socket): number {
 
 function setBombTime(sok: Socket, value: number): void {
    if (!BOMB_TIMES.includes(value)) {
-      console.error('wrong bombTime');
+      console.error(`wrong bombTime ${value}`);
       return;
    }
    sok._bombTime = value;

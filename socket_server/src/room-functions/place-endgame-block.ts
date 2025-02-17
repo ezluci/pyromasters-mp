@@ -1,6 +1,7 @@
 import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY } from "../game-consts";
 import { Block } from "../game-types";
 import { Room } from "../room";
+import { playSound } from "./play-sound";
 
 export function generate_placeEndgameBlock(room: Room): () => void {
    const io = room.owner.nsp.server;
@@ -53,7 +54,7 @@ export function generate_placeEndgameBlock(room: Room): () => void {
       room.map[yg][xg] = Block.PERMANENT;
 
       io.to(room.name).emit('mapUpdates', [{x: xg, y: yg, block: Block.PERMANENT}]);
-      io.to(room.name).emit('playsound', 'walldrop');
+      playSound(room, 'walldrop');
 
       [xg, yg] = [xn, yn];
    };

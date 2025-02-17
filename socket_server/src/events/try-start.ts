@@ -1,6 +1,7 @@
 import { Socket } from "socket.io";
 import { Animation, Block, Color, Coord, RoomStatus } from "../game-types";
 import { ALL_COLORS, ALL_MAPS, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BOMB_TIMES, DEFAULT_POS, MAP_FOURWAY_PORTAL_POSITIONS, MOVE_SPEEDS } from "../game-consts";
+import { playSound } from "../room-functions/play-sound";
 
 export function tryStart(mapName: string, sok: Socket): void {
    const io = sok.nsp.server;
@@ -86,7 +87,7 @@ export function tryStart(mapName: string, sok: Socket): void {
    sok.room.ticks.startTickLoop();
 
    sok.room.ticks.addFunc(() => { sok.room.status = RoomStatus.STARTING; }, sok.room.ticks.TPS * 0);
-   sok.room.ticks.addFunc(() => { sok.room.status = RoomStatus.RUNNING; }, sok.room.ticks.TPS * 2);
+   sok.room.ticks.addFunc(() => { sok.room.status = RoomStatus.RUNNING; io.to(sok.room.name).emit('stopmenusound'); }, sok.room.ticks.TPS * 2);
 
    sok.room.gameTime = 120; // 2 minutes
 
@@ -94,6 +95,14 @@ export function tryStart(mapName: string, sok: Socket): void {
       sok.room.ticks.addFunc(() => {
          sok.room.gameTime --;
          io.to(sok.room.name).emit('gameTime', sok.room.gameTime);
+         
+         if (sok.room.gameTime % 20 === 16) {
+            playSound(sok.room, 'taunt');
+         } else if (sok.room.gameTime === 5) {
+            playSound(sok.room, 'hurrymain');
+         } else if (sok.room.gameTime === 3) {
+            playSound(sok.room, 'hurry');
+         }
       }, sok.room.ticks.TPS * (2 + i));
    }
    for (let i = 0; i < BLOCKS_HORIZONTALLY * BLOCKS_VERTICALLY; i++) {

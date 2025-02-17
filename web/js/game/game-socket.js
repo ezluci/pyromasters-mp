@@ -11,7 +11,6 @@ console.log(socket);
 
 
 socket.on('initial_info', (players, mapName, map1, roomStatus, playersAlive) => {
-   console.log(players, mapName, map1, roomStatus, playersAlive);
    for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
       map[y] = [];
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
@@ -30,9 +29,6 @@ socket.on('initial_info', (players, mapName, map1, roomStatus, playersAlive) => 
    players.forEach( ({name, color, isOwner}) => {
       addPlayerToList(name, color, isOwner)
    });
-
-   if (roomStatus === ROOM_STATUS.WAITING || roomStatus === ROOM_STATUS.STARTING)
-      sounds.menu.play();
    
    ['white', 'black', 'orange', 'green'].forEach(color => {
       coords[color].alive = false;
@@ -82,7 +78,6 @@ socket.on('room_status', (msg) => {
          selectMapEl.hidden = true;
          canvasEl.hidden = false;
          CAN_MOVE = (myColor !== 'spectator');
-         sounds.menu.stop();
          END_SCREEN = null;
          break;
    }
@@ -118,7 +113,6 @@ socket.on('death', (color) => {
    if (myColor === color) {
       CAN_MOVE = false;
    }
-   sounds.dead[Math.floor(Math.random() * sounds.dead.length)].play();
    coords[color].alive = false;
 })
 
@@ -155,11 +149,8 @@ socket.on('C', (coordsReceived) => {
 // it doesn't check myColor.
 socket.on('coords', (color, coords1, animState) => {
    if (!animState)   animState = 'idle';
-   console.log(coords[color].x, coords[color].y);
    coords[color].x = coords1.x;
    coords[color].y = coords1.y;
-   console.log(coords[color].x, coords[color].y);
-   console.log(coords[color]);
    if (sprites.players[color].state !== animState) {
       changeAnimation(color, animState);
    }
@@ -175,19 +166,13 @@ socket.on('mapName', (mapName) => {
 });
 
 socket.on('mapUpdates', (updates) => {
-   let anyNewFires = false; // maybe you can play each sound for each bomb exploded. not a big difference but yeah.
-
    updates.forEach(({x, y, block}) => {
-      if (isPowerup(map[y][x]) && block === BLOCK.NO)
-         sounds.powerup.play();
-      
       map[y][x] = block;
    });
 });
 
 socket.on('addBomb', (bombId, x, y) => {
    bombs.push({x, y, bombId});
-   sounds.dropBomb.play();
 });
 socket.on('deleteBomb', (bombId) => {
    const index = bombs.findIndex(bomb => bomb.bombId === bombId);
@@ -203,13 +188,8 @@ socket.on('updateBomb', (bombId, x, y) => {
    bombs.push({x, y, bombId});
 });
 
-let lastBombfireTime = performance.now(); // =[
 socket.on('addBombfire', (x, y) => {
    bombfires.push({x, y});
-   if (performance.now() - lastBombfireTime > 100) {
-      lastBombfireTime = performance.now();
-      sounds.explodeBomb[Math.floor(Math.random() * sounds.explodeBomb.length)].play();
-   }
 });
 socket.on('deleteBombfire', (x, y) => {
    const index = bombfires.findIndex(bombfire => bombfire.x === x && bombfire.y === y);
@@ -221,31 +201,42 @@ socket.on('deleteBombfire', (x, y) => {
 
 socket.on('gameTime', (time) => {
    gameTime = time;
-
-   if (time === 5)
-      sounds.hurry[0].play();
-   if (time === 3)   
-      sounds.hurry[Math.floor(Math.random() * (sounds.hurry.length - 1)) + 1].play();
-   
-   if (time % 20 === 16)
-      sounds.taunt[Math.floor(Math.random() * sounds.taunt.length)].play();
 })
 
+let menu_soundId;
 
-socket.on('playsound', (sound) => {
-   sounds[sound].play();
+socket.on('playsound', (soundName) => {
+   console.log(soundName);
+   const id = audio.play(soundName);
+
+   if (soundName === 'draw' || soundName.startsWith('draw_') ||
+         soundName === 'win' || soundName.startsWith('win_')) {
+      audio.on('end', () => {
+         menu_soundId = audio.play('menu');
+         audio.loop(true, menu_soundId);
+      }, id);
+   }
+
+   if (soundName === 'menu') {
+      menu_soundId = id;
+      audio.loop(true, menu_soundId);
+   }
 })
+
+socket.on('stopmenusound', () => {
+   if (menu_soundId) {
+      audio.stop(menu_soundId);
+      menu_soundId = undefined;
+   }
+});
 
 
 socket.on('endscreen', (color, ranking) => {
    document.querySelector('#canvas').hidden = false;
    if (!color) {
       addLog('Draw! Press \'Start game\' to play again.');
-      sounds.draw[Math.floor(Math.random() * sounds.draw.length)].play();
-   }
-   else {
+   } else {
       addLog(`${color.slice(0, 1).toUpperCase() + color.slice(1)} won! Press \'Start game\' to play again.`);
-      sounds.win[Math.floor(Math.random() * sounds.win.length)].play();
    }
 
    if (color === null)

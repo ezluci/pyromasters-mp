@@ -1,6 +1,7 @@
 import { Socket } from "socket.io";
 import { Room } from "../room";
 import { RoomStatus } from "../game-types";
+import { playSound } from "../room-functions/play-sound";
 
 export function disconnect(rooms: Map<string, Room>, sok: Socket): void {
    const io = sok.nsp.server;
@@ -25,6 +26,7 @@ export function disconnect(rooms: Map<string, Room>, sok: Socket): void {
          if (sok.room.status === RoomStatus.RUNNING && !sok.dead) {
             io.to(sok.room.name).emit('death', sok.color);
             sok.room.countPlayersAlive --;
+            playSound(sok.room, 'dead');
          }
          sok.room[sok.color] = null;
       }

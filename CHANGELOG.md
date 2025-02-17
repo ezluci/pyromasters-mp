@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.10.1] - 2025-02-17
+
+- Compressed all the sounds into one single file, to save up loading time.
+- Switched from client-side processing the sounds to server-side.
+- Added kick bomb sound.
+- Cleaned up the client-side animations code.
+- Added a bit of delay between bomb placements.
+- Fixed a bug with bomb count.
+- Added a better favicon.
+- Fixed a bug where the sick powerup was applied to all players.
+- Fixed a bug with the testmap.
+- Fixed a bug with the disconnect event.
+- Fixed a bug with the webserver (forgot to delete the consts template).
+
 ## [0.10.0] - 2025-02-14
 
 - Rewrote the socket server from JavaScript to TypeScript.

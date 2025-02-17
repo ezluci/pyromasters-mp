@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { ALL_COLORS, BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BOMB_TIMES, MAP_FOURWAY_PORTAL_POSITIONS } from "../game-consts";
 import { Block, Bomb, RoomStatus } from "../game-types";
+import { playSound } from "../room-functions/play-sound";
 
 export function tie_bombs(sok: Socket): void {
    const io: Server = sok.nsp.server;
@@ -52,7 +53,10 @@ export function tie_bombs(sok: Socket): void {
       // placing the bomb
       const bombId: number = sok.room.bombIdCounter;
       const tickFuncId: number | undefined = sok.room.ticks.addFunc(
-         () => sok.room.explodeBomb(bombId, false),
+         () => {
+            sok.room.explodeBomb(bombId, false);
+            playSound(sok.room, 'explode');
+         },
          sok.bombTime / sok.room.ticks.MSPT
       );
 
@@ -64,7 +68,9 @@ export function tie_bombs(sok: Socket): void {
       
       io.to(sok.room.name).emit('addBomb', bombId, x, y);
       if (sok.sick) {
-         io.to(sok.room.name).emit('playsound', 'dropBombSick');
+         playSound(sok.room, 'dropbombsick');
+      } else {
+         playSound(sok.room, 'dropbomb');
       }
       
       sok.bombCount --;
@@ -78,8 +84,13 @@ export function tie_bombs(sok: Socket): void {
       if (!sok.kickBombs || sok.room.mapName === 'magneto') {
          return;
       }
+
+      if (bomb.xvel === xvel && bomb.yvel === yvel) {
+         return; // nothing changes
+      }
       
       bomb.xvel = xvel;
       bomb.yvel = yvel;
+      playSound(sok.room, 'kickbomb');
    };
 }

@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { Animation, Block, Color, Coord } from "./game-types";
 import { ALL_COLORS, BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, END_SCREEN_TIMEOUT, isPowerup, KICK_BOMB_SPEED } from "./game-consts";
+import { playSound } from "./room-functions/play-sound";
 
 
 
@@ -32,6 +33,7 @@ export function generate_runEveryTick(sok: Socket): () => void {
          
          sok.room.countPlayersAlive --;
          io.to(sok.room.name).emit('death', color);
+         playSound(sok.room, 'dead');
 
          sok.room[color].dead = true;
 

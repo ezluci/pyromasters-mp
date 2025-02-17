@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { ALL_COLORS, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BOMB_TIMES, isPowerup, MOVE_SPEEDS } from "../game-consts";
 import { Animation, Block, Color } from "../game-types";
+import { playSound } from "../room-functions/play-sound";
 
 function collectPowerupBombplus(sok: Socket) {
    if (sok.bombCount < 4)
@@ -131,7 +132,7 @@ export function tie_powerups(sok: Socket): void {
                sok.bombLength = 2;
                sok.shield = false;
                sok.kickBombs = false;
-               io.to(sok.room.name).emit('playsound', 'bonusLost');
+               playSound(sok.room, 'bonuslost');
                break;
             case 10: // BonusALL
                sok.speed = MOVE_SPEEDS[MOVE_SPEEDS.length - 1];
@@ -140,12 +141,13 @@ export function tie_powerups(sok: Socket): void {
                sok.bombLength = 16;
                sok.shield = true;
                sok.kickBombs = true;
-               io.to(sok.room.name).emit('playsound', 'bonusAll');
+               playSound(sok.room, 'bonusall');
                break;
          }
       }
 
       io.to(sok.room.name).emit('mapUpdates', [{x, y, block: Block.NO}]);
+      playSound(sok.room, 'powerup');
       sok.room.map[y][x] = Block.NO;
    }
 }
