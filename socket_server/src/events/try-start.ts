@@ -120,6 +120,10 @@ function generateMap(mapName: string): Block[][] {
          }
       }
       map[4][4] = Block.POWER_SHIELD;
+      map[4][6] = Block.POWER_SWITCHPLAYER;
+      map[6][6] = Block.POWER_KICKBOMBS;
+      map[8][8] = Block.POWER_SICK;
+      map[8][10] = Block.POWER_SICK;
       
       return map;
    }

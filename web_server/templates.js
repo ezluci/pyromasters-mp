@@ -10,8 +10,7 @@ function readFile(path) {
 
 const templates = {};
 
-templates.version = JSON.parse(readFile(path.join(__dirname, '..', 'package.json'))).version;
-templates.consts_file = readFile(path.join(__dirname, '..', 'socket_server', 'dist', 'consts.js'));
+templates.version = JSON.parse(readFile(path.join(__dirname, '..', 'package.json'))).version
 templates.footer = resolveTemplates(readFile(path.join(__dirname, 'templates', 'footer.html')));
 
 

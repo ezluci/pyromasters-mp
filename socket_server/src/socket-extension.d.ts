@@ -16,14 +16,18 @@ declare module 'socket.io' {
       animState: Animation;
 
       speed: number; // check MOVE_SPEEDS
+      _speed: number; // don't access variables with _  check attach-getters-setters.ts
       bombCount: number;
       bombTime: number; // check BOMB_TIMES
+      _bombTime: number;
       bombLength: number;
       
       shield: boolean;
+      _shield: boolean;
       shieldFalse_tickId: number;
       
       sick: boolean;
+      _sick: boolean;
       sickFalse_tickId: number;
 
       kickBombs: boolean;

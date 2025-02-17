@@ -1,13 +1,8 @@
 import { Socket } from "socket.io";
 import { BOMB_TIMES, MOVE_SPEEDS, SHIELD_TIME_TICKS, SICK_TIME_TICKS } from "../game-consts";
 
-let _speed: number;
-let _bombTime: number;
-let _shield: boolean;
-let _sick: boolean;
-
-function getSpeed(): number {
-   return _speed;
+function getSpeed(sok: Socket): number {
+   return sok._speed;
 }
 
 function setSpeed(sok: Socket, value: number): void {
@@ -15,43 +10,43 @@ function setSpeed(sok: Socket, value: number): void {
       console.error('wrong speed');
       return;
    }
-   if (value !== _speed) {
+   if (value !== sok._speed) {
       sok.emit('speedUpdate', value);
    }
-   _speed = value;
+   sok._speed = value;
 }
 
-function getBombTime(): number {
-   return _bombTime;
+function getBombTime(sok: Socket): number {
+   return sok._bombTime;
 }
 
-function setBombTime(value: number): void {
+function setBombTime(sok: Socket, value: number): void {
    if (!BOMB_TIMES.includes(value)) {
       console.error('wrong bombTime');
       return;
    }
-   _bombTime = value;
+   sok._bombTime = value;
 }
 
 
-function getShield() {
-   return _shield;
+function getShield(sok: Socket) {
+   return sok._shield;
 }
 
 function setShield(sok: Socket, value: boolean): void {
    if (value === false) {
-      if (_shield) {
+      if (sok._shield) {
          sok.nsp.server.to(sok.room.name).emit('shield', sok.color, false);
          sok.room.ticks.removeFunc(sok.shieldFalse_tickId);
-         _shield = false;
+         sok._shield = false;
          sok.shieldFalse_tickId = 0;
       }
    } else {
-      if (_shield) {
+      if (sok._shield) {
          sok.room.ticks.removeFunc(sok.shieldFalse_tickId);
       } else {
          sok.nsp.server.to(sok.room.name).emit('shield', sok.color, true);
-         _shield = true;
+         sok._shield = true;
       }
    
       const newFuncId: number | undefined = sok.room.ticks.addFunc(() => { setShield(sok, false) }, SHIELD_TIME_TICKS);
@@ -62,24 +57,24 @@ function setShield(sok: Socket, value: boolean): void {
 }
 
 
-function getSick(): boolean {
-   return _sick;
+function getSick(sok: Socket): boolean {
+   return sok._sick;
 }
 
 function setSick(sok: Socket, value: boolean): void {
    if (value === false) {
-      if (_sick) {
+      if (sok._sick) {
          sok.nsp.server.to(sok.room.name).emit('sick0', sok.color);
          sok.room.ticks.removeFunc(sok.sickFalse_tickId);
-         _sick = false;
+         sok._sick = false;
          sok.sickFalse_tickId = 0;
       }
    } else {
-      if (_sick) {
+      if (sok._sick) {
          sok.room.ticks.removeFunc(sok.sickFalse_tickId);
       } else {
          sok.nsp.server.to(sok.room.name).emit('sick1', sok.color);
-         _sick = true;
+         sok._sick = true;
       }
 
       const newFuncId: number | undefined = sok.room.ticks.addFunc(() => { setSick(sok, false) }, SICK_TIME_TICKS);
@@ -91,14 +86,14 @@ function setSick(sok: Socket, value: boolean): void {
 
 
 export function attachGettersSetters(sok: Socket): void {
-   _speed = sok.speed;
-   _bombTime = sok.bombTime;
-   _shield = sok.shield;
-   _sick = sok.sick;
+   sok._speed = sok.speed;
+   sok._bombTime = sok.bombTime;
+   sok._shield = sok.shield;
+   sok._sick = sok.sick;
    
    Object.defineProperty(sok, 'speed', {
       get: function (): number {
-         return getSpeed();
+         return getSpeed(this);
       },
       set: function (value: number): void {
          setSpeed(this, value);
@@ -107,16 +102,16 @@ export function attachGettersSetters(sok: Socket): void {
    
    Object.defineProperty(sok, 'bombTime', {
       get: function (): number {
-         return getBombTime();
+         return getBombTime(this);
       },
       set: function (value: number): void {
-         setBombTime(value);
+         setBombTime(this, value);
       }
    });
    
    Object.defineProperty(sok, 'shield', {
       get: function (): boolean {
-         return getShield();
+         return getShield(this);
       },
       set: function (value: boolean): void {
          setShield(this, value);
@@ -125,7 +120,7 @@ export function attachGettersSetters(sok: Socket): void {
    
    Object.defineProperty(sok, 'sick', {
       get: function (): boolean {
-         return getSick();
+         return getSick(this);
       },
       set: function (value: boolean): void {
          setSick(this, value);

@@ -11,6 +11,7 @@ console.log(socket);
 
 
 socket.on('initial_info', (players, mapName, map1, roomStatus, playersAlive) => {
+   console.log(players, mapName, map1, roomStatus, playersAlive);
    for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
       map[y] = [];
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
@@ -20,6 +21,9 @@ socket.on('initial_info', (players, mapName, map1, roomStatus, playersAlive) => 
             map[y][x] = BLOCK.NO;
          }
       }
+   }
+   if (mapName === 'testmap:)') {
+      mapName = 'bricktown';
    }
    MAP_NAME = mapName;
    
@@ -151,9 +155,11 @@ socket.on('C', (coordsReceived) => {
 // it doesn't check myColor.
 socket.on('coords', (color, coords1, animState) => {
    if (!animState)   animState = 'idle';
-   animState = animState;
+   console.log(coords[color].x, coords[color].y);
    coords[color].x = coords1.x;
    coords[color].y = coords1.y;
+   console.log(coords[color].x, coords[color].y);
+   console.log(coords[color]);
    if (sprites.players[color].state !== animState) {
       changeAnimation(color, animState);
    }

@@ -30,6 +30,7 @@ function collectPowerupBombtime(sok: Socket) {
 }
 
 function collectPowerupSwitchplayer(sok: Socket) {
+   const io: Server = sok.nsp.server;
    const otherPlayers: Color[] = [];
    ALL_COLORS.forEach(otherColor => {
       if (sok.room[otherColor] && !sok.room[otherColor].dead && otherColor !== sok.color)
@@ -45,12 +46,11 @@ function collectPowerupSwitchplayer(sok: Socket) {
       return;
    }
 
-   let coordsMe = sok.coords;
-   let coordsYo = sok.room[randColor].coords;
-   [coordsMe, coordsYo] = [coordsYo, coordsMe];
+   [sok.coords.x, sok.room[randColor].coords.x] = [sok.room[randColor].coords.x, sok.coords.x];
+   [sok.coords.y, sok.room[randColor].coords.y] = [sok.room[randColor].coords.y, sok.coords.y];
    
-   sok.emit('coords', sok.color, coordsMe, Animation.IDLE);
-   sok.room[randColor].emit('coords', randColor, coordsYo, Animation.IDLE);
+   io.to(sok.room.name).emit('coords', sok.color, sok.coords, Animation.IDLE);
+   io.to(sok.room.name).emit('coords', randColor, sok.room[randColor].coords, Animation.IDLE);
 }
 
 function collectPowerupSick(sok: Socket) {

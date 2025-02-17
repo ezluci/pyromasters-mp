@@ -23,13 +23,11 @@ export function disconnect(rooms: Map<string, Room>, sok: Socket): void {
       rooms.delete(sok.room.name);
    } else {
       if (sok.color !== null) {
-         if (sok.room.status !== RoomStatus.WAITING && sok.room.status !== RoomStatus.STARTING) {
-            io.to(sok.room.name).emit('coords', sok.color, { x: 0, y: 0 });
-            sok.room[sok.color] = null;
-         } else {
-            io.to(sok.room.name).emit('coords', sok.color, DEFAULT_POS[sok.color]);
-            sok.room[sok.color] = null;
+         if (sok.room.status === RoomStatus.RUNNING && !sok.dead) {
+            io.to(sok.room.name).emit('death', sok.color);
+            sok.room.countPlayersAlive --;
          }
+         sok.room[sok.color] = null;
       }
    }
 }

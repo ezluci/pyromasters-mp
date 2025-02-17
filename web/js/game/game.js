@@ -235,7 +235,7 @@ function gameloop() {
       }
 
       if (meOld.x !== me.x || meOld.y !== me.y || lastAnimState !== sprites.players[myColor].state)
-         socket.emit('coords', me, sprites.players[myColor].state)
+         socket.emit('coords', { x: me.x, y: me.y }, sprites.players[myColor].state)
    
       coords[myColor] = me;
    }

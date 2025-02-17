@@ -49,21 +49,21 @@ io.on('connection', (sok: Socket): void => {
 
    sok.on('chat', (msg) => {
       if (typeof msg !== 'string') {
-         return;
+         return console.error('wrong chat event');
       }
       chat_event(msg, sok);
    });
 
    sok.on('tryStart', (mapName) => {
       if (typeof mapName !== 'string') {
-         return;
+         return console.error('wrong trystart event');
       }
       tryStart_event(mapName, sok);
    });
 
    sok.on('selectColor', (newColor) => {
       if (typeof newColor !== 'string' || !Object.values(Color).includes(newColor as Color)) {
-         return;
+         return console.error('wrong selectcolor event');
       }
       selectColor_event(newColor as Color, sok);
    });
@@ -74,18 +74,19 @@ io.on('connection', (sok: Socket): void => {
    
    sok.on('kickbomb', (bombId, xvel, yvel) => {
       if (typeof bombId !== 'number' || typeof xvel !== 'number' || typeof yvel !== 'number') {
-         return;
+         return console.error('wrong kickbomb event');
       }
       sok.kickBomb(bombId, xvel, yvel);
    });
 
    sok.on('coords', (coords, animState) => {
-      if (typeof coords !== 'object' || typeof coords?.x !== 'number' || typeof coords?.y !== 'number' ||
+      if (typeof coords !== 'object' || typeof coords?.x !== 'number' ||
+         typeof coords?.y !== 'number' || Object.keys(coords).length !== 2 ||
          typeof animState !== 'string' || !Object.values(Animation).includes(animState as Animation)
       ) {
-         return;
+         return console.error('wrong coords event');
       }
-      coords_event(coords as Coord, animState as Animation, sok);
+      coords_event(coords, animState as Animation, sok);
    });
 
    sok.on('disconnect', () => {
