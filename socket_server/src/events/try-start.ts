@@ -89,7 +89,7 @@ export function tryStart(mapName: string, sok: Socket): void {
    sok.room.ticks.addFunc(() => { sok.room.status = RoomStatus.STARTING; }, sok.room.ticks.TPS * 0);
    sok.room.ticks.addFunc(() => { sok.room.status = RoomStatus.RUNNING; io.to(sok.room.name).emit('stopmenusound'); }, sok.room.ticks.TPS * 2);
 
-   sok.room.gameTime = 120; // 2 minutes
+   sok.room.gameTime = 10; // 2 minutes
 
    for (let i = 0; i < sok.room.gameTime; i++) {
       sok.room.ticks.addFunc(() => {

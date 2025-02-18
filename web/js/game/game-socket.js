@@ -117,6 +117,9 @@ socket.on('death', (color) => {
 })
 
 socket.on('playersAlive', (playersAlive) => {
+   ['white', 'black', 'orange', 'green'].forEach(color => {
+      coords[color].alive = false;
+   })
    playersAlive.forEach(color => {
       coords[color].alive = true;
    });
@@ -212,12 +215,18 @@ socket.on('playsound', (soundName) => {
    if (soundName === 'draw' || soundName.startsWith('draw_') ||
          soundName === 'win' || soundName.startsWith('win_')) {
       audio.on('end', () => {
+         if (menu_soundId) {
+            audio.stop(menu_soundId);
+         }
          menu_soundId = audio.play('menu');
          audio.loop(true, menu_soundId);
       }, id);
    }
 
    if (soundName === 'menu') {
+      if (menu_soundId) {
+         audio.stop(menu_soundId);
+      }
       menu_soundId = id;
       audio.loop(true, menu_soundId);
    }

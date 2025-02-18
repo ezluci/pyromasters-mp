@@ -1,7 +1,7 @@
 import { Socket } from "socket.io";
 import { Color, RoomStatus } from "../game-types";
 
-export function selectColor(newColor: Color, sok: Socket): void {
+export function selectColor(newColor: Color | null, sok: Socket): void {
    const io = sok.nsp.server;
    
    if (sok.room.status !== RoomStatus.WAITING) {
@@ -9,7 +9,7 @@ export function selectColor(newColor: Color, sok: Socket): void {
       return
    }
    
-   if (!Object.values(Color).includes(newColor)) {
+   if (newColor !== null && !Object.values(Color).includes(newColor)) {
       sok.emit('error', 'selectColor: invalid color.');
       return;
    }

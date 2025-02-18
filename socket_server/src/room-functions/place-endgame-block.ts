@@ -48,6 +48,7 @@ export function generate_placeEndgameBlock(room: Room): () => void {
       const bombId = room.getBombIdByCoords({x: xg, y: yg});
       if (bombId) {
          room.explodeBomb(bombId, false);
+         playSound(room, 'explode');
       }
 
       filled[yg][xg] = true;

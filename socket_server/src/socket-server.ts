@@ -86,10 +86,10 @@ io.on('connection', (sok: Socket): void => {
    });
 
    sok.on('selectColor', (newColor) => {
-      if (typeof newColor !== 'string' || !Object.values(Color).includes(newColor as Color)) {
+      if (newColor !== null && (typeof newColor !== 'string' || !Object.values(Color).includes(newColor as Color))) {
          return console.error('wrong selectcolor event');
       }
-      selectColor_event(newColor as Color, sok);
+      selectColor_event(newColor as Color | null, sok);
    });
 
    sok.on('tryPlaceBomb', () => {
