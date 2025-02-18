@@ -19,6 +19,7 @@ import http from 'http';
 import dotenv from 'dotenv';
 import { readdirSync } from 'fs';
 import path from 'path';
+import { playSound } from './room-functions/play-sound';
 
 dotenv.config({ path: '../.env' });
 
@@ -103,14 +104,17 @@ io.on('connection', (sok: Socket): void => {
       sok.kickBomb(bombId, xvel, yvel);
    });
 
-   sok.on('coords', (coords, animState) => {
-      if (typeof coords !== 'object' || typeof coords?.x !== 'number' ||
-         typeof coords?.y !== 'number' || Object.keys(coords).length !== 2 ||
+   sok.on('coords', (x, y, animState) => {
+      if (typeof x !== 'number' || typeof y !== 'number' ||
          typeof animState !== 'string' || !Object.values(Animation).includes(animState as Animation)
       ) {
          return console.error('wrong coords event');
       }
-      coords_event(coords, animState as Animation, sok);
+      coords_event(x, y, animState as Animation, sok);
+   });
+
+   sok.on('portaltp', () => {
+      playSound(sok.room, 'teleport');
    });
 
    sok.on('disconnect', () => {

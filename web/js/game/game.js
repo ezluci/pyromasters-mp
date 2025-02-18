@@ -3,7 +3,7 @@
 
 
 let gameTime = 0, SOCKET_FULLCONN = 0, playersAlive = [];
-var canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords = {}, keys, map, moveSpeed, switchedKeys, shields, lastPressed, CAN_MOVE = false, END_SCREEN = null, RANKING = null, MAP_NAME = null, bombs = [], bombfires = [];
+var canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords = {}, keys_p = 0, map, moveSpeed, switchedKeys, shields, keyPressQueue = [], CAN_MOVE = false, END_SCREEN = null, RANKING = null, MAP_NAME = null, bombs = [], bombfires = [];
 
 map = [];
 for (let i = 0; i < BLOCKS_VERTICALLY; i += 1) {
@@ -25,7 +25,6 @@ ctx = canvas.getContext('2d');
 
 
 
-keys = {a:0, s:0, d:0, w:0, p:0}
 myColor = 'spectator'
 coords = {
    'white': {},
@@ -161,42 +160,23 @@ function gameloop() {
       meOld = {x: me.x, y: me.y}
 
       // place bomb
-      if (keys.p && currentTime - lastBombTime > 100) {
+      if (keys_p && currentTime - lastBombTime > 100) {
          socket.emit('tryPlaceBomb');
          lastBombTime = currentTime;
       }
 
       // move
-      let keysPressed = 0
-      if (keys.a) keysPressed ++
-      if (keys.s) keysPressed ++
-      if (keys.d) keysPressed ++
-      if (keys.w) keysPressed ++
 
-      const lastAnimState = sprites.players[myColor].state;
-
-      if (keysPressed === 1) {
-         if (keys.a)
+      if (keyPressQueue.length === 1 || keyPressQueue.length === 2) {
+         const key = keyPressQueue[keyPressQueue.length - 1];
+         if (key === 'a')
             moveLeft()
-         else if (keys.s)
+         else if (key === 's')
             moveDown()
-         else if (keys.d)
+         else if (key === 'd')
             moveRight()
-         else if (keys.w)
+         else if (key === 'w')
             moveUp()
-      }
-      else if (keysPressed === 2) {
-         if (lastPressed === 'a')
-            moveLeft()
-         else if (lastPressed === 's')
-            moveDown()
-         else if (lastPressed === 'd')
-            moveRight()
-         else if (lastPressed === 'w')
-            moveUp()
-      }
-      else {
-         changeAnimation(myColor, 'idle');
       }
 
       me.x = Math.max(MIN_X, me.x)
@@ -232,13 +212,71 @@ function gameloop() {
          });
 
          if (portalIdx !== null) {
+            socket.emit('portaltp');
             me.x = MAP_FOURWAY_NEXT_PORTAL[portalIdx].x * BLOCK_SIZE;
             me.y = MAP_FOURWAY_NEXT_PORTAL[portalIdx].y * BLOCK_SIZE;
          }
       }
 
-      if (meOld.x !== me.x || meOld.y !== me.y || lastAnimState !== sprites.players[myColor].state)
-         socket.emit('coords', { x: me.x, y: me.y }, sprites.players[myColor].state)
+      // changing animations
+
+      if (meOld.x === me.x && meOld.y === me.y) {
+         // walk -> idle
+         changeAnimation(myColor, 'idle_' + sprites.players[myColor].state.split('_')[1]);
+      } else if (keyPressQueue.length === 1 || keyPressQueue.length === 2) {
+         let q;
+         const key = keyPressQueue[keyPressQueue.length - 1];
+         if (key === 'w') {
+            if (meOld.y === me.y) {
+               if (me.x < meOld.x) {
+                  q = 'left';
+               } else {
+                  q = 'right';
+               }
+            } else {
+               q = 'up';
+            }
+         } else if (key === 's') {
+            if (meOld.y === me.y) {
+               if (me.x < meOld.x) {
+                  q = 'left';
+               } else {
+                  q = 'right';
+               }
+            } else {
+               q = 'down';
+            }
+         } else if (key === 'a') {
+            if (meOld.x === me.x) {
+               if (me.y < meOld.y) {
+                  q = 'up';
+               } else {
+                  q = 'down';
+               }
+            } else {
+               q = 'left';
+            }
+         } else if (key === 'd') {
+            if (meOld.x === me.x) {
+               if (me.y < meOld.y) {
+                  q = 'up';
+               } else {
+                  q = 'down';
+               }
+            } else {
+               q = 'right';
+            }
+         }
+
+         if (q === 'up') {
+            q = 'back';
+         } else if (q === 'down') {
+            q = 'front';
+         }
+         changeAnimation(myColor, 'walk_' + q);
+      }
+      
+      socket.emit('coords', me.x, me.y, sprites.players[myColor].state)
    
       coords[myColor] = me;
    }

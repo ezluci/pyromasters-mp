@@ -1,4 +1,4 @@
-import { Server, Socket } from "socket.io";
+import { Socket } from "socket.io";
 import { Animation, Block, Color, Coord } from "./game-types";
 import { ALL_COLORS, BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, END_SCREEN_TIMEOUT, isPowerup, KICK_BOMB_SPEED } from "./game-consts";
 import { playSound } from "./room-functions/play-sound";
@@ -13,7 +13,7 @@ export function generate_runEveryTick(sok: Socket): () => void {
       const coords: [number, number, Animation][] = [];
       ALL_COLORS.forEach(color => {
          if (!sok.room[color]) {
-            coords.push([0, 0, Animation.IDLE]);
+            coords.push([0, 0, Animation.IDLE_FRONT]);
          } else {
             coords.push([sok.room[color].coords.x, sok.room[color].coords.y, sok.room[color].animState]);
          }

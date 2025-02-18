@@ -17,5 +17,5 @@ fetch('/assets/images/animations/spritesheet.json').then(file => {
 sprites.players = {};
 ['white', 'black', 'orange', 'green'].forEach(color => {
    sprites.players[color] = {};
-   sprites.players[color].state = 'idle'; // the state of animations is handled in movement.js
+   sprites.players[color].state = 'idle_front'; // the state of animations is handled in movement.js
 })

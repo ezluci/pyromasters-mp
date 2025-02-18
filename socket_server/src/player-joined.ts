@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io";
 import { Animation, Color, RoomStatus } from "./game-types";
 import { Room } from "./room";
 import { ALL_COLORS } from "./game-consts";
-import { playSound } from "./room-functions/play-sound";
+import { playSoundSok } from "./room-functions/play-sound";
 
 export function playerJoined(userName: unknown, roomName: unknown, rooms: Map<string, Room>, sok: Socket): void {
    
@@ -38,7 +38,7 @@ export function playerJoined(userName: unknown, roomName: unknown, rooms: Map<st
    sok.color = null;
    sok.coords = {x: 0, y: 0};
    sok.dead = false;
-   sok.animState = Animation.IDLE;
+   sok.animState = Animation.IDLE_FRONT;
 
    sok.speed = 0;
    sok.bombCount = 0;
@@ -88,6 +88,6 @@ export function playerJoined(userName: unknown, roomName: unknown, rooms: Map<st
 
    sok.emit('initial_info', players, sok.room.mapName, sok.room.map, sok.room.status, playersAlive);
    if (sok.room.status !== RoomStatus.RUNNING) {
-      playSound(sok.room, 'menu');
+      playSoundSok(sok, 'menu');
    }
 }

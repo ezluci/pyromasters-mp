@@ -20,8 +20,6 @@ function getbomb(x, y) {
 
 
 function moveLeft() {
-   changeAnimation(myColor, 'left');
-   
    if (me.x === MIN_X)
       return
 
@@ -80,8 +78,6 @@ function moveLeft() {
 
 
 function moveDown() {
-   changeAnimation(myColor, 'front');
-   
    if (me.y === MAX_Y)
       return
    
@@ -140,8 +136,6 @@ function moveDown() {
 
 
 function moveRight() {
-   changeAnimation(myColor, 'right');
-   
    if (me.x === MAX_X)
       return
    
@@ -200,8 +194,6 @@ function moveRight() {
 
 
 function moveUp() {
-   changeAnimation(myColor, 'back');
-
    if (me.y === MIN_Y)
       return
    

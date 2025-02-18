@@ -50,8 +50,8 @@ function collectPowerupSwitchplayer(sok: Socket) {
    [sok.coords.x, sok.room[randColor].coords.x] = [sok.room[randColor].coords.x, sok.coords.x];
    [sok.coords.y, sok.room[randColor].coords.y] = [sok.room[randColor].coords.y, sok.coords.y];
    
-   io.to(sok.room.name).emit('coords', sok.color, sok.coords, Animation.IDLE);
-   io.to(sok.room.name).emit('coords', randColor, sok.room[randColor].coords, Animation.IDLE);
+   io.to(sok.room.name).emit('coords', sok.color, sok.coords);
+   io.to(sok.room.name).emit('coords', randColor, sok.room[randColor].coords);
 }
 
 function collectPowerupSick(sok: Socket) {

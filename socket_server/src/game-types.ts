@@ -47,11 +47,15 @@ export interface Coord {
 }
 
 export enum Animation {
-   IDLE = 'idle',
-   FRONT = 'front',
-   BACK = 'back',
-   LEFT = 'left',
-   RIGHT = 'right'
+   IDLE_BACK = 'idle_back',
+   IDLE_FRONT = 'idle_front',
+   IDLE_LEFT = 'idle_left',
+   IDLE_RIGHT = 'idle_right',
+   
+   WALK_BACK = 'walk_back',
+   WALK_FRONT = 'walk_front',
+   WALK_LEFT = 'walk_left',
+   WALK_RIGHT = 'walk_right'
 }
 
 export enum RoomStatus {

@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.10.2] - 2025-02-18
+
+- Rewrote some client-side code for the movement keys
+- Animations now show the exact direction you're going.
+- Added idle animations in each direction.
+- Fixed the main menu sound resetting on someone's join
+- Changed the 'coords' event declaration
+- Added a sound when a player teleports through a portal.
+
 ## [0.10.1] - 2025-02-17
 
 - Compressed all the sounds into one single file, to save up loading time.

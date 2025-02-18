@@ -5,27 +5,30 @@ const butLeft = document.querySelector('#button-left');
 const butDown = document.querySelector('#button-down');
 const butRight = document.querySelector('#button-right');
 const butBomb = document.querySelector('#button-bomb');
+const revKey = { a: 'd', d: 'a', w: 's', s: 'w' };
 
 // on phone, we allow only one button pressed at once
 let buttonPressed = undefined;
 const movingButtons = [[butUp, 'w'], [butLeft, 'a'], [butRight, 'd'], [butDown, 's']];
 
 butBomb.addEventListener('touchstart', (event) => {
-   keys.p = 1;
+   keys_p = 1;
 });
 
 butBomb.addEventListener('touchend', (event) => {
-   keys.p = 0;
+   keys_p = 0;
 });
 
 movingButtons.forEach(([button, key], idx) => {
-   const otherKey = movingButtons[movingButtons.length - idx - 1][1];
-
    button.addEventListener('touchstart', (event) => {
-      if (buttonPressed) {
+      if (buttonPressed) { // if exists, remove the last press
          buttonPressed.dispatchEvent(new Event('touchend'));
       }
-      keys[(switchedKeys ? otherKey : key)] = 1;
+      if (switchedKeys) {
+         key = revKey[key];
+      }
+
+      keyPressQueue[0] = key;
       buttonPressed = button;
    });
 
@@ -33,14 +36,17 @@ movingButtons.forEach(([button, key], idx) => {
       if (button !== buttonPressed) {
          return;
       }
-      keys[(switchedKeys ? otherKey : key)] = 0;
+      if (switchedKeys) {
+         key = revKey[key];
+      }
+
+      keyPressQueue.pop();
       buttonPressed = undefined;
    });
 });
 
 document.addEventListener('switchkeyschange', (event) => {
-   if (buttonPressed) {
-      keys.w = keys.a = keys.s = keys.d = 0;
-      buttonPressed.dispatchEvent(new Event('touchstart'));
+   for (let i = 0; i < keyPressQueue.length; i += 1) {
+      keyPressQueue[i] = revKey[keyPressQueue[i]];
    }
 });

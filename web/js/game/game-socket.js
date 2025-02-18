@@ -137,7 +137,6 @@ socket.on('C', (coordsReceived) => {
       let animState;
       if (typeof coordsReceived[idx][2] === 'string')
          animState = coordsReceived[idx][2];
-      if (!animState)   animState = 'idle';
 
       if (sprites.players[color].state !== animState) {
          changeAnimation(color, animState);
@@ -151,10 +150,9 @@ socket.on('C', (coordsReceived) => {
 // this event updates the coords, no matter what.
 // it doesn't check myColor.
 socket.on('coords', (color, coords1, animState) => {
-   if (!animState)   animState = 'idle';
    coords[color].x = coords1.x;
    coords[color].y = coords1.y;
-   if (sprites.players[color].state !== animState) {
+   if (animState && sprites.players[color].state !== animState) {
       changeAnimation(color, animState);
    }
 })
