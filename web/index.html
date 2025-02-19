@@ -1,28 +1,61 @@
 <!DOCTYPE html>
 <html lang="en-us">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="icon" href="/favicon.ico">
-      <title>pyromasters-mp - index.html</title>
-      <link rel="stylesheet" href="./css/index.css">
-   </head>
-   <body>
-      <h1> Select your device:</h1>
-      <div class="Select">
-         <button onclick="document.location.href = 'Join.html?device=pc'" class="color-button"> PC </button>
-         <button onclick="document.location.href = 'Join.html?device=mobile'" class="color-button"> Mobile </button>
-      </div>
+<head>
+   <link rel="stylesheet" href="./css/index.css">
+   <meta charset="UTF-8">
+   <title>pyromasters-mp - index.html</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <script src="js/mobile-detect.min.js"></script>
+</head>
 
-      <style>
-         .footer > div {
-            display: inline-block;
-            border: 4px;
-            padding: 0.4em 1em;
-            vertical-align: middle;
-         }
-      </style>
-      
-      <%- footer %>
-   </body>
+<body>
+   <img src="assets/images/title.png">
+   
+   <h1 style="font-family: initial;">JOIN A GAME</h1>
+   
+   <input style="height: 30px;" id="username" name="username" autocomplete="off" placeholder="Username">
+   <br>
+   <input style="height: 30px;" id="room" name="room" autocomplete="off" placeholder="Room">
+   <br>
+
+   <label for="platform-select">Select your platform:</label>
+
+   <select id="platform-select">
+      <option value="pc">PC</option>
+      <option value="mobile">Mobile</option>
+   </select>
+
+   <script>
+      const md = new MobileDetect(window.navigator.userAgent);
+      document.querySelector('#platform-select').value = md.mobile() ? 'mobile' : 'pc';
+   </script>
+   <br><br>
+
+   <script>
+      function getUsername() {
+         return document.querySelector('#username').value;
+      }
+      function getRoom() {
+         return document.querySelector('#room').value;
+      }
+
+      const params = new URLSearchParams(window.location.search);
+   </script>
+   
+   <button onclick="
+      username = getUsername();
+      room = getRoom();
+      if (!username || !room) {
+         document.body.innerHTML += '<br>please put something ...';
+      } else if (username.length > 15 || room.length > 15) {
+         document.body.innerHTML += '<br> max 15 characters :(';
+      } else if (! /^[ -~]{1,15}$/.test(username) || ! /^[ -~]{1,15}$/.test(room)) {
+         document.body.innerHTML += '<br>please use printable ascii characters 🦆🦆';
+      }  else {
+         document.location.href = `Game${document.querySelector('#platform-select').value==='mobile' ? 'Mobile' : 'PC'}.html?username=${encodeURIComponent(username)}&room=${encodeURIComponent(room)}`;
+      }
+   ">PLAY</button>
+
+   <%- footer %>
+</body>
 </html>

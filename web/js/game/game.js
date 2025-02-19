@@ -2,8 +2,8 @@
 
 
 
-let gameTime = 0, SOCKET_FULLCONN = 0, playersAlive = [];
-var canvas, ctx, meOld, meNew, me, deltaTime, myColor, coords = {}, keys_p = 0, map, moveSpeed, switchedKeys, shields, keyPressQueue = [], CAN_MOVE = false, END_SCREEN = null, RANKING = null, MAP_NAME = null, bombs = [], bombfires = [];
+let gameTime = 0, playersAlive = [];
+var canvas, ctx, meOld, me, deltaTime, myColor, coords = {}, keys_p = 0, map, moveSpeed, switchedKeys, shields, keyPressQueue = [], CAN_MOVE = false, END_SCREEN = null, RANKING = null, MAP_NAME = null, bombs = [], bombfires = [];
 
 map = [];
 for (let i = 0; i < BLOCKS_VERTICALLY; i += 1) {
