@@ -89,3 +89,7 @@ canvas {
    width: 45%;
    margin: 0% 5%;
 }
+
+#loading {
+   text-align: center;
+}

@@ -16,7 +16,6 @@
 
    <script>
       const DEFAULT_VOLUME = 20;
-      let LOADED_COUNT = 0;
 
       const params = new URLSearchParams(window.location.search);
       const usernameHTML = params.get('username');
@@ -38,7 +37,6 @@
 <body>
    <main>
       <div class="sidebar_left">
-         <span id="loading" style="font-size: large; font-weight: bold;">LOADING...</span>
 
          <div id="log">
             <div id="log-messages"></div>
@@ -85,6 +83,10 @@
       </div>
 
 
+      <span id="loading" style="font-size: large; font-weight: bold;"></span>
+      <script>
+         document.querySelector('#loading').innerText = `Loading assets 0/${ASSETS_COUNT}...`;
+      </script>
       <canvas id="canvas" width="815" height="620"></canvas>
 
 

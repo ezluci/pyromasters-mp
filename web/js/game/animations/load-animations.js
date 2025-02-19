@@ -5,12 +5,12 @@ const sprites = {};
 sprites.playerAnimations = {};
 loadImage('/assets/images/animations/spritesheet.png').then(img => {
    sprites.playerAnimations.img = img;
-   LOADED_COUNT ++;
+   document.dispatchEvent(new CustomEvent('loaded++'));
 });
 fetch('/assets/images/animations/spritesheet.json').then(file => {
    file.json().then(data => {
       sprites.playerAnimations.data = data;
-      LOADED_COUNT ++;
+      document.dispatchEvent(new CustomEvent('loaded++'));
    });
 });
 
