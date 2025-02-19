@@ -5,6 +5,8 @@ export interface Bomb {
    y: number;
    xvel: number;
    yvel: number;
+   xvel_push: number;
+   yvel_push: number;
    owner: Socket;
    length: number;
    tickFuncId: number;

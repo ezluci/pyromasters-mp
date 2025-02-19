@@ -63,7 +63,7 @@ export function tie_bombs(sok: Socket): void {
       if (!tickFuncId) {
          return console.error('tryPlaceBomb: something went wrong');
       }
-      sok.room.bombs.set(bombId, { x, y, xvel: 0, yvel: 0, owner: sok, length: sok.bombLength, tickFuncId });
+      sok.room.bombs.set(bombId, { x, y, xvel: 0, yvel: 0, xvel_push: 0, yvel_push: 0, owner: sok, length: sok.bombLength, tickFuncId });
       sok.room.bombIdCounter ++;
       
       io.to(sok.room.name).emit('addBomb', bombId, x, y);
@@ -89,8 +89,7 @@ export function tie_bombs(sok: Socket): void {
          return; // nothing changes
       }
       
-      bomb.xvel = xvel;
-      bomb.yvel = yvel;
-      playSound(sok.room, 'kickbomb');
+      bomb.xvel_push = xvel;
+      bomb.yvel_push = yvel;
    };
 }

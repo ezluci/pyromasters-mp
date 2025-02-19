@@ -10,6 +10,7 @@ import { generate_showEndScreen } from "./room-functions/show-end-screen";
 
 export class Room {
    name: string;
+   displayName: string;
    owner: Socket;
 
    io: Server;
@@ -45,7 +46,8 @@ export class Room {
 
 
    constructor(name: string, owner: Socket) {
-      this.name = name;
+      this.name = name.toLowerCase();
+      this.displayName = name;
       this.owner = owner;
 
       this.io = owner.nsp.server;

@@ -101,6 +101,10 @@ io.on('connection', (sok: Socket): void => {
       if (typeof bombId !== 'number' || typeof xvel !== 'number' || typeof yvel !== 'number') {
          return console.error('wrong kickbomb event');
       }
+      if (xvel > 0)  xvel = +1;
+      if (xvel < 0)  xvel = -1;
+      if (yvel > 0)  yvel = +1;
+      if (yvel < 0)  yvel = -1;
       sok.kickBomb(bombId, xvel, yvel);
    });
 

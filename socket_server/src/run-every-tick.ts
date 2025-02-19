@@ -64,6 +64,15 @@ export function generate_runEveryTick(sok: Socket): () => void {
       
       // update bombs' positions
       sok.room.bombs.forEach((bomb, bombId) => {
+         let pushed = false;
+         if (bomb.xvel_push || bomb.yvel_push) {
+            bomb.xvel = bomb.xvel_push;
+            bomb.yvel = bomb.yvel_push;
+            bomb.xvel_push = 0;
+            bomb.yvel_push = 0;
+            pushed = true;
+         }
+
          if (bomb.xvel || bomb.yvel) {
             const oldCoords: Coord = { x: bomb.x, y: bomb.y };
             bomb.x += bomb.xvel * KICK_BOMB_SPEED;
@@ -138,6 +147,9 @@ export function generate_runEveryTick(sok: Socket): () => void {
                newCoords.y = Math.round(oldCoords.y);
                bomb.xvel = bomb.yvel = 0;
             } else {
+               if (pushed) {
+                  playSound(sok.room, 'kickbomb');
+               }
                // does it destroy any powerup?
                if (isPowerup(sok.room.map[checkBlock.y][checkBlock.x])) {
                   sok.room.map[checkBlock.y][checkBlock.x] = Block.NO;

@@ -11,6 +11,7 @@ console.log(socket);
 
 
 socket.on('initial_info', (players, mapName, map1, roomStatus, playersAlive) => {
+
    for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
       map[y] = [];
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {

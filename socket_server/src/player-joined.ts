@@ -17,6 +17,12 @@ export function playerJoined(userName: unknown, roomName: unknown, rooms: Map<st
       sok.disconnect();
       return;
    }
+
+   roomName = roomName.toLowerCase();
+   if (typeof roomName !== 'string') {
+      return;
+   }
+   
    if (! /^[ -~]{1,15}$/.test(roomName)) {
       sok.emit('error', 'playerJoined: invalid room name. DISCONNECTED.');
       sok.disconnect();
