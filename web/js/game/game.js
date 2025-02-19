@@ -222,10 +222,15 @@ function gameloop() {
 
       if (meOld.x === me.x && meOld.y === me.y) {
          // walk -> idle
-         changeAnimation(myColor, 'idle_' + sprites.players[myColor].state.split('_')[1]);
+         const key = keyPressQueue.length ? keyPressQueue[keyPressQueue.length - 1] : '';
+         if (key) {
+            changeAnimation(myColor, 'idle_' + (key === 'a' ? 'left' : key === 'd' ? 'right' : key === 'w' ? 'back' : 'front'));
+         } else {
+            changeAnimation(myColor, 'idle_' + sprites.players[myColor].state.split('_')[1]);
+         }
       } else if (keyPressQueue.length === 1 || keyPressQueue.length === 2) {
          let q;
-         const key = keyPressQueue[keyPressQueue.length - 1];
+         const key = keyPressQueue.length && keyPressQueue[keyPressQueue.length - 1] || ' ';
          if (key === 'w') {
             if (meOld.y === me.y) {
                if (me.x < meOld.x) {

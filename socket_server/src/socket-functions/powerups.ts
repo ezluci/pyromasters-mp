@@ -128,7 +128,7 @@ export function tie_powerups(sok: Socket): void {
             case 9: // BonusLOST
                sok.speed = MOVE_SPEEDS[0];
                sok.bombCount = 1;
-               sok.bombTime = MOVE_SPEEDS[0];
+               sok.bombTime = BOMB_TIMES[0];
                sok.bombLength = 2;
                sok.shield = false;
                sok.kickBombs = false;
