@@ -35,7 +35,8 @@
    <script src="js/game/movement.js"></script>
 </head>
 
-<body>
+
+<body tabindex="-1">
    <span id="loading" style="font-size: large; font-weight: bold;"></span>
    <script>
       document.querySelector('#loading').innerText = `Loading assets 0/${ASSETS_COUNT}...`;
@@ -53,11 +54,28 @@
 
             <script>
                const chatInput = document.querySelector('#chat-input');
+               chatInput.value = '';
+               let chatShortcut = false;
+
                chatInput.addEventListener('keypress', (event) => {
+                  if (chatShortcut) {
+                     event.preventDefault();
+                     chatShortcut = false;
+                     return;
+                  }
+
                   if (event.key === 'Enter') {
                      event.preventDefault();
                      socket.emit('chat', chatInput.value);
                      chatInput.value = '';
+                     document.body.focus();
+                  }
+               });
+
+               chatInput.addEventListener('keydown', (event) => {
+                  if (event.key === 'Escape') {
+                     event.preventDefault();
+                     document.body.focus();
                   }
                });
             </script>

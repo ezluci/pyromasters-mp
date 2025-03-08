@@ -73,7 +73,6 @@ export function playerJoined(userName: unknown, roomName: unknown, rooms: Map<st
       return console.error('player-joined error');
    }
    
-   sok.emit('room_status', sok.room.status);
    sok.room.players.set(sok.name, sok);
    
    console.log(`connected:    ${sok.id}, {username: ${sok.name}, room: ${sok.room.name}, isOwner: ${sok.isOwner}}`)
@@ -92,7 +91,8 @@ export function playerJoined(userName: unknown, roomName: unknown, rooms: Map<st
       }
    });
 
-   sok.emit('initial_info', players, sok.room.mapName, sok.room.map, sok.room.status, playersAlive);
+   sok.emit('initial_info', players, sok.room.mapName, sok.room.map, playersAlive);
+   sok.emit('room_status', sok.room.status);
    if (sok.room.status !== RoomStatus.RUNNING) {
       playSoundSok(sok, 'menu');
    }

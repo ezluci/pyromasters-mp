@@ -34,7 +34,7 @@
    <script src="js/game/movement.js"></script>
 </head>
 
-<body>
+<body tabindex="-1">
    <main>
       <div class="sidebar_left">
 
@@ -46,13 +46,7 @@
 
             <script>
                const chatInput = document.querySelector('#chat-input');
-               chatInput.addEventListener('keypress', (event) => {
-                  if (event.key === 'Enter') {
-                     event.preventDefault();
-                     socket.emit('chat', chatInput.value);
-                     chatInput.value = '';
-                  }
-               });
+               chatInput.value = '';
                addLog('please rotate your device in landscape mode.')
             </script>
          </div>

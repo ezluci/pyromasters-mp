@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { Animation, Block, Color, Coord, RoomStatus } from "../game-types";
+import { Animation, Block, Bomb, Color, Coord, RoomStatus } from "../game-types";
 import { ALL_COLORS, ALL_MAPS, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BOMB_TIMES, DEFAULT_POS, MAP_FOURWAY_PORTAL_POSITIONS, MOVE_SPEEDS } from "../game-consts";
 import { playSound } from "../room-functions/play-sound";
 
@@ -76,6 +76,8 @@ export function tryStart(mapName: string, sok: Socket): void {
       }
    })
 
+   sok.room.bombs.clear();
+   sok.room.flames.clear();
    sok.room.mapName = mapName;
    sok.room.map = generateMap(mapName);
    sok.room.endgameBlocks = 0;

@@ -292,8 +292,8 @@ function gameloop() {
    if (!END_SCREEN)
       DRAW_game();
    else {
-      bombs = [];
-      bombfires = [];
+      if (bombs.length) bombs = [];
+      if (bombfires.length)   bombfires = [];
       ctx.drawImage(images.endscreens[END_SCREEN], 0, 0, canvas.width, canvas.height);
       let k = 50;
       RANKING.forEach(({name, wins, kills}) => {

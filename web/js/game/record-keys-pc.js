@@ -6,7 +6,13 @@ document.onkeydown = (event) => {
    if (document.activeElement === document.querySelector('#chat-input')) {
       return;
    }
-   let code = event.code
+   let code = event.code;
+   
+   if (code === 'KeyT' || code === 'Enter') {
+      chatShortcut = true;
+      document.querySelector('#chat-input').focus();
+      return;
+   }
 
    switch (code) {
       case 'KeyA':   code = 'a'; break;

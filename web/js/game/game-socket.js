@@ -8,9 +8,13 @@ document.addEventListener('socket-loaded', function() {
 
 
 console.log(socket);
+socket.onAny((event, ...args) => {
+   if (event === 'C')   return;
+   console.log(`Received event: ${event}`, ...args);
+});
 
 
-socket.on('initial_info', (players, mapName, map1, roomStatus, playersAlive) => {
+socket.on('initial_info', (players, mapName, map1, playersAlive) => {
 
    for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
       map[y] = [];
