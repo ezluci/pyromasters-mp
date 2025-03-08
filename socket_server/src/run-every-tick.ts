@@ -1,6 +1,6 @@
 import { Socket } from "socket.io";
 import { Animation, Block, Color, Coord } from "./game-types";
-import { ALL_COLORS, BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, END_SCREEN_TIMEOUT, isPowerup, KICK_BOMB_SPEED } from "./game-consts";
+import { ALL_COLORS, BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, END_SCREEN_TIMEOUT, isPowerup, KICK_BOMB_SPEED, MAP_FOURWAY_PORTAL_POSITIONS } from "./game-consts";
 import { playSound } from "./room-functions/play-sound";
 
 
@@ -114,6 +114,14 @@ export function generate_runEveryTick(sok: Socket): () => void {
                if (sok.room.map[checkBlock.y][checkBlock.x] === Block.PERMANENT ||
                      sok.room.map[checkBlock.y][checkBlock.x] === Block.NORMAL) {
                   canGo = false;
+               }
+
+               if (sok.room.mapName === 'fourway') {
+                  MAP_FOURWAY_PORTAL_POSITIONS.forEach((portalCoord: Coord) => {
+                     if (portalCoord.x === checkBlock.x && portalCoord.y === checkBlock.y) {
+                        canGo = false;
+                     }
+                  });
                }
                
                const otherBombId: number | undefined = sok.room.getBombIdByCoords({ x: checkBlock.x, y: checkBlock.y });

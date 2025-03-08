@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.3] - 2025-03-08
+
+- Added pc/mobile automatic detection.
+- Bombs and flames now reset on room restart.
+- Improved chat input (added shortcuts).
+- Bombs can't be kicked through portals.
+
 ## [0.10.2] - 2025-02-18
 
 - Rewrote some client-side code for the movement keys
