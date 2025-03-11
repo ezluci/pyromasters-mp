@@ -24,20 +24,19 @@ movingButtons.forEach(([button, key], idx) => {
       if (buttonPressed) { // if exists, remove the last press
          buttonPressed.dispatchEvent(new Event('touchend'));
       }
+
+      let key2 = key;
       if (switchedKeys) {
-         key = revKey[key];
+         key2 = revKey[key];
       }
 
-      keyPressQueue[0] = key;
+      keyPressQueue[0] = key2;
       buttonPressed = button;
    });
 
    button.addEventListener('touchend', (event) => {
       if (button !== buttonPressed) {
          return;
-      }
-      if (switchedKeys) {
-         key = revKey[key];
       }
 
       keyPressQueue.pop();
@@ -46,7 +45,7 @@ movingButtons.forEach(([button, key], idx) => {
 });
 
 document.addEventListener('switchkeyschange', (event) => {
-   for (let i = 0; i < keyPressQueue.length; i += 1) {
-      keyPressQueue[i] = revKey[keyPressQueue[i]];
+   if (keyPressQueue.length) {
+      keyPressQueue[0] = revKey[keyPressQueue[0]];
    }
 });
