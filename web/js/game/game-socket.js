@@ -10,7 +10,7 @@ document.addEventListener('socket-loaded', function() {
 console.log(socket);
 socket.onAny((event, ...args) => {
    if (event === 'C')   return;
-   console.log(`Received event: ${event}`, ...args);
+   // console.log(`Received event: ${event}`, ...args);
 });
 
 
@@ -32,6 +32,7 @@ socket.on('initial_info', (players, mapName, map1, playersAlive) => {
    MAP_NAME = mapName;
    
    players.forEach( ({name, color, isOwner}) => {
+      if (color === null)  color = 'spectator';
       addPlayerToList(name, color, isOwner)
    });
    
@@ -46,6 +47,7 @@ socket.on('initial_info', (players, mapName, map1, playersAlive) => {
 });
 
 socket.on('player+', (username, color, isOwner) => {
+   if (color === null)  color = 'spectator';
    addPlayerToList(username, color, isOwner);
 })
 
@@ -54,8 +56,9 @@ socket.on('player-', (username) => {
 })
 
 socket.on('player~', (oldUsername, username, color, isOwner) => {
+   if (color === null)  color = 'spectator';
    changePlayerFromList(oldUsername, username, color, isOwner);
-
+   
    if (username === usernameHTML) {
       myColor = color;
    }
@@ -72,6 +75,7 @@ socket.on('room_status', (msg) => {
       case ROOM_STATUS.WAITING:
          selectColorsEl.hidden = false;
          selectMapEl.hidden = false;
+         CAN_MOVE = false;
          break;
       case ROOM_STATUS.STARTING:
          selectColorsEl.hidden = true;

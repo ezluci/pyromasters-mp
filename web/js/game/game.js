@@ -16,7 +16,7 @@ for (let i = 0; i < BLOCKS_VERTICALLY; i += 1) {
 
 ASSETS_LOADING.then(() => {
 
-socket = io(`${protocol}://${window.location.hostname}:22822?userName=${usernameHTML}&roomName=${roomHTML}`);
+socket = io(`${protocol}://${window.location.hostname}:22822?userName=${encodeURIComponent(usernameHTML)}&roomName=${encodeURIComponent(roomHTML)}`);
 document.dispatchEvent(new CustomEvent('socket-loaded'));
 
 canvas = document.querySelector('#canvas');

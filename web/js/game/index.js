@@ -11,7 +11,7 @@ function addPlayerToList(username, color, isOwner) {
       li.innerText += ` ${String.fromCodePoint(0x1F451)}`
 
    li.dataset.username = username
-   li.style.backgroundColor = (color === null ? 'gray' : color)
+   li.style.backgroundColor = (color === null || color === 'spectator' ? 'gray' : color)
    li.style.fontWeight = 'bolder'
    if (color === 'black')
       li.style.color = 'white'
