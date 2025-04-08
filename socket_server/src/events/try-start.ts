@@ -54,14 +54,14 @@ export function tryStart(mapName: string, sok: Socket): void {
       
       sok.room[color].speed = MOVE_SPEEDS[0];
       sok.room[color].bombCount = 1;
-      sok.room[color].bombTime = BOMB_TIMES[0];
+      sok.room[color]._bombTime = BOMB_TIMES[0];
       sok.room[color].bombLength = 2;
 
-      sok.room[color].shield = false;
       sok.room[color].shieldFalse_tickId = 0;
+      sok.room[color]._shield = false;
 
-      sok.room[color].sick = false;
       sok.room[color].sickFalse_tickId = 0;
+      sok.room[color]._sick = false;
 
       sok.room[color].kickBombs = false;
 
@@ -70,7 +70,7 @@ export function tryStart(mapName: string, sok: Socket): void {
       if (mapName === 'testmap:)') {
          sok.room[color].speed = MOVE_SPEEDS[MOVE_SPEEDS.length - 1];
          sok.room[color].bombCount = 4;
-         sok.room[color].bombTime = BOMB_TIMES[BOMB_TIMES.length - 1];
+         sok.room[color]._bombTime = BOMB_TIMES[BOMB_TIMES.length - 1];
          sok.room[color].bombLength = 14;
          sok.room[color].kickBombs = true;
       }

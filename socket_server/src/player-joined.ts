@@ -85,13 +85,22 @@ export function playerJoined(userName: unknown, roomName: unknown, rooms: Map<st
    });
 
    const playersAlive: Color[] = [];
+   const playersPowerups: { color: Color, powerup: string, value: any }[] = [];
    ALL_COLORS.forEach(color => {
       if (sok.room[color] && !sok.room[color].dead) {
          playersAlive.push(color);
+         playersPowerups.push(
+            { color, powerup: 'bomblength', value: sok.room[color].bombLength },
+            { color, powerup: 'bombtime', value: sok.room[color].bombTime },
+            { color, powerup: 'speed', value: sok.room[color].speed },
+            { color, powerup: 'kickbomb', value: sok.room[color].kickBomb },
+            { color, powerup: 'bombcount', value: sok.room[color].bombCount }
+         );
       }
    });
 
-   sok.emit('initial_info', players, sok.room.mapName, sok.room.map, playersAlive);
+
+   sok.emit('initial_info', players, sok.room.mapName, sok.room.map, playersAlive, playersPowerups);
    sok.emit('room_status', sok.room.status);
    if (sok.room.status !== RoomStatus.RUNNING) {
       playSoundSok(sok, 'menu');

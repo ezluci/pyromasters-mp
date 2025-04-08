@@ -47,8 +47,25 @@ export function tie_bombs(sok: Socket): void {
          }
       }
       
-      if (sok.bombCount === 0)
+      let realBombCount = sok.bombCount;
+      sok.room.bombs.forEach((bomb) => {
+         if (bomb.owner === sok) {
+            realBombCount -= 1;
+         }
+      });
+      sok.room.flames.forEach((flameRow, flameX) => {
+         flameRow.forEach((flameColumn, flameY) => {
+            flameColumn.forEach((flame) => {
+               if (flame.owner === sok && flame.wasBomb) {
+                  realBombCount -= 1;
+               }
+            });
+         });
+      });
+      
+      if (realBombCount === 0) {
          return; // no bombs left
+      }
       
       // placing the bomb
       const bombId: number = sok.room.bombIdCounter;
@@ -72,8 +89,6 @@ export function tie_bombs(sok: Socket): void {
       } else {
          playSound(sok.room, 'dropbomb');
       }
-      
-      sok.bombCount --;
    };
 
    sok.kickBomb = (bombId: number, xvel: number, yvel: number): void => {

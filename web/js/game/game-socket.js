@@ -1,21 +1,14 @@
 'use strict';
 
 const protocol = (window.location.hostname==='localhost' || window.location.hostname.startsWith('192.168.0.') ? 'http' : 'https');
-let socket;
+let socket, _gameloop_req_id = -1, gameloop_;
 
 document.addEventListener('socket-loaded', function() {
 
-
-
 console.log(socket);
-socket.onAny((event, ...args) => {
-   if (event === 'C')   return;
-   // console.log(`Received event: ${event}`, ...args);
-});
+document.querySelector('#loading').hidden = true;
 
-
-socket.on('initial_info', (players, mapName, map1, playersAlive) => {
-
+socket.on('initial_info', (players, mapName, map1, playersAlive, playersPowerups) => {
    for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
       map[y] = [];
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
@@ -38,12 +31,20 @@ socket.on('initial_info', (players, mapName, map1, playersAlive) => {
    
    ['white', 'black', 'orange', 'green'].forEach(color => {
       coords[color].alive = false;
+      powerupsDOM[color].main.style.display = 'none';
    });
    playersAlive.forEach(color => {
       coords[color].alive = true;
+      powerupsDOM[color].main.style.display = 'flex';
    });
 
-   document.dispatchEvent( new CustomEvent('mapnamechange') );
+   playersPowerups.forEach(powerup => {
+      modifyPlayerPowerups(powerup.color, powerup.powerup, powerup.value);
+   })
+
+   if (MAP_NAME && _gameloop_req_id === -1) {
+      _gameloop_req_id = window.requestAnimationFrame(gameloop_);
+   }
 });
 
 socket.on('player+', (username, color, isOwner) => {
@@ -73,16 +74,19 @@ socket.on('room_status', (msg) => {
 
    switch (msg) {
       case ROOM_STATUS.WAITING:
+         powerupsMainDOM.hidden = true;
          selectColorsEl.hidden = false;
          selectMapEl.hidden = false;
          CAN_MOVE = false;
          break;
       case ROOM_STATUS.STARTING:
+         powerupsMainDOM.hidden = false;
          selectColorsEl.hidden = true;
          selectMapEl.hidden = true;
          canvasEl.hidden = false;
          break;
       case ROOM_STATUS.RUNNING:
+         powerupsMainDOM.hidden = false;
          selectColorsEl.hidden = true;
          selectMapEl.hidden = true;
          canvasEl.hidden = false;
@@ -91,6 +95,14 @@ socket.on('room_status', (msg) => {
          break;
    }
 })
+
+
+socket.on('powerup-update', (statuss) => {
+   console.log(statuss);
+   statuss.forEach((status) => {
+      modifyPlayerPowerups(status.color, status.powerup, status.value);
+   });
+});
 
 
 socket.on('speedUpdate', (newSpeed) => {
@@ -123,14 +135,25 @@ socket.on('death', (color) => {
       CAN_MOVE = false;
    }
    coords[color].alive = false;
+   powerupsDOM[color].main.style.display = 'none';
 })
 
 socket.on('playersAlive', (playersAlive) => {
    ['white', 'black', 'orange', 'green'].forEach(color => {
       coords[color].alive = false;
+      powerupsDOM[color].main.style.display = 'none';
    })
    playersAlive.forEach(color => {
       coords[color].alive = true;
+      powerupsDOM[color].main.style.display = 'flex';
+      powerupsDOM[color]['bomblength'].querySelector('span').innerText = '2';
+      powerupsDOM[color]['bombtime'].querySelector('span').innerText = '4s';
+      powerupsDOM[color]['speed'].querySelector('span').innerText = 'LOW';
+      powerupsDOM[color]['kickbomb'].style.visibility = 'hidden';
+      powerupsDOM[color]['bomb1'].style.visibility = 'visible';
+      powerupsDOM[color]['bomb2'].style.visibility = 'hidden';
+      powerupsDOM[color]['bomb3'].style.visibility = 'hidden';
+      powerupsDOM[color]['bomb4'].style.visibility = 'hidden';
    });
 });
 
@@ -172,7 +195,10 @@ socket.on('mapName', (mapName) => {
       mapName = 'bricktown';
    }
    MAP_NAME = mapName;
-   document.dispatchEvent( new CustomEvent('mapnamechange') );
+   
+   if (MAP_NAME && _gameloop_req_id === -1) {
+      _gameloop_req_id = window.requestAnimationFrame(gameloop_);
+   }
 });
 
 socket.on('mapUpdates', (updates) => {
@@ -216,7 +242,7 @@ socket.on('gameTime', (time) => {
 let menu_soundId;
 
 socket.on('playsound', (soundName) => {
-   console.log(soundName);
+   // console.log(soundName);
    const id = audio.play(soundName);
 
    if (soundName === 'draw' || soundName.startsWith('draw_') ||

@@ -7,7 +7,7 @@ export function coords(x: number, y: number, animState: Animation, sok: Socket):
       return;
    }
    if (sok.dead) {
-      sok.emit('error', 'coords: Player is \'dead\'');
+      // sok.emit('error', 'coords: Player is \'dead\'');
       return;
    }
    if (!Object.values(Animation).includes(animState)) {

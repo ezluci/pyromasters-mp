@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.10.4] - 2025-04-08
+
+- Fixed reversed keys on phone.
+- Fixed names that contain special characters, for example =.
+- Fixed a bug with the spectators.
+- Added powerups status (only on PC for now).
+- Fixed a bug with sick powerup.
+- Fixed a bug with game starting.
+
 ## [0.10.3] - 2025-03-08
 
 - Added pc/mobile automatic detection.

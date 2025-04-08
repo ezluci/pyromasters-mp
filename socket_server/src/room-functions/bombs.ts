@@ -156,10 +156,6 @@ export function generate_removeFlame(room: Room): (x: number, y: number, owner: 
          room.map[y][x] = Block.NO;
          io.to(room.name).emit('mapUpdates', [{ x, y, block: Block.NO }]);
       }
-   
-      if (owner.bombCount < 4 && flame.wasBomb) {
-         owner.bombCount ++;
-      }
    }
 }
 

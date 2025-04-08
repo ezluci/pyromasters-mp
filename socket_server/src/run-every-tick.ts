@@ -48,7 +48,7 @@ export function generate_runEveryTick(sok: Socket): () => void {
       
       // check players who are sick
       ALL_COLORS.forEach(color => {
-         if (sok.room[color]?.sick) {
+         if (sok.room[color] && !sok.room[color].dead && sok.room[color].sick) {
             sok.room[color].placeBomb();
          }
       });

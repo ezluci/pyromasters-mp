@@ -17,7 +17,13 @@ for (let i = 0; i < BLOCKS_VERTICALLY; i += 1) {
 ASSETS_LOADING.then(() => {
 
 socket = io(`${protocol}://${window.location.hostname}:22822?userName=${encodeURIComponent(usernameHTML)}&roomName=${encodeURIComponent(roomHTML)}`);
+
 document.dispatchEvent(new CustomEvent('socket-loaded'));
+
+socket.onAny((event, ...args) => {
+   if (event === 'C')   return;
+   // console.log(`Received event: ${event}`, ...args);
+});
 
 canvas = document.querySelector('#canvas');
 ctx = canvas.getContext('2d');
@@ -36,20 +42,6 @@ let lastFrameTime
 
 
 // starting game loop
-
-const stopController = new AbortController();
-document.addEventListener(
-   'mapnamechange',
-   () => {
-      console.warn('map change');
-      document.querySelector('#loading').hidden = true;
-      if (MAP_NAME) {
-         stopController.abort();
-         window.requestAnimationFrame(gameloop);
-      }
-   },
-   { signal: stopController.signal }
-);
 
 lastFrameTime = performance.now();
 moveSpeed = MOVE_SPEEDS[0];
@@ -145,7 +137,7 @@ function DRAW_game() {
 
 let lastBombTime = -10000;
 
-function gameloop() {
+gameloop_ = function gameloop() {
    // calculate deltaTime
    const currentTime = performance.now()
    deltaTime = currentTime - lastFrameTime
@@ -302,7 +294,7 @@ function gameloop() {
       });
    }
 
-   window.requestAnimationFrame(gameloop);
+   _gameloop_req_id = window.requestAnimationFrame(gameloop);
 }
 
 

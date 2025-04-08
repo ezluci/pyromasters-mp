@@ -94,6 +94,31 @@ body {
 }
 
 
+#powerups > div {
+   display: flex;
+   justify-content: space-between;
+   flex-wrap: wrap;
+   align-items: center;
+}
+
+.powerup-image-full {
+   height: 4rem;
+}
+
+.powerup-image-up {
+   height: 2rem;
+}
+
+.powerup-image-small {
+   height: 3rem;
+}
+
+.powerup-text {
+   font-size: 0.7em
+}
+
+
+
 /* sidebar_middle: */
 
 #sidebar_middle {

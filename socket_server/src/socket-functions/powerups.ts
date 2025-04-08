@@ -9,7 +9,10 @@ function collectPowerupBombplus(sok: Socket) {
 }
 
 function collectPowerupBomblength(sok: Socket) {
-   sok.bombLength += 2
+   sok.bombLength += 2;
+   if (sok.bombLength > 14) {
+      sok.bombLength = 14;
+   }
 }
 
 function collectPowerupSpeed(sok: Socket) {
@@ -75,21 +78,26 @@ export function tie_powerups(sok: Socket): void {
 
       if (sok.room.map[y][x] === Block.POWER_BOMBPLUS) {
          collectPowerupBombplus(sok);
+         io.emit('powerup-update', [{ color: sok.color, powerup: 'bombcount', value: sok.bombCount }]);
       }
       else if (sok.room.map[y][x] === Block.POWER_BOMBLENGTH) {
          collectPowerupBomblength(sok);
+         io.emit('powerup-update', [{ color: sok.color, powerup: 'bomblength', value: sok.bombLength }]);
       }
       else if (sok.room.map[y][x] === Block.POWER_SPEED) {
          collectPowerupSpeed(sok);
+         io.emit('powerup-update', [{ color: sok.color, powerup: 'speed', value: sok.speed }]);
       }
       else if (sok.room.map[y][x] === Block.POWER_SHIELD) {
          collectPowerupShield(sok);
       }
       else if (sok.room.map[y][x] === Block.POWER_KICKBOMBS) {
          collectPowerupKickbombs(sok);
+         io.emit('powerup-update', [{ color: sok.color, powerup: 'kickbomb', value: sok.kickBombs }]);
       }
       else if (sok.room.map[y][x] === Block.POWER_BOMBTIME) {
          collectPowerupBombtime(sok);
+         io.emit('powerup-update', [{ color: sok.color, powerup: 'bombtime', value: sok.bombTime }]);
       }
       else if (sok.room.map[y][x] === Block.POWER_SWITCHPLAYER) {
          collectPowerupSwitchplayer(sok);
@@ -103,24 +111,29 @@ export function tie_powerups(sok: Socket): void {
          switch (rand) {
             case 0:
                collectPowerupBomblength(sok);
+               io.emit('powerup-update', [{ color: sok.color, powerup: 'bomblength', value: sok.bombLength }]);
                break;
             case 1:
                collectPowerupBombplus(sok);
+               io.emit('powerup-update', [{ color: sok.color, powerup: 'bombcount', value: sok.bombCount }]);
                break;
             case 2:
                collectPowerupKickbombs(sok);
+               io.emit('powerup-update', [{ color: sok.color, powerup: 'kickbomb', value: sok.kickBombs }]);
                break;
             case 3:  case 4:
                collectPowerupSick(sok);
                break;
             case 5:
                collectPowerupSpeed(sok);
+               io.emit('powerup-update', [{ color: sok.color, powerup: 'speed', value: sok.speed }]);
                break;
             case 6:
                collectPowerupShield(sok);
                break;
             case 7:
                collectPowerupBombtime(sok);
+               io.emit('powerup-update', [{ color: sok.color, powerup: 'bombtime', value: sok.bombTime }]);
                break;
             case 8:
                collectPowerupSwitchplayer(sok);
@@ -133,15 +146,29 @@ export function tie_powerups(sok: Socket): void {
                sok.shield = false;
                sok.kickBombs = false;
                playSound(sok.room, 'bonuslost');
+               io.emit('powerup-update', [
+                  { color: sok.color, powerup: 'bombcount', value: sok.bombCount },
+                  { color: sok.color, powerup: 'bomblength', value: sok.bombLength },
+                  { color: sok.color, powerup: 'speed', value: sok.speed },
+                  { color: sok.color, powerup: 'kickbomb', value: sok.kickBombs },
+                  { color: sok.color, powerup: 'bombtime', value: sok.bombTime }
+               ]);
                break;
             case 10: // BonusALL
                sok.speed = MOVE_SPEEDS[MOVE_SPEEDS.length - 1];
                sok.bombCount = 4;
                sok.bombTime = BOMB_TIMES[BOMB_TIMES.length - 1];
-               sok.bombLength = 16;
+               sok.bombLength = 14;
                sok.shield = true;
                sok.kickBombs = true;
                playSound(sok.room, 'bonusall');
+               io.emit('powerup-update', [
+                  { color: sok.color, powerup: 'bombcount', value: sok.bombCount },
+                  { color: sok.color, powerup: 'bomblength', value: sok.bombLength },
+                  { color: sok.color, powerup: 'speed', value: sok.speed },
+                  { color: sok.color, powerup: 'kickbomb', value: sok.kickBombs },
+                  { color: sok.color, powerup: 'bombtime', value: sok.bombTime }
+               ]);
                break;
          }
       }
