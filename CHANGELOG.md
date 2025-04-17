@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.10.5] - 2025-04-17
+
+- Rewrote the web-server from NodeJS to Go.
+
 ## [0.10.4] - 2025-04-08
 
 - Fixed reversed keys on phone.

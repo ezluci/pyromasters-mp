@@ -3,11 +3,11 @@
 
 <head>
    <meta charset="UTF-8">
-   <link rel="icon" href="/favicon.ico">
+   <link rel="icon" href="favicon.ico">
    
    <title>pyromasters-mp - GamePC.html</title>
 
-   <link rel="stylesheet" href="/css/GamePC.css">
+   <link rel="stylesheet" href="css/GamePC.css">
 
    <script src="socket.io/socket.io.min.js"></script>
    <script src="howler.js/howler.js"></script>
@@ -304,7 +304,7 @@
       window.addEventListener('resize', updateCanvasSize);
    </script>
 
-   <%- footer %>
+   {{ template "footer.html" . }}
 </body>
 
 </html>

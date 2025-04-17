@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-us">
 <head>
-   <link rel="stylesheet" href="./css/index.css">
+   <link rel="stylesheet" href="css/index.css">
    <meta charset="UTF-8">
    <title>pyromasters-mp - index.html</title>
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,11 +51,11 @@
          document.body.innerHTML += '<br> max 15 characters :(';
       } else if (! /^[ -~]{1,15}$/.test(username) || ! /^[ -~]{1,15}$/.test(room)) {
          document.body.innerHTML += '<br>please use printable ascii characters 🦆🦆';
-      }  else {
-         document.location.href = `Game${document.querySelector('#platform-select').value==='mobile' ? 'Mobile' : 'PC'}.html?username=${encodeURIComponent(username)}&room=${encodeURIComponent(room)}`;
+      } else {
+         document.location.href = `game${document.querySelector('#platform-select').value==='mobile' ? 'mobile' : 'pc'}?username=${encodeURIComponent(username)}&room=${encodeURIComponent(room)}`;
       }
    ">PLAY</button>
 
-   <%- footer %>
+   {{ template "footer.html" . }}
 </body>
 </html>

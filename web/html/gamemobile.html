@@ -4,9 +4,9 @@
    <meta charset="UTF-8">
    
    <title>pyromasters-mp - GameMobile.html</title>
-   <link rel="icon" href="/favicon.ico">
+   <link rel="icon" href="favicon.ico">
 
-   <link rel="stylesheet" href="/css/GameMobile.css">
+   <link rel="stylesheet" href="css/GameMobile.css">
    
    <script src="socket.io/socket.io.min.js"></script>
    <script src="howler.js/howler.js"></script>
@@ -244,6 +244,6 @@
    <script src="js/game/game.js"></script>
    <script src="js/game/record-keys-phone.js"></script>
 
-   <%- footer %>
+   {{ template "footer.html" . }}
 </body>
 </html>
