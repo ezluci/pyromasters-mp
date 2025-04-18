@@ -1,0 +1,10 @@
+*.min.js linguist-vendored
+*.min.js.map linguist-vendored
+**/howler.js linguist-vendored
+
+*.jpg binary
+*.png binary
+*.ico binary
+*.webm binary
+
+* text=auto eol=lf
