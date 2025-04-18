@@ -35,14 +35,20 @@
 </head>
 
 <body tabindex="-1">
+   <span id="loading" style="font-size: large; font-weight: bold;"></span>
+   <script>
+      document.querySelector('#loading').innerText = `Loading assets 0/${ASSETS_COUNT}...`;
+   </script>
+   
    <main>
       <div class="sidebar_left">
 
          <div id="log">
             <div id="log-messages"></div>
-
-            <input id="chat-input">
-            <button id="chat-send-message" onclick="socket.emit('chat', chatInput.value); chatInput.value = '';">Send msg</button>
+            <div id="log-buttons">
+               <input id="chat-input">
+               <button id="chat-send-message" onclick="socket.emit('chat', chatInput.value); chatInput.value = '';">Send</button>
+            </div>
 
             <script>
                const chatInput = document.querySelector('#chat-input');
@@ -208,10 +214,6 @@
       </div>
 
 
-      <span id="loading" style="font-size: large; font-weight: bold;"></span>
-      <script>
-         document.querySelector('#loading').innerText = `Loading assets 0/${ASSETS_COUNT}...`;
-      </script>
       <canvas id="canvas" width="815" height="620"></canvas>
 
 
