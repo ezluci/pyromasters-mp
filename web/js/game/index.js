@@ -119,6 +119,7 @@ function addLog(msg) {
    spanEl.style.display = 'block'
    spanEl.innerText = `log ${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}:${date.getSeconds().toString().padStart(2,'0')} - ${msg}`
    logElm.appendChild(spanEl)
+   logElm.scrollTop = logElm.scrollHeight;
 }
 
 function invertHex(hex) {
