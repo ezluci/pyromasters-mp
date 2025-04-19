@@ -14,7 +14,7 @@ body {
 
 /* sidebar left: */
 
-#sidebar_left {
+#sidebar-left {
    display: flex;
    flex-direction: column;
    width: 25em;
@@ -119,16 +119,16 @@ body {
 
 
 
-/* sidebar_middle: */
+/* sidebar middle: */
 
-#sidebar_middle {
+#sidebar-middle {
    width: 50%;
 }
 
 
-/* sidebar_right: */
+/* sidebar right: */
 
-#sidebar_right {
+#sidebar-right {
    display: flex;
    flex-direction: column;
    padding-left: 1em;

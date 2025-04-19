@@ -2,6 +2,26 @@
 
 const ASSETS_COUNT = 31;
 
+// create a promise which you can use to check if assets are loaded
+const ASSETS_LOADING = new Promise((resolve) => {
+   let loaded = 0;
+
+   document.addEventListener('loaded++', () => {
+      loaded++;
+      
+      if (document.readyState !== 'loading') {
+         document.querySelector('#loading').innerText = `Loading assets ${loaded}/${ASSETS_COUNT}...`;
+      }
+
+      if (loaded === ASSETS_COUNT) {
+         if (document.readyState !== 'loading') {
+            document.querySelector('#loading').innerText = `Loading assets ${ASSETS_COUNT}/${ASSETS_COUNT} ✅\nConnecting to the server...`
+         }
+         resolve();
+      }
+   });
+});
+
 /// LOADING SOUNDS
 
 let audio;
@@ -92,6 +112,8 @@ loadImage('assets/images/blocks/fire.png').then(image => {
    document.dispatchEvent(new CustomEvent('loaded++'));
 })
 
+
+// LOADING POWERUPS
 images.powers = [];
 loadImage('assets/images/blocks/powerup.png').then(image => {
    images.powers.main = image;
@@ -155,18 +177,4 @@ loadImage('assets/images/endscreens/orange.jpg').then(image => {
 loadImage('assets/images/endscreens/green.jpg').then(image => {
    images.endscreens.green = image;
    document.dispatchEvent(new CustomEvent('loaded++'));
-});
-
-
-// create promise which checks if animations are loaded
-const ASSETS_LOADING = new Promise((resolve) => {
-   let loaded = 0;
-   document.addEventListener('loaded++', () => {
-      loaded++;
-      document.querySelector('#loading').innerText = `Loading assets ${loaded}/${ASSETS_COUNT}...`;
-      if (loaded === ASSETS_COUNT) {
-         document.querySelector('#loading').innerText = `Loading assets ${ASSETS_COUNT}/${ASSETS_COUNT} ✅\nConnecting to the server...`
-         resolve();
-      }
-   });
 });

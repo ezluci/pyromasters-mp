@@ -1,24 +1,8 @@
 'use strict';
 
 
-
-let gameTime = 0, playersAlive = [];
-var canvas, ctx, meOld, me, deltaTime, myColor, coords = {}, keys_p = 0, map, moveSpeed, switchedKeys, shields, keyPressQueue = [], CAN_MOVE = false, END_SCREEN = null, RANKING = null, MAP_NAME = null, bombs = [], bombfires = [];
-
-map = [];
-for (let i = 0; i < BLOCKS_VERTICALLY; i += 1) {
-   map[i] = [];
-   for (let j = 0; j < BLOCKS_HORIZONTALLY; j += 1) {
-      map[i][j] = BLOCK.NO;
-   }
-}
-
-
 ASSETS_LOADING.then(() => {
 
-socket = io(`${protocol}://${window.location.hostname}:22822?userName=${encodeURIComponent(usernameHTML)}&roomName=${encodeURIComponent(roomHTML)}`);
-
-document.dispatchEvent(new CustomEvent('socket-loaded'));
 
 socket.onAny((event, ...args) => {
    if (event === 'C')   return;
@@ -39,9 +23,6 @@ coords = {
    'green': {}
 }
 let lastFrameTime
-
-
-// starting game loop
 
 lastFrameTime = performance.now();
 moveSpeed = MOVE_SPEEDS[0];

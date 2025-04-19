@@ -5,13 +5,20 @@ body {
    touch-action: manipulation;
 }
 
-main {
+#main {
    display: flex;
    justify-content: center;
    gap: 5px;
 }
 
-/* sidebar left */
+/* sidebar left: */
+
+.sidebar-left {
+   flex: 1;
+   flex-direction: column;
+   width: 15em;
+   padding: 0%;
+}
 
 .color-button {
    border: solid;
@@ -65,14 +72,6 @@ main {
 }
 
 
-.sidebar_left {
-   flex: 1;
-   flex-direction: column;
-   width: 15em;
-   padding: 0%;
-}
-
-
 #powerups > div {
    display: flex;
    justify-content: space-between;
@@ -97,22 +96,17 @@ main {
 }
 
 
-/* canvas */
+/* sidebar middle: */
 
-#loading {
-   text-align: center;
-}
-
-canvas {
+#sidebar-middle {
    flex: 2;
    width: 50%;
-   flex-direction: column;
 }
 
-/* sidebar-right */
 
+/* sidebar right: */
 
-.sidebar_right {
+#sidebar-right {
    flex: 2;
    flex-direction: column;
    float: right;

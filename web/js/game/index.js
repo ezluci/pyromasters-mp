@@ -1,11 +1,26 @@
 'use strict';
 
-let playerListElm, powerupsMainDOM, powerupsDOM;
+let logElm, playerListElm, powerupsMainDOM, powerupsDOM;
 
-waitForElm('#player-list').then((elm) => {playerListElm = elm});
+const DEFAULT_VOLUME = 20;
 
-waitForElm('#powerups').then((elm) => {
-   powerupsMainDOM = elm;
+const params = new URLSearchParams(window.location.search);
+const usernameHTML = params.get('username');
+const roomHTML = params.get('room');
+
+if (document.readyState === 'loading') {
+   document.addEventListener('DOMContentLoaded', loadElmVariables);
+} else {
+   loadElmVariables();
+}
+
+function loadElmVariables() {
+   logElm = document.querySelector('#log-messages');
+
+   playerListElm = document.querySelector('#player-list');
+   
+   powerupsMainDOM = document.querySelector('#powerups');
+   
    powerupsDOM = {};
    ['white', 'black', 'orange', 'green'].forEach(color => {
       powerupsDOM[color] = {};
@@ -14,7 +29,7 @@ waitForElm('#powerups').then((elm) => {
          powerupsDOM[color][powerName] = document.querySelector('#powerups-' + color + '-' + powerName);
       });
    });
-});
+}
 
 
 function addPlayerToList(username, color, isOwner) {
@@ -96,4 +111,25 @@ function modifyPlayerPowerups(color, powerup, value) {
    } else {
       console.error('error update player status');
    }
+}
+
+function addLog(msg) {
+   const date = new Date()
+   const spanEl = document.createElement('span')
+   spanEl.style.display = 'block'
+   spanEl.innerText = `log ${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}:${date.getSeconds().toString().padStart(2,'0')} - ${msg}`
+   logElm.appendChild(spanEl)
+}
+
+function invertHex(hex) {
+   return (Number(`0x1${hex}`) ^ 0xFFFFFF).toString(16).substring(1).toUpperCase()
+}
+
+function loadImage(src) {
+   return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = reject;
+      img.src = src;
+   });
 }

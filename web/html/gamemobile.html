@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html lang="en-us">
+
 <head>
    <meta charset="UTF-8">
-   
-   <title>pyromasters-mp - GameMobile.html</title>
    <link rel="icon" href="favicon.ico">
+   
+   <title>pyromasters-mp - GameMobile</title>
 
    <link rel="stylesheet" href="css/GameMobile.css">
-   
+
    <script src="socket.io/socket.io.min.js"></script>
    <script src="howler.js/howler.js"></script>
 
-   <script src="js/misc.js"></script>
-   <script src="js/log.js"></script>
-
-   <script>
-      const DEFAULT_VOLUME = 20;
-
-      const params = new URLSearchParams(window.location.search);
-      const usernameHTML = params.get('username');
-      const roomHTML = params.get('room');
-   </script>
+   <!-- LOADING PAGE -->
+   <script src="js/game/index.js"></script>
 
    <!-- LOADING ASSETS -->
    <script src="js/game/load-assets.js"></script>
    <script src="js/game/animations/load-animations.js"></script>
    <script src="js/game/animations/process-animations.js"></script>
 
-   <script src="js/game/index.js"></script>
-   <script src="js/game/misc.js"></script>
+   <!-- LOADING GAME -->
    <script src="js/game/consts.js"></script>
-   <script src="js/game/game-socket.js"></script>
    <script src="js/game/movement.js"></script>
+   <script src="js/game/misc.js"></script>
+   <script src="js/game/game-socket.js"></script>
+   <script defer src="js/game/game.js"></script>
+   <script defer src="js/game/record-keys-phone.js"></script>
+
+   <!--
+   first we load the assets. on each asset loaded, the event 'loaded++' fires.
+   the 'loaded++' event checks if the loaded count is ASSETS_COUNT, if it is then game-socket.js continues to load.
+   -->
 </head>
 
 <body tabindex="-1">
@@ -53,15 +53,18 @@
             <script>
                const chatInput = document.querySelector('#chat-input');
                chatInput.value = '';
+               logElm = document.querySelector('#log-messages');
                addLog('please rotate your device in landscape mode.')
             </script>
          </div>
 
          <div id="select-color" style="color: black; font-weight: bold;" hidden>
-            <u><b><i>
+            <b><i>
                <span style="color: red;">Select</span>
                <span style="color: aqua;">color</span>
-               <span style="color: blue;">here:</span></i></b></u><br>
+               <span style="color: blue;">here:</span>
+            </i></b>
+            <br>
             <button id="white" class="color-button" onclick="socket.emit('selectColor', 'white')">WHITE</button>
             <button id="black" class="color-button" onclick="socket.emit('selectColor', 'black')">BLACK</button>
             <button id="orange" class="color-button" onclick="socket.emit('selectColor', 'orange')">ORANGE</button>
@@ -242,9 +245,6 @@
          <button id="button-down" class="android-button">v</button>
       </div>
    </main>
-
-   <script src="js/game/game.js"></script>
-   <script src="js/game/record-keys-phone.js"></script>
 
    {{ template "footer.html" . }}
 </body>

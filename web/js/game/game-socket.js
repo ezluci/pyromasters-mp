@@ -2,13 +2,27 @@
 
 const protocol = (window.location.hostname==='localhost' || window.location.hostname.startsWith('192.168.0.') ? 'http' : 'https');
 let socket, _gameloop_req_id = -1, gameloop_;
+var gameTime = 0, playersAlive = [], canvas, ctx, meOld, me, deltaTime, myColor, coords = {}, keys_p = 0, map = [], moveSpeed;
+var switchedKeys, shields, keyPressQueue = [], CAN_MOVE = false, END_SCREEN = null, RANKING = null, MAP_NAME = null, bombs = [], bombfires = [];
 
-document.addEventListener('socket-loaded', function() {
 
-console.log(socket);
-document.querySelector('#loading').hidden = true;
+ASSETS_LOADING.then(() => {
+   if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadSocket);
+   } else {
+      loadSocket();
+   }
+});
+
+
+function loadSocket() {
+// this function is ran after the dom has loaded and after the assets are loaded (or that's what i like to think)
+
+socket = io(`${protocol}://${window.location.hostname}:22822?userName=${encodeURIComponent(usernameHTML)}&roomName=${encodeURIComponent(roomHTML)}`);
 
 socket.on('initial_info', (players, mapName, map1, playersAlive, playersPowerups) => {
+   console.log(socket);
+   document.querySelector('#loading').hidden = true;
    for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
       map[y] = [];
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
@@ -304,4 +318,4 @@ socket.on('error', (msg) => {
 
 
    
-});
+}
