@@ -4,6 +4,7 @@
 <head>
    <meta charset="UTF-8">
    <link rel="icon" href="favicon.ico">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
    
    <title>pyromasters-mp - GameMobile</title>
 
@@ -11,6 +12,15 @@
 
    <script src="socket.io/socket.io.min.js"></script>
    <script src="howler.js/howler.js"></script>
+   
+   <script>
+      function setViewportHeight() {
+         const vh = window.innerHeight * 0.01;
+         document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }
+      setViewportHeight();
+      window.addEventListener('resize', setViewportHeight);
+   </script>
 
    <!-- LOADING PAGE -->
    <script src="js/game/index.js"></script>
@@ -40,9 +50,8 @@
       document.querySelector('#loading').innerText = `Loading assets 0/${ASSETS_COUNT}...`;
    </script>
    
-   <main>
-      <div class="sidebar_left">
-
+   <div id="main">
+      <div id="sidebar-left">
          <div id="log">
             <div id="log-messages"></div>
             <div id="log-buttons">
@@ -58,7 +67,7 @@
             </script>
          </div>
 
-         <div id="select-color" style="color: black; font-weight: bold;" hidden>
+         <div id="select-color" hidden>
             <b><i>
                <span style="color: red;">Select</span>
                <span style="color: aqua;">color</span>
@@ -74,7 +83,7 @@
 
          <div id="select-map" hidden>
             <b><i>
-               Select map here (owner only):
+               Select map (owner only):
             </i></b>
             <select id="map-selected">
                <option value="random" selected>Random map</option>
@@ -84,7 +93,7 @@
             </select>
          </div>
 
-         <div id="powerups" hidden style="visibility: hidden; display: none;">
+         <div id="powerups" hidden>
             <div id="powerups-white">
                <div>
                   <img class="powerup-image-full" src="assets/images/players/white.png">
@@ -217,10 +226,12 @@
       </div>
 
 
-      <canvas id="canvas" width="815" height="620"></canvas>
+      <div id="sidebar-middle">
+         <canvas id="canvas" width="815" height="620"></canvas>
+      </div>
 
 
-      <div class="sidebar_right">
+      <div id="sidebar-right">
          <div id="start-game">
             <button id="start-button" onclick="
                if (usernameHTML === 'testmap:)') {
@@ -233,9 +244,6 @@
             <span id="room-status" style="color: red;"></span>
          </div>
 
-         <ul id="player-list" style="display: inline-block; background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; font-size: 20px;"></ul>
-
-         <br>
          <button id="button-up" class="android-button">^</button>
          <br>
          <button id="button-left" class="android-button"><</button>
@@ -243,8 +251,11 @@
          <button id="button-right" class="android-button">></button>
          <br>
          <button id="button-down" class="android-button">v</button>
+         <br>
+
+         <ul id="player-list"></ul>
       </div>
-   </main>
+   </div>
 
    {{ template "footer.html" . }}
 </body>
