@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.10.6] - 2025-04-23
+
+- Added .gitattributes
+- Fixed chat auto scroll on mobile
+- Fixed connection timings for client, I hope
+- Fixed the CSS for gamemobile.html (typo in commit)
+- Added auto-scroll for addLog
+- Better index.html errors
+
 ## [0.10.5] - 2025-04-17
 
 - Rewrote the web-server from NodeJS to Go.

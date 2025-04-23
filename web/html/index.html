@@ -45,16 +45,20 @@
    <button onclick="
       username = getUsername();
       room = getRoom();
+      const el = document.createElement('div');
       if (!username || !room) {
-         document.body.innerHTML += '<br>please put something ...';
+         el.innerText = 'please put something ...';
       } else if (username.length > 15 || room.length > 15) {
-         document.body.innerHTML += '<br> max 15 characters :(';
+         el.innerText = 'max 15 characters :(';
       } else if (! /^[ -~]{1,15}$/.test(username) || ! /^[ -~]{1,15}$/.test(room)) {
-         document.body.innerHTML += '<br>please use printable ascii characters 🦆🦆';
+         el.innerText = 'please use printable ascii characters 🦆🦆';
       } else {
          document.location.href = `game${document.querySelector('#platform-select').value==='mobile' ? 'mobile' : 'pc'}?username=${encodeURIComponent(username)}&room=${encodeURIComponent(room)}`;
       }
+      document.querySelector('#errors').appendChild(el);
    ">PLAY</button>
+
+   <div id="errors"></div>
 
    {{ template "footer.html" . }}
 </body>
