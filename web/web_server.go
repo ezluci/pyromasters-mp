@@ -48,7 +48,7 @@ func main() {
 
 	tmpl, err := template.New("").Funcs(template.FuncMap{
 		"version": func() string { return version },
-	}).ParseGlob("html/*.html")
+	}).ParseGlob("dist/html/*.html")
 
 	if err != nil {
 		log.Default().Panic(err.Error())
@@ -82,7 +82,7 @@ func main() {
 		}
 
 		// serve non html content
-		fileContents, err := os.ReadFile("./" + path)
+		fileContents, err := os.ReadFile("./dist/" + path)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
 			w.Header().Set("Content-Type", "text/html")
