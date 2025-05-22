@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.10.7] - 2025-05-22
+
+- Refactored client code from JS to TS
+- Fixed often crashes on player movement
+- Added Vite as a dev-tool
+
 ## [0.10.6] - 2025-04-23
 
 - Added .gitattributes

@@ -5,14 +5,10 @@
    <meta charset="UTF-8">
    <link rel="icon" href="favicon.ico">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
    <title>pyromasters-mp - GameMobile</title>
-
    <link rel="stylesheet" href="css/GameMobile.css">
+   <script type="module" src="src/index.ts"></script>
 
-   <script src="socket.io/socket.io.min.js"></script>
-   <script src="howler.js/howler.js"></script>
-   
    <script>
       function setViewportHeight() {
          const vh = window.innerHeight * 0.01;
@@ -21,50 +17,20 @@
       setViewportHeight();
       window.addEventListener('resize', setViewportHeight);
    </script>
-
-   <!-- LOADING PAGE -->
-   <script src="js/game/index.js"></script>
-
-   <!-- LOADING ASSETS -->
-   <script src="js/game/load-assets.js"></script>
-   <script src="js/game/animations/load-animations.js"></script>
-   <script src="js/game/animations/process-animations.js"></script>
-
-   <!-- LOADING GAME -->
-   <script src="js/game/consts.js"></script>
-   <script src="js/game/movement.js"></script>
-   <script src="js/game/misc.js"></script>
-   <script src="js/game/game-socket.js"></script>
-   <script defer src="js/game/game.js"></script>
-   <script defer src="js/game/record-keys-phone.js"></script>
-
-   <!--
-   first we load the assets. on each asset loaded, the event 'loaded++' fires.
-   the 'loaded++' event checks if the loaded count is ASSETS_COUNT, if it is then game-socket.js continues to load.
-   -->
 </head>
 
 <body tabindex="-1">
    <span id="loading" style="font-size: large; font-weight: bold;"></span>
-   <script>
-      document.querySelector('#loading').innerText = `Loading assets 0/${ASSETS_COUNT}...`;
-   </script>
    
    <div id="main">
       <div id="sidebar-left">
+
          <div id="log">
             <div id="log-messages"></div>
             <div id="log-buttons">
                <input id="chat-input">
-               <button id="chat-send-message" onclick="socket.emit('chat', chatInput.value); chatInput.value = '';">Send</button>
+               <button id="chat-send-message">Send</button>
             </div>
-
-            <script>
-               const chatInput = document.querySelector('#chat-input');
-               chatInput.value = '';
-               logElm = document.querySelector('#log-messages');
-               addLog('please rotate your device in landscape mode.')
-            </script>
          </div>
 
          <div id="select-color" hidden>
@@ -74,11 +40,11 @@
                <span style="color: blue;">here:</span>
             </i></b>
             <br>
-            <button id="white" class="color-button" onclick="socket.emit('selectColor', 'white')">WHITE</button>
-            <button id="black" class="color-button" onclick="socket.emit('selectColor', 'black')">BLACK</button>
-            <button id="orange" class="color-button" onclick="socket.emit('selectColor', 'orange')">ORANGE</button>
-            <button id="green" class="color-button" onclick="socket.emit('selectColor', 'green')">GREEN</buttton>
-            <button id="spectator" class="color-button" onclick="socket.emit('selectColor', null)">SPECTATOR</buttton>
+            <button id="white" class="color-button">WHITE</button>
+            <button id="black" class="color-button">BLACK</button>
+            <button id="orange" class="color-button">ORANGE</button>
+            <button id="green" class="color-button">GREEN</buttton>
+            <button id="spectator" class="color-button">SPECTATOR</buttton>
          </div>
 
          <div id="select-map" hidden>
@@ -233,24 +199,18 @@
 
       <div id="sidebar-right">
          <div id="start-game">
-            <button id="start-button" onclick="
-               if (usernameHTML === 'testmap:)') {
-                  socket.emit('tryStart', 'testmap:)');
-               } else {
-                  socket.emit('tryStart', document.querySelector('#map-selected').value);
-               }
-            ">Start game</button>
-            <br>
             <span id="room-status" style="color: red;"></span>
+            <br>
+            <button id="start-button">Start game</button>
          </div>
 
-         <button id="button-up" class="android-button">^</button>
+         <button id="button-up" class="android-button"> ^ </button>
          <br>
-         <button id="button-left" class="android-button"><</button>
-         <button id="button-bomb" class="android-button">BOMB</button>
-         <button id="button-right" class="android-button">></button>
+         <button id="button-left" class="android-button"> &#x003c; </button>
+         <button id="button-bomb" class="android-button"> BOMB </button>
+         <button id="button-right" class="android-button"> &#x003e; </button>
          <br>
-         <button id="button-down" class="android-button">v</button>
+         <button id="button-down" class="android-button"> v </button>
          <br>
 
          <ul id="player-list"></ul>

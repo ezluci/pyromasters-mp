@@ -38,6 +38,6 @@ export function generate_showEndScreen(room: Room): () => void {
       io.to(room.name).emit('endscreen', winnerColor, ranking);
       playSound(room, winner ? 'win' : 'draw');
       room.status = RoomStatus.WAITING;
-      room.mapName = '';
+      room.mapName = null;
    };
 }

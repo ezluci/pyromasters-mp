@@ -23,7 +23,7 @@ export class Room {
    green: Socket | null;
    
    private _map: Block[][];
-   private _mapName: string;
+   private _mapName: string | null;
 
    bombs: Map<number, Bomb>; // <bomdId, bomb>
    bombIdCounter: number;
@@ -57,7 +57,7 @@ export class Room {
       this.white = this.black = this.orange = this.green = null;
 
       this._map = [];
-      this._mapName = '';
+      this._mapName = null;
 
       this.bombs = new Map<number, Bomb>();
       this.bombIdCounter = 0;
@@ -101,11 +101,11 @@ export class Room {
       this.io.to(this.name).emit('mapUpdates', updates);
    }
 
-   get mapName(): string {
+   get mapName(): string | null {
       return this._mapName;
    }
 
-   set mapName(newName: string) {
+   set mapName(newName: string | null) {
       this._mapName = newName;
       this.io.to(this.name).emit('mapName', newName);
    }

@@ -68,7 +68,7 @@ export function tryStart(mapName: string, sok: Socket): void {
       io.to(sok.room.name).emit('coords', color, sok.room[color].coords, sok.room[color].animState);
       
       if (mapName === 'testmap:)') {
-         sok.room[color].speed = MOVE_SPEEDS[MOVE_SPEEDS.length - 1];
+         sok.room[color].speed = MOVE_SPEEDS[0];
          sok.room[color].bombCount = 4;
          sok.room[color]._bombTime = BOMB_TIMES[BOMB_TIMES.length - 1];
          sok.room[color].bombLength = 14;

@@ -1,0 +1,1 @@
+import "./game-socket"; // trigger socket connection
