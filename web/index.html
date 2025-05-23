@@ -1,15 +1,23 @@
 <!DOCTYPE html>
 <html lang="en-us">
+
 <head>
-   <link rel="stylesheet" href="../css/index.css">
+   <title>pyromasters-mp - index</title>
+
    <meta charset="UTF-8">
-   <title>pyromasters-mp - index.html</title>
+   <link rel="icon" href="/favicon.ico">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <script type="module" src="../libs/mobile-detect.min.js"></script>
+   
+   <link rel="stylesheet" href="/css/index.css">
+   <script type="module">
+      import MobileDetect from 'mobile-detect';
+      const md = new MobileDetect(window.navigator.userAgent);
+      document.querySelector('#platform-select').value = md.mobile() ? 'mobile' : 'pc';
+   </script>
 </head>
 
 <body>
-   <img src="assets/images/title.png">
+   <img src="/assets/images/title.png">
    
    <h1 style="font-family: initial;">JOIN A GAME</h1>
    
@@ -25,10 +33,6 @@
       <option value="mobile">Mobile</option>
    </select>
 
-   <script>
-      const md = new MobileDetect(window.navigator.userAgent);
-      document.querySelector('#platform-select').value = md.mobile() ? 'mobile' : 'pc';
-   </script>
    <br><br>
 
    <script>

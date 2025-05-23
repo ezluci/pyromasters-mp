@@ -48,7 +48,7 @@ func main() {
 
 	tmpl, err := template.New("").Funcs(template.FuncMap{
 		"version": func() string { return version },
-	}).ParseGlob("dist/html/*.html")
+	}).ParseGlob("dist/*.html")
 
 	if err != nil {
 		log.Default().Panic(err.Error())
