@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { Animation, Block, Bomb, Color, Coord, RoomStatus } from "../game-types";
+import { Animation, Block, Color, Coord, RoomStatus } from "../game-types";
 import { ALL_COLORS, ALL_MAPS, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BOMB_TIMES, DEFAULT_POS, MAP_FOURWAY_PORTAL_POSITIONS, MOVE_SPEEDS } from "../game-consts";
 import { playSound } from "../room-functions/play-sound";
 
@@ -68,21 +68,24 @@ export function tryStart(mapName: string, sok: Socket): void {
       io.to(sok.room.name).emit('coords', color, sok.room[color].coords, sok.room[color].animState);
       
       if (mapName === 'testmap:)') {
-         sok.room[color].speed = MOVE_SPEEDS[0];
+         sok.room[color].speed = MOVE_SPEEDS[MOVE_SPEEDS.length - 1];
          sok.room[color].bombCount = 4;
          sok.room[color]._bombTime = BOMB_TIMES[BOMB_TIMES.length - 1];
          sok.room[color].bombLength = 14;
          sok.room[color].kickBombs = true;
+         
+         io.to(sok.room.name).emit('shield', color, true);
+         sok.room[color]._shield = true;
       }
    })
 
-   sok.room.bombs.clear();
-   sok.room.flames.clear();
+   sok.room.bombs.length = 0;
+   sok.room.flames.length = 0;
    sok.room.mapName = mapName;
    sok.room.map = generateMap(mapName);
    sok.room.endgameBlocks = 0;
    sok.room.endscreen_tickId = null;
-   sok.room.bombIdCounter = 1;
+   sok.room.bombIdCounter = 0;
    sok.room.singlePlayer = (playersAlive.length === 1);
 
 
@@ -130,11 +133,17 @@ function generateMap(mapName: string): Block[][] {
             }
          }
       }
+
       map[4][4] = Block.POWER_SHIELD;
       map[4][6] = Block.POWER_SWITCHPLAYER;
       map[6][6] = Block.POWER_KICKBOMBS;
       map[8][8] = Block.POWER_SICK;
       map[8][10] = Block.POWER_SICK;
+      map[2][2] = Block.POWER_BONUS;
+      map[2][4] = Block.POWER_BONUS;
+      map[2][6] = Block.POWER_BONUS;
+      map[2][8] = Block.POWER_BONUS;
+      map[2][10] = Block.POWER_BOMBPLUS;
       
       return map;
    }

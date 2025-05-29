@@ -1,4 +1,4 @@
-import { Server, Socket } from "socket.io";
+import { Socket } from "socket.io";
 import { Animation, Color, RoomStatus } from "./game-types";
 import { Room } from "./room";
 import { ALL_COLORS } from "./game-consts";

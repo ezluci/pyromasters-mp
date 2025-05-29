@@ -3,6 +3,7 @@ import { Socket } from "socket.io";
 export interface Bomb {
    x: number;
    y: number;
+   id: number;
    xvel: number;
    yvel: number;
    xvel_push: number;

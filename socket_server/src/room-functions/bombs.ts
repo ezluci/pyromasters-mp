@@ -1,128 +1,142 @@
 import { Socket } from "socket.io";
 import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, FIRE_TIME, isPowerup } from "../game-consts";
-import { Block, Coord, Flame } from "../game-types";
+import { Block, Bomb, Flame } from "../game-types";
 import { Room } from "../room";
 
 
-export function generate_getBombIdByCoords(room: Room): (coord: Coord) => number | undefined {
-   return ({x, y}) => {
-      let id = undefined;
-      room.bombs.forEach((bomb, bombId) => {
-         if (Math.round(bomb.x) === x && Math.round(bomb.y) === y) {
-            id = bombId;
-         }
-      });
-      return id;
+export function generate_getBomb(room: Room): (arg1: number, arg2?: number) => Bomb | undefined {
+   return (arg1, arg2?): Bomb | undefined => {
+      if (arg2 !== undefined) {
+         // coords are arg1, arg2
+         return room.bombs.find(bomb => Math.round(bomb.x) === arg1 && Math.round(bomb.y) === arg2);
+      } else {
+         // id is arg1
+         const a = room.bombs.find(bomb => bomb.id === arg1);
+         return a;
+      }
+   };
+}
+
+export function generate_getFlame(room: Room): (x: number, y: number, owner: Socket) => Flame | undefined {
+   return (x, y, owner): Flame | undefined => {
+      return room.flames.find(flame => flame.x === x && flame.y === y && flame.owner === owner);
    };
 }
 
 
-export function generate_explodeBomb(room: Room): (bombId: number, recursive: boolean) => Flame[] {
+// call this only with bombId
+export function generate_explodeBomb(room: Room): (bombId: number, recursive?: boolean, flames?: Flame[]) => void {
    const io = room.owner.nsp.server;
    
-   return (bombId, recursive) => {
-      const bomb = room.bombs.get(bombId);
+   return (bombId, recursive = false, flames = []) => {
+      const bomb = room.getBomb(bombId);
       if (!bomb) {
-         console.error('explodeBomb: incorrect bombId');
+         console.error('explodeBomb: no bomb found');
          return [];
       }
 
+      const bombOwner = bomb.owner;
       const bombLength = bomb.length;
       room.ticks.removeFunc(bomb.tickFuncId);
-      room.bombs.delete(bombId);
+      room.bombs = room.bombs.filter(bomb => bomb.id !== bombId);
       io.to(room.name).emit('deleteBomb', bombId);
+
+
+      function explodeHelper(x: number, y: number): boolean {
+         let tmpBomb: Bomb | undefined;
+         if (tmpBomb = room.getBomb(x, y)) {
+            room.explodeBomb(tmpBomb.id, true, flames);
+         }
+         if (room.map[y][x] !== Block.PERMANENT &&
+               flames.filter(flame => flame.x === x && flame.y === y && flame.owner === bombOwner).length === 0) {
+            flames.push({ x: x, y: y, owner: bombOwner, oldBlock: room.map[y][x], wasBomb: false, tickFuncId: undefined });
+         }
+         return breakLoop(room.map[y][x]);
+      }
       
       const x = Math.round(bomb.x);
       const y = Math.round(bomb.y);
-      let fires: Flame[] = [];
 
-      fires.push({ x: x, y: y, owner: bomb.owner, oldBlock: room.map[y][x], wasBomb: true, tickFuncId: undefined });
+      flames.push({ x: x, y: y, owner: bombOwner, oldBlock: room.map[y][x], wasBomb: true, tickFuncId: undefined });
       room.map[y][x] = Block.NO;
 
-      let tmpBombId: number | undefined;
+
       for (let yy = y-1; yy >= Math.max(0, y - bombLength); --yy) {
-         if (tmpBombId = room.getBombIdByCoords({ x: x, y: yy} )) {
-            fires = fires.concat( room.explodeBomb(tmpBombId, true) );
+         if (explodeHelper(x, yy)) {
             break;
          }
-         if (room.map[yy][x] !== Block.PERMANENT)
-            fires.push({ x: x, y: yy, owner: bomb.owner, oldBlock: room.map[yy][x], wasBomb: false, tickFuncId: undefined });
-         if (breakLoop(room.map[yy][x]))
-            break;
       }
-
       for (let yy = y+1; yy <= Math.min(BLOCKS_VERTICALLY-1, y + bombLength); ++yy) {
-         if (tmpBombId = room.getBombIdByCoords({ x: x, y: yy })) {
-            fires = fires.concat( room.explodeBomb(tmpBombId, true) );
+         if (explodeHelper(x, yy)) {
             break;
          }
-         if (room.map[yy][x] !== Block.PERMANENT)
-            fires.push({ x: x, y: yy, owner: bomb.owner, oldBlock: room.map[yy][x], wasBomb: false, tickFuncId: undefined });
-         if (breakLoop(room.map[yy][x]))
-            break;
       }
-
       for (let xx = x-1; xx >= Math.max(0, x - bombLength); --xx) {
-         if (tmpBombId = room.getBombIdByCoords({ x: xx, y: y })) {
-            fires = fires.concat( room.explodeBomb(tmpBombId, true) );
+         if (explodeHelper(xx, y)) {
             break;
          }
-         if (room.map[y][xx] !== Block.PERMANENT)
-            fires.push({ x: xx, y: y, owner: bomb.owner, oldBlock: room.map[y][xx], wasBomb: false, tickFuncId: undefined });
-         if (breakLoop(room.map[y][xx]))
-            break;
       }
-
       for (let xx = x+1; xx <= Math.min(BLOCKS_HORIZONTALLY-1, x + bombLength); ++xx) {
-         if (tmpBombId = room.getBombIdByCoords({ x: xx, y: y })) {
-            fires = fires.concat( room.explodeBomb(tmpBombId, true) );
+         if (explodeHelper(xx, y)) {
             break;
          }
-         if (room.map[y][xx] !== Block.PERMANENT)
-            fires.push({ x: xx, y: y, owner: bomb.owner, oldBlock: room.map[y][xx], wasBomb: false, tickFuncId: undefined });
-         if (breakLoop(room.map[y][xx]))
-            break;
       }
 
-      if (recursive)
-         return fires;
-      
-      fires.forEach((fire: Flame) => {
-         const oldBombfire = room.flames.get(fire.x)?.get(fire.y)?.get(fire.owner);
-         if (oldBombfire) {
-            if (!oldBombfire.tickFuncId) {
-               return console.error('explodebomb error 2');
-            }
-            room.ticks.removeFunc(oldBombfire.tickFuncId);
-            if (oldBombfire.wasBomb) {
-               fire.wasBomb = true;
-            }
-         } else {
-            io.to(room.name).emit('addBombfire', fire.x, fire.y);
-         }
-         
-         const tickFuncId = room.ticks.addFunc(
-            () => room.removeFlame(fire.x, fire.y, fire.owner),
-            FIRE_TIME / room.ticks.MSPT
-         );
-         fire.tickFuncId = tickFuncId;
+      if (recursive) {
+         return; // let the main call handle all the flames
+      }
 
-         flamesSet(room.flames, fire.x, fire.y, fire.owner, fire);
+      // 'flames' only contains unique triples <x,y,owner> now.
+      // 'flames' means all the flames that we want to add.
+      // let's see what triples we have already in room.flames, so we dont add twice.
+
+      const flames2: Flame[] = [];
+      flames.forEach((flame: Flame) => {
+         const existingFlame = room.flames.find(
+            roomFlame => roomFlame.x === flame.x && roomFlame.y === flame.y && roomFlame.owner === flame.owner
+         );
+         
+         if (existingFlame) {
+            // if we already had such triple, then replace its tickFuncId
+            if (!existingFlame.tickFuncId) {
+               return console.error('explode error');
+            }
+            room.ticks.removeFunc(existingFlame.tickFuncId);
+            existingFlame.tickFuncId = room.ticks.addFunc(
+               () => room.removeFlame(existingFlame.x, existingFlame.y, existingFlame.owner),
+               FIRE_TIME / room.ticks.MSPT
+            );
+         } else {
+            flames2.push(flame);
+         }
       });
 
-      return [];
+      // flames2 now contains triples that we need to add.
+      // we'll simply add & send all of them to clients.
+      // clients are responsible to not draw pairs <x,y> more than once.
+      flames2.forEach(flame => {
+         flame.tickFuncId = room.ticks.addFunc(
+            () => room.removeFlame(flame.x, flame.y, flame.owner),
+            FIRE_TIME / room.ticks.MSPT
+         );
+         room.flames.push(flame);
+         io.to(room.name).emit('addBombfire', flame.x, flame.y);
+      });
    };
 }
 
 
 export function generate_removeFlame(room: Room): (x: number, y: number, owner: Socket) => void {
    const io = room.owner.nsp.server;
+
    return (x, y, owner) => {
-      const flame: Flame | undefined = room.flames.get(x)?.get(y)?.get(owner);
+      const flame = room.getFlame(x, y, owner);
       if (!flame) {
-         return console.error('removeflame something wrong');
+         return console.error('error removeFlame');
       }
-      flamesDelete(room.flames, x, y, owner);
+
+      room.flames = room.flames.filter(roomFlame => roomFlame !== flame);
+
       io.to(room.name).emit('deleteBombfire', x, y);
 
       if (flame.oldBlock === Block.NORMAL) {
@@ -160,37 +174,7 @@ export function generate_removeFlame(room: Room): (x: number, y: number, owner: 
 }
 
 
-// a block before/on which the fire should stop; used in explodeBomb
+// a block before/on which the flame should stop; used in explodeBomb
 function breakLoop(block: Block) {
    return (block === Block.NORMAL || block === Block.PERMANENT || isPowerup(block));
-}
-
-// a helper function to set a value in the flames map
-function flamesSet(flames: Map<number, Map<number, Map<Socket, Flame>>>, x: number, y: number, owner: Socket, flame: Flame) {
-   if (!flames.has(x)) {
-      flames.set(x, new Map<number, Map<Socket, Flame>>());
-   }
-   if (!flames.get(x)!.has(y)) {
-      flames.get(x)!.set(y, new Map<Socket, Flame>());
-   }
-   flames.get(x)!.get(y)!.set(owner, flame);
-}
-
-// a helper function to delete a value in the flames map
-function flamesDelete(flames: Map<number, Map<number, Map<Socket, Flame>>>, x: number, y: number, owner: Socket) {
-   const xMap = flames.get(x);
-   if (!xMap) {
-      return;
-   }
-   const yMap = xMap.get(y);
-   if (!yMap) {
-      return;
-   }
-   yMap.delete(owner);
-   if (yMap.size === 0) {
-      xMap.delete(y);
-      if (xMap.size === 0) {
-         flames.delete(x);
-      }
-   }
 }

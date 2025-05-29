@@ -62,10 +62,10 @@ export function tie_isDying(sok: Socket): void {
             return;
          }
          let assisted = false;
-         if (deadBlk1 !== null && sok.room.flames.get(deadBlk1.x)?.get(deadBlk1.y)?.get(sok.room[assistColor])) {
+         if (deadBlk1 !== null && sok.room.getFlame(deadBlk1.x, deadBlk1.y, sok.room[assistColor])) {
             assisted = true;
          }
-         if (deadBlk2 !== null && sok.room.flames.get(deadBlk2.x)?.get(deadBlk2.y)?.get(sok.room[assistColor])) {
+         if (deadBlk2 !== null && sok.room.getFlame(deadBlk2.x, deadBlk2.y, sok.room[assistColor])) {
             assisted = true;
          }
 

@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { Animation, Block, Color, Coord } from "./game-types";
+import { Animation, Block, Bomb, Color, Coord } from "./game-types";
 import { ALL_COLORS, BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, END_SCREEN_TIMEOUT, isPowerup, KICK_BOMB_SPEED, MAP_FOURWAY_PORTAL_POSITIONS } from "./game-consts";
 import { playSound } from "./room-functions/play-sound";
 
@@ -63,7 +63,7 @@ export function generate_runEveryTick(sok: Socket): () => void {
       });
       
       // update bombs' positions
-      sok.room.bombs.forEach((bomb, bombId) => {
+      sok.room.bombs.forEach((bomb) => {
          let pushed = false;
          if (bomb.xvel_push || bomb.yvel_push) {
             bomb.xvel = bomb.xvel_push;
@@ -124,8 +124,8 @@ export function generate_runEveryTick(sok: Socket): () => void {
                   });
                }
                
-               const otherBombId: number | undefined = sok.room.getBombIdByCoords({ x: checkBlock.x, y: checkBlock.y });
-               if (otherBombId && otherBombId !== bombId) {
+               const otherBomb: Bomb | undefined = sok.room.getBomb(checkBlock.x, checkBlock.y);
+               if (otherBomb && otherBomb.id !== bomb.id) {
                   canGo = false;
                }
                
@@ -167,8 +167,8 @@ export function generate_runEveryTick(sok: Socket): () => void {
                // explode if it walks in flames
                let exploded = false;
                ALL_COLORS.forEach(color => {
-                  if (sok.room[color] && sok.room.flames.get(Math.round(newCoords.x))?.get(Math.round(newCoords.y))?.get(sok.room[color])) {
-                     sok.room.explodeBomb(bombId, false);
+                  if (!exploded && sok.room[color] && sok.room.getFlame(Math.round(newCoords.x), Math.round(newCoords.y), sok.room[color])) {
+                     sok.room.explodeBomb(bomb.id);
                      exploded = true;
                   }
                });
@@ -179,7 +179,7 @@ export function generate_runEveryTick(sok: Socket): () => void {
             
             bomb.x = newCoords.x;
             bomb.y = newCoords.y;
-            io.to(sok.room.name).emit('updateBomb', bombId, newCoords.x, newCoords.y);
+            io.to(sok.room.name).emit('updateBomb', bomb.id, newCoords.x, newCoords.y);
          }
       });
       

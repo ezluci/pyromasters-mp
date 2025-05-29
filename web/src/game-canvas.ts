@@ -109,9 +109,17 @@ export function drawFrame() {
          }
       }
    
-   // draw bombs and flames
+   // draw bombs
    bombs.forEach(bomb => drawBlock(images.bomb, bomb.x, bomb.y, 0));
-   flames.forEach(flame => drawBlock(images.fire, flame.x, flame.y, 0));
+
+   // draw flames
+   for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
+      for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
+         if (flames[y][x]) {
+            drawBlock(images.fire, x, y, 0);
+         }
+      }
+   }
    
    // draw players
    Object.values(Color).forEach(color => {

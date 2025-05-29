@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { Coord, Animation } from "../game-types";
+import { Animation } from "../game-types";
 
 export function coords(x: number, y: number, animState: Animation, sok: Socket): void {
    if (sok.color === null) {

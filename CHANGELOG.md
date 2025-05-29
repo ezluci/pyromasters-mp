@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.10.8] - 2025-05-29
+
+- Fixed web-server for the new update
+- Update README.md
+- Update .gitattributes
+- Update credits.txt
+- Finally fixed the web-server's structure
+- Fixed bombs
+
 ## [0.10.7] - 2025-05-22
 
 - Refactored client code from JS to TS

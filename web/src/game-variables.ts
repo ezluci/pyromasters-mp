@@ -1,5 +1,5 @@
 import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY } from "./game-consts";
-import { Block, Bomb, Color, Flame, Map, RoomStatus } from "./game-types";
+import { Block, Bomb, Color, Map, RoomStatus } from "./game-types";
 
 const queryParams = new URLSearchParams(window.location.search);
 
@@ -56,7 +56,8 @@ export const map: Block[][] = Array.from({ length: BLOCKS_VERTICALLY }, () => Ar
 
 export const bombs: Bomb[] = [];
 
-export const flames: Flame[] = [];
+// counts how many flames there are in a spot
+export const flames: number[][] = Array.from({ length: BLOCKS_VERTICALLY }, () => Array(BLOCKS_HORIZONTALLY).fill(0));
 
 export const shields = Object.fromEntries(
    Object.values(Color).map(color => [

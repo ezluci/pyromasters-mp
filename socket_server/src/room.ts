@@ -1,10 +1,10 @@
 import { Server, Socket } from "socket.io";
-import { Block, Bomb, Coord, Flame, RoomStatus } from "./game-types";
+import { Block, Bomb, Flame, RoomStatus } from "./game-types";
 import { Ticks } from "./ticks";
 import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY } from "./game-consts";
 import { generate_runEveryTick } from "./run-every-tick";
 import { generate_placeEndgameBlock } from "./room-functions/place-endgame-block";
-import { generate_explodeBomb, generate_getBombIdByCoords, generate_removeFlame } from "./room-functions/bombs";
+import { generate_explodeBomb, generate_getBomb, generate_getFlame, generate_removeFlame } from "./room-functions/bombs";
 import { generate_showEndScreen } from "./room-functions/show-end-screen";
 
 
@@ -25,9 +25,9 @@ export class Room {
    private _map: Block[][];
    private _mapName: string | null;
 
-   bombs: Map<number, Bomb>; // <bomdId, bomb>
+   bombs: Bomb[];
    bombIdCounter: number;
-   flames: Map<number, Map<number, Map<Socket, Flame>>>; // <{x, y, owner}, flame>
+   flames: Flame[];
    gameTime: number;
    endscreen_tickId: number | null;
    endgameBlocks: number;
@@ -39,8 +39,12 @@ export class Room {
    // METHODS:
 
    placeEndgameBlock: () => void;
-   getBombIdByCoords: (coord: Coord) => number | undefined;
-   explodeBomb: (bombId: number, recursive: boolean) => Flame[];
+   getBomb: {
+      (x: number, y: number): Bomb | undefined;
+      (id: number): Bomb | undefined;
+   };
+   getFlame: (x: number, y: number, owner: Socket) => Flame | undefined;
+   explodeBomb: (bombId: number, recursive?: boolean, flames?: Flame[]) => void;
    removeFlame: (x: number, y: number, owner: Socket) => void;
    showEndScreen: () => void;
 
@@ -59,9 +63,9 @@ export class Room {
       this._map = [];
       this._mapName = null;
 
-      this.bombs = new Map<number, Bomb>();
+      this.bombs = [];
       this.bombIdCounter = 0;
-      this.flames = new Map<number, Map<number, Map<Socket, Flame>>>();
+      this.flames = [];
       this.gameTime = 0;
       this.endscreen_tickId = 0;
       this.endgameBlocks = 0;
@@ -71,7 +75,8 @@ export class Room {
       this.singlePlayer = false;
 
       this.placeEndgameBlock = generate_placeEndgameBlock(this);
-      this.getBombIdByCoords = generate_getBombIdByCoords(this);
+      this.getBomb = generate_getBomb(this);
+      this.getFlame = generate_getFlame(this);
       this.explodeBomb = generate_explodeBomb(this);
       this.removeFlame = generate_removeFlame(this);
       this.showEndScreen = generate_showEndScreen(this);

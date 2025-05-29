@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import { ALL_COLORS, BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BOMB_TIMES, MAP_FOURWAY_PORTAL_POSITIONS } from "../game-consts";
+import { ALL_COLORS, BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, MAP_FOURWAY_PORTAL_POSITIONS } from "../game-consts";
 import { Block, Bomb, RoomStatus } from "../game-types";
 import { playSound } from "../room-functions/play-sound";
 
@@ -27,18 +27,23 @@ export function tie_bombs(sok: Socket): void {
          sok.emit('error', 'tryPlaceBomb: x or y out of range.');
          return;
       }
-      
-      for (const color of ALL_COLORS) {
-         if (sok.room[color] && sok.room.flames.get(x)?.get(y)?.get(sok.room[color])) {
-            return; // can't place a bomb inside flame
-         }
+      if (sok.room.map[y][x] === Block.PERMANENT || sok.room.map[y][x] === Block.NORMAL) {
+         sok.emit('error', 'tryPlaceBomb: can\'t place bomb here');
+         return;
       }
       
-      if (sok.room.map[y][x] === Block.PERMANENT || sok.room.map[y][x] === Block.NORMAL)
+      let exit: boolean = false;
+      ALL_COLORS.forEach(color => {
+         if (sok.room[color] && sok.room.getFlame(x, y, sok.room[color])) {
+            exit = true; // can't place a bomb inside flame
+         }
+      });
+      if (exit) {
          return;
+      }
       
-      if (sok.room.getBombIdByCoords({ x, y })) {
-         return;
+      if (sok.room.getBomb(x, y)) {
+         return; // can't place bomb inside bomb
       }
       
       if (sok.room.mapName === 'fourway') {
@@ -53,17 +58,13 @@ export function tie_bombs(sok: Socket): void {
             realBombCount -= 1;
          }
       });
-      sok.room.flames.forEach((flameRow, flameX) => {
-         flameRow.forEach((flameColumn, flameY) => {
-            flameColumn.forEach((flame) => {
-               if (flame.owner === sok && flame.wasBomb) {
-                  realBombCount -= 1;
-               }
-            });
-         });
+      sok.room.flames.forEach(flame => {
+         if (flame.owner === sok && flame.wasBomb) {
+            realBombCount -= 1;
+         }
       });
       
-      if (realBombCount === 0) {
+      if (realBombCount <= 0) {
          return; // no bombs left
       }
       
@@ -71,7 +72,7 @@ export function tie_bombs(sok: Socket): void {
       const bombId: number = sok.room.bombIdCounter;
       const tickFuncId: number | undefined = sok.room.ticks.addFunc(
          () => {
-            sok.room.explodeBomb(bombId, false);
+            sok.room.explodeBomb(bombId);
             playSound(sok.room, 'explode');
          },
          sok.bombTime / sok.room.ticks.MSPT
@@ -80,7 +81,7 @@ export function tie_bombs(sok: Socket): void {
       if (!tickFuncId) {
          return console.error('tryPlaceBomb: something went wrong');
       }
-      sok.room.bombs.set(bombId, { x, y, xvel: 0, yvel: 0, xvel_push: 0, yvel_push: 0, owner: sok, length: sok.bombLength, tickFuncId });
+      sok.room.bombs.push({ x, y, id: bombId, xvel: 0, yvel: 0, xvel_push: 0, yvel_push: 0, owner: sok, length: sok.bombLength, tickFuncId });
       sok.room.bombIdCounter ++;
       
       io.to(sok.room.name).emit('addBomb', bombId, x, y);
@@ -92,9 +93,9 @@ export function tie_bombs(sok: Socket): void {
    };
 
    sok.kickBomb = (bombId: number, xvel: number, yvel: number): void => {
-      const bomb: Bomb | undefined = sok.room.bombs.get(bombId);
+      const bomb: Bomb | undefined = sok.room.getBomb(bombId);
       if (!bomb) {
-         return console.error(`kickbomb bombid not good ${bombId}`);
+         return; // maybe the client still has the bomb data
       }
       if (!sok.kickBombs || sok.room.mapName === 'magneto') {
          return;

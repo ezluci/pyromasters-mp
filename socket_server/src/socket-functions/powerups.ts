@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { ALL_COLORS, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, BOMB_TIMES, isPowerup, MOVE_SPEEDS } from "../game-consts";
-import { Animation, Block, Color } from "../game-types";
+import { Block, Color } from "../game-types";
 import { playSound } from "../room-functions/play-sound";
 
 function collectPowerupBombplus(sok: Socket) {

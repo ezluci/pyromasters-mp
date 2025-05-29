@@ -8,13 +8,17 @@ import { changeAnimation } from "./animations/process-animations";
 import { addChatMessage, addLog, addPlayerToList, canvasElm, changePlayerFromList, chatInputElm, chatSendMsgElm, loadingElm, mapSelectedElm, modifyPlayerPowerups, playerListElm, powerupsDOM, powerupsMainDOM, removePlayerFromList, roomStatusElm, selectBlackElm, selectColorsElm, selectGreenElm, selectMapElm, selectOrangeElm, selectSpectatorElm, selectWhiteElm, startButtonElm } from "./page";
 import { bombs, coords, flames, map, myColor, ranking, roomName, setEndScreen, setGameTime, setMapName, setMyColor, setRoomStatus, setSpeed, setSwitchedKeys, shields, switchedKeys, userName } from "./game-variables";
 
-const protocol: 'http' | 'https' = (
-   window.location.hostname === 'localhost' || window.location.hostname.startsWith('192.168.0.')
-   ? 'http'
-   : 'https'
+const ez_testPC: boolean = (
+   window.location.hostname === 'localhost' ||
+   window.location.hostname.startsWith('192.168.') ||
+   window.location.hostname === '0.0.0.0'
+);
+const ez_testSV: boolean = (
+   window.location.hostname.startsWith('93.113.33.138')
 );
 
-const port: number = 22822;
+const protocol: 'http' | 'https' = (ez_testPC || ez_testSV ? 'http' : 'https');
+const port: number = (ez_testSV ? 3306 : 22822);
 
 export const socket = io(`${protocol}://${window.location.hostname}:${port}?userName=${encodeURIComponent(userName)}&roomName=${encodeURIComponent(roomName)}`);
 
@@ -38,11 +42,11 @@ chatSendMsgElm.addEventListener('click', () => {
 
 
 // debug socket
-// (socket as any).onAny((event: any, ...args: any) => {
-//    if (event !== 'C' && event !== 'gameTime') {
-//       console.log(event, ...args);
-//    }
-// });
+(socket as any).onAny((event: any, ...args: any) => {
+   if (event !== 'C' && event !== 'gameTime') {
+      console.log(event, ...args);
+   }
+});
 
 
 socket.on('initial_info', (
@@ -257,13 +261,10 @@ socket.on('updateBomb', (bombId: number, x: number, y: number) => {
 });
 
 socket.on('addBombfire', (x: number, y: number) => {
-   flames.push({ x: x, y: y, id: -6969 });
+   flames[y][x]++;
 });
 socket.on('deleteBombfire', (x: number, y: number) => {
-   const index = flames.findIndex(flame => flame.x === x && flame.y === y);
-   if (index !== -1) {
-      flames.splice(index, 1);
-   }
+   flames[y][x]--;
 });
 
 
@@ -321,6 +322,14 @@ socket.on('endscreen', (color: Color, newRanking: { name: string, wins: number, 
    newRanking.forEach(elm => {
       ranking.push(elm);
    });
+
+   // clear game
+   for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
+      for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
+         flames[y][x] = 0;
+      }
+   }
+   bombs.length = 0;
 })
 
 
