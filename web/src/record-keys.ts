@@ -2,17 +2,69 @@ import { socket } from "./game-socket";
 import { switchedKeys } from "./game-variables";
 import { chatInputElm, isMobile } from "./page";
 
+type InputActionMove = 'up' | 'left' | 'down' | 'right';
+type InputActionAll = InputActionMove | 'bomb';
+
+type DirKey = 'KeyW' | 'KeyA' | 'KeyS' | 'KeyD' | 'ArrowUp' | 'ArrowLeft' | 'ArrowDown' | 'ArrowRight';
+type BombKey = 'KeyP' | 'Space';
+type Key = DirKey | BombKey;
+
 const revKey: {
-   [K in Key]: Key
-} = { a: 'd', d: 'a', w: 's', s: 'w' };
-type Key = 'w' | 'a' | 's' | 'd';
+   [K in DirKey]: DirKey
+} = {
+   KeyW: 'KeyS',
+   KeyA: 'KeyD',
+   KeyS: 'KeyW',
+   KeyD: 'KeyA',
+   ArrowUp: 'ArrowDown',
+   ArrowLeft: 'ArrowRight',
+   ArrowDown: 'ArrowUp',
+   ArrowRight: 'ArrowLeft'
+};
 
-export let keyPressQueue: Key[] = [];
-export let keypressPlaceBomb: boolean = false;
+const revAction: {
+   [A in InputActionMove]: InputActionMove
+} = {
+   up: 'down',
+   left: 'right',
+   down: 'up',
+   right: 'left'
+};
+
+const keyToInputAction: {
+   [K in Key]: InputActionAll
+} = {
+   KeyW: 'up',
+   KeyA: 'left',
+   KeyS: 'down',
+   KeyD: 'right',
+   ArrowUp: 'up',
+   ArrowLeft: 'left',
+   ArrowDown: 'down',
+   ArrowRight: 'right',
+   KeyP: 'bomb',
+   Space: 'bomb'
+};
+
+// it's not actually all the keys that are pressed...
+// this tells us what is the last dirkey pressed,
+// it makes it easier to handle movement.
+export const keysPressed: {
+   [K in InputActionAll]: boolean
+} = {
+   up: false,
+   left: false,
+   down: false,
+   right: false,
+   bomb: false
+};
 
 
+      /// PC KEYS
 
 if (!isMobile) {
+   // chat shortcuts
+
    let chatShortcut: boolean = false;
 
    chatInputElm.addEventListener('keypress', (event) => {
@@ -37,8 +89,29 @@ if (!isMobile) {
       }
    });
 
+   // non-chat keys
 
-   document.onkeydown = (event) => {
+   const moveKeyQueue: DirKey[] = [];
+   const bombKeyPressed: {
+      [K in BombKey]: boolean
+   } = {
+      KeyP: false,
+      Space: false
+   };
+
+   function updateKeysPressed() {
+      keysPressed.up = keysPressed.left = keysPressed.down = keysPressed.right = keysPressed.bomb = false;
+      if (moveKeyQueue.length === 1 || moveKeyQueue.length === 2) {
+         const lastKey = moveKeyQueue[moveKeyQueue.length - 1];
+         keysPressed[ keyToInputAction[lastKey] ] = true;
+      }
+      if (bombKeyPressed.KeyP || bombKeyPressed.Space) {
+         keysPressed.bomb = true;
+      }
+   }
+
+
+   document.addEventListener('keydown', (event) => {
       if (document.activeElement === chatInputElm) {
          return;
       }
@@ -50,49 +123,69 @@ if (!isMobile) {
          return;
       }
 
-      switch (code) {
-         case 'KeyA':   code = 'a'; break;
-         case 'KeyD':   code = 'd'; break;
-         case 'KeyW':   code = 'w'; break;
-         case 'KeyS':   code = 's'; break;
-         case 'KeyP':   keypressPlaceBomb = true; return;
-         default:    return;
+      if (code === 'Space' || code === 'ArrowDown') {
+         event.preventDefault();
       }
 
-      if (switchedKeys) {
-         code = revKey[code as Key];
+      let dirKey: DirKey | null = null;
+      if (code === 'KeyW' || code === 'ArrowUp' ||
+            code === 'KeyA' || code === 'ArrowLeft' ||
+            code === 'KeyS' || code === 'ArrowDown' ||
+            code === 'KeyD' || code === 'ArrowRight'
+      ) {
+         dirKey = code;
+      } else if (code === 'KeyP' || code === 'Space') {
+         bombKeyPressed[code] = true;
       }
 
-      if (keyPressQueue.filter(key => key === code).length === 0) {
-         keyPressQueue.push(code as Key);
+      if (dirKey) {
+         if (switchedKeys) {
+            dirKey = revKey[dirKey];
+         }
+         if (moveKeyQueue.filter(key => key === dirKey).length === 0) {
+            moveKeyQueue.push(dirKey);
+         }
       }
-   }
 
-   document.onkeyup = (event) => {
+      updateKeysPressed();
+   });
+
+   document.addEventListener('keyup', (event) => {
       let code = event.code;
 
-      switch (code) {
-         case 'KeyA':   code = 'a'; break;
-         case 'KeyD':   code = 'd'; break;
-         case 'KeyW':   code = 'w'; break;
-         case 'KeyS':   code = 's'; break;
-         case 'KeyP':   keypressPlaceBomb = false; break;
+      let dirKey: DirKey | null = null;
+      if (code === 'KeyW' || code === 'ArrowUp' ||
+            code === 'KeyA' || code === 'ArrowLeft' ||
+            code === 'KeyS' || code === 'ArrowDown' ||
+            code === 'KeyD' || code === 'ArrowRight'
+      ) {
+         dirKey = code;
+      } else if (code === 'KeyP' || code === 'Space') {
+         bombKeyPressed[code] = false;
       }
 
-      if (switchedKeys) {
-         code = revKey[code as Key];
+      if (dirKey) {
+         if (switchedKeys) {
+            dirKey = revKey[dirKey];
+         }
+         const idx = moveKeyQueue.indexOf(dirKey);
+         if (idx !== -1) {
+            moveKeyQueue.splice(idx, 1);
+         }
       }
-      
-      keyPressQueue = keyPressQueue.filter(key => key !== code);
-   }
+
+      updateKeysPressed();
+   });
 
    document.addEventListener('switchkeyschange', () => {
-      for (let i = 0; i < keyPressQueue.length; i += 1) {
-         keyPressQueue[i] = revKey[keyPressQueue[i]];
+      for (let i = 0; i < moveKeyQueue.length; ++i) {
+         moveKeyQueue[i] = revKey[moveKeyQueue[i]];
       }
    });
 }
 
+
+      /// MOBILE KEYS
 
 if (isMobile) {
    const butUp = document.querySelector('#button-up') as HTMLButtonElement;
@@ -103,33 +196,29 @@ if (isMobile) {
 
    // on phone, we allow only one button pressed at once
    let buttonPressed: HTMLButtonElement | null = null;
-   const movingButtons: { button: HTMLButtonElement, key: Key }[] = [
-      { button: butUp, key: 'w' },
-      { button: butLeft, key: 'a' },
-      { button: butRight, key: 'd' },
-      { button: butDown, key: 's' }
+   const movingButtons: { button: HTMLButtonElement, action: InputActionMove }[] = [
+      { button: butUp, action: 'up' },
+      { button: butLeft, action: 'left' },
+      { button: butRight, action: 'right' },
+      { button: butDown, action: 'down' }
    ];
 
    butBomb.addEventListener('touchstart', () => {
-      keypressPlaceBomb = true;
+      keysPressed.bomb = true;
    });
 
    butBomb.addEventListener('touchend', () => {
-      keypressPlaceBomb = false;
+      keysPressed.bomb = false;
    });
 
-   movingButtons.forEach(({ button, key }) => {
+   movingButtons.forEach(({ button, action }) => {
       button.addEventListener('touchstart', () => {
          if (buttonPressed) { // if exists, remove the last press
             buttonPressed.dispatchEvent(new Event('touchend'));
          }
 
-         let key2 = key;
-         if (switchedKeys) {
-            key2 = revKey[key];
-         }
-
-         keyPressQueue[0] = key2;
+         const realAction = (switchedKeys ? revAction[action] : action);
+         keysPressed[realAction] = true;
          buttonPressed = button;
       });
 
@@ -138,14 +227,14 @@ if (isMobile) {
             return;
          }
 
-         keyPressQueue.pop();
+         const realAction = (switchedKeys ? revAction[action] : action);
+         keysPressed[realAction] = false;
          buttonPressed = null;
       });
    });
 
    document.addEventListener('switchkeyschange', () => {
-      if (keyPressQueue.length) {
-         keyPressQueue[0] = revKey[keyPressQueue[0]];
-      }
+      [keysPressed.left, keysPressed.right] = [keysPressed.right, keysPressed.left];
+      [keysPressed.up, keysPressed.down] = [keysPressed.down, keysPressed.up];
    });
 }

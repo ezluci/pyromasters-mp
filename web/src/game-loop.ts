@@ -6,9 +6,9 @@ import { socket } from "./game-socket";
 import { Animation, Coord, Map, RoomStatus } from "./game-types";
 import { images } from "./load-assets";
 import { moveDown, moveLeft, moveRight, moveUp } from "./movement";
-import { keypressPlaceBomb, keyPressQueue } from "./record-keys";
 import { coords, endScreen, mapName, myColor, ranking, roomStatus, setDeltaTime } from "./game-variables";
 import { canvasElm, ctx } from "./page";
+import { keysPressed } from "./record-keys";
 
 
 let lastBombTime = -10000;
@@ -26,7 +26,7 @@ export function gameLoop() {
    if (myColor && roomStatus === RoomStatus.RUNNING) {
 
       // place bomb
-      if (keypressPlaceBomb && currentTime - lastBombTime > 100) {
+      if (keysPressed.bomb && currentTime - lastBombTime > 100) {
          socket.emit('tryPlaceBomb');
          lastBombTime = currentTime;
       }
@@ -35,17 +35,14 @@ export function gameLoop() {
       const me = coords[myColor];
       const meOld: Coord = { x: me.x, y: me.y };
 
-      if (keyPressQueue.length === 1 || keyPressQueue.length === 2) {
-         const key = keyPressQueue[keyPressQueue.length - 1];
-         if (key === 'a') {
-            moveLeft();
-         } else if (key === 's') {
-            moveDown();
-         } else if (key === 'd') {
-            moveRight();
-         } else if (key === 'w') {
-            moveUp();
-         }
+      if (keysPressed.left) {
+         moveLeft();
+      } else if (keysPressed.down) {
+         moveDown();
+      } else if (keysPressed.right) {
+         moveRight();
+      } else if (keysPressed.up) {
+         moveUp();
       } else {
          const currentAnimation = playerAnimations.states[myColor];
          if (currentAnimation.split('_')[0] === 'walk') {
