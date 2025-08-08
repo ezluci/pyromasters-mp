@@ -1,15 +1,21 @@
+# dependencies, environment variables, vscode
+
 /node_modules
 /.env
 /.vscode
 
-/spright/*
-!/spright/pyromasters-mp_config/
-!/spright/pyromasters-mp_config/**
+# spright
 
-/pyro.txt
+/tools/spright
+
+# compiled files
 
 /socket_server/dist/
-
 /web/web-server
 /web/dist/
+
+# my random files
+
 /web/untitled.png
+/pyro.txt
+/rsync-server.sh

@@ -1,22 +1,20 @@
-import { Server, Socket } from "socket.io";
-import { ALL_COLORS, BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, MAP_FOURWAY_PORTAL_POSITIONS } from "../game-consts";
-import { Block, Bomb, RoomStatus } from "../game-types";
-import { playSound } from "../room-functions/play-sound";
+import { WebSocket } from "ws";
+import { BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, MAP_FOURWAY_PORTAL_POSITIONS } from "../game-consts";
+import { Block, Bomb, Color, RoomStatus } from "../game-types";
+import { OutPackets } from "../out-packets/out-packets";
 
-export function tie_bombs(sok: Socket): void {
-   const io: Server = sok.nsp.server;
-
+export function tie_bombs(sok: WebSocket): void {
    sok.placeBomb = (): void => {
       if (sok.color === null) {
-         sok.emit('error', 'tryPlaceBomb: You are a spectator.');
+         OutPackets.send_error(sok, 'tryPlaceBomb: You are a spectator.');
          return;
       }
       if (sok.dead) {
-         sok.emit('error', 'tryPlaceBomb: You are \'dead\'');
+         OutPackets.send_error(sok, 'tryPlaceBomb: You are \'dead\'');
          return;
       }
       if (sok.room.status !== RoomStatus.RUNNING) {
-         sok.emit('error', 'tryPlaceBomb: The game is not running');
+         OutPackets.send_error(sok, 'tryPlaceBomb: The game is not running');
          return;
       }
       
@@ -24,16 +22,16 @@ export function tie_bombs(sok: Socket): void {
       const y = Math.round(sok.coords.y / BLOCK_SIZE);
       
       if ( !(0 <= x && x < BLOCKS_HORIZONTALLY && 0 <= y && y < BLOCKS_VERTICALLY) ) {
-         sok.emit('error', 'tryPlaceBomb: x or y out of range.');
+         OutPackets.send_error(sok, 'tryPlaceBomb: x or y out of range.');
          return;
       }
-      if (sok.room.map[y][x] === Block.PERMANENT || sok.room.map[y][x] === Block.NORMAL) {
-         sok.emit('error', 'tryPlaceBomb: can\'t place bomb here');
+      if (sok.room.grid[y][x] === Block.PERMANENT || sok.room.grid[y][x] === Block.NORMAL) {
+         OutPackets.send_error(sok, 'tryPlaceBomb: can\'t place bomb here');
          return;
       }
       
       let exit: boolean = false;
-      ALL_COLORS.forEach(color => {
+      Object.values(Color).forEach(color => {
          if (sok.room[color] && sok.room.getFlame(x, y, sok.room[color])) {
             exit = true; // can't place a bomb inside flame
          }
@@ -46,7 +44,7 @@ export function tie_bombs(sok: Socket): void {
          return; // can't place bomb inside bomb
       }
       
-      if (sok.room.mapName === 'fourway') {
+      if (sok.room.map === 'fourway') {
          if (MAP_FOURWAY_PORTAL_POSITIONS.filter(({x: xx, y: yy}) => (xx === x && yy === y)).length === 1) {
             return; // can't place bomb inside a portal
          }
@@ -67,13 +65,14 @@ export function tie_bombs(sok: Socket): void {
       if (realBombCount <= 0) {
          return; // no bombs left
       }
+
       
       // placing the bomb
       const bombId: number = sok.room.bombIdCounter;
       const tickFuncId: number | undefined = sok.room.ticks.addFunc(
          () => {
             sok.room.explodeBomb(bombId);
-            playSound(sok.room, 'explode');
+            OutPackets.send_playSound(sok.room, 'explode');
          },
          sok.bombTime / sok.room.ticks.MSPT
       );
@@ -84,11 +83,11 @@ export function tie_bombs(sok: Socket): void {
       sok.room.bombs.push({ x, y, id: bombId, xvel: 0, yvel: 0, xvel_push: 0, yvel_push: 0, owner: sok, length: sok.bombLength, tickFuncId });
       sok.room.bombIdCounter ++;
       
-      io.to(sok.room.name).emit('addBomb', bombId, x, y);
+      OutPackets.send_addBomb(sok.room, x, y, bombId);
       if (sok.sick) {
-         playSound(sok.room, 'dropbombsick');
+         OutPackets.send_playSound(sok.room, 'dropbombsick');
       } else {
-         playSound(sok.room, 'dropbomb');
+         OutPackets.send_playSound(sok.room, 'dropbomb');
       }
    };
 
@@ -97,7 +96,7 @@ export function tie_bombs(sok: Socket): void {
       if (!bomb) {
          return; // maybe the client still has the bomb data
       }
-      if (!sok.kickBombs || sok.room.mapName === 'magneto') {
+      if (!sok.kickBombs || sok.room.map === 'magneto') {
          return;
       }
 

@@ -1,6 +1,6 @@
 {
   "urls": [
-    "../web/assets/audiosprite.webm"
+    "./web/public/assets/audiosprite.webm"
   ],
   "sprite": {
     "bonusall": [

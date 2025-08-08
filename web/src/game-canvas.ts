@@ -1,8 +1,8 @@
-import { playerAnimations } from "./animations/load-animations";
-import { animations, nextAnimation, type AnimationInfo } from "./animations/process-animations";
+import { ANIMATION_SPRITE } from "./animations/load-animations";
+import { animations, nextAnimation, AnimationInfo } from "./animations/process-animations";
 import { BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, MAP_FOURWAY_PORTAL_POSITIONS, OFFSET_DOWN, OFFSET_LEFT, OFFSET_RIGHT, OFFSET_UP } from "./game-consts";
-import { Block, Color, Map } from "./game-types";
-import { bombs, coords, flames, gameTime, map, mapName, shields } from "./game-variables";
+import { Block, Map } from "./game-types";
+import { bombs, colors, flames, gameTime, grid, map } from "./game-variables";
 import { images } from "./load-assets";
 import { canvasElm, ctx } from "./page";
 
@@ -44,7 +44,7 @@ export function drawAnimation(animation: AnimationInfo, x: number, y: number) {
    const dy = OFFSET_UP + y + (trimmedRect.y - rect.y) - 25;
    const dw = sw; // if the animations didn't match this exact resolution, this wouldn't work. you need percentages.
    const dh = sh;
-   ctx.drawImage(playerAnimations.spriteImg, sx, sy, sw, sh, dx, dy, dw, dh);
+   ctx.drawImage(ANIMATION_SPRITE.img, sx, sy, sw, sh, dx, dy, dw, dh);
    nextAnimation(animation);
 }
 
@@ -53,31 +53,31 @@ export function drawFrame() {
    ctx.fillStyle = '#203d37';
    ctx.fillRect(0, 0, canvasElm.width, canvasElm.height);
 
-   if (mapName === null) {
+   if (map === null) {
       return;
    }
    
    // draw background
-   ctx.drawImage(images.maps[mapName].background, OFFSET_LEFT, OFFSET_UP, canvasElm.width - OFFSET_LEFT - OFFSET_RIGHT, canvasElm.height - OFFSET_UP - OFFSET_DOWN);
+   ctx.drawImage(images.maps[map].background, OFFSET_LEFT, OFFSET_UP, canvasElm.width - OFFSET_LEFT - OFFSET_RIGHT, canvasElm.height - OFFSET_UP - OFFSET_DOWN);
 
 
    // draw map blocks
    for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-         if (mapName === Map.FOURWAY && MAP_FOURWAY_PORTAL_POSITIONS.filter(({ x: xx, y: yy }) => xx === x && yy === y).length === 1) {
-            const portalImg = images.maps[mapName].portal;
+         if (map === Map.FOURWAY && MAP_FOURWAY_PORTAL_POSITIONS.filter(({ x: xx, y: yy }) => xx === x && yy === y).length === 1) {
+            const portalImg = images.maps[map].portal;
             if (portalImg) {
                drawBlock(portalImg, x, y);
             }
          }
          
-         switch (map[y][x]) {
+         switch (grid[y][x]) {
             case Block.NO:
                break;
             case Block.NORMAL:
-               drawBlock(images.maps[mapName].normal, x, y); break;
+               drawBlock(images.maps[map].normal, x, y); break;
             case Block.PERMANENT:
-               drawBlock(images.maps[mapName].permanent, x, y);  break;
+               drawBlock(images.maps[map].permanent, x, y);  break;
             
             case Block.POWER_BOMBPLUS:
                drawBlock(images.powers.main, x, y);
@@ -122,13 +122,13 @@ export function drawFrame() {
    }
    
    // draw players
-   Object.values(Color).forEach(color => {
-      if (!coords[color].alive) {
+   Object.values(colors).forEach(player => {
+      if (!player || player.dead || !player.color) {
          return;
       }
-      drawAnimation(animations[color][playerAnimations.states[color]], coords[color].x, coords[color].y);
-      if (shields[color]) {
-         drawPlayer(images.shield, coords[color].x, coords[color].y);
+      drawAnimation(animations[player.color][player.animState], player.coords.x, player.coords.y);
+      if (player.shield) {
+         drawPlayer(images.shield, player.coords.x, player.coords.y);
       }
    });
 

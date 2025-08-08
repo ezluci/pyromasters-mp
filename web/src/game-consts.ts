@@ -1,4 +1,4 @@
-import { Block, Color, type Coord } from "./game-types";
+import { Block, Color } from "./game-types";
 
 export function isPowerup(block: Block): boolean {
    return block === Block.POWER_BOMBLENGTH ||
@@ -13,7 +13,6 @@ export function isPowerup(block: Block): boolean {
 }
 
 export const MOVE_SPEEDS = [0.17, 0.279, 0.337];
-
 export const BOMB_TIMES = [4000, 3600, 3200, 2800];
 
 export const OFFSET_LEFT = 10;
@@ -36,25 +35,27 @@ export const MIN_Y = 0;
 export const MAX_X = BLOCK_SIZE * (BLOCKS_HORIZONTALLY - 1);
 export const MAX_Y = BLOCK_SIZE * (BLOCKS_VERTICALLY - 1);
 
-export const ALL_COLORS: Color[] = [Color.WHITE, Color.BLACK, Color.ORANGE, Color.GREEN];
-
-export const DEFAULT_POS: { white: Coord, black: Coord, orange: Coord, green: Coord } = {
-   white: {x: MIN_X, y: MIN_Y}, black: {x: MAX_X, y: MAX_Y},
-   orange: {x: MAX_X, y: MIN_Y}, green: {x: MIN_X, y: MAX_Y}
+export const DEFAULT_POS: {
+   [C in Color]: { x: number, y: number }
+} = {
+   white: {x: MIN_X, y: MIN_Y},
+   black: {x: MAX_X, y: MAX_Y},
+   orange: {x: MAX_X, y: MIN_Y},
+   green: {x: MIN_X, y: MAX_Y}
 };
 
 export const END_SCREEN_TIMEOUT = 5000;
 
-export const MAP_FOURWAY_PORTAL_POSITIONS: Coord[] = [
+export const MAP_FOURWAY_PORTAL_POSITIONS: { x: number, y: number }[] = [
    { x: 2, y: 2 },
    { x: 2, y: BLOCKS_VERTICALLY - 3 },
    { x: BLOCKS_HORIZONTALLY - 3, y: BLOCKS_VERTICALLY - 3 },
    { x: BLOCKS_HORIZONTALLY - 3, y: 2 }
 ];
 
-export const MAP_FOURWAY_NEXT_PORTAL: Coord[] = [
+export const MAP_FOURWAY_NEXT_PORTAL: { x: number, y: number }[] = [
    { x: 2, y: BLOCKS_VERTICALLY - 3 },
    { x: BLOCKS_HORIZONTALLY - 3, y: BLOCKS_VERTICALLY - 3 },
    { x: BLOCKS_HORIZONTALLY - 3, y: 2 },
    { x: 2, y: 2 }
-]
+];

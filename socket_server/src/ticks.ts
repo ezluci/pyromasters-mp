@@ -1,7 +1,6 @@
-import { Socket } from "socket.io";
-
 // !! the tick loop is not started on object construction
 
+import { WebSocket } from "ws";
 
 /*
  breakdown of the tick class:
@@ -21,7 +20,7 @@ import { Socket } from "socket.io";
 */
 
 export class Ticks {
-   sok: Socket;
+   sok: WebSocket;
    
    TPS: number; // ticks per second
    MSPT: number; // ms per tick
@@ -35,7 +34,7 @@ export class Ticks {
    tickLoopIntervalId: ReturnType<typeof setTimeout> | null;
 
    
-   constructor(sok: Socket, runEveryTick: Function | null) {
+   constructor(sok: WebSocket, runEveryTick: Function | null) {
       this.sok = sok;
 
       this.TPS = 62.5;

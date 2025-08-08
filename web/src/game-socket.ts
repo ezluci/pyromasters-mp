@@ -1,12 +1,11 @@
-import io from "socket.io-client";
-import { Animation, Block, Color, type Coord, Map, RoomStatus } from "./game-types";
-import { ALL_COLORS, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY } from "./game-consts";
 import { gameLoop } from "./game-loop";
-import { audio } from "./load-assets";
-import { playerAnimations } from "./animations/load-animations";
-import { changeAnimation } from "./animations/process-animations";
-import { addChatMessage, addLog, addPlayerToList, canvasElm, changePlayerFromList, chatInputElm, chatSendMsgElm, loadingElm, mapSelectedElm, modifyPlayerPowerups, playerListElm, powerupsDOM, powerupsMainDOM, removePlayerFromList, roomStatusElm, selectBlackElm, selectColorsElm, selectGreenElm, selectMapElm, selectOrangeElm, selectSpectatorElm, selectWhiteElm, startButtonElm } from "./page";
-import { bombs, coords, flames, map, myColor, ranking, roomName, setEndScreen, setGameTime, setMapName, setMyColor, setRoomStatus, setSpeed, setSwitchedKeys, shields, switchedKeys, userName } from "./game-variables";
+import { Color, Map } from "./game-types";
+import { roomName, userName } from "./game-variables";
+import { processPacket } from "./in-packets/process-packet";
+import { sendPacket_chat } from "./out-packets/chat";
+import { sendPacket_selectColor } from "./out-packets/select-color";
+import { sendPacket_startGame } from "./out-packets/start-game";
+import { chatInputElm, chatSendMsgElm, DOM_addLog, loadingElm, mapSelectedElm, selectBlackElm, selectColorsElm, selectGreenElm, selectOrangeElm, selectSpectatorElm, selectWhiteElm, startButtonElm } from "./page";
 
 const ez_testPC: boolean = (
    window.location.hostname === 'localhost' ||
@@ -17,328 +16,57 @@ const ez_testSV: boolean = (
    window.location.hostname.startsWith('93.113.33.138')
 );
 
-const protocol: 'http' | 'https' = (ez_testPC || ez_testSV ? 'http' : 'https');
-const port: number = (ez_testSV ? 3306 : 22822);
+if (ez_testPC) {
+   DOM_addLog('ez_testPC');
+}
+if (ez_testSV) {
+   DOM_addLog('ez_testPC');
+}
 
-export const socket = io(`${protocol}://${window.location.hostname}:${port}?userName=${encodeURIComponent(userName)}&roomName=${encodeURIComponent(roomName)}`);
+const protocol = (ez_testPC || ez_testSV ? 'http' : 'https');
+const port = (ez_testSV ? 3306 : 22822);
+const url = `${protocol}://${window.location.hostname}:${port}/${encodeURIComponent(userName + String.fromCharCode(0) + roomName)}`;
+
+
+export const server = new WebSocket(url);
+server.binaryType = 'arraybuffer';
+
+server.onopen = () => {
+   loadingElm.hidden = true;
+   selectColorsElm.hidden = false;
+   requestAnimationFrame(gameLoop);
+}
+
+server.onmessage = (event) => {
+   if (!(event.data instanceof ArrayBuffer)) {
+      return;
+   }
+   const frame = new Uint8Array(event.data);
+   
+   let idx = 0;
+   while (idx < frame.length) {
+      const packetLength = frame[idx] << 8 | frame[idx+1];
+      idx += 2;
+      processPacket(frame.slice(idx, idx + packetLength));
+      idx += packetLength;
+   }
+}
+
 
 // set button actions
-selectWhiteElm.addEventListener('click', () => socket.emit('selectColor', 'white'));
-selectBlackElm.addEventListener('click', () => socket.emit('selectColor', 'black'));
-selectOrangeElm.addEventListener('click', () => socket.emit('selectColor', 'orange'));
-selectGreenElm.addEventListener('click', () => socket.emit('selectColor', 'green'));
-selectSpectatorElm.addEventListener('click', () => socket.emit('selectColor', null));
+selectWhiteElm.addEventListener('click', () => sendPacket_selectColor(Color.WHITE));
+selectBlackElm.addEventListener('click', () => sendPacket_selectColor(Color.BLACK));
+selectOrangeElm.addEventListener('click', () => sendPacket_selectColor(Color.ORANGE));
+selectGreenElm.addEventListener('click', () => sendPacket_selectColor(Color.GREEN));
+selectSpectatorElm.addEventListener('click', () => sendPacket_selectColor(null));
 startButtonElm.addEventListener('click', () => {
    if (userName === 'testmap:)') {
-      socket.emit('tryStart', 'testmap:)');
+      sendPacket_startGame(Map.TESTMAP);
    } else {
-      socket.emit('tryStart', mapSelectedElm.value);
+      sendPacket_startGame(mapSelectedElm.value as Map);
    }
 });
 chatSendMsgElm.addEventListener('click', () => {
-   socket.emit('chat', chatInputElm.value);
+   sendPacket_chat(chatInputElm.value);
    chatInputElm.value = '';
 });
-
-
-// debug socket
-(socket as any).onAny((event: any, ...args: any) => {
-   if (event !== 'C' && event !== 'gameTime') {
-      console.log(event, ...args);
-   }
-});
-
-
-socket.on('initial_info', (
-         players: { name: string, color: Color, isOwner: boolean }[],
-         newMapName: Map,
-         newMap: Block[][] | null,
-         playersAlive: Color[],
-         playersPowerups: { color: Color, powerup: string, value: string }[]
-      ) => {
-   loadingElm.hidden = true;
-   if (newMap?.length) {
-      for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
-         for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-            map[y][x] = newMap[y][x];
-         }
-      }
-   }
-
-   if (newMapName as string === 'testmap:)') {
-      newMapName = Map.BRICKTOWN;
-   }
-   setMapName(newMapName);
-   
-   players.forEach( ({ name, color, isOwner }) => {
-      addPlayerToList(name, color, isOwner);
-   });
-   
-   ALL_COLORS.forEach(color => {
-      coords[color].alive = false;
-      powerupsDOM[color].main.style.display = 'none';
-   });
-   playersAlive.forEach(color => {
-      coords[color].alive = true;
-      powerupsDOM[color].main.style.display = 'flex';
-   });
-
-   playersPowerups.forEach(powerup => {
-      modifyPlayerPowerups(powerup.color, powerup.powerup, powerup.value);
-   })
-
-   window.requestAnimationFrame(gameLoop); // start the game loop
-});
-
-socket.on('player+', (username: string, color: Color, isOwner: boolean) => {
-   addPlayerToList(username, color, isOwner);
-})
-
-socket.on('player-', (username: string) => {
-   removePlayerFromList(username);
-})
-
-socket.on('player~', (oldUsername: string, newUsername: string, color: Color, isOwner: boolean) => {
-   changePlayerFromList(oldUsername, newUsername, color, isOwner);
-})
-
-
-socket.on('room_status', (msg: RoomStatus) => {
-   roomStatusElm.innerText = 'room status: ' + msg;
-   setRoomStatus(msg);
-
-   switch (msg) {
-      case RoomStatus.WAITING:
-         powerupsMainDOM.hidden = true;
-         selectColorsElm.hidden = false;
-         selectMapElm.hidden = false;
-         break;
-      case RoomStatus.STARTING:
-         powerupsMainDOM.hidden = false;
-         selectColorsElm.hidden = true;
-         selectMapElm.hidden = true;
-         canvasElm.hidden = false;
-         break;
-      case RoomStatus.RUNNING:
-         powerupsMainDOM.hidden = false;
-         selectColorsElm.hidden = true;
-         selectMapElm.hidden = true;
-         canvasElm.hidden = false;
-         setEndScreen(null);
-         break;
-   }
-})
-
-
-socket.on('powerup-update', (statuss: { color: Color, powerup: string, value: string }[]) => {
-   statuss.forEach((status) => {
-      modifyPlayerPowerups(status.color, status.powerup, status.value);
-   });
-});
-
-
-socket.on('speedUpdate', (newSpeed: number) => {
-   setSpeed(newSpeed);
-})
-
-
-socket.on('switchKeys', () => {
-   setSwitchedKeys(switchedKeys + 1);
-   if (switchedKeys === 1) {
-      document.dispatchEvent(new CustomEvent('switchkeyschange'));
-   }
-
-   setTimeout(() => {
-      setSwitchedKeys(switchedKeys - 1);
-      if (switchedKeys === 0) {
-         document.dispatchEvent(new CustomEvent('switchkeyschange'));
-      }
-   }, 10000);
-})
-
-
-socket.on('shield', (color: Color, value: boolean) => {
-   shields[color] = value;
-})
-
-
-socket.on('death', (color: Color) => {
-   if (myColor === color) {
-      setMyColor(null);
-   }
-   coords[color].alive = false;
-   powerupsDOM[color].main.style.display = 'none';
-})
-
-socket.on('playersAlive', (playersAlive: Color[]) => {
-   ALL_COLORS.forEach(color => {
-      coords[color].alive = false;
-      powerupsDOM[color].main.style.display = 'none';
-   });
-
-   playersAlive.forEach(color => {
-      coords[color].alive = true;
-      const playersElm = playerListElm.children;
-      for (let i = 0; i < playersElm.length; ++i) {
-         const playerElm = playersElm[i];
-         if (!(playerElm instanceof HTMLLIElement)) {
-            continue;
-         }
-         if (playerElm.dataset.username === userName && playerElm.style.backgroundColor === color) {
-            setMyColor(color);
-         }
-      }
-      powerupsDOM[color].main.style.display = 'flex';
-      powerupsDOM[color]['bomblength'].querySelector('span')!.innerText = '2';
-      powerupsDOM[color]['bombtime'].querySelector('span')!.innerText = '4s';
-      powerupsDOM[color]['speed'].querySelector('span')!.innerText = 'LOW';
-      powerupsDOM[color]['kickbomb'].style.visibility = 'hidden';
-      powerupsDOM[color]['bomb1'].style.visibility = 'visible';
-      powerupsDOM[color]['bomb2'].style.visibility = 'hidden';
-      powerupsDOM[color]['bomb3'].style.visibility = 'hidden';
-      powerupsDOM[color]['bomb4'].style.visibility = 'hidden';
-   });
-});
-
-
-// these are coords received on every server tick.
-// ignores the coords for myColor.
-socket.on('C', (coordsReceived: [number, number, Animation][]) => {
-   ALL_COLORS.forEach((color, idx) => {
-      if (color === myColor) {
-         return;
-      }
-      let animState = coordsReceived[idx][2];
-
-      if (playerAnimations.states[color] !== animState) {
-         changeAnimation(color, animState);
-      }
-
-      coords[color].x = coordsReceived[idx][0];
-      coords[color].y = coordsReceived[idx][1];
-   });
-})
-
-// this event updates the coords, no matter what.
-// it doesn't check myColor.
-socket.on('coords', (color: Color, newCoords: Coord, animState: Animation) => {
-   coords[color].x = newCoords.x;
-   coords[color].y = newCoords.y;
-   if (animState) {
-      changeAnimation(color, animState);
-   }
-})
-
-
-socket.on('mapName', (newMapName: Map) => {
-   if (newMapName as string === 'testmap:)') {
-      newMapName = Map.BRICKTOWN;
-   }
-   setMapName(newMapName);
-});
-
-socket.on('mapUpdates', (updates: { x: number, y: number, block: Block }[]) => {
-   updates.forEach(({ x, y, block }) => {
-      map[y][x] = block;
-   });
-});
-
-socket.on('addBomb', (bombId: number, x: number, y: number) => {
-   bombs.push({ x, y, id: bombId });
-});
-socket.on('deleteBomb', (bombId: number) => {
-   const index = bombs.findIndex(bomb => bomb.id === bombId);
-   if (index !== -1) {
-      bombs.splice(index, 1);
-   }
-});
-socket.on('updateBomb', (bombId: number, x: number, y: number) => {
-   const index = bombs.findIndex(bomb => bomb.id === bombId);
-   if (index !== -1) {
-      bombs.splice(index, 1);
-   }
-   bombs.push({ x, y, id: bombId });
-});
-
-socket.on('addBombfire', (x: number, y: number) => {
-   flames[y][x]++;
-});
-socket.on('deleteBombfire', (x: number, y: number) => {
-   flames[y][x]--;
-});
-
-
-socket.on('gameTime', (time: number) => {
-   setGameTime(time);
-})
-
-let menu_soundId: any = undefined;
-
-socket.on('playsound', (soundName: string) => {
-   const id = audio.play(soundName);
-
-   if (soundName === 'draw' || soundName.startsWith('draw_') ||
-         soundName === 'win' || soundName.startsWith('win_')) {
-      audio.on('end', () => {
-         if (menu_soundId) {
-            audio.stop(menu_soundId);
-         }
-         menu_soundId = audio.play('menu');
-         audio.loop(true, menu_soundId);
-      }, id);
-   }
-
-   if (soundName === 'menu') {
-      if (menu_soundId) {
-         audio.stop(menu_soundId);
-      }
-      menu_soundId = id;
-      audio.loop(true, menu_soundId);
-   }
-})
-
-socket.on('stopmenusound', () => {
-   if (menu_soundId) {
-      audio.stop(menu_soundId);
-      menu_soundId = undefined;
-   }
-});
-
-socket.on('endscreen', (color: Color, newRanking: { name: string, wins: number, kills: number }[]) => {
-   canvasElm.hidden = false;
-   if (!color) {
-      addLog('Draw! Press \'Start game\' to play again.');
-   } else {
-      addLog(`${color.slice(0, 1).toUpperCase() + color.slice(1)} won! Press \'Start game\' to play again.`);
-   }
-
-   if (color === null) {
-      setEndScreen('draw');
-   } else {
-      setEndScreen(color);
-   }
-   
-   ranking.length = 0;
-   newRanking.forEach(elm => {
-      ranking.push(elm);
-   });
-
-   // clear game
-   for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
-      for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-         flames[y][x] = 0;
-      }
-   }
-   bombs.length = 0;
-})
-
-
-socket.on('chat', (username: string, msg: string) => {
-   addChatMessage(username, msg);
-});
-
-
-socket.on('error', (msg: string) => {
-   addLog(`ERROR: ${msg}`);
-   console.error(`ERROR: ${msg}`);
-})

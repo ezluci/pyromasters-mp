@@ -15,8 +15,13 @@ function loadImage(src: string): Promise<HTMLImageElement> {
 
 // Audio
 
+export const soundNames: string[] = [];
+
 async function loadAudio(): Promise<Howl> {
    const spriteData = await fetch('assets/audiosprite.json').then(data => data.json()).then(data => data.sprite);
+   Object.keys(spriteData).forEach((sound, index) => {
+      soundNames[index] = sound as string;
+   });
    return new Promise<Howl>((resolve, reject) => {
       const audio = new Howl({
          src: ['assets/audiosprite.webm'],

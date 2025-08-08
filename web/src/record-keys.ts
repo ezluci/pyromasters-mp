@@ -1,5 +1,5 @@
-import { socket } from "./game-socket";
 import { switchedKeys } from "./game-variables";
+import { sendPacket_chat } from "./out-packets/chat";
 import { chatInputElm, isMobile } from "./page";
 
 type InputActionMove = 'up' | 'left' | 'down' | 'right';
@@ -76,7 +76,7 @@ if (!isMobile) {
 
       if (event.key === 'Enter') {
          event.preventDefault();
-         socket.emit('chat', chatInputElm.value);
+         sendPacket_chat(chatInputElm.value);
          chatInputElm.value = '';
          document.body.focus();
       }

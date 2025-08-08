@@ -1,33 +1,32 @@
-import { Animation, Color, Coord } from "./game-types";
+import { Animation, Color } from "./game-types";
 import { Room } from "./room";
 
-declare module 'socket.io' {
-   interface Socket {
+declare module 'ws' {
+   interface WebSocket {
       name: string;
       room: Room;
       isOwner: boolean;
+      server: WebSocketServer;
 
       wins: number;
       kills: number;
       
       color: Color | null; // if color is null then spectator
-      coords: Coord;
+      coords: { x: number, y : number };
       dead: boolean;
       animState: Animation;
 
       speed: number; // check MOVE_SPEEDS
-      _speed: number; // don't access variables with _  check attach-getters-setters.ts
       bombCount: number;
       bombTime: number; // check BOMB_TIMES
-      _bombTime: number;
       bombLength: number;
       
-      shield: boolean;
-      _shield: boolean;
+      shield: boolean; // use setShield to set this!!
+      setShield(value: boolean): void;
       shieldFalse_tickId: number;
       
-      sick: boolean;
-      _sick: boolean;
+      sick: boolean; // use setSick to set this!!
+      setSick(value: boolean): void;
       sickFalse_tickId: number;
 
       kickBombs: boolean;

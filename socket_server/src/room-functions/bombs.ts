@@ -1,7 +1,8 @@
-import { Socket } from "socket.io";
+import { WebSocket } from "ws";
 import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, FIRE_TIME, isPowerup } from "../game-consts";
 import { Block, Bomb, Flame } from "../game-types";
 import { Room } from "../room";
+import { OutPackets } from "../out-packets/out-packets";
 
 
 export function generate_getBomb(room: Room): (arg1: number, arg2?: number) => Bomb | undefined {
@@ -17,7 +18,7 @@ export function generate_getBomb(room: Room): (arg1: number, arg2?: number) => B
    };
 }
 
-export function generate_getFlame(room: Room): (x: number, y: number, owner: Socket) => Flame | undefined {
+export function generate_getFlame(room: Room): (x: number, y: number, owner: WebSocket) => Flame | undefined {
    return (x, y, owner): Flame | undefined => {
       return room.flames.find(flame => flame.x === x && flame.y === y && flame.owner === owner);
    };
@@ -26,8 +27,6 @@ export function generate_getFlame(room: Room): (x: number, y: number, owner: Soc
 
 // call this only with bombId
 export function generate_explodeBomb(room: Room): (bombId: number, recursive?: boolean, flames?: Flame[]) => void {
-   const io = room.owner.nsp.server;
-   
    return (bombId, recursive = false, flames = []) => {
       const bomb = room.getBomb(bombId);
       if (!bomb) {
@@ -39,7 +38,7 @@ export function generate_explodeBomb(room: Room): (bombId: number, recursive?: b
       const bombLength = bomb.length;
       room.ticks.removeFunc(bomb.tickFuncId);
       room.bombs = room.bombs.filter(bomb => bomb.id !== bombId);
-      io.to(room.name).emit('deleteBomb', bombId);
+      OutPackets.send_deleteBomb(room, bombId);
 
 
       function explodeHelper(x: number, y: number): boolean {
@@ -47,18 +46,18 @@ export function generate_explodeBomb(room: Room): (bombId: number, recursive?: b
          if (tmpBomb = room.getBomb(x, y)) {
             room.explodeBomb(tmpBomb.id, true, flames);
          }
-         if (room.map[y][x] !== Block.PERMANENT &&
+         if (room.grid[y][x] !== Block.PERMANENT &&
                flames.filter(flame => flame.x === x && flame.y === y && flame.owner === bombOwner).length === 0) {
-            flames.push({ x: x, y: y, owner: bombOwner, oldBlock: room.map[y][x], wasBomb: false, tickFuncId: undefined });
+            flames.push({ x: x, y: y, owner: bombOwner, oldBlock: room.grid[y][x], wasBomb: false, tickFuncId: undefined });
          }
-         return breakLoop(room.map[y][x]);
+         return breakLoop(room.grid[y][x]);
       }
       
       const x = Math.round(bomb.x);
       const y = Math.round(bomb.y);
 
-      flames.push({ x: x, y: y, owner: bombOwner, oldBlock: room.map[y][x], wasBomb: true, tickFuncId: undefined });
-      room.map[y][x] = Block.NO;
+      flames.push({ x: x, y: y, owner: bombOwner, oldBlock: room.grid[y][x], wasBomb: true, tickFuncId: undefined });
+      room.grid[y][x] = Block.NO;
 
 
       for (let yy = y-1; yy >= Math.max(0, y - bombLength); --yy) {
@@ -120,15 +119,13 @@ export function generate_explodeBomb(room: Room): (bombId: number, recursive?: b
             FIRE_TIME / room.ticks.MSPT
          );
          room.flames.push(flame);
-         io.to(room.name).emit('addBombfire', flame.x, flame.y);
+         OutPackets.send_addFlame(room, flame.x, flame.y);
       });
    };
 }
 
 
-export function generate_removeFlame(room: Room): (x: number, y: number, owner: Socket) => void {
-   const io = room.owner.nsp.server;
-
+export function generate_removeFlame(room: Room): (x: number, y: number, owner: WebSocket) => void {
    return (x, y, owner) => {
       const flame = room.getFlame(x, y, owner);
       if (!flame) {
@@ -137,7 +134,7 @@ export function generate_removeFlame(room: Room): (x: number, y: number, owner: 
 
       room.flames = room.flames.filter(roomFlame => roomFlame !== flame);
 
-      io.to(room.name).emit('deleteBombfire', x, y);
+      OutPackets.send_deleteFlame(room, x, y);
 
       if (flame.oldBlock === Block.NORMAL) {
          const rand = Math.floor(Math.random() * 18);
@@ -164,11 +161,11 @@ export function generate_removeFlame(room: Room): (x: number, y: number, owner: 
             else if (rand === 12 || rand === 13)
                newBlock = Block.POWER_BONUS;
          }
-         room.map[y][x] = newBlock;
-         io.to(room.name).emit('mapUpdates', [{ x, y, block: newBlock }]);
+         room.grid[y][x] = newBlock;
+         OutPackets.send_gridUpdate(room, x, y, newBlock);
       } else if (isPowerup(flame.oldBlock)) {
-         room.map[y][x] = Block.NO;
-         io.to(room.name).emit('mapUpdates', [{ x, y, block: Block.NO }]);
+         room.grid[y][x] = Block.NO;
+         OutPackets.send_gridUpdate(room, x, y, Block.NO);
       }
    }
 }

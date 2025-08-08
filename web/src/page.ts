@@ -1,4 +1,3 @@
-import { MOVE_SPEEDS } from "./game-consts";
 import { Color } from "./game-types";
 import { audio } from "./load-assets";
 
@@ -47,28 +46,27 @@ Object.values(Color).forEach(color => {
    });
 }); // at least it's short
 
-export function addPlayerToList(userName: string, color: Color | null, isOwner: boolean) {
+export let menuSoundId: number | null = null;
+export function setMenuSoundId(newValue: number | null) {
+   menuSoundId = newValue;
+}
+
+export function DOM_addPlayer(userName: string) {
    const li = document.createElement('li');
    li.innerText = userName;
-   if (isOwner) {
-      li.innerText += ` ${String.fromCodePoint(0x1F451)}`;
-   }
 
-   li.dataset.username = userName;
-   li.style.backgroundColor = (color === null ? 'gray' : color);
+   li.dataset.userName = userName;
+
+   li.style.backgroundColor = 'gray';
    li.style.fontWeight = 'bolder';
-   if (color === 'black') {
-      li.style.color = 'white';
-   } else {
-      li.style.color = 'black';
-   }
+   li.style.color = 'black';
    playerListElm.appendChild(li);
 }
 
 
-export function removePlayerFromList(userName: string) {
+export function DOM_removePlayer(userName: string) {
    Array.from(playerListElm.children).forEach((child) => {
-      if ((child as HTMLLIElement).dataset.username === userName) {
+      if ((child as HTMLLIElement).dataset.userName === userName) {
          child.remove();
          return;
       }
@@ -76,18 +74,12 @@ export function removePlayerFromList(userName: string) {
 }
 
 
-export function changePlayerFromList(oldUserName: string, userName: string, color: Color | null, isOwner: boolean) {
+export function DOM_changePlayerColor(userName: string, newColor: Color | null) {
    Array.from(playerListElm.children).forEach((child) => {
       const liChild = child as HTMLLIElement;
-      if (liChild.dataset.username === oldUserName) {
-         liChild.innerText = userName;
-         if (isOwner) {
-            liChild.innerText += ` ${String.fromCodePoint(0x1F451)}`;
-         }
-         
-         liChild.dataset.username = userName;
-         liChild.style.backgroundColor = (color === null ? 'gray' : color);
-         if (color === Color.BLACK) {
+      if (liChild.dataset.userName === userName) {
+         liChild.style.backgroundColor = (newColor === null ? 'gray' : newColor);
+         if (newColor === Color.BLACK) {
             liChild.style.color = 'white';
          } else {
             liChild.style.color = 'black';
@@ -96,43 +88,27 @@ export function changePlayerFromList(oldUserName: string, userName: string, colo
    });
 }
 
+export function DOM_changePlayerIsOwner(userName: string, isOwner: boolean) {
+   Array.from(playerListElm.children).forEach((child) => {
+      const liChild = child as HTMLLIElement;
+      if (liChild.dataset.userName === userName) {
+         liChild.innerText = userName;
+         if (isOwner) {
+            liChild.innerText += ` ${String.fromCodePoint(0x1F451)}`;
+         }
+      }
+   });
+}
 
-export function addChatMessage(userName: string, msg: string) {
+
+export function DOM_addChatMessage(userName: string, msg: string) {
    const div = document.createElement('div');
    div.innerText = `Player ${userName}: ${msg}`;
    logElm.append(div);
    logElm.scrollTop = logElm.scrollHeight;
 }
 
-
-export function modifyPlayerPowerups(color: Color, powerup: string, value: string) {
-   const valueNumber = parseFloat(value);
-   if (powerup === 'bomblength') {
-      powerupsDOM[color]['bomblength'].querySelector('span')!.innerText = value;
-   } else if (powerup === 'bombtime') {
-      powerupsDOM[color]['bombtime'].querySelector('span')!.innerText = valueNumber / 1000 + 's';
-   } else if (powerup === 'speed') {
-      powerupsDOM[color]['speed'].querySelector('span')!.innerText = (
-         valueNumber === MOVE_SPEEDS[0] ? 'LOW' :
-         valueNumber === MOVE_SPEEDS[1] ? 'MED' :
-         valueNumber === MOVE_SPEEDS[2] ? 'HIGH' :
-         'ERR'
-      );
-   } else if (powerup === 'kickbomb') {
-      powerupsDOM[color]['kickbomb'].style.visibility = (value ? 'visible' : 'hidden');
-   } else if (powerup === 'bombcount') {
-      for (let i = 1; i <= valueNumber; ++i) {
-         (powerupsDOM[color] as any)[`bomb${i}`].style.visibility = 'visible';
-      }
-      for (let i = valueNumber + 1; i <= 4; ++i) {
-         (powerupsDOM[color] as any)[`bomb${i}`].style.visibility = 'hidden';
-      }
-   } else {
-      addLog('error update player status');
-   }
-}
-
-export function addLog(msg: string) {
+export function DOM_addLog(msg: string) {
    const date = new Date();
    const spanEl = document.createElement('span');
    spanEl.style.display = 'block';
@@ -145,7 +121,7 @@ export function addLog(msg: string) {
 chatInputElm.value = '';
 
 if (isMobile) {
-   addLog('please rotate your device in landscape mode.')
+   DOM_addLog('please rotate your device in landscape mode.')
 }
 
 if (!isMobile) {

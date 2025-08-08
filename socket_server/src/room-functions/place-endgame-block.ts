@@ -1,10 +1,9 @@
 import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY } from "../game-consts";
 import { Block } from "../game-types";
+import { OutPackets } from "../out-packets/out-packets";
 import { Room } from "../room";
-import { playSound } from "./play-sound";
 
 export function generate_placeEndgameBlock(room: Room): () => void {
-   const io = room.owner.nsp.server;
    let xg: number, yg: number, xdir: number, ydir: number;
    let filled: boolean[][] = [];
 
@@ -48,14 +47,14 @@ export function generate_placeEndgameBlock(room: Room): () => void {
       const bomb = room.getBomb(xg, yg);
       if (bomb) {
          room.explodeBomb(bomb.id);
-         playSound(room, 'explode');
+         OutPackets.send_playSound(room, 'explode');
       }
 
       filled[yg][xg] = true;
-      room.map[yg][xg] = Block.PERMANENT;
+      room.grid[yg][xg] = Block.PERMANENT;
 
-      io.to(room.name).emit('mapUpdates', [{x: xg, y: yg, block: Block.PERMANENT}]);
-      playSound(room, 'walldrop');
+      OutPackets.send_gridUpdate(room, xg, yg, Block.PERMANENT);
+      OutPackets.send_playSound(room, 'walldrop');
 
       [xg, yg] = [xn, yn];
    };

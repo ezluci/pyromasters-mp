@@ -1,27 +1,16 @@
-import { Socket } from "socket.io";
-import { Animation, Block, Bomb, Color, Coord } from "./game-types";
-import { ALL_COLORS, BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, END_SCREEN_TIMEOUT, isPowerup, KICK_BOMB_SPEED, MAP_FOURWAY_PORTAL_POSITIONS } from "./game-consts";
-import { playSound } from "./room-functions/play-sound";
-
-
+import { WebSocket } from "ws";
+import { Block, Bomb, Color } from "./game-types";
+import { OutPackets, Packet } from "./out-packets/out-packets";
+import { BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, END_SCREEN_TIMEOUT, isPowerup, KICK_BOMB_SPEED, MAP_FOURWAY_PORTAL_POSITIONS } from "./game-consts";
 
 // this GENERATES the runEveryTick function that is going to be passed into the Ticks class
-export function generate_runEveryTick(sok: Socket): () => void {
-   const io = sok.nsp.server;
+export function generate_runEveryTick(sok: WebSocket): () => void {
    return () => {
       // send coordinates to everyone
-      const coords: [number, number, Animation][] = [];
-      ALL_COLORS.forEach(color => {
-         if (!sok.room[color]) {
-            coords.push([0, 0, Animation.IDLE_FRONT]);
-         } else {
-            coords.push([sok.room[color].coords.x, sok.room[color].coords.y, sok.room[color].animState]);
-         }
-      });
-      io.to(sok.room.name).emit('C', coords);
+      OutPackets.send_C(sok.room);
       
       // check deaths
-      ALL_COLORS.forEach(color => {
+      Object.values(Color).forEach(color => {
          if (!sok.room[color] || sok.room[color].dead) {
             return;
          }
@@ -32,8 +21,8 @@ export function generate_runEveryTick(sok: Socket): () => void {
          }
          
          sok.room.countPlayersAlive --;
-         io.to(sok.room.name).emit('death', color);
-         playSound(sok.room, 'dead');
+         OutPackets.send_death(sok.room, color);
+         OutPackets.send_playSound(sok.room, 'dead');
 
          sok.room[color].dead = true;
 
@@ -47,14 +36,14 @@ export function generate_runEveryTick(sok: Socket): () => void {
       });
       
       // check players who are sick
-      ALL_COLORS.forEach(color => {
+      Object.values(Color).forEach(color => {
          if (sok.room[color] && !sok.room[color].dead && sok.room[color].sick) {
             sok.room[color].placeBomb();
          }
       });
       
       // collect powerups
-      ALL_COLORS.forEach(color => {
+      Object.values(Color).forEach(color => {
          if (!sok.room[color] || sok.room[color].dead) {
             return;
          }
@@ -74,12 +63,12 @@ export function generate_runEveryTick(sok: Socket): () => void {
          }
 
          if (bomb.xvel || bomb.yvel) {
-            const oldCoords: Coord = { x: bomb.x, y: bomb.y };
+            const oldCoords = { x: bomb.x, y: bomb.y };
             bomb.x += bomb.xvel * KICK_BOMB_SPEED;
             bomb.y += bomb.yvel * KICK_BOMB_SPEED;
-            const newCoords: Coord = { x: bomb.x, y: bomb.y };
+            const newCoords = { x: bomb.x, y: bomb.y };
             
-            let checkBlock: Coord = { x: 0, y: 0 };
+            let checkBlock = { x: 0, y: 0 };
             if (bomb.xvel) {
                oldCoords.y = Math.round(oldCoords.y);
                newCoords.y = Math.round(newCoords.y);
@@ -111,13 +100,13 @@ export function generate_runEveryTick(sok: Socket): () => void {
             // checking if the bomb can continue walking
             let canGo: boolean = true;
             if (0 <= checkBlock.x && checkBlock.x < BLOCKS_HORIZONTALLY && 0 <= checkBlock.y && checkBlock.y < BLOCKS_VERTICALLY) {
-               if (sok.room.map[checkBlock.y][checkBlock.x] === Block.PERMANENT ||
-                     sok.room.map[checkBlock.y][checkBlock.x] === Block.NORMAL) {
+               if (sok.room.grid[checkBlock.y][checkBlock.x] === Block.PERMANENT ||
+                     sok.room.grid[checkBlock.y][checkBlock.x] === Block.NORMAL) {
                   canGo = false;
                }
 
-               if (sok.room.mapName === 'fourway') {
-                  MAP_FOURWAY_PORTAL_POSITIONS.forEach((portalCoord: Coord) => {
+               if (sok.room.map === 'fourway') {
+                  MAP_FOURWAY_PORTAL_POSITIONS.forEach((portalCoord) => {
                      if (portalCoord.x === checkBlock.x && portalCoord.y === checkBlock.y) {
                         canGo = false;
                      }
@@ -130,7 +119,7 @@ export function generate_runEveryTick(sok: Socket): () => void {
                }
                
                
-               ALL_COLORS.forEach(color => {
+               Object.values(Color).forEach(color => {
                   if (!sok.room[color] || sok.room[color].dead) {
                      return;
                   }
@@ -156,17 +145,17 @@ export function generate_runEveryTick(sok: Socket): () => void {
                bomb.xvel = bomb.yvel = 0;
             } else {
                if (pushed) {
-                  playSound(sok.room, 'kickbomb');
+                  OutPackets.send_playSound(sok.room, 'kickbomb');
                }
                // does it destroy any powerup?
-               if (isPowerup(sok.room.map[checkBlock.y][checkBlock.x])) {
-                  sok.room.map[checkBlock.y][checkBlock.x] = Block.NO;
-                  io.to(sok.room.name).emit('mapUpdates', [{ x: checkBlock.x, y: checkBlock.y, block: Block.NO }]);
+               if (isPowerup(sok.room.grid[checkBlock.y][checkBlock.x])) {
+                  sok.room.grid[checkBlock.y][checkBlock.x] = Block.NO;
+                  OutPackets.send_gridUpdate(sok.room, checkBlock.x, checkBlock.y, Block.NO);
                }
                
                // explode if it walks in flames
                let exploded = false;
-               ALL_COLORS.forEach(color => {
+               Object.values(Color).forEach(color => {
                   if (!exploded && sok.room[color] && sok.room.getFlame(Math.round(newCoords.x), Math.round(newCoords.y), sok.room[color])) {
                      sok.room.explodeBomb(bomb.id);
                      exploded = true;
@@ -179,7 +168,7 @@ export function generate_runEveryTick(sok: Socket): () => void {
             
             bomb.x = newCoords.x;
             bomb.y = newCoords.y;
-            io.to(sok.room.name).emit('updateBomb', bomb.id, newCoords.x, newCoords.y);
+            OutPackets.send_updateBomb(sok.room, newCoords.x, newCoords.y, bomb.id);
          }
       });
       
@@ -190,5 +179,38 @@ export function generate_runEveryTick(sok: Socket): () => void {
             sok.room.endscreen_tickId = funcId;
          }
       }
+
+      // send buffered packets (at the end of tick loop)
+      const roomBuffer = OutPackets.getBufferedPackets(sok.room);
+      OutPackets.setBufferedPackets(sok.room, []);
+      sok.room.players.forEach(player => {
+         const playerNewBuffer: Packet[] = [];
+         const playerBuffer = OutPackets.getBufferedPackets(player);
+         let i = 0, j = 0;
+         
+         while (i < roomBuffer.length && j < playerBuffer.length) {
+            if (roomBuffer[i].time < playerBuffer[j].time) {
+               playerNewBuffer.push(roomBuffer[i++]);
+            } else {
+               playerNewBuffer.push(playerBuffer[j++]);
+            }
+         }
+
+         while (i < roomBuffer.length) {
+            playerNewBuffer.push(roomBuffer[i++]);
+         }
+
+         while (j < playerBuffer.length) {
+            playerNewBuffer.push(playerBuffer[j++]);
+         }
+
+         const frame = OutPackets.constructFrame(playerNewBuffer);
+         if (!frame) {
+            return console.error('generate_runEveryTick: constructFrame returned undefined');
+         }
+
+         OutPackets.sendFrame(player, frame);
+         OutPackets.setBufferedPackets(player, []);
+      });
    };
 }

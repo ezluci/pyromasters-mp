@@ -11,18 +11,18 @@ export interface Flame {
 }
 
 export enum Block {
-   NO = 0,   // nothing
-   NORMAL = 1,  // a block that can be destroyed with bombs
-   PERMANENT = 2,   // a block that cannot be destroyed
-   POWER_BOMBPLUS = 5,
-   POWER_BOMBLENGTH = 6,
-   POWER_SPEED = 7,
-   POWER_SHIELD = 8,
-   POWER_KICKBOMBS = 9,
-   POWER_BOMBTIME = 10,
-   POWER_SWITCHPLAYER = 11,
-   POWER_SICK = 12,
-   POWER_BONUS = 13
+   NO,      // nothing
+   NORMAL,  // a block that can be destroyed with bombs
+   PERMANENT,  // a block that cannot be destroyed
+   POWER_BOMBPLUS,
+   POWER_BOMBLENGTH,
+   POWER_SPEED,
+   POWER_SHIELD,
+   POWER_KICKBOMBS,
+   POWER_BOMBTIME,
+   POWER_SWITCHPLAYER,
+   POWER_SICK,
+   POWER_BONUS
 }
 
 export enum Color {
@@ -32,31 +32,70 @@ export enum Color {
    GREEN = 'green'
 }
 
-export interface Coord {
-   x: number;
-   y: number;
-}
-
 export enum Animation {
-   IDLE_BACK = 'idle_back',
-   IDLE_FRONT = 'idle_front',
-   IDLE_LEFT = 'idle_left',
-   IDLE_RIGHT = 'idle_right',
+   IDLE_BACK,
+   IDLE_FRONT,
+   IDLE_LEFT,
+   IDLE_RIGHT,
    
-   WALK_BACK = 'walk_back',
-   WALK_FRONT = 'walk_front',
-   WALK_LEFT = 'walk_left',
-   WALK_RIGHT = 'walk_right'
+   WALK_BACK,
+   WALK_FRONT,
+   WALK_LEFT,
+   WALK_RIGHT
 }
 
 export enum RoomStatus {
-   WAITING = 'waiting',
-   STARTING = 'starting',
-   RUNNING = 'running'
+   WAITING,
+   STARTING,
+   RUNNING
 }
 
 export enum Map {
+   TESTMAP = 'testmap:)',
+   RANDOM = 'random',
    BRICKTOWN = 'bricktown',
    FOURWAY = 'fourway',
    MAGNETO = 'magneto'
+}
+
+export class Player {
+   name: string;
+   isOwner: boolean;
+
+   wins: number;
+   kills: number;
+
+   color: Color | null;
+   coords: { x : number, y: number };
+   dead: boolean;
+   animState: Animation;
+   
+   speed: number;
+   bombCount: number;
+   bombTime: number;
+   bombLength: number;
+   shield: boolean;
+   sick: boolean;
+   kickBombs: boolean;
+
+   constructor(name: string) {
+      this.name = name;
+      this.isOwner = false;
+      
+      this.wins = 0;
+      this.kills = 0;
+
+      this.color = null;
+      this.coords = { x: 0, y: 0 };
+      this.dead = false;
+
+      this.animState = Animation.IDLE_BACK;
+      this.speed = 0;
+      this.bombCount = 0;
+      this.bombTime = 0;
+      this.bombLength = 0;
+      this.shield = false;
+      this.sick = false;
+      this.kickBombs = false;
+   }
 }

@@ -2,7 +2,6 @@
   "name": "pyromasters-mp",
   "description": "The old game Pyromasters, available on MoFunZone.com since 2006, now multiplayer!",
   "version": "0.10.8",
-  "main": "./src/server/server.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ezluci/pyromasters-mp.git"
@@ -14,11 +13,11 @@
   },
   "homepage": "https://github.com/ezluci/pyromasters-mp#readme",
   "dependencies": {
+    "@types/ws": "^8.18.1",
     "dotenv": "^16.4.5",
     "howler": "^2.2.4",
     "mobile-detect": "^1.4.5",
-    "socket.io": "^4.6.1",
-    "socket.io-client": "^4.8.1"
+    "ws": "^8.18.2"
   },
   "scripts": {
     "dev": "cd web && vite",
@@ -27,8 +26,7 @@
   },
   "devDependencies": {
     "@types/howler": "^2.2.12",
-    "@types/socket.io": "^3.0.1",
-    "@types/socket.io-client": "^1.4.36",
+    "audiosprite": "^0.7.2",
     "tsx": "^4.19.4",
     "typescript": "^5.7.3",
     "vite": "^6.3.5"

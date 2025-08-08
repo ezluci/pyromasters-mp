@@ -1,14 +1,15 @@
-import { playerAnimations } from "./animations/load-animations";
 import { changeAnimation } from "./animations/process-animations";
 import { drawFrame } from "./game-canvas";
 import { BLOCK_SIZE, MAP_FOURWAY_NEXT_PORTAL, MAP_FOURWAY_PORTAL_POSITIONS } from "./game-consts";
-import { socket } from "./game-socket";
-import { Animation, Coord, Map, RoomStatus } from "./game-types";
+import { Map, RoomStatus } from "./game-types";
 import { images } from "./load-assets";
 import { moveDown, moveLeft, moveRight, moveUp } from "./movement";
-import { coords, endScreen, mapName, myColor, ranking, roomStatus, setDeltaTime } from "./game-variables";
+import { endScreen, map, myPlayer, ranking, roomStatus, setDeltaTime } from "./game-variables";
 import { canvasElm, ctx } from "./page";
 import { keysPressed } from "./record-keys";
+import { sendPacket_placeBomb } from "./out-packets/place-bomb";
+import { sendPacket_portalTp } from "./out-packets/portal-tp";
+import { sendPacket_coords } from "./out-packets/coords";
 
 
 let lastBombTime = -10000;
@@ -23,17 +24,16 @@ export function gameLoop() {
    lastFrameTime = currentTime;
 
    /// UPDATES
-   if (myColor && roomStatus === RoomStatus.RUNNING) {
-
+   if (myPlayer && myPlayer.color && !myPlayer.dead && roomStatus === RoomStatus.RUNNING) {
       // place bomb
       if (keysPressed.bomb && currentTime - lastBombTime > 100) {
-         socket.emit('tryPlaceBomb');
+         sendPacket_placeBomb();
          lastBombTime = currentTime;
       }
-
+      
       // move
-      const me = coords[myColor];
-      const meOld: Coord = { x: me.x, y: me.y };
+      const me = myPlayer.coords;
+      const meOld = { x: me.x, y: me.y };
 
       if (keysPressed.left) {
          moveLeft();
@@ -44,15 +44,15 @@ export function gameLoop() {
       } else if (keysPressed.up) {
          moveUp();
       } else {
-         const currentAnimation = playerAnimations.states[myColor];
-         if (currentAnimation.split('_')[0] === 'walk') {
-            changeAnimation(myColor, ('idle_' + currentAnimation.split('_')[1]) as Animation);
+         const currentAnimation = myPlayer.animState;
+         if (currentAnimation >= 4) { // if walking
+            changeAnimation(myPlayer, currentAnimation - 4);
          }
       }
 
       // check if the player went through any fourway portals
 
-      if (mapName === Map.FOURWAY && (me.x === meOld.x || me.y === meOld.y) && (me.x !== meOld.x || me.y !== meOld.y)) {
+      if (map === Map.FOURWAY && (me.x === meOld.x || me.y === meOld.y) && (me.x !== meOld.x || me.y !== meOld.y)) {
          let A, B, dif;
          if (me.x !== meOld.x) {
             A = me.x;
@@ -79,13 +79,13 @@ export function gameLoop() {
          });
 
          if (portalIdx !== null) {
-            socket.emit('portaltp');
+            sendPacket_portalTp();
             me.x = MAP_FOURWAY_NEXT_PORTAL[portalIdx].x * BLOCK_SIZE;
             me.y = MAP_FOURWAY_NEXT_PORTAL[portalIdx].y * BLOCK_SIZE;
          }
       }
-      
-      socket.emit('coords', me.x, me.y, playerAnimations.states[myColor]);
+
+      sendPacket_coords(me.x, me.y, myPlayer.animState);
    }
 
 
@@ -103,5 +103,5 @@ export function gameLoop() {
       drawFrame();
    }
 
-   window.requestAnimationFrame(gameLoop);
+   requestAnimationFrame(gameLoop);
 }

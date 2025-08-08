@@ -1,11 +1,11 @@
-import { Socket } from "socket.io";
-import { ALL_COLORS, BLOCK_SAFE_PX, BLOCK_SIZE } from "../game-consts";
-import { Block, Color, Coord } from "../game-types";
+import { WebSocket } from "ws";
+import { BLOCK_SAFE_PX, BLOCK_SIZE } from "../game-consts";
+import { Block, Color } from "../game-types";
 
 const BLK = BLOCK_SIZE;
 const BLK_SAFE = BLOCK_SAFE_PX;
 
-export function tie_isDying(sok: Socket): void {
+export function tie_isDying(sok: WebSocket): void {
    // return FALSE or an array of 'colors' (who assisted to the kill)
    sok.isDying = (): boolean | Color[] => {
       if (sok.shield) {
@@ -15,8 +15,8 @@ export function tie_isDying(sok: Socket): void {
       const x = sok.coords.x;
       const y = sok.coords.y;
       
-      let deadBlk1: Coord | null = null;
-      let deadBlk2: Coord | null = null;
+      let deadBlk1: { x: number, y: number } | null = null;
+      let deadBlk2: { x: number, y: number } | null = null;
 
       if (x % BLK === 0 && y % BLK === 0) {
          deadBlk1 = {x: x / BLK, y: y / BLK}
@@ -49,15 +49,15 @@ export function tie_isDying(sok: Socket): void {
          return false;  // he's messing with the coords =[
       }
 
-      if (deadBlk1 !== null && sok.room.map[deadBlk1.y][deadBlk1.x] === Block.PERMANENT) {
+      if (deadBlk1 !== null && sok.room.grid[deadBlk1.y][deadBlk1.x] === Block.PERMANENT) {
          return [];
       }
-      if (deadBlk2 !== null && sok.room.map[deadBlk2.y][deadBlk2.x] === Block.PERMANENT) {
+      if (deadBlk2 !== null && sok.room.grid[deadBlk2.y][deadBlk2.x] === Block.PERMANENT) {
          return [];
       }
       
       const assistColors: Color[] = [];
-      ALL_COLORS.forEach(assistColor => {
+      Object.values(Color).forEach(assistColor => {
          if (sok.room[assistColor] === null) {
             return;
          }

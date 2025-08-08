@@ -1,11 +1,9 @@
-import { Socket } from "socket.io";
-import { ALL_COLORS } from "../game-consts";
 import { Color, RoomStatus } from "../game-types";
 import { Room } from "../room";
-import { playSound } from "./play-sound";
+import { OutPackets } from "../out-packets/out-packets";
+import { WebSocket } from "ws";
 
 export function generate_showEndScreen(room: Room): () => void {
-   const io = room.owner.nsp.server;
    return () => {
       if (room.countPlayersAlive >= 2) {
          console.error('showEndScreen ignored');
@@ -15,29 +13,33 @@ export function generate_showEndScreen(room: Room): () => void {
       room.ticks.endTickLoop();
       
       let winnerColor: Color | null = null;
-      let winner: Socket | null = null;
+      let winner: WebSocket | null = null;
       
-      for (const color of ALL_COLORS) { // typescript is complaining about foreach
-         if (room[color] && !room[color].dead) {
+      (Object.values(Color) as Color[]).forEach(color => {
+         const player = room[color];
+         if (player && !player.dead) {
             winnerColor = color;
-            winner = room[color];
-         }
-      }
-
-      if (winner) {
-         winner.wins ++;
-      }
-
-      const ranking: { name: string, wins: number, kills: number }[] = [];
-      ALL_COLORS.forEach((color) => {
-         if (room[color]) {
-            ranking.push({ name: room[color].name, wins: room[color].wins, kills: room[color].kills });
+            winner = player;
          }
       });
 
-      io.to(room.name).emit('endscreen', winnerColor, ranking);
-      playSound(room, winner ? 'win' : 'draw');
+      // if (winner) {
+      //    (winner as WebSocket).wins ++; // tf do you want
+      // }
+
+      // const ranking: { name: string, wins: number, kills: number }[] = [];
+      // ALL_COLORS.forEach((color) => {
+      //    if (room[color]) {
+      //       ranking.push({ name: room[color].name, wins: room[color].wins, kills: room[color].kills });
+      //    }
+      // });
+      
+      // todo send ranking  !!!
+
+      OutPackets.send_endScreen(room, winnerColor);
+      OutPackets.send_playSound(room, winner ? 'win' : 'draw');
       room.status = RoomStatus.WAITING;
-      room.mapName = null;
+      OutPackets.send_roomStatus(room, RoomStatus.WAITING);
+      room.map = null;
    };
 }

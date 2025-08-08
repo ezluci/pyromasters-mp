@@ -1,8 +1,8 @@
 import { changeAnimation } from "./animations/process-animations";
 import { BLOCK_SAFE_PX, BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, MAX_X, MAX_Y, MIN_X, MIN_Y } from "./game-consts";
-import { socket } from "./game-socket";
-import { Animation, Block, type Bomb, type Coord } from "./game-types";
-import { bombs, coords, deltaTime, map, myColor, speed } from "./game-variables";
+import { Animation, Block, Bomb } from "./game-types";
+import { bombs, deltaTime, grid, myPlayer } from "./game-variables";
+import { sendPacket_kickBomb } from "./out-packets/kick-bomb";
 
 // returns true if you CANNOT GO through these coordinates (there is a thing at these INTEGER coords)
 function stop(x: number, y: number): boolean {
@@ -11,7 +11,7 @@ function stop(x: number, y: number): boolean {
    if (x < 0 || y < 0 || x >= BLOCKS_HORIZONTALLY || y >= BLOCKS_VERTICALLY) {
       return false;
    }
-   return map[y][x] === Block.NORMAL || map[y][x] === Block.PERMANENT || getBomb(x, y) !== null;
+   return grid[y][x] === Block.NORMAL || grid[y][x] === Block.PERMANENT || getBomb(x, y) !== null;
 }
 
 // ok so the thing is that two bombs (x1, y1) and (x2, y2) cannot have the same coords,
@@ -53,21 +53,23 @@ function getBombExact(x: number, y: number): Bomb | null {
 let tmpBomb: Bomb | null;
 
 export function moveLeft() {
-   if (myColor === null) {
+   if (!myPlayer.color || myPlayer.dead) {
       return;
    }
-   const me = coords[myColor];
-   const meOld: Coord = { x: me.x, y: me.y };
+
+   const me = myPlayer.coords;
+   const meOld = { x: me.x, y: me.y };
+   const speed = myPlayer.speed;
 
    const mod = me.y % (2 * BLOCK_SIZE);
 
    if (BLOCK_SIZE - BLOCK_SAFE_PX <= mod && mod <= BLOCK_SIZE + BLOCK_SAFE_PX || me.x === MIN_X) {
-      changeAnimation(myColor, Animation.WALK_LEFT);
+      changeAnimation(myPlayer, Animation.WALK_LEFT);
       return; // next to the player is a block. we don't move anything.
    }
 
    if (mod === 0) {
-      changeAnimation(myColor, Animation.WALK_LEFT);
+      changeAnimation(myPlayer, Animation.WALK_LEFT);
       me.x -= speed * deltaTime;
       if (me.x < MIN_X) {
          me.x = MIN_X;
@@ -77,42 +79,42 @@ export function moveLeft() {
          }
       }
       if (me.x % BLOCK_SIZE === 0 && (tmpBomb = getBombExact(me.x / BLOCK_SIZE - 1, me.y / BLOCK_SIZE))) {
-         socket.emit('kickbomb', tmpBomb.id, -1, 0);
+         sendPacket_kickBomb(tmpBomb, -1, 0);
       }
    } else {
       if (mod < BLOCK_SIZE) { // move up
          if (tmpBomb = getBombExact(me.x / BLOCK_SIZE - 1, Math.floor(me.y / BLOCK_SIZE))) {
-            changeAnimation(myColor, Animation.WALK_LEFT);
-            socket.emit('kickbomb', tmpBomb.id, -1, 0);
+            changeAnimation(myPlayer, Animation.WALK_LEFT);
+            sendPacket_kickBomb(tmpBomb, -1, 0);
          } else if (!stop(me.x / BLOCK_SIZE - 1, Math.floor(me.y / BLOCK_SIZE))) {
-            changeAnimation(myColor, Animation.WALK_BACK);
+            changeAnimation(myPlayer, Animation.WALK_BACK);
             me.y -= speed * deltaTime;
             me.y = Math.max(me.y, MIN_Y);
             const newMod = me.y % (2 * BLOCK_SIZE);
             if (newMod > mod) {
-               changeAnimation(myColor, Animation.WALK_LEFT);
+               changeAnimation(myPlayer, Animation.WALK_LEFT);
                me.x -= 2 * BLOCK_SIZE - newMod;
                me.y = Math.floor(meOld.y / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
-            changeAnimation(myColor, Animation.WALK_LEFT);
+            changeAnimation(myPlayer, Animation.WALK_LEFT);
          }
       } else if (mod > BLOCK_SIZE) { // move down
          if (tmpBomb = getBombExact(me.x / BLOCK_SIZE - 1, Math.ceil(me.y / BLOCK_SIZE))) {
-            changeAnimation(myColor, Animation.WALK_LEFT);
-            socket.emit('kickbomb', tmpBomb.id, -1, 0);
+            changeAnimation(myPlayer, Animation.WALK_LEFT);
+            sendPacket_kickBomb(tmpBomb, -1, 0);
          } else if (!stop(me.x / BLOCK_SIZE - 1, Math.ceil(me.y / BLOCK_SIZE))) {
-            changeAnimation(myColor, Animation.WALK_FRONT);
+            changeAnimation(myPlayer, Animation.WALK_FRONT);
             me.y += speed * deltaTime;
             me.y = Math.min(me.y, MAX_Y);
             const newMod = me.y % (2 * BLOCK_SIZE);
             if (newMod < mod) {
-               changeAnimation(myColor, Animation.WALK_LEFT);
+               changeAnimation(myPlayer, Animation.WALK_LEFT);
                me.x -= newMod;
                me.y = Math.ceil(meOld.y / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
-            changeAnimation(myColor, Animation.WALK_LEFT);
+            changeAnimation(myPlayer, Animation.WALK_LEFT);
          }
       }
    }
@@ -120,21 +122,23 @@ export function moveLeft() {
 
 
 export function moveDown() {
-   if (myColor === null) {
+   if (!myPlayer.color || myPlayer.dead) {
       return;
    }
-   const me = coords[myColor];
-   const meOld: Coord = { x: me.x, y: me.y };
+
+   const me = myPlayer.coords;
+   const meOld = { x: me.x, y: me.y };
+   const speed = myPlayer.speed;
 
    const mod = me.x % (2 * BLOCK_SIZE);
 
    if (BLOCK_SIZE - BLOCK_SAFE_PX <= mod && mod <= BLOCK_SIZE + BLOCK_SAFE_PX || me.y === MAX_Y) {
-      changeAnimation(myColor, Animation.WALK_FRONT);
+      changeAnimation(myPlayer, Animation.WALK_FRONT);
       return;
    }
    
    if (mod === 0) {
-      changeAnimation(myColor, Animation.WALK_FRONT);
+      changeAnimation(myPlayer, Animation.WALK_FRONT);
       me.y += speed * deltaTime;
       if (me.y > MAX_Y) {
          me.y = MAX_Y;
@@ -144,42 +148,42 @@ export function moveDown() {
          }
       }
       if (me.y % BLOCK_SIZE === 0 && (tmpBomb = getBombExact(me.x / BLOCK_SIZE, me.y / BLOCK_SIZE + 1))) {
-         socket.emit('kickbomb', tmpBomb.id, 0, +1);
+         sendPacket_kickBomb(tmpBomb, 0, +1);
       }
    } else {
       if (mod < BLOCK_SIZE) {
          if (tmpBomb = getBombExact(Math.floor(me.x / BLOCK_SIZE), me.y / BLOCK_SIZE + 1)) {
-            changeAnimation(myColor, Animation.WALK_FRONT);
-            socket.emit('kickbomb', tmpBomb.id, 0, +1);
+            changeAnimation(myPlayer, Animation.WALK_FRONT);
+            sendPacket_kickBomb(tmpBomb, 0, +1);
          } else if (!stop(Math.floor(me.x / BLOCK_SIZE), me.y / BLOCK_SIZE + 1)) {
-            changeAnimation(myColor, Animation.WALK_LEFT);
+            changeAnimation(myPlayer, Animation.WALK_LEFT);
             me.x -= speed * deltaTime;
             me.x = Math.max(me.x, MIN_X);
             const newMod = me.x % (2 * BLOCK_SIZE);
             if (newMod > mod) {
-               changeAnimation(myColor, Animation.WALK_FRONT);
+               changeAnimation(myPlayer, Animation.WALK_FRONT);
                me.y += 2 * BLOCK_SIZE - newMod;
                me.x = Math.floor(meOld.x / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
-            changeAnimation(myColor, Animation.WALK_FRONT);
+            changeAnimation(myPlayer, Animation.WALK_FRONT);
          }
       } else if (mod > BLOCK_SIZE) {
          if (tmpBomb = getBombExact(Math.ceil(me.x / BLOCK_SIZE), me.y / BLOCK_SIZE + 1)) {
-            changeAnimation(myColor, Animation.WALK_FRONT);
-            socket.emit('kickbomb', tmpBomb.id, 0, +1);
+            changeAnimation(myPlayer, Animation.WALK_FRONT);
+            sendPacket_kickBomb(tmpBomb, 0, +1);
          } else if (!stop(Math.ceil(me.x / BLOCK_SIZE), me.y / BLOCK_SIZE + 1)) {
-            changeAnimation(myColor, Animation.WALK_RIGHT);
+            changeAnimation(myPlayer, Animation.WALK_RIGHT);
             me.x += speed * deltaTime;
             me.x = Math.min(me.x, MAX_X);
             const newMod = me.x % (2 * BLOCK_SIZE);
             if (newMod < mod) {
-               changeAnimation(myColor, Animation.WALK_FRONT);
+               changeAnimation(myPlayer, Animation.WALK_FRONT);
                me.y += newMod;
                me.x = Math.ceil(meOld.x / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
-            changeAnimation(myColor, Animation.WALK_FRONT);
+            changeAnimation(myPlayer, Animation.WALK_FRONT);
          }
       }
    }
@@ -187,21 +191,23 @@ export function moveDown() {
 
 
 export function moveRight() {
-   if (myColor === null) {
+   if (!myPlayer.color || myPlayer.dead) {
       return;
    }
-   const me = coords[myColor];
-   const meOld: Coord = { x: me.x, y: me.y };
+
+   const me = myPlayer.coords;
+   const meOld = { x: me.x, y: me.y };
+   const speed = myPlayer.speed;
    
    const mod = me.y % (2 * BLOCK_SIZE);
 
    if (BLOCK_SIZE - BLOCK_SAFE_PX <= mod && mod <= BLOCK_SIZE + BLOCK_SAFE_PX || me.x === MAX_X) {
-      changeAnimation(myColor, Animation.WALK_RIGHT);
+      changeAnimation(myPlayer, Animation.WALK_RIGHT);
       return;
    }
    
    if (mod === 0) {
-      changeAnimation(myColor, Animation.WALK_RIGHT);
+      changeAnimation(myPlayer, Animation.WALK_RIGHT);
       me.x += speed * deltaTime;
       if (me.x > MAX_X) {
          me.x = MAX_X;
@@ -211,43 +217,43 @@ export function moveRight() {
          }
       }
       if (me.x % BLOCK_SIZE === 0 && (tmpBomb = getBombExact(me.x / BLOCK_SIZE + 1, me.y / BLOCK_SIZE))) {
-         socket.emit('kickbomb', tmpBomb.id, +1, 0);
+         sendPacket_kickBomb(tmpBomb, +1, 0);
       }
    } else {
       if (mod < BLOCK_SIZE) {
          if (tmpBomb = getBombExact(me.x / BLOCK_SIZE + 1, Math.floor(me.y / BLOCK_SIZE))) {
-            changeAnimation(myColor, Animation.WALK_RIGHT);
-            socket.emit('kickbomb', tmpBomb.id, +1, 0);
+            changeAnimation(myPlayer, Animation.WALK_RIGHT);
+            sendPacket_kickBomb(tmpBomb, +1, 0);
          } else if (!stop(me.x / BLOCK_SIZE + 1, Math.floor(me.y / BLOCK_SIZE))) {
-            changeAnimation(myColor, Animation.WALK_BACK);
+            changeAnimation(myPlayer, Animation.WALK_BACK);
             me.y -= speed * deltaTime;
             me.y = Math.max(me.y, MIN_Y);
             const newMod = me.y % (2 * BLOCK_SIZE);
             if (newMod > mod) {
-               changeAnimation(myColor, Animation.WALK_RIGHT);
+               changeAnimation(myPlayer, Animation.WALK_RIGHT);
                me.x += 2 * BLOCK_SIZE - newMod;
                me.y = Math.floor(meOld.y / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
-            changeAnimation(myColor, Animation.WALK_RIGHT);
+            changeAnimation(myPlayer, Animation.WALK_RIGHT);
          }
       }
       else if (mod > BLOCK_SIZE) {
          if (tmpBomb = getBombExact(me.x / BLOCK_SIZE + 1, Math.ceil(me.y / BLOCK_SIZE))) {
-            changeAnimation(myColor, Animation.WALK_RIGHT);
-            socket.emit('kickbomb', tmpBomb.id, +1, 0);
+            changeAnimation(myPlayer, Animation.WALK_RIGHT);
+            sendPacket_kickBomb(tmpBomb, +1, 0);
          } else if (!stop(me.x / BLOCK_SIZE + 1, Math.ceil(me.y / BLOCK_SIZE))) {
-            changeAnimation(myColor, Animation.WALK_FRONT);
+            changeAnimation(myPlayer, Animation.WALK_FRONT);
             me.y += speed * deltaTime;
             me.y = Math.min(me.y, MAX_Y);
             const newMod = me.y % (2 * BLOCK_SIZE);
             if (newMod < mod) {
-               changeAnimation(myColor, Animation.WALK_RIGHT);
+               changeAnimation(myPlayer, Animation.WALK_RIGHT);
                me.x += newMod;
                me.y = Math.ceil(meOld.y / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
-            changeAnimation(myColor, Animation.WALK_RIGHT);
+            changeAnimation(myPlayer, Animation.WALK_RIGHT);
          }
       }
    }
@@ -255,21 +261,23 @@ export function moveRight() {
 
 
 export function moveUp() {
-   if (myColor === null) {
+   if (!myPlayer.color || myPlayer.dead) {
       return;
    }
-   const me = coords[myColor];
-   const meOld: Coord = { x: me.x, y: me.y };
+
+   const me = myPlayer.coords;
+   const meOld = { x: me.x, y: me.y };
+   const speed = myPlayer.speed;
    
    const mod = me.x % (2 * BLOCK_SIZE);
 
    if (BLOCK_SIZE - BLOCK_SAFE_PX <= mod && mod <= BLOCK_SIZE + BLOCK_SAFE_PX || me.y === MIN_Y) {
-      changeAnimation(myColor, Animation.WALK_BACK);
+      changeAnimation(myPlayer, Animation.WALK_BACK);
       return;
    }
 
    if (mod === 0) {
-      changeAnimation(myColor, Animation.WALK_BACK);
+      changeAnimation(myPlayer, Animation.WALK_BACK);
       me.y -= speed * deltaTime;
       if (me.y < MIN_Y) {
          me.y = MIN_Y;
@@ -279,43 +287,43 @@ export function moveUp() {
          }
       }
       if (me.y % BLOCK_SIZE === 0 && (tmpBomb = getBombExact(me.x / BLOCK_SIZE, me.y / BLOCK_SIZE - 1))) {
-         socket.emit('kickbomb', tmpBomb.id, 0, -1);
+         sendPacket_kickBomb(tmpBomb, 0, -1);
       }
    } else {
       if (mod < BLOCK_SIZE) {
          if (tmpBomb = getBombExact(Math.floor(me.x / BLOCK_SIZE), me.y / BLOCK_SIZE - 1)) {
-            changeAnimation(myColor, Animation.WALK_BACK);
-            socket.emit('kickbomb', tmpBomb.id, 0, -1);
+            changeAnimation(myPlayer, Animation.WALK_BACK);
+            sendPacket_kickBomb(tmpBomb, 0, -1);
          } else if (!stop(Math.floor(me.x / BLOCK_SIZE), me.y / BLOCK_SIZE - 1)) {
-            changeAnimation(myColor, Animation.WALK_LEFT);
+            changeAnimation(myPlayer, Animation.WALK_LEFT);
             me.x -= speed * deltaTime;
             me.x = Math.max(me.x, MIN_X);
             const newMod = me.x % (2 * BLOCK_SIZE);
             if (newMod > mod) {
-               changeAnimation(myColor, Animation.WALK_BACK);
+               changeAnimation(myPlayer, Animation.WALK_BACK);
                me.y -= 2 * BLOCK_SIZE - newMod;
                me.x = Math.floor(meOld.x / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
-            changeAnimation(myColor, Animation.WALK_BACK);
+            changeAnimation(myPlayer, Animation.WALK_BACK);
          }
       }
       else if (mod > BLOCK_SIZE) {
          if (tmpBomb = getBombExact(Math.ceil(me.x / BLOCK_SIZE), me.y / BLOCK_SIZE - 1)) {
-            changeAnimation(myColor, Animation.WALK_BACK);
-            socket.emit('kickbomb', tmpBomb.id, 0, -1);
+            changeAnimation(myPlayer, Animation.WALK_BACK);
+            sendPacket_kickBomb(tmpBomb, 0, -1);
          } else if (!stop(Math.ceil(me.x / BLOCK_SIZE), me.y / BLOCK_SIZE - 1)) {
-            changeAnimation(myColor, Animation.WALK_RIGHT);
+            changeAnimation(myPlayer, Animation.WALK_RIGHT);
             me.x += speed * deltaTime;
             me.x = Math.min(me.x, MAX_X);
             const newMod = me.x % (2 * BLOCK_SIZE);
             if (newMod < mod) {
-               changeAnimation(myColor, Animation.WALK_BACK);
+               changeAnimation(myPlayer, Animation.WALK_BACK);
                me.y -= newMod;
                me.x = Math.ceil(meOld.x / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
-            changeAnimation(myColor, Animation.WALK_BACK);
+            changeAnimation(myPlayer, Animation.WALK_BACK);
          }
       }
    }

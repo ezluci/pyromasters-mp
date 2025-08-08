@@ -1,7 +1,7 @@
 {
 	"inputs": [
 		{
-			"filename": "white_walk_back/{0000-}.png",
+			"filename": "images/white_walk_back/{0000-}.png",
 			"sources": [
 				{
 					"index": 0,
@@ -246,7 +246,7 @@
 			]
 		},
 		{
-			"filename": "white_walk_front/{0000-}.png",
+			"filename": "images/white_walk_front/{0000-}.png",
 			"sources": [
 				{
 					"index": 60,
@@ -491,7 +491,7 @@
 			]
 		},
 		{
-			"filename": "white_walk_left/{0000-}.png",
+			"filename": "images/white_walk_left/{0000-}.png",
 			"sources": [
 				{
 					"index": 120,
@@ -736,7 +736,7 @@
 			]
 		},
 		{
-			"filename": "white_walk_right/{0000-}.png",
+			"filename": "images/white_walk_right/{0000-}.png",
 			"sources": [
 				{
 					"index": 180,
@@ -981,7 +981,7 @@
 			]
 		},
 		{
-			"filename": "white_idle_back/0000.png",
+			"filename": "images/white_idle_back/0000.png",
 			"sources": [
 				{
 					"index": 240,
@@ -990,7 +990,7 @@
 			]
 		},
 		{
-			"filename": "white_idle_front/0000.png",
+			"filename": "images/white_idle_front/0000.png",
 			"sources": [
 				{
 					"index": 241,
@@ -999,7 +999,7 @@
 			]
 		},
 		{
-			"filename": "white_idle_left/0000.png",
+			"filename": "images/white_idle_left/0000.png",
 			"sources": [
 				{
 					"index": 242,
@@ -1008,7 +1008,7 @@
 			]
 		},
 		{
-			"filename": "white_idle_right/0000.png",
+			"filename": "images/white_idle_right/0000.png",
 			"sources": [
 				{
 					"index": 243,
@@ -1017,7 +1017,7 @@
 			]
 		},
 		{
-			"filename": "black_walk_back/{0000-}.png",
+			"filename": "images/black_walk_back/{0000-}.png",
 			"sources": [
 				{
 					"index": 244,
@@ -1262,7 +1262,7 @@
 			]
 		},
 		{
-			"filename": "black_walk_front/{0000-}.png",
+			"filename": "images/black_walk_front/{0000-}.png",
 			"sources": [
 				{
 					"index": 304,
@@ -1507,7 +1507,7 @@
 			]
 		},
 		{
-			"filename": "black_walk_left/{0000-}.png",
+			"filename": "images/black_walk_left/{0000-}.png",
 			"sources": [
 				{
 					"index": 364,
@@ -1752,7 +1752,7 @@
 			]
 		},
 		{
-			"filename": "black_walk_right/{0000-}.png",
+			"filename": "images/black_walk_right/{0000-}.png",
 			"sources": [
 				{
 					"index": 424,
@@ -1997,7 +1997,7 @@
 			]
 		},
 		{
-			"filename": "black_idle_back/0000.png",
+			"filename": "images/black_idle_back/0000.png",
 			"sources": [
 				{
 					"index": 484,
@@ -2006,7 +2006,7 @@
 			]
 		},
 		{
-			"filename": "black_idle_front/0000.png",
+			"filename": "images/black_idle_front/0000.png",
 			"sources": [
 				{
 					"index": 485,
@@ -2015,7 +2015,7 @@
 			]
 		},
 		{
-			"filename": "black_idle_left/0000.png",
+			"filename": "images/black_idle_left/0000.png",
 			"sources": [
 				{
 					"index": 486,
@@ -2024,7 +2024,7 @@
 			]
 		},
 		{
-			"filename": "black_idle_right/0000.png",
+			"filename": "images/black_idle_right/0000.png",
 			"sources": [
 				{
 					"index": 487,
@@ -2033,7 +2033,7 @@
 			]
 		},
 		{
-			"filename": "orange_walk_back/{0000-}.png",
+			"filename": "images/orange_walk_back/{0000-}.png",
 			"sources": [
 				{
 					"index": 488,
@@ -2278,7 +2278,7 @@
 			]
 		},
 		{
-			"filename": "orange_walk_front/{0000-}.png",
+			"filename": "images/orange_walk_front/{0000-}.png",
 			"sources": [
 				{
 					"index": 548,
@@ -2523,7 +2523,7 @@
 			]
 		},
 		{
-			"filename": "orange_walk_left/{0000-}.png",
+			"filename": "images/orange_walk_left/{0000-}.png",
 			"sources": [
 				{
 					"index": 608,
@@ -2768,7 +2768,7 @@
 			]
 		},
 		{
-			"filename": "orange_walk_right/{0000-}.png",
+			"filename": "images/orange_walk_right/{0000-}.png",
 			"sources": [
 				{
 					"index": 668,
@@ -3013,7 +3013,7 @@
 			]
 		},
 		{
-			"filename": "orange_idle_back/0000.png",
+			"filename": "images/orange_idle_back/0000.png",
 			"sources": [
 				{
 					"index": 728,
@@ -3022,7 +3022,7 @@
 			]
 		},
 		{
-			"filename": "orange_idle_front/0000.png",
+			"filename": "images/orange_idle_front/0000.png",
 			"sources": [
 				{
 					"index": 729,
@@ -3031,7 +3031,7 @@
 			]
 		},
 		{
-			"filename": "orange_idle_left/0000.png",
+			"filename": "images/orange_idle_left/0000.png",
 			"sources": [
 				{
 					"index": 730,
@@ -3040,7 +3040,7 @@
 			]
 		},
 		{
-			"filename": "orange_idle_right/0000.png",
+			"filename": "images/orange_idle_right/0000.png",
 			"sources": [
 				{
 					"index": 731,
@@ -3049,7 +3049,7 @@
 			]
 		},
 		{
-			"filename": "green_walk_back/{0000-}.png",
+			"filename": "images/green_walk_back/{0000-}.png",
 			"sources": [
 				{
 					"index": 732,
@@ -3294,7 +3294,7 @@
 			]
 		},
 		{
-			"filename": "green_walk_front/{0000-}.png",
+			"filename": "images/green_walk_front/{0000-}.png",
 			"sources": [
 				{
 					"index": 792,
@@ -3539,7 +3539,7 @@
 			]
 		},
 		{
-			"filename": "green_walk_left/{0000-}.png",
+			"filename": "images/green_walk_left/{0000-}.png",
 			"sources": [
 				{
 					"index": 852,
@@ -3784,7 +3784,7 @@
 			]
 		},
 		{
-			"filename": "green_walk_right/{0000-}.png",
+			"filename": "images/green_walk_right/{0000-}.png",
 			"sources": [
 				{
 					"index": 912,
@@ -4029,7 +4029,7 @@
 			]
 		},
 		{
-			"filename": "green_idle_back/0000.png",
+			"filename": "images/green_idle_back/0000.png",
 			"sources": [
 				{
 					"index": 972,
@@ -4038,7 +4038,7 @@
 			]
 		},
 		{
-			"filename": "green_idle_front/0000.png",
+			"filename": "images/green_idle_front/0000.png",
 			"sources": [
 				{
 					"index": 973,
@@ -4047,7 +4047,7 @@
 			]
 		},
 		{
-			"filename": "green_idle_left/0000.png",
+			"filename": "images/green_idle_left/0000.png",
 			"sources": [
 				{
 					"index": 974,
@@ -4056,7 +4056,7 @@
 			]
 		},
 		{
-			"filename": "green_idle_right/0000.png",
+			"filename": "images/green_idle_right/0000.png",
 			"sources": [
 				{
 					"index": 975,
@@ -4072,5857 +4072,5857 @@
 	],
 	"sources": [
 		{
-			"filename": "white_walk_back/0000.png",
+			"filename": "images/white_walk_back/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0001.png",
+			"filename": "images/white_walk_back/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0002.png",
+			"filename": "images/white_walk_back/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0003.png",
+			"filename": "images/white_walk_back/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0004.png",
+			"filename": "images/white_walk_back/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0005.png",
+			"filename": "images/white_walk_back/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0006.png",
+			"filename": "images/white_walk_back/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0007.png",
+			"filename": "images/white_walk_back/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0008.png",
+			"filename": "images/white_walk_back/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0009.png",
+			"filename": "images/white_walk_back/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0010.png",
+			"filename": "images/white_walk_back/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0011.png",
+			"filename": "images/white_walk_back/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0012.png",
+			"filename": "images/white_walk_back/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0013.png",
+			"filename": "images/white_walk_back/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0014.png",
+			"filename": "images/white_walk_back/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0015.png",
+			"filename": "images/white_walk_back/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0016.png",
+			"filename": "images/white_walk_back/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0017.png",
+			"filename": "images/white_walk_back/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0018.png",
+			"filename": "images/white_walk_back/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0019.png",
+			"filename": "images/white_walk_back/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0020.png",
+			"filename": "images/white_walk_back/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0021.png",
+			"filename": "images/white_walk_back/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0022.png",
+			"filename": "images/white_walk_back/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0023.png",
+			"filename": "images/white_walk_back/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0024.png",
+			"filename": "images/white_walk_back/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0025.png",
+			"filename": "images/white_walk_back/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0026.png",
+			"filename": "images/white_walk_back/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0027.png",
+			"filename": "images/white_walk_back/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0028.png",
+			"filename": "images/white_walk_back/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0029.png",
+			"filename": "images/white_walk_back/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0030.png",
+			"filename": "images/white_walk_back/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0031.png",
+			"filename": "images/white_walk_back/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0032.png",
+			"filename": "images/white_walk_back/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0033.png",
+			"filename": "images/white_walk_back/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0034.png",
+			"filename": "images/white_walk_back/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0035.png",
+			"filename": "images/white_walk_back/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0036.png",
+			"filename": "images/white_walk_back/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0037.png",
+			"filename": "images/white_walk_back/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0038.png",
+			"filename": "images/white_walk_back/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0039.png",
+			"filename": "images/white_walk_back/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0040.png",
+			"filename": "images/white_walk_back/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0041.png",
+			"filename": "images/white_walk_back/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0042.png",
+			"filename": "images/white_walk_back/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0043.png",
+			"filename": "images/white_walk_back/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0044.png",
+			"filename": "images/white_walk_back/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0045.png",
+			"filename": "images/white_walk_back/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0046.png",
+			"filename": "images/white_walk_back/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0047.png",
+			"filename": "images/white_walk_back/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0048.png",
+			"filename": "images/white_walk_back/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0049.png",
+			"filename": "images/white_walk_back/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0050.png",
+			"filename": "images/white_walk_back/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0051.png",
+			"filename": "images/white_walk_back/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0052.png",
+			"filename": "images/white_walk_back/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0053.png",
+			"filename": "images/white_walk_back/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0054.png",
+			"filename": "images/white_walk_back/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0055.png",
+			"filename": "images/white_walk_back/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0056.png",
+			"filename": "images/white_walk_back/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0057.png",
+			"filename": "images/white_walk_back/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0058.png",
+			"filename": "images/white_walk_back/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_back/0059.png",
+			"filename": "images/white_walk_back/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0000.png",
+			"filename": "images/white_walk_front/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0001.png",
+			"filename": "images/white_walk_front/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0002.png",
+			"filename": "images/white_walk_front/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0003.png",
+			"filename": "images/white_walk_front/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0004.png",
+			"filename": "images/white_walk_front/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0005.png",
+			"filename": "images/white_walk_front/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0006.png",
+			"filename": "images/white_walk_front/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0007.png",
+			"filename": "images/white_walk_front/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0008.png",
+			"filename": "images/white_walk_front/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0009.png",
+			"filename": "images/white_walk_front/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0010.png",
+			"filename": "images/white_walk_front/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0011.png",
+			"filename": "images/white_walk_front/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0012.png",
+			"filename": "images/white_walk_front/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0013.png",
+			"filename": "images/white_walk_front/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0014.png",
+			"filename": "images/white_walk_front/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0015.png",
+			"filename": "images/white_walk_front/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0016.png",
+			"filename": "images/white_walk_front/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0017.png",
+			"filename": "images/white_walk_front/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0018.png",
+			"filename": "images/white_walk_front/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0019.png",
+			"filename": "images/white_walk_front/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0020.png",
+			"filename": "images/white_walk_front/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0021.png",
+			"filename": "images/white_walk_front/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0022.png",
+			"filename": "images/white_walk_front/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0023.png",
+			"filename": "images/white_walk_front/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0024.png",
+			"filename": "images/white_walk_front/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0025.png",
+			"filename": "images/white_walk_front/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0026.png",
+			"filename": "images/white_walk_front/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0027.png",
+			"filename": "images/white_walk_front/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0028.png",
+			"filename": "images/white_walk_front/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0029.png",
+			"filename": "images/white_walk_front/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0030.png",
+			"filename": "images/white_walk_front/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0031.png",
+			"filename": "images/white_walk_front/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0032.png",
+			"filename": "images/white_walk_front/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0033.png",
+			"filename": "images/white_walk_front/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0034.png",
+			"filename": "images/white_walk_front/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0035.png",
+			"filename": "images/white_walk_front/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0036.png",
+			"filename": "images/white_walk_front/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0037.png",
+			"filename": "images/white_walk_front/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0038.png",
+			"filename": "images/white_walk_front/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0039.png",
+			"filename": "images/white_walk_front/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0040.png",
+			"filename": "images/white_walk_front/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0041.png",
+			"filename": "images/white_walk_front/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0042.png",
+			"filename": "images/white_walk_front/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0043.png",
+			"filename": "images/white_walk_front/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0044.png",
+			"filename": "images/white_walk_front/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0045.png",
+			"filename": "images/white_walk_front/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0046.png",
+			"filename": "images/white_walk_front/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0047.png",
+			"filename": "images/white_walk_front/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0048.png",
+			"filename": "images/white_walk_front/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0049.png",
+			"filename": "images/white_walk_front/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0050.png",
+			"filename": "images/white_walk_front/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0051.png",
+			"filename": "images/white_walk_front/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0052.png",
+			"filename": "images/white_walk_front/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0053.png",
+			"filename": "images/white_walk_front/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0054.png",
+			"filename": "images/white_walk_front/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0055.png",
+			"filename": "images/white_walk_front/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0056.png",
+			"filename": "images/white_walk_front/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0057.png",
+			"filename": "images/white_walk_front/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0058.png",
+			"filename": "images/white_walk_front/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_front/0059.png",
+			"filename": "images/white_walk_front/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0000.png",
+			"filename": "images/white_walk_left/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0001.png",
+			"filename": "images/white_walk_left/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0002.png",
+			"filename": "images/white_walk_left/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0003.png",
+			"filename": "images/white_walk_left/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0004.png",
+			"filename": "images/white_walk_left/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0005.png",
+			"filename": "images/white_walk_left/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0006.png",
+			"filename": "images/white_walk_left/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0007.png",
+			"filename": "images/white_walk_left/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0008.png",
+			"filename": "images/white_walk_left/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0009.png",
+			"filename": "images/white_walk_left/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0010.png",
+			"filename": "images/white_walk_left/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0011.png",
+			"filename": "images/white_walk_left/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0012.png",
+			"filename": "images/white_walk_left/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0013.png",
+			"filename": "images/white_walk_left/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0014.png",
+			"filename": "images/white_walk_left/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0015.png",
+			"filename": "images/white_walk_left/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0016.png",
+			"filename": "images/white_walk_left/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0017.png",
+			"filename": "images/white_walk_left/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0018.png",
+			"filename": "images/white_walk_left/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0019.png",
+			"filename": "images/white_walk_left/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0020.png",
+			"filename": "images/white_walk_left/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0021.png",
+			"filename": "images/white_walk_left/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0022.png",
+			"filename": "images/white_walk_left/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0023.png",
+			"filename": "images/white_walk_left/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0024.png",
+			"filename": "images/white_walk_left/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0025.png",
+			"filename": "images/white_walk_left/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0026.png",
+			"filename": "images/white_walk_left/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0027.png",
+			"filename": "images/white_walk_left/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0028.png",
+			"filename": "images/white_walk_left/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0029.png",
+			"filename": "images/white_walk_left/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0030.png",
+			"filename": "images/white_walk_left/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0031.png",
+			"filename": "images/white_walk_left/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0032.png",
+			"filename": "images/white_walk_left/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0033.png",
+			"filename": "images/white_walk_left/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0034.png",
+			"filename": "images/white_walk_left/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0035.png",
+			"filename": "images/white_walk_left/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0036.png",
+			"filename": "images/white_walk_left/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0037.png",
+			"filename": "images/white_walk_left/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0038.png",
+			"filename": "images/white_walk_left/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0039.png",
+			"filename": "images/white_walk_left/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0040.png",
+			"filename": "images/white_walk_left/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0041.png",
+			"filename": "images/white_walk_left/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0042.png",
+			"filename": "images/white_walk_left/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0043.png",
+			"filename": "images/white_walk_left/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0044.png",
+			"filename": "images/white_walk_left/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0045.png",
+			"filename": "images/white_walk_left/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0046.png",
+			"filename": "images/white_walk_left/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0047.png",
+			"filename": "images/white_walk_left/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0048.png",
+			"filename": "images/white_walk_left/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0049.png",
+			"filename": "images/white_walk_left/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0050.png",
+			"filename": "images/white_walk_left/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0051.png",
+			"filename": "images/white_walk_left/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0052.png",
+			"filename": "images/white_walk_left/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0053.png",
+			"filename": "images/white_walk_left/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0054.png",
+			"filename": "images/white_walk_left/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0055.png",
+			"filename": "images/white_walk_left/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0056.png",
+			"filename": "images/white_walk_left/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0057.png",
+			"filename": "images/white_walk_left/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0058.png",
+			"filename": "images/white_walk_left/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_left/0059.png",
+			"filename": "images/white_walk_left/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0000.png",
+			"filename": "images/white_walk_right/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0001.png",
+			"filename": "images/white_walk_right/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0002.png",
+			"filename": "images/white_walk_right/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0003.png",
+			"filename": "images/white_walk_right/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0004.png",
+			"filename": "images/white_walk_right/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0005.png",
+			"filename": "images/white_walk_right/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0006.png",
+			"filename": "images/white_walk_right/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0007.png",
+			"filename": "images/white_walk_right/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0008.png",
+			"filename": "images/white_walk_right/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0009.png",
+			"filename": "images/white_walk_right/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0010.png",
+			"filename": "images/white_walk_right/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0011.png",
+			"filename": "images/white_walk_right/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0012.png",
+			"filename": "images/white_walk_right/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0013.png",
+			"filename": "images/white_walk_right/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0014.png",
+			"filename": "images/white_walk_right/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0015.png",
+			"filename": "images/white_walk_right/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0016.png",
+			"filename": "images/white_walk_right/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0017.png",
+			"filename": "images/white_walk_right/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0018.png",
+			"filename": "images/white_walk_right/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0019.png",
+			"filename": "images/white_walk_right/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0020.png",
+			"filename": "images/white_walk_right/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0021.png",
+			"filename": "images/white_walk_right/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0022.png",
+			"filename": "images/white_walk_right/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0023.png",
+			"filename": "images/white_walk_right/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0024.png",
+			"filename": "images/white_walk_right/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0025.png",
+			"filename": "images/white_walk_right/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0026.png",
+			"filename": "images/white_walk_right/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0027.png",
+			"filename": "images/white_walk_right/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0028.png",
+			"filename": "images/white_walk_right/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0029.png",
+			"filename": "images/white_walk_right/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0030.png",
+			"filename": "images/white_walk_right/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0031.png",
+			"filename": "images/white_walk_right/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0032.png",
+			"filename": "images/white_walk_right/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0033.png",
+			"filename": "images/white_walk_right/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0034.png",
+			"filename": "images/white_walk_right/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0035.png",
+			"filename": "images/white_walk_right/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0036.png",
+			"filename": "images/white_walk_right/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0037.png",
+			"filename": "images/white_walk_right/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0038.png",
+			"filename": "images/white_walk_right/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0039.png",
+			"filename": "images/white_walk_right/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0040.png",
+			"filename": "images/white_walk_right/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0041.png",
+			"filename": "images/white_walk_right/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0042.png",
+			"filename": "images/white_walk_right/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0043.png",
+			"filename": "images/white_walk_right/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0044.png",
+			"filename": "images/white_walk_right/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0045.png",
+			"filename": "images/white_walk_right/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0046.png",
+			"filename": "images/white_walk_right/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0047.png",
+			"filename": "images/white_walk_right/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0048.png",
+			"filename": "images/white_walk_right/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0049.png",
+			"filename": "images/white_walk_right/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0050.png",
+			"filename": "images/white_walk_right/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0051.png",
+			"filename": "images/white_walk_right/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0052.png",
+			"filename": "images/white_walk_right/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0053.png",
+			"filename": "images/white_walk_right/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0054.png",
+			"filename": "images/white_walk_right/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0055.png",
+			"filename": "images/white_walk_right/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0056.png",
+			"filename": "images/white_walk_right/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0057.png",
+			"filename": "images/white_walk_right/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0058.png",
+			"filename": "images/white_walk_right/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_walk_right/0059.png",
+			"filename": "images/white_walk_right/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_idle_back/0000.png",
+			"filename": "images/white_idle_back/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_idle_front/0000.png",
+			"filename": "images/white_idle_front/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_idle_left/0000.png",
+			"filename": "images/white_idle_left/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "white_idle_right/0000.png",
+			"filename": "images/white_idle_right/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0000.png",
+			"filename": "images/black_walk_back/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0001.png",
+			"filename": "images/black_walk_back/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0002.png",
+			"filename": "images/black_walk_back/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0003.png",
+			"filename": "images/black_walk_back/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0004.png",
+			"filename": "images/black_walk_back/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0005.png",
+			"filename": "images/black_walk_back/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0006.png",
+			"filename": "images/black_walk_back/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0007.png",
+			"filename": "images/black_walk_back/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0008.png",
+			"filename": "images/black_walk_back/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0009.png",
+			"filename": "images/black_walk_back/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0010.png",
+			"filename": "images/black_walk_back/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0011.png",
+			"filename": "images/black_walk_back/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0012.png",
+			"filename": "images/black_walk_back/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0013.png",
+			"filename": "images/black_walk_back/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0014.png",
+			"filename": "images/black_walk_back/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0015.png",
+			"filename": "images/black_walk_back/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0016.png",
+			"filename": "images/black_walk_back/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0017.png",
+			"filename": "images/black_walk_back/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0018.png",
+			"filename": "images/black_walk_back/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0019.png",
+			"filename": "images/black_walk_back/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0020.png",
+			"filename": "images/black_walk_back/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0021.png",
+			"filename": "images/black_walk_back/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0022.png",
+			"filename": "images/black_walk_back/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0023.png",
+			"filename": "images/black_walk_back/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0024.png",
+			"filename": "images/black_walk_back/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0025.png",
+			"filename": "images/black_walk_back/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0026.png",
+			"filename": "images/black_walk_back/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0027.png",
+			"filename": "images/black_walk_back/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0028.png",
+			"filename": "images/black_walk_back/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0029.png",
+			"filename": "images/black_walk_back/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0030.png",
+			"filename": "images/black_walk_back/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0031.png",
+			"filename": "images/black_walk_back/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0032.png",
+			"filename": "images/black_walk_back/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0033.png",
+			"filename": "images/black_walk_back/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0034.png",
+			"filename": "images/black_walk_back/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0035.png",
+			"filename": "images/black_walk_back/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0036.png",
+			"filename": "images/black_walk_back/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0037.png",
+			"filename": "images/black_walk_back/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0038.png",
+			"filename": "images/black_walk_back/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0039.png",
+			"filename": "images/black_walk_back/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0040.png",
+			"filename": "images/black_walk_back/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0041.png",
+			"filename": "images/black_walk_back/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0042.png",
+			"filename": "images/black_walk_back/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0043.png",
+			"filename": "images/black_walk_back/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0044.png",
+			"filename": "images/black_walk_back/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0045.png",
+			"filename": "images/black_walk_back/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0046.png",
+			"filename": "images/black_walk_back/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0047.png",
+			"filename": "images/black_walk_back/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0048.png",
+			"filename": "images/black_walk_back/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0049.png",
+			"filename": "images/black_walk_back/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0050.png",
+			"filename": "images/black_walk_back/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0051.png",
+			"filename": "images/black_walk_back/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0052.png",
+			"filename": "images/black_walk_back/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0053.png",
+			"filename": "images/black_walk_back/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0054.png",
+			"filename": "images/black_walk_back/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0055.png",
+			"filename": "images/black_walk_back/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0056.png",
+			"filename": "images/black_walk_back/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0057.png",
+			"filename": "images/black_walk_back/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0058.png",
+			"filename": "images/black_walk_back/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_back/0059.png",
+			"filename": "images/black_walk_back/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0000.png",
+			"filename": "images/black_walk_front/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0001.png",
+			"filename": "images/black_walk_front/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0002.png",
+			"filename": "images/black_walk_front/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0003.png",
+			"filename": "images/black_walk_front/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0004.png",
+			"filename": "images/black_walk_front/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0005.png",
+			"filename": "images/black_walk_front/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0006.png",
+			"filename": "images/black_walk_front/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0007.png",
+			"filename": "images/black_walk_front/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0008.png",
+			"filename": "images/black_walk_front/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0009.png",
+			"filename": "images/black_walk_front/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0010.png",
+			"filename": "images/black_walk_front/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0011.png",
+			"filename": "images/black_walk_front/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0012.png",
+			"filename": "images/black_walk_front/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0013.png",
+			"filename": "images/black_walk_front/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0014.png",
+			"filename": "images/black_walk_front/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0015.png",
+			"filename": "images/black_walk_front/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0016.png",
+			"filename": "images/black_walk_front/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0017.png",
+			"filename": "images/black_walk_front/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0018.png",
+			"filename": "images/black_walk_front/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0019.png",
+			"filename": "images/black_walk_front/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0020.png",
+			"filename": "images/black_walk_front/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0021.png",
+			"filename": "images/black_walk_front/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0022.png",
+			"filename": "images/black_walk_front/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0023.png",
+			"filename": "images/black_walk_front/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0024.png",
+			"filename": "images/black_walk_front/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0025.png",
+			"filename": "images/black_walk_front/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0026.png",
+			"filename": "images/black_walk_front/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0027.png",
+			"filename": "images/black_walk_front/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0028.png",
+			"filename": "images/black_walk_front/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0029.png",
+			"filename": "images/black_walk_front/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0030.png",
+			"filename": "images/black_walk_front/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0031.png",
+			"filename": "images/black_walk_front/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0032.png",
+			"filename": "images/black_walk_front/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0033.png",
+			"filename": "images/black_walk_front/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0034.png",
+			"filename": "images/black_walk_front/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0035.png",
+			"filename": "images/black_walk_front/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0036.png",
+			"filename": "images/black_walk_front/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0037.png",
+			"filename": "images/black_walk_front/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0038.png",
+			"filename": "images/black_walk_front/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0039.png",
+			"filename": "images/black_walk_front/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0040.png",
+			"filename": "images/black_walk_front/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0041.png",
+			"filename": "images/black_walk_front/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0042.png",
+			"filename": "images/black_walk_front/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0043.png",
+			"filename": "images/black_walk_front/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0044.png",
+			"filename": "images/black_walk_front/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0045.png",
+			"filename": "images/black_walk_front/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0046.png",
+			"filename": "images/black_walk_front/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0047.png",
+			"filename": "images/black_walk_front/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0048.png",
+			"filename": "images/black_walk_front/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0049.png",
+			"filename": "images/black_walk_front/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0050.png",
+			"filename": "images/black_walk_front/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0051.png",
+			"filename": "images/black_walk_front/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0052.png",
+			"filename": "images/black_walk_front/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0053.png",
+			"filename": "images/black_walk_front/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0054.png",
+			"filename": "images/black_walk_front/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0055.png",
+			"filename": "images/black_walk_front/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0056.png",
+			"filename": "images/black_walk_front/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0057.png",
+			"filename": "images/black_walk_front/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0058.png",
+			"filename": "images/black_walk_front/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_front/0059.png",
+			"filename": "images/black_walk_front/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0000.png",
+			"filename": "images/black_walk_left/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0001.png",
+			"filename": "images/black_walk_left/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0002.png",
+			"filename": "images/black_walk_left/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0003.png",
+			"filename": "images/black_walk_left/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0004.png",
+			"filename": "images/black_walk_left/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0005.png",
+			"filename": "images/black_walk_left/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0006.png",
+			"filename": "images/black_walk_left/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0007.png",
+			"filename": "images/black_walk_left/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0008.png",
+			"filename": "images/black_walk_left/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0009.png",
+			"filename": "images/black_walk_left/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0010.png",
+			"filename": "images/black_walk_left/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0011.png",
+			"filename": "images/black_walk_left/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0012.png",
+			"filename": "images/black_walk_left/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0013.png",
+			"filename": "images/black_walk_left/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0014.png",
+			"filename": "images/black_walk_left/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0015.png",
+			"filename": "images/black_walk_left/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0016.png",
+			"filename": "images/black_walk_left/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0017.png",
+			"filename": "images/black_walk_left/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0018.png",
+			"filename": "images/black_walk_left/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0019.png",
+			"filename": "images/black_walk_left/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0020.png",
+			"filename": "images/black_walk_left/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0021.png",
+			"filename": "images/black_walk_left/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0022.png",
+			"filename": "images/black_walk_left/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0023.png",
+			"filename": "images/black_walk_left/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0024.png",
+			"filename": "images/black_walk_left/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0025.png",
+			"filename": "images/black_walk_left/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0026.png",
+			"filename": "images/black_walk_left/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0027.png",
+			"filename": "images/black_walk_left/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0028.png",
+			"filename": "images/black_walk_left/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0029.png",
+			"filename": "images/black_walk_left/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0030.png",
+			"filename": "images/black_walk_left/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0031.png",
+			"filename": "images/black_walk_left/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0032.png",
+			"filename": "images/black_walk_left/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0033.png",
+			"filename": "images/black_walk_left/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0034.png",
+			"filename": "images/black_walk_left/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0035.png",
+			"filename": "images/black_walk_left/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0036.png",
+			"filename": "images/black_walk_left/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0037.png",
+			"filename": "images/black_walk_left/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0038.png",
+			"filename": "images/black_walk_left/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0039.png",
+			"filename": "images/black_walk_left/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0040.png",
+			"filename": "images/black_walk_left/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0041.png",
+			"filename": "images/black_walk_left/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0042.png",
+			"filename": "images/black_walk_left/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0043.png",
+			"filename": "images/black_walk_left/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0044.png",
+			"filename": "images/black_walk_left/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0045.png",
+			"filename": "images/black_walk_left/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0046.png",
+			"filename": "images/black_walk_left/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0047.png",
+			"filename": "images/black_walk_left/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0048.png",
+			"filename": "images/black_walk_left/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0049.png",
+			"filename": "images/black_walk_left/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0050.png",
+			"filename": "images/black_walk_left/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0051.png",
+			"filename": "images/black_walk_left/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0052.png",
+			"filename": "images/black_walk_left/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0053.png",
+			"filename": "images/black_walk_left/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0054.png",
+			"filename": "images/black_walk_left/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0055.png",
+			"filename": "images/black_walk_left/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0056.png",
+			"filename": "images/black_walk_left/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0057.png",
+			"filename": "images/black_walk_left/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0058.png",
+			"filename": "images/black_walk_left/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_left/0059.png",
+			"filename": "images/black_walk_left/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0000.png",
+			"filename": "images/black_walk_right/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0001.png",
+			"filename": "images/black_walk_right/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0002.png",
+			"filename": "images/black_walk_right/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0003.png",
+			"filename": "images/black_walk_right/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0004.png",
+			"filename": "images/black_walk_right/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0005.png",
+			"filename": "images/black_walk_right/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0006.png",
+			"filename": "images/black_walk_right/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0007.png",
+			"filename": "images/black_walk_right/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0008.png",
+			"filename": "images/black_walk_right/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0009.png",
+			"filename": "images/black_walk_right/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0010.png",
+			"filename": "images/black_walk_right/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0011.png",
+			"filename": "images/black_walk_right/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0012.png",
+			"filename": "images/black_walk_right/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0013.png",
+			"filename": "images/black_walk_right/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0014.png",
+			"filename": "images/black_walk_right/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0015.png",
+			"filename": "images/black_walk_right/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0016.png",
+			"filename": "images/black_walk_right/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0017.png",
+			"filename": "images/black_walk_right/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0018.png",
+			"filename": "images/black_walk_right/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0019.png",
+			"filename": "images/black_walk_right/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0020.png",
+			"filename": "images/black_walk_right/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0021.png",
+			"filename": "images/black_walk_right/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0022.png",
+			"filename": "images/black_walk_right/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0023.png",
+			"filename": "images/black_walk_right/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0024.png",
+			"filename": "images/black_walk_right/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0025.png",
+			"filename": "images/black_walk_right/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0026.png",
+			"filename": "images/black_walk_right/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0027.png",
+			"filename": "images/black_walk_right/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0028.png",
+			"filename": "images/black_walk_right/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0029.png",
+			"filename": "images/black_walk_right/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0030.png",
+			"filename": "images/black_walk_right/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0031.png",
+			"filename": "images/black_walk_right/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0032.png",
+			"filename": "images/black_walk_right/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0033.png",
+			"filename": "images/black_walk_right/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0034.png",
+			"filename": "images/black_walk_right/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0035.png",
+			"filename": "images/black_walk_right/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0036.png",
+			"filename": "images/black_walk_right/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0037.png",
+			"filename": "images/black_walk_right/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0038.png",
+			"filename": "images/black_walk_right/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0039.png",
+			"filename": "images/black_walk_right/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0040.png",
+			"filename": "images/black_walk_right/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0041.png",
+			"filename": "images/black_walk_right/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0042.png",
+			"filename": "images/black_walk_right/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0043.png",
+			"filename": "images/black_walk_right/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0044.png",
+			"filename": "images/black_walk_right/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0045.png",
+			"filename": "images/black_walk_right/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0046.png",
+			"filename": "images/black_walk_right/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0047.png",
+			"filename": "images/black_walk_right/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0048.png",
+			"filename": "images/black_walk_right/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0049.png",
+			"filename": "images/black_walk_right/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0050.png",
+			"filename": "images/black_walk_right/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0051.png",
+			"filename": "images/black_walk_right/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0052.png",
+			"filename": "images/black_walk_right/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0053.png",
+			"filename": "images/black_walk_right/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0054.png",
+			"filename": "images/black_walk_right/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0055.png",
+			"filename": "images/black_walk_right/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0056.png",
+			"filename": "images/black_walk_right/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0057.png",
+			"filename": "images/black_walk_right/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0058.png",
+			"filename": "images/black_walk_right/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_walk_right/0059.png",
+			"filename": "images/black_walk_right/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_idle_back/0000.png",
+			"filename": "images/black_idle_back/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_idle_front/0000.png",
+			"filename": "images/black_idle_front/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_idle_left/0000.png",
+			"filename": "images/black_idle_left/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "black_idle_right/0000.png",
+			"filename": "images/black_idle_right/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0000.png",
+			"filename": "images/orange_walk_back/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0001.png",
+			"filename": "images/orange_walk_back/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0002.png",
+			"filename": "images/orange_walk_back/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0003.png",
+			"filename": "images/orange_walk_back/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0004.png",
+			"filename": "images/orange_walk_back/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0005.png",
+			"filename": "images/orange_walk_back/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0006.png",
+			"filename": "images/orange_walk_back/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0007.png",
+			"filename": "images/orange_walk_back/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0008.png",
+			"filename": "images/orange_walk_back/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0009.png",
+			"filename": "images/orange_walk_back/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0010.png",
+			"filename": "images/orange_walk_back/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0011.png",
+			"filename": "images/orange_walk_back/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0012.png",
+			"filename": "images/orange_walk_back/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0013.png",
+			"filename": "images/orange_walk_back/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0014.png",
+			"filename": "images/orange_walk_back/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0015.png",
+			"filename": "images/orange_walk_back/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0016.png",
+			"filename": "images/orange_walk_back/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0017.png",
+			"filename": "images/orange_walk_back/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0018.png",
+			"filename": "images/orange_walk_back/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0019.png",
+			"filename": "images/orange_walk_back/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0020.png",
+			"filename": "images/orange_walk_back/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0021.png",
+			"filename": "images/orange_walk_back/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0022.png",
+			"filename": "images/orange_walk_back/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0023.png",
+			"filename": "images/orange_walk_back/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0024.png",
+			"filename": "images/orange_walk_back/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0025.png",
+			"filename": "images/orange_walk_back/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0026.png",
+			"filename": "images/orange_walk_back/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0027.png",
+			"filename": "images/orange_walk_back/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0028.png",
+			"filename": "images/orange_walk_back/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0029.png",
+			"filename": "images/orange_walk_back/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0030.png",
+			"filename": "images/orange_walk_back/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0031.png",
+			"filename": "images/orange_walk_back/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0032.png",
+			"filename": "images/orange_walk_back/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0033.png",
+			"filename": "images/orange_walk_back/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0034.png",
+			"filename": "images/orange_walk_back/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0035.png",
+			"filename": "images/orange_walk_back/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0036.png",
+			"filename": "images/orange_walk_back/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0037.png",
+			"filename": "images/orange_walk_back/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0038.png",
+			"filename": "images/orange_walk_back/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0039.png",
+			"filename": "images/orange_walk_back/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0040.png",
+			"filename": "images/orange_walk_back/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0041.png",
+			"filename": "images/orange_walk_back/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0042.png",
+			"filename": "images/orange_walk_back/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0043.png",
+			"filename": "images/orange_walk_back/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0044.png",
+			"filename": "images/orange_walk_back/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0045.png",
+			"filename": "images/orange_walk_back/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0046.png",
+			"filename": "images/orange_walk_back/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0047.png",
+			"filename": "images/orange_walk_back/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0048.png",
+			"filename": "images/orange_walk_back/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0049.png",
+			"filename": "images/orange_walk_back/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0050.png",
+			"filename": "images/orange_walk_back/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0051.png",
+			"filename": "images/orange_walk_back/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0052.png",
+			"filename": "images/orange_walk_back/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0053.png",
+			"filename": "images/orange_walk_back/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0054.png",
+			"filename": "images/orange_walk_back/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0055.png",
+			"filename": "images/orange_walk_back/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0056.png",
+			"filename": "images/orange_walk_back/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0057.png",
+			"filename": "images/orange_walk_back/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0058.png",
+			"filename": "images/orange_walk_back/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_back/0059.png",
+			"filename": "images/orange_walk_back/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0000.png",
+			"filename": "images/orange_walk_front/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0001.png",
+			"filename": "images/orange_walk_front/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0002.png",
+			"filename": "images/orange_walk_front/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0003.png",
+			"filename": "images/orange_walk_front/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0004.png",
+			"filename": "images/orange_walk_front/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0005.png",
+			"filename": "images/orange_walk_front/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0006.png",
+			"filename": "images/orange_walk_front/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0007.png",
+			"filename": "images/orange_walk_front/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0008.png",
+			"filename": "images/orange_walk_front/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0009.png",
+			"filename": "images/orange_walk_front/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0010.png",
+			"filename": "images/orange_walk_front/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0011.png",
+			"filename": "images/orange_walk_front/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0012.png",
+			"filename": "images/orange_walk_front/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0013.png",
+			"filename": "images/orange_walk_front/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0014.png",
+			"filename": "images/orange_walk_front/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0015.png",
+			"filename": "images/orange_walk_front/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0016.png",
+			"filename": "images/orange_walk_front/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0017.png",
+			"filename": "images/orange_walk_front/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0018.png",
+			"filename": "images/orange_walk_front/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0019.png",
+			"filename": "images/orange_walk_front/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0020.png",
+			"filename": "images/orange_walk_front/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0021.png",
+			"filename": "images/orange_walk_front/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0022.png",
+			"filename": "images/orange_walk_front/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0023.png",
+			"filename": "images/orange_walk_front/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0024.png",
+			"filename": "images/orange_walk_front/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0025.png",
+			"filename": "images/orange_walk_front/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0026.png",
+			"filename": "images/orange_walk_front/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0027.png",
+			"filename": "images/orange_walk_front/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0028.png",
+			"filename": "images/orange_walk_front/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0029.png",
+			"filename": "images/orange_walk_front/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0030.png",
+			"filename": "images/orange_walk_front/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0031.png",
+			"filename": "images/orange_walk_front/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0032.png",
+			"filename": "images/orange_walk_front/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0033.png",
+			"filename": "images/orange_walk_front/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0034.png",
+			"filename": "images/orange_walk_front/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0035.png",
+			"filename": "images/orange_walk_front/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0036.png",
+			"filename": "images/orange_walk_front/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0037.png",
+			"filename": "images/orange_walk_front/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0038.png",
+			"filename": "images/orange_walk_front/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0039.png",
+			"filename": "images/orange_walk_front/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0040.png",
+			"filename": "images/orange_walk_front/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0041.png",
+			"filename": "images/orange_walk_front/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0042.png",
+			"filename": "images/orange_walk_front/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0043.png",
+			"filename": "images/orange_walk_front/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0044.png",
+			"filename": "images/orange_walk_front/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0045.png",
+			"filename": "images/orange_walk_front/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0046.png",
+			"filename": "images/orange_walk_front/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0047.png",
+			"filename": "images/orange_walk_front/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0048.png",
+			"filename": "images/orange_walk_front/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0049.png",
+			"filename": "images/orange_walk_front/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0050.png",
+			"filename": "images/orange_walk_front/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0051.png",
+			"filename": "images/orange_walk_front/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0052.png",
+			"filename": "images/orange_walk_front/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0053.png",
+			"filename": "images/orange_walk_front/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0054.png",
+			"filename": "images/orange_walk_front/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0055.png",
+			"filename": "images/orange_walk_front/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0056.png",
+			"filename": "images/orange_walk_front/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0057.png",
+			"filename": "images/orange_walk_front/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0058.png",
+			"filename": "images/orange_walk_front/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_front/0059.png",
+			"filename": "images/orange_walk_front/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0000.png",
+			"filename": "images/orange_walk_left/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0001.png",
+			"filename": "images/orange_walk_left/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0002.png",
+			"filename": "images/orange_walk_left/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0003.png",
+			"filename": "images/orange_walk_left/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0004.png",
+			"filename": "images/orange_walk_left/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0005.png",
+			"filename": "images/orange_walk_left/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0006.png",
+			"filename": "images/orange_walk_left/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0007.png",
+			"filename": "images/orange_walk_left/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0008.png",
+			"filename": "images/orange_walk_left/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0009.png",
+			"filename": "images/orange_walk_left/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0010.png",
+			"filename": "images/orange_walk_left/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0011.png",
+			"filename": "images/orange_walk_left/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0012.png",
+			"filename": "images/orange_walk_left/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0013.png",
+			"filename": "images/orange_walk_left/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0014.png",
+			"filename": "images/orange_walk_left/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0015.png",
+			"filename": "images/orange_walk_left/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0016.png",
+			"filename": "images/orange_walk_left/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0017.png",
+			"filename": "images/orange_walk_left/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0018.png",
+			"filename": "images/orange_walk_left/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0019.png",
+			"filename": "images/orange_walk_left/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0020.png",
+			"filename": "images/orange_walk_left/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0021.png",
+			"filename": "images/orange_walk_left/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0022.png",
+			"filename": "images/orange_walk_left/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0023.png",
+			"filename": "images/orange_walk_left/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0024.png",
+			"filename": "images/orange_walk_left/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0025.png",
+			"filename": "images/orange_walk_left/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0026.png",
+			"filename": "images/orange_walk_left/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0027.png",
+			"filename": "images/orange_walk_left/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0028.png",
+			"filename": "images/orange_walk_left/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0029.png",
+			"filename": "images/orange_walk_left/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0030.png",
+			"filename": "images/orange_walk_left/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0031.png",
+			"filename": "images/orange_walk_left/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0032.png",
+			"filename": "images/orange_walk_left/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0033.png",
+			"filename": "images/orange_walk_left/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0034.png",
+			"filename": "images/orange_walk_left/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0035.png",
+			"filename": "images/orange_walk_left/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0036.png",
+			"filename": "images/orange_walk_left/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0037.png",
+			"filename": "images/orange_walk_left/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0038.png",
+			"filename": "images/orange_walk_left/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0039.png",
+			"filename": "images/orange_walk_left/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0040.png",
+			"filename": "images/orange_walk_left/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0041.png",
+			"filename": "images/orange_walk_left/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0042.png",
+			"filename": "images/orange_walk_left/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0043.png",
+			"filename": "images/orange_walk_left/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0044.png",
+			"filename": "images/orange_walk_left/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0045.png",
+			"filename": "images/orange_walk_left/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0046.png",
+			"filename": "images/orange_walk_left/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0047.png",
+			"filename": "images/orange_walk_left/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0048.png",
+			"filename": "images/orange_walk_left/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0049.png",
+			"filename": "images/orange_walk_left/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0050.png",
+			"filename": "images/orange_walk_left/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0051.png",
+			"filename": "images/orange_walk_left/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0052.png",
+			"filename": "images/orange_walk_left/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0053.png",
+			"filename": "images/orange_walk_left/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0054.png",
+			"filename": "images/orange_walk_left/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0055.png",
+			"filename": "images/orange_walk_left/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0056.png",
+			"filename": "images/orange_walk_left/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0057.png",
+			"filename": "images/orange_walk_left/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0058.png",
+			"filename": "images/orange_walk_left/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_left/0059.png",
+			"filename": "images/orange_walk_left/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0000.png",
+			"filename": "images/orange_walk_right/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0001.png",
+			"filename": "images/orange_walk_right/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0002.png",
+			"filename": "images/orange_walk_right/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0003.png",
+			"filename": "images/orange_walk_right/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0004.png",
+			"filename": "images/orange_walk_right/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0005.png",
+			"filename": "images/orange_walk_right/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0006.png",
+			"filename": "images/orange_walk_right/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0007.png",
+			"filename": "images/orange_walk_right/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0008.png",
+			"filename": "images/orange_walk_right/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0009.png",
+			"filename": "images/orange_walk_right/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0010.png",
+			"filename": "images/orange_walk_right/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0011.png",
+			"filename": "images/orange_walk_right/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0012.png",
+			"filename": "images/orange_walk_right/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0013.png",
+			"filename": "images/orange_walk_right/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0014.png",
+			"filename": "images/orange_walk_right/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0015.png",
+			"filename": "images/orange_walk_right/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0016.png",
+			"filename": "images/orange_walk_right/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0017.png",
+			"filename": "images/orange_walk_right/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0018.png",
+			"filename": "images/orange_walk_right/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0019.png",
+			"filename": "images/orange_walk_right/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0020.png",
+			"filename": "images/orange_walk_right/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0021.png",
+			"filename": "images/orange_walk_right/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0022.png",
+			"filename": "images/orange_walk_right/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0023.png",
+			"filename": "images/orange_walk_right/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0024.png",
+			"filename": "images/orange_walk_right/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0025.png",
+			"filename": "images/orange_walk_right/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0026.png",
+			"filename": "images/orange_walk_right/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0027.png",
+			"filename": "images/orange_walk_right/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0028.png",
+			"filename": "images/orange_walk_right/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0029.png",
+			"filename": "images/orange_walk_right/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0030.png",
+			"filename": "images/orange_walk_right/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0031.png",
+			"filename": "images/orange_walk_right/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0032.png",
+			"filename": "images/orange_walk_right/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0033.png",
+			"filename": "images/orange_walk_right/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0034.png",
+			"filename": "images/orange_walk_right/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0035.png",
+			"filename": "images/orange_walk_right/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0036.png",
+			"filename": "images/orange_walk_right/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0037.png",
+			"filename": "images/orange_walk_right/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0038.png",
+			"filename": "images/orange_walk_right/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0039.png",
+			"filename": "images/orange_walk_right/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0040.png",
+			"filename": "images/orange_walk_right/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0041.png",
+			"filename": "images/orange_walk_right/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0042.png",
+			"filename": "images/orange_walk_right/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0043.png",
+			"filename": "images/orange_walk_right/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0044.png",
+			"filename": "images/orange_walk_right/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0045.png",
+			"filename": "images/orange_walk_right/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0046.png",
+			"filename": "images/orange_walk_right/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0047.png",
+			"filename": "images/orange_walk_right/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0048.png",
+			"filename": "images/orange_walk_right/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0049.png",
+			"filename": "images/orange_walk_right/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0050.png",
+			"filename": "images/orange_walk_right/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0051.png",
+			"filename": "images/orange_walk_right/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0052.png",
+			"filename": "images/orange_walk_right/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0053.png",
+			"filename": "images/orange_walk_right/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0054.png",
+			"filename": "images/orange_walk_right/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0055.png",
+			"filename": "images/orange_walk_right/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0056.png",
+			"filename": "images/orange_walk_right/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0057.png",
+			"filename": "images/orange_walk_right/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0058.png",
+			"filename": "images/orange_walk_right/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_walk_right/0059.png",
+			"filename": "images/orange_walk_right/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_idle_back/0000.png",
+			"filename": "images/orange_idle_back/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_idle_front/0000.png",
+			"filename": "images/orange_idle_front/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_idle_left/0000.png",
+			"filename": "images/orange_idle_left/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "orange_idle_right/0000.png",
+			"filename": "images/orange_idle_right/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0000.png",
+			"filename": "images/green_walk_back/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0001.png",
+			"filename": "images/green_walk_back/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0002.png",
+			"filename": "images/green_walk_back/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0003.png",
+			"filename": "images/green_walk_back/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0004.png",
+			"filename": "images/green_walk_back/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0005.png",
+			"filename": "images/green_walk_back/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0006.png",
+			"filename": "images/green_walk_back/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0007.png",
+			"filename": "images/green_walk_back/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0008.png",
+			"filename": "images/green_walk_back/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0009.png",
+			"filename": "images/green_walk_back/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0010.png",
+			"filename": "images/green_walk_back/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0011.png",
+			"filename": "images/green_walk_back/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0012.png",
+			"filename": "images/green_walk_back/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0013.png",
+			"filename": "images/green_walk_back/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0014.png",
+			"filename": "images/green_walk_back/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0015.png",
+			"filename": "images/green_walk_back/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0016.png",
+			"filename": "images/green_walk_back/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0017.png",
+			"filename": "images/green_walk_back/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0018.png",
+			"filename": "images/green_walk_back/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0019.png",
+			"filename": "images/green_walk_back/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0020.png",
+			"filename": "images/green_walk_back/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0021.png",
+			"filename": "images/green_walk_back/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0022.png",
+			"filename": "images/green_walk_back/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0023.png",
+			"filename": "images/green_walk_back/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0024.png",
+			"filename": "images/green_walk_back/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0025.png",
+			"filename": "images/green_walk_back/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0026.png",
+			"filename": "images/green_walk_back/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0027.png",
+			"filename": "images/green_walk_back/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0028.png",
+			"filename": "images/green_walk_back/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0029.png",
+			"filename": "images/green_walk_back/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0030.png",
+			"filename": "images/green_walk_back/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0031.png",
+			"filename": "images/green_walk_back/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0032.png",
+			"filename": "images/green_walk_back/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0033.png",
+			"filename": "images/green_walk_back/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0034.png",
+			"filename": "images/green_walk_back/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0035.png",
+			"filename": "images/green_walk_back/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0036.png",
+			"filename": "images/green_walk_back/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0037.png",
+			"filename": "images/green_walk_back/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0038.png",
+			"filename": "images/green_walk_back/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0039.png",
+			"filename": "images/green_walk_back/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0040.png",
+			"filename": "images/green_walk_back/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0041.png",
+			"filename": "images/green_walk_back/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0042.png",
+			"filename": "images/green_walk_back/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0043.png",
+			"filename": "images/green_walk_back/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0044.png",
+			"filename": "images/green_walk_back/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0045.png",
+			"filename": "images/green_walk_back/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0046.png",
+			"filename": "images/green_walk_back/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0047.png",
+			"filename": "images/green_walk_back/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0048.png",
+			"filename": "images/green_walk_back/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0049.png",
+			"filename": "images/green_walk_back/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0050.png",
+			"filename": "images/green_walk_back/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0051.png",
+			"filename": "images/green_walk_back/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0052.png",
+			"filename": "images/green_walk_back/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0053.png",
+			"filename": "images/green_walk_back/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0054.png",
+			"filename": "images/green_walk_back/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0055.png",
+			"filename": "images/green_walk_back/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0056.png",
+			"filename": "images/green_walk_back/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0057.png",
+			"filename": "images/green_walk_back/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0058.png",
+			"filename": "images/green_walk_back/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_back/0059.png",
+			"filename": "images/green_walk_back/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0000.png",
+			"filename": "images/green_walk_front/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0001.png",
+			"filename": "images/green_walk_front/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0002.png",
+			"filename": "images/green_walk_front/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0003.png",
+			"filename": "images/green_walk_front/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0004.png",
+			"filename": "images/green_walk_front/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0005.png",
+			"filename": "images/green_walk_front/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0006.png",
+			"filename": "images/green_walk_front/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0007.png",
+			"filename": "images/green_walk_front/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0008.png",
+			"filename": "images/green_walk_front/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0009.png",
+			"filename": "images/green_walk_front/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0010.png",
+			"filename": "images/green_walk_front/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0011.png",
+			"filename": "images/green_walk_front/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0012.png",
+			"filename": "images/green_walk_front/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0013.png",
+			"filename": "images/green_walk_front/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0014.png",
+			"filename": "images/green_walk_front/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0015.png",
+			"filename": "images/green_walk_front/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0016.png",
+			"filename": "images/green_walk_front/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0017.png",
+			"filename": "images/green_walk_front/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0018.png",
+			"filename": "images/green_walk_front/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0019.png",
+			"filename": "images/green_walk_front/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0020.png",
+			"filename": "images/green_walk_front/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0021.png",
+			"filename": "images/green_walk_front/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0022.png",
+			"filename": "images/green_walk_front/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0023.png",
+			"filename": "images/green_walk_front/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0024.png",
+			"filename": "images/green_walk_front/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0025.png",
+			"filename": "images/green_walk_front/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0026.png",
+			"filename": "images/green_walk_front/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0027.png",
+			"filename": "images/green_walk_front/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0028.png",
+			"filename": "images/green_walk_front/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0029.png",
+			"filename": "images/green_walk_front/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0030.png",
+			"filename": "images/green_walk_front/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0031.png",
+			"filename": "images/green_walk_front/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0032.png",
+			"filename": "images/green_walk_front/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0033.png",
+			"filename": "images/green_walk_front/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0034.png",
+			"filename": "images/green_walk_front/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0035.png",
+			"filename": "images/green_walk_front/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0036.png",
+			"filename": "images/green_walk_front/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0037.png",
+			"filename": "images/green_walk_front/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0038.png",
+			"filename": "images/green_walk_front/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0039.png",
+			"filename": "images/green_walk_front/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0040.png",
+			"filename": "images/green_walk_front/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0041.png",
+			"filename": "images/green_walk_front/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0042.png",
+			"filename": "images/green_walk_front/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0043.png",
+			"filename": "images/green_walk_front/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0044.png",
+			"filename": "images/green_walk_front/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0045.png",
+			"filename": "images/green_walk_front/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0046.png",
+			"filename": "images/green_walk_front/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0047.png",
+			"filename": "images/green_walk_front/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0048.png",
+			"filename": "images/green_walk_front/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0049.png",
+			"filename": "images/green_walk_front/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0050.png",
+			"filename": "images/green_walk_front/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0051.png",
+			"filename": "images/green_walk_front/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0052.png",
+			"filename": "images/green_walk_front/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0053.png",
+			"filename": "images/green_walk_front/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0054.png",
+			"filename": "images/green_walk_front/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0055.png",
+			"filename": "images/green_walk_front/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0056.png",
+			"filename": "images/green_walk_front/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0057.png",
+			"filename": "images/green_walk_front/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0058.png",
+			"filename": "images/green_walk_front/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_front/0059.png",
+			"filename": "images/green_walk_front/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0000.png",
+			"filename": "images/green_walk_left/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0001.png",
+			"filename": "images/green_walk_left/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0002.png",
+			"filename": "images/green_walk_left/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0003.png",
+			"filename": "images/green_walk_left/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0004.png",
+			"filename": "images/green_walk_left/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0005.png",
+			"filename": "images/green_walk_left/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0006.png",
+			"filename": "images/green_walk_left/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0007.png",
+			"filename": "images/green_walk_left/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0008.png",
+			"filename": "images/green_walk_left/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0009.png",
+			"filename": "images/green_walk_left/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0010.png",
+			"filename": "images/green_walk_left/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0011.png",
+			"filename": "images/green_walk_left/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0012.png",
+			"filename": "images/green_walk_left/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0013.png",
+			"filename": "images/green_walk_left/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0014.png",
+			"filename": "images/green_walk_left/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0015.png",
+			"filename": "images/green_walk_left/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0016.png",
+			"filename": "images/green_walk_left/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0017.png",
+			"filename": "images/green_walk_left/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0018.png",
+			"filename": "images/green_walk_left/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0019.png",
+			"filename": "images/green_walk_left/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0020.png",
+			"filename": "images/green_walk_left/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0021.png",
+			"filename": "images/green_walk_left/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0022.png",
+			"filename": "images/green_walk_left/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0023.png",
+			"filename": "images/green_walk_left/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0024.png",
+			"filename": "images/green_walk_left/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0025.png",
+			"filename": "images/green_walk_left/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0026.png",
+			"filename": "images/green_walk_left/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0027.png",
+			"filename": "images/green_walk_left/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0028.png",
+			"filename": "images/green_walk_left/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0029.png",
+			"filename": "images/green_walk_left/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0030.png",
+			"filename": "images/green_walk_left/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0031.png",
+			"filename": "images/green_walk_left/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0032.png",
+			"filename": "images/green_walk_left/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0033.png",
+			"filename": "images/green_walk_left/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0034.png",
+			"filename": "images/green_walk_left/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0035.png",
+			"filename": "images/green_walk_left/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0036.png",
+			"filename": "images/green_walk_left/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0037.png",
+			"filename": "images/green_walk_left/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0038.png",
+			"filename": "images/green_walk_left/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0039.png",
+			"filename": "images/green_walk_left/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0040.png",
+			"filename": "images/green_walk_left/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0041.png",
+			"filename": "images/green_walk_left/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0042.png",
+			"filename": "images/green_walk_left/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0043.png",
+			"filename": "images/green_walk_left/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0044.png",
+			"filename": "images/green_walk_left/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0045.png",
+			"filename": "images/green_walk_left/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0046.png",
+			"filename": "images/green_walk_left/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0047.png",
+			"filename": "images/green_walk_left/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0048.png",
+			"filename": "images/green_walk_left/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0049.png",
+			"filename": "images/green_walk_left/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0050.png",
+			"filename": "images/green_walk_left/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0051.png",
+			"filename": "images/green_walk_left/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0052.png",
+			"filename": "images/green_walk_left/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0053.png",
+			"filename": "images/green_walk_left/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0054.png",
+			"filename": "images/green_walk_left/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0055.png",
+			"filename": "images/green_walk_left/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0056.png",
+			"filename": "images/green_walk_left/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0057.png",
+			"filename": "images/green_walk_left/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0058.png",
+			"filename": "images/green_walk_left/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_left/0059.png",
+			"filename": "images/green_walk_left/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0000.png",
+			"filename": "images/green_walk_right/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0001.png",
+			"filename": "images/green_walk_right/0001.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0002.png",
+			"filename": "images/green_walk_right/0002.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0003.png",
+			"filename": "images/green_walk_right/0003.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0004.png",
+			"filename": "images/green_walk_right/0004.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0005.png",
+			"filename": "images/green_walk_right/0005.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0006.png",
+			"filename": "images/green_walk_right/0006.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0007.png",
+			"filename": "images/green_walk_right/0007.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0008.png",
+			"filename": "images/green_walk_right/0008.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0009.png",
+			"filename": "images/green_walk_right/0009.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0010.png",
+			"filename": "images/green_walk_right/0010.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0011.png",
+			"filename": "images/green_walk_right/0011.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0012.png",
+			"filename": "images/green_walk_right/0012.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0013.png",
+			"filename": "images/green_walk_right/0013.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0014.png",
+			"filename": "images/green_walk_right/0014.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0015.png",
+			"filename": "images/green_walk_right/0015.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0016.png",
+			"filename": "images/green_walk_right/0016.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0017.png",
+			"filename": "images/green_walk_right/0017.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0018.png",
+			"filename": "images/green_walk_right/0018.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0019.png",
+			"filename": "images/green_walk_right/0019.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0020.png",
+			"filename": "images/green_walk_right/0020.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0021.png",
+			"filename": "images/green_walk_right/0021.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0022.png",
+			"filename": "images/green_walk_right/0022.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0023.png",
+			"filename": "images/green_walk_right/0023.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0024.png",
+			"filename": "images/green_walk_right/0024.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0025.png",
+			"filename": "images/green_walk_right/0025.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0026.png",
+			"filename": "images/green_walk_right/0026.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0027.png",
+			"filename": "images/green_walk_right/0027.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0028.png",
+			"filename": "images/green_walk_right/0028.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0029.png",
+			"filename": "images/green_walk_right/0029.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0030.png",
+			"filename": "images/green_walk_right/0030.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0031.png",
+			"filename": "images/green_walk_right/0031.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0032.png",
+			"filename": "images/green_walk_right/0032.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0033.png",
+			"filename": "images/green_walk_right/0033.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0034.png",
+			"filename": "images/green_walk_right/0034.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0035.png",
+			"filename": "images/green_walk_right/0035.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0036.png",
+			"filename": "images/green_walk_right/0036.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0037.png",
+			"filename": "images/green_walk_right/0037.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0038.png",
+			"filename": "images/green_walk_right/0038.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0039.png",
+			"filename": "images/green_walk_right/0039.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0040.png",
+			"filename": "images/green_walk_right/0040.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0041.png",
+			"filename": "images/green_walk_right/0041.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0042.png",
+			"filename": "images/green_walk_right/0042.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0043.png",
+			"filename": "images/green_walk_right/0043.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0044.png",
+			"filename": "images/green_walk_right/0044.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0045.png",
+			"filename": "images/green_walk_right/0045.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0046.png",
+			"filename": "images/green_walk_right/0046.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0047.png",
+			"filename": "images/green_walk_right/0047.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0048.png",
+			"filename": "images/green_walk_right/0048.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0049.png",
+			"filename": "images/green_walk_right/0049.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0050.png",
+			"filename": "images/green_walk_right/0050.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0051.png",
+			"filename": "images/green_walk_right/0051.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0052.png",
+			"filename": "images/green_walk_right/0052.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0053.png",
+			"filename": "images/green_walk_right/0053.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0054.png",
+			"filename": "images/green_walk_right/0054.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0055.png",
+			"filename": "images/green_walk_right/0055.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0056.png",
+			"filename": "images/green_walk_right/0056.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0057.png",
+			"filename": "images/green_walk_right/0057.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0058.png",
+			"filename": "images/green_walk_right/0058.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_walk_right/0059.png",
+			"filename": "images/green_walk_right/0059.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_idle_back/0000.png",
+			"filename": "images/green_idle_back/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_idle_front/0000.png",
+			"filename": "images/green_idle_front/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_idle_left/0000.png",
+			"filename": "images/green_idle_left/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
 		},
 		{
-			"filename": "green_idle_right/0000.png",
+			"filename": "images/green_idle_right/0000.png",
 			"height": 78,
 			"path": "",
 			"width": 53
@@ -49949,7 +49949,7 @@
 	"tags": {},
 	"textures": [
 		{
-			"filename": "../../web/assets/images/animations/spritesheet.png",
+			"filename": "../web/public/assets/images/animations/spritesheet.png",
 			"height": 1645,
 			"map": "",
 			"scale": 1.0,
