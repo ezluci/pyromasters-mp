@@ -19,6 +19,7 @@ import { sendPacket_death } from "./death";
 import { sendPacket_C } from "./C";
 import { sendPacket_coords } from "./coords";
 import { sendPacket_endScreen } from "./end-screen";
+import { sendPacket_pong } from "./pong";
 
 // you use bufferPacket to pack more packets at once before actually sending them.
 // the packets are sent automatically. if ~the room / the client's room~ has an active
@@ -134,4 +135,5 @@ export class OutPackets {
    static send_death = sendPacket_death;
    static send_C = sendPacket_C;
    static send_coords = sendPacket_coords;
+   static send_pong = sendPacket_pong;
 };

@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.10.9] - 2025-08-09
+
+- Added more shortcuts for bombplace + movement
+- Cleaned up the tools for generating audiosprite + spritesheet
+- Organized all the packets into different files
+- Switched from socket.io to WebSocket + ws
+- Implemented a basic ping/pong keep-alive mechanism
+- Replaced the null byte with a / on connection
+
 ## [0.10.8] - 2025-05-29
 
 - Fixed web-server for the new update

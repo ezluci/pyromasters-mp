@@ -6,7 +6,7 @@ declare module 'ws' {
       name: string;
       room: Room;
       isOwner: boolean;
-      server: WebSocketServer;
+      lastReceivedPing: number;
 
       wins: number;
       kills: number;

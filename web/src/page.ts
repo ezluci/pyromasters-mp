@@ -8,6 +8,7 @@ export const ctx = canvasElm.getContext('2d') as CanvasRenderingContext2D;
 
 export const logElm = document.querySelector('#log-messages') as HTMLDivElement;
 export const playerListElm = document.querySelector('#player-list') as HTMLUListElement;
+export const pingElm = document.querySelector('#ping') as HTMLSpanElement;
 
 export const loadingElm = document.querySelector('#loading') as HTMLSpanElement;
 export const startButtonElm = document.querySelector('#start-button') as HTMLButtonElement;

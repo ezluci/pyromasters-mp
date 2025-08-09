@@ -3,6 +3,7 @@ import { Color, Map } from "./game-types";
 import { roomName, userName } from "./game-variables";
 import { processPacket } from "./in-packets/process-packet";
 import { sendPacket_chat } from "./out-packets/chat";
+import { sendPacket_ping } from "./out-packets/ping";
 import { sendPacket_selectColor } from "./out-packets/select-color";
 import { sendPacket_startGame } from "./out-packets/start-game";
 import { chatInputElm, chatSendMsgElm, DOM_addLog, loadingElm, mapSelectedElm, selectBlackElm, selectColorsElm, selectGreenElm, selectOrangeElm, selectSpectatorElm, selectWhiteElm, startButtonElm } from "./page";
@@ -24,8 +25,8 @@ if (ez_testSV) {
 }
 
 const protocol = (ez_testPC || ez_testSV ? 'http' : 'https');
-const port = (ez_testSV ? 3306 : 22822);
-const url = `${protocol}://${window.location.hostname}:${port}/${encodeURIComponent(userName + String.fromCharCode(0) + roomName)}`;
+const port = (ez_testSV ? 3301 : 22822);
+const url = `${protocol}://${window.location.hostname}:${port}/${encodeURIComponent(userName)}/${encodeURIComponent(roomName)}`;
 
 
 export const server = new WebSocket(url);
@@ -52,6 +53,10 @@ server.onmessage = (event) => {
    }
 }
 
+server.onclose = () => {
+   DOM_addLog('websocket closed. refresh the page.');
+}
+
 
 // set button actions
 selectWhiteElm.addEventListener('click', () => sendPacket_selectColor(Color.WHITE));
@@ -70,3 +75,35 @@ chatSendMsgElm.addEventListener('click', () => {
    sendPacket_chat(chatInputElm.value);
    chatInputElm.value = '';
 });
+
+
+export const timeBitmask = 0xffffff;
+const pingDelay = 1000;
+export const unresolvedPings: number[] = [];
+let connectionLost = false;
+
+// ping loop
+const pingLoopIntv = setInterval(() => {
+   if (server.readyState === WebSocket.CLOSING || server.readyState === WebSocket.CLOSED) {
+      clearInterval(pingLoopIntv);
+      return;
+   }
+   
+   const time = performance.now() & timeBitmask;
+   sendPacket_ping(time);
+   unresolvedPings.push(time);
+
+   const timeSinceFirstUnresolved = (time - unresolvedPings[0] + timeBitmask+1) & timeBitmask;
+   
+   if (timeSinceFirstUnresolved >= pingDelay * 8) {
+      DOM_addLog('connection closed. refresh the page.');
+      server.close();
+      clearInterval(pingLoopIntv);
+   } else if (timeSinceFirstUnresolved >= pingDelay * 1.75) {
+      connectionLost = true;
+      DOM_addLog('can\'t hear from server, wait...');
+   } else if (connectionLost) {
+      connectionLost = false;
+      DOM_addLog('reconnected!');
+   }
+}, pingDelay);

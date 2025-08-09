@@ -17,6 +17,7 @@ import { processPacket_deleteFlame } from "./delete-flame";
 import { processPacket_death } from "./death";
 import { processPacket_coords } from "./coords";
 import { processPacket_C } from "./C";
+import { processPacket_pong } from "./pong";
 
 const char_playerPlus = '+';
 const char_playerMinus = '-';
@@ -36,7 +37,8 @@ const char_deleteFlame = '5';
 const char_death = 'x';
 const char_C = 'q';
 const char_coords = 'w';
-const char_ranking = 'r'; // TODO
+const char_pong = ':';
+// const char_ranking = 'r'; // TODO
 
 export function processPacket(packet: Uint8Array) {
    const packetType = String.fromCharCode(packet[0]);
@@ -79,6 +81,8 @@ export function processPacket(packet: Uint8Array) {
       processPacket_C(packet);
    } else if (packetType === char_coords) {
       processPacket_coords(packet);
+   } else if (packetType === char_pong) {
+      processPacket_pong(packet);
    } else if (packet[0] <= 13) {
       processPacket_playerAttribute(packet);
    } else {

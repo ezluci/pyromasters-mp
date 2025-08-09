@@ -6,6 +6,7 @@ import { processPacket_portalTp } from "./portal-tp";
 import { processPacket_placeBomb } from "./place-bomb";
 import { processPacket_coords } from "./coords";
 import { processPacket_kickBomb } from "./kick-bomb";
+import { processPacket_ping } from "./ping";
 
 const char_chat = 'C'.charCodeAt(0);
 const char_selectColor = 'O'.charCodeAt(0);
@@ -14,6 +15,7 @@ const char_portalTp = 'P'.charCodeAt(0);
 const char_placeBomb = 'B'.charCodeAt(0);
 const char_coords = 'S'.charCodeAt(0);
 const char_kickBomb = 'K'.charCodeAt(0);
+const char_ping = ';'.charCodeAt(0);
 
 export function processPacket(sok: WebSocket, packet: Buffer) {
    if (packet.length === 0) {
@@ -34,7 +36,9 @@ export function processPacket(sok: WebSocket, packet: Buffer) {
       processPacket_placeBomb(sok, packet);
    } else if (packetType === char_coords) {
       processPacket_coords(sok, packet);
-   }else if (packetType === char_kickBomb) {
+   } else if (packetType === char_kickBomb) {
       processPacket_kickBomb(sok, packet);
+   } else if (packetType === char_ping) {
+      processPacket_ping(sok, packet);
    }
 }

@@ -57,9 +57,10 @@ const server = new WebSocketServer({
 });
 
 server.on('connection', (socket: WebSocket, request) => {
+   socket.lastReceivedPing = performance.now();
    
    // process the new player
-   playerConnect(request.url, rooms, socket, server);
+   playerConnect(request.url, rooms, socket);
 
    // attach setters for some socket properties
    socket.setShield = setShield;
@@ -82,3 +83,16 @@ server.on('connection', (socket: WebSocket, request) => {
       playerDisconnect(rooms, socket);
    });
 });
+
+
+// remove dead connections
+setInterval(() => {
+   rooms.forEach(room => {
+      room.players.forEach(socket => {
+         if (performance.now() - socket.lastReceivedPing >= 9000) {
+            playerDisconnect(rooms, socket);
+            socket.close();
+         }
+      });
+   });
+}, 2000);

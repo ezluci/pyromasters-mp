@@ -1,30 +1,27 @@
 import { Animation, Color, RoomStatus } from "./game-types";
 import { Room } from "./room";
-import { WebSocket, WebSocketServer } from "ws";
+import { WebSocket } from "ws";
 import { OutPackets } from "./out-packets/out-packets";
 import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY } from "./game-consts";
 
-export function playerConnect(url: string | undefined, rooms: Map<string, Room>, sok: WebSocket, server: WebSocketServer): void {
+export function playerConnect(url: string | undefined, rooms: Map<string, Room>, sok: WebSocket): void {
    url = url?.substring(1);
    if (!url) {
       return sok.close();
    }
-   url = decodeURIComponent(url);
 
-   const nullIdx = url.indexOf(String.fromCharCode(0));
-   if (nullIdx === -1) {
+   const urlParts = url.split('/');
+   if (urlParts.length !== 2) {
       return sok.close();
    }
 
-   const userName = url.substring(0, nullIdx);
-   let roomName = url.substring(nullIdx + 1);
+   const userName = decodeURIComponent(urlParts[0]);
+   const roomName = decodeURIComponent(urlParts[1]).toLowerCase();
 
    if (! /^[ -~]{1,15}$/.test(userName)) {
       OutPackets.send_error(sok, 'playerJoined: invalid username. DISCONNECTED.');
       return sok.close();
    }
-
-   roomName = roomName.toLowerCase();
    
    if (! /^[ -~]{1,15}$/.test(roomName)) {
       OutPackets.send_error(sok, 'playerJoined: invalid room name. DISCONNECTED.');
@@ -38,7 +35,6 @@ export function playerConnect(url: string | undefined, rooms: Map<string, Room>,
 
    sok.name = userName;
    sok.isOwner = !rooms.has(roomName);
-   sok.server = server;
 
    sok.wins = 0;
    sok.kills = 0;
@@ -146,6 +142,10 @@ export function playerDisconnect(rooms: Map<string, Room>, sok: WebSocket): void
    if (!sok.room) {
       return;
    }
+   const room = rooms.get(sok.room.name);
+   if (!room || !room.players.get(sok.name)) {
+      return;
+   }
    console.log(`room{${sok.room.name}} -= ${sok.name}`);
 
    if (sok.isOwner) {
@@ -161,7 +161,6 @@ export function playerDisconnect(rooms: Map<string, Room>, sok: WebSocket): void
       rooms.delete(sok.room.name);
    } else {
       OutPackets.send_playerMinus(sok.room, sok.name);
-      sok.room.players.delete(sok.name);
 
       if (sok.color !== null) {
          if (sok.room.status === RoomStatus.RUNNING && !sok.dead) {
@@ -171,5 +170,7 @@ export function playerDisconnect(rooms: Map<string, Room>, sok: WebSocket): void
          }
          sok.room[sok.color] = null;
       }
+      sok.close();
    }
+   sok.room.players.delete(sok.name);
 }

@@ -46,6 +46,11 @@ export function setEndScreen(newEndScreen: Color | 'draw' | null) {
    endScreen = newEndScreen;
 }
 
+export let ping: number = 0;
+export function setPing(newPing: number) {
+   ping = newPing;
+}
+
 export const ranking: { name: string, wins: number, kills: number }[] = [];
 
 export const grid: Block[][] = Array.from({ length: BLOCKS_VERTICALLY }, () => Array(BLOCKS_HORIZONTALLY).fill(Block.NO));
