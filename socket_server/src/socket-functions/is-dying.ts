@@ -12,8 +12,8 @@ export function tie_isDying(sok: WebSocket): void {
          return false;
       }
       
-      const x = sok.coords.x;
-      const y = sok.coords.y;
+      const x = sok.x;
+      const y = sok.y;
       
       let deadBlk1: { x: number, y: number } | null = null;
       let deadBlk2: { x: number, y: number } | null = null;

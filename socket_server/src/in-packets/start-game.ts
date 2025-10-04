@@ -65,7 +65,8 @@ export function processPacket_startGame(sok: WebSocket, packet: Buffer) {
       sok.room[color].animState = Animation.IDLE_FRONT;
       OutPackets.send_playerAttribute(sok.room, sok.room[color], 'animState');
 
-      sok.room[color].coords = { ...DEFAULT_POS[color] };
+      sok.room[color].x = DEFAULT_POS[color].x;
+      sok.room[color].y = DEFAULT_POS[color].y;
       OutPackets.send_playerAttribute(sok.room, sok.room[color], 'coords');
       sok.room[color].dead = false;
       OutPackets.send_playerAttribute(sok.room, sok.room[color], 'dead');

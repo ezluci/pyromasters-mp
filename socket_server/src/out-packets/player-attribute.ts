@@ -63,8 +63,8 @@ export function sendPacket_playerAttribute(this: typeof OutPackets, target: Room
          break;
       case 'coords':
          packet[0] = 4;
-         const x = Math.floor(sok.coords.x * 70);
-         const y = Math.floor(sok.coords.y * 70);
+         const x = Math.floor(sok.x * 70);
+         const y = Math.floor(sok.y * 70);
          packet[2] = x >>> 8 & 0xff;
          packet[3] = x & 0xff;
          packet[4] = y >>> 8 & 0xff;

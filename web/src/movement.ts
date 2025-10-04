@@ -57,8 +57,8 @@ export function moveLeft(g: Game) {
       return;
    }
 
-   const me = g.myPlayer.coords;
-   const meOld = { x: me.x, y: me.y };
+   const me = g.myPlayer;
+   const xOld = me.x, yOld = me.y;
    const speed = g.myPlayer.speed;
 
    const mod = me.y % (2 * BLOCK_SIZE);
@@ -73,9 +73,9 @@ export function moveLeft(g: Game) {
       me.x -= speed * g.deltaTime;
       if (me.x < MIN_X) {
          me.x = MIN_X;
-      } else if (Math.floor(me.x / BLOCK_SIZE) !== Math.floor(meOld.x / BLOCK_SIZE)) { // if we go in a different block
+      } else if (Math.floor(me.x / BLOCK_SIZE) !== Math.floor(xOld / BLOCK_SIZE)) { // if we go in a different block
          if (stop(g, Math.floor(me.x / BLOCK_SIZE), me.y / BLOCK_SIZE)) {
-            me.x = Math.floor(meOld.x / BLOCK_SIZE) * BLOCK_SIZE;
+            me.x = Math.floor(xOld / BLOCK_SIZE) * BLOCK_SIZE;
          }
       }
       if (me.x % BLOCK_SIZE === 0 && (tmpBomb = getBombExact(g, me.x / BLOCK_SIZE - 1, me.y / BLOCK_SIZE))) {
@@ -94,7 +94,7 @@ export function moveLeft(g: Game) {
             if (newMod > mod) {
                Animations.changeAnimation(g.myPlayer, Animation.WALK_LEFT);
                me.x -= 2 * BLOCK_SIZE - newMod;
-               me.y = Math.floor(meOld.y / BLOCK_SIZE) * BLOCK_SIZE;
+               me.y = Math.floor(yOld / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
             Animations.changeAnimation(g.myPlayer, Animation.WALK_LEFT);
@@ -111,7 +111,7 @@ export function moveLeft(g: Game) {
             if (newMod < mod) {
                Animations.changeAnimation(g.myPlayer, Animation.WALK_LEFT);
                me.x -= newMod;
-               me.y = Math.ceil(meOld.y / BLOCK_SIZE) * BLOCK_SIZE;
+               me.y = Math.ceil(yOld / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
             Animations.changeAnimation(g.myPlayer, Animation.WALK_LEFT);
@@ -126,8 +126,8 @@ export function moveDown(g: Game) {
       return;
    }
 
-   const me = g.myPlayer.coords;
-   const meOld = { x: me.x, y: me.y };
+   const me = g.myPlayer;
+   const xOld = me.x, yOld = me.y;
    const speed = g.myPlayer.speed;
 
    const mod = me.x % (2 * BLOCK_SIZE);
@@ -142,9 +142,9 @@ export function moveDown(g: Game) {
       me.y += speed * g.deltaTime;
       if (me.y > MAX_Y) {
          me.y = MAX_Y;
-      } else if (Math.ceil(me.y / BLOCK_SIZE) !== Math.ceil(meOld.y / BLOCK_SIZE)) {
+      } else if (Math.ceil(me.y / BLOCK_SIZE) !== Math.ceil(yOld / BLOCK_SIZE)) {
          if (stop(g, me.x / BLOCK_SIZE, Math.ceil(me.y / BLOCK_SIZE))) {
-            me.y = Math.ceil(meOld.y / BLOCK_SIZE) * BLOCK_SIZE;
+            me.y = Math.ceil(yOld / BLOCK_SIZE) * BLOCK_SIZE;
          }
       }
       if (me.y % BLOCK_SIZE === 0 && (tmpBomb = getBombExact(g, me.x / BLOCK_SIZE, me.y / BLOCK_SIZE + 1))) {
@@ -163,7 +163,7 @@ export function moveDown(g: Game) {
             if (newMod > mod) {
                Animations.changeAnimation(g.myPlayer, Animation.WALK_FRONT);
                me.y += 2 * BLOCK_SIZE - newMod;
-               me.x = Math.floor(meOld.x / BLOCK_SIZE) * BLOCK_SIZE;
+               me.x = Math.floor(xOld / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
             Animations.changeAnimation(g.myPlayer, Animation.WALK_FRONT);
@@ -180,7 +180,7 @@ export function moveDown(g: Game) {
             if (newMod < mod) {
                Animations.changeAnimation(g.myPlayer, Animation.WALK_FRONT);
                me.y += newMod;
-               me.x = Math.ceil(meOld.x / BLOCK_SIZE) * BLOCK_SIZE;
+               me.x = Math.ceil(xOld / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
             Animations.changeAnimation(g.myPlayer, Animation.WALK_FRONT);
@@ -195,8 +195,8 @@ export function moveRight(g: Game) {
       return;
    }
 
-   const me = g.myPlayer.coords;
-   const meOld = { x: me.x, y: me.y };
+   const me = g.myPlayer;
+   const xOld = me.x, yOld = me.y;
    const speed = g.myPlayer.speed;
    
    const mod = me.y % (2 * BLOCK_SIZE);
@@ -211,9 +211,9 @@ export function moveRight(g: Game) {
       me.x += speed * g.deltaTime;
       if (me.x > MAX_X) {
          me.x = MAX_X;
-      } else if (Math.ceil(me.x / BLOCK_SIZE) !== Math.ceil(meOld.x / BLOCK_SIZE)) {
+      } else if (Math.ceil(me.x / BLOCK_SIZE) !== Math.ceil(xOld / BLOCK_SIZE)) {
          if (stop(g, Math.ceil(me.x / BLOCK_SIZE), me.y / BLOCK_SIZE)) {
-            me.x = Math.ceil(meOld.x / BLOCK_SIZE) * BLOCK_SIZE;
+            me.x = Math.ceil(xOld / BLOCK_SIZE) * BLOCK_SIZE;
          }
       }
       if (me.x % BLOCK_SIZE === 0 && (tmpBomb = getBombExact(g, me.x / BLOCK_SIZE + 1, me.y / BLOCK_SIZE))) {
@@ -232,7 +232,7 @@ export function moveRight(g: Game) {
             if (newMod > mod) {
                Animations.changeAnimation(g.myPlayer, Animation.WALK_RIGHT);
                me.x += 2 * BLOCK_SIZE - newMod;
-               me.y = Math.floor(meOld.y / BLOCK_SIZE) * BLOCK_SIZE;
+               me.y = Math.floor(yOld / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
             Animations.changeAnimation(g.myPlayer, Animation.WALK_RIGHT);
@@ -250,7 +250,7 @@ export function moveRight(g: Game) {
             if (newMod < mod) {
                Animations.changeAnimation(g.myPlayer, Animation.WALK_RIGHT);
                me.x += newMod;
-               me.y = Math.ceil(meOld.y / BLOCK_SIZE) * BLOCK_SIZE;
+               me.y = Math.ceil(yOld / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
             Animations.changeAnimation(g.myPlayer, Animation.WALK_RIGHT);
@@ -265,8 +265,8 @@ export function moveUp(g: Game) {
       return;
    }
 
-   const me = g.myPlayer.coords;
-   const meOld = { x: me.x, y: me.y };
+   const me = g.myPlayer;
+   const xOld = me.x, yOld = me.y;
    const speed = g.myPlayer.speed;
    
    const mod = me.x % (2 * BLOCK_SIZE);
@@ -281,9 +281,9 @@ export function moveUp(g: Game) {
       me.y -= speed * g.deltaTime;
       if (me.y < MIN_Y) {
          me.y = MIN_Y;
-      } else if (Math.floor(me.y / BLOCK_SIZE) !== Math.floor(meOld.y / BLOCK_SIZE)) {
+      } else if (Math.floor(me.y / BLOCK_SIZE) !== Math.floor(yOld / BLOCK_SIZE)) {
          if (stop(g, me.x / BLOCK_SIZE, Math.floor(me.y / BLOCK_SIZE))) {
-            me.y = Math.floor(meOld.y / BLOCK_SIZE) * BLOCK_SIZE;
+            me.y = Math.floor(yOld / BLOCK_SIZE) * BLOCK_SIZE;
          }
       }
       if (me.y % BLOCK_SIZE === 0 && (tmpBomb = getBombExact(g, me.x / BLOCK_SIZE, me.y / BLOCK_SIZE - 1))) {
@@ -302,7 +302,7 @@ export function moveUp(g: Game) {
             if (newMod > mod) {
                Animations.changeAnimation(g.myPlayer, Animation.WALK_BACK);
                me.y -= 2 * BLOCK_SIZE - newMod;
-               me.x = Math.floor(meOld.x / BLOCK_SIZE) * BLOCK_SIZE;
+               me.x = Math.floor(xOld / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
             Animations.changeAnimation(g.myPlayer, Animation.WALK_BACK);
@@ -320,7 +320,7 @@ export function moveUp(g: Game) {
             if (newMod < mod) {
                Animations.changeAnimation(g.myPlayer, Animation.WALK_BACK);
                me.y -= newMod;
-               me.x = Math.ceil(meOld.x / BLOCK_SIZE) * BLOCK_SIZE;
+               me.x = Math.ceil(xOld / BLOCK_SIZE) * BLOCK_SIZE;
             }
          } else {
             Animations.changeAnimation(g.myPlayer, Animation.WALK_BACK);

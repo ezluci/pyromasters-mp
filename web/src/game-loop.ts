@@ -31,8 +31,7 @@ export function gameLoop(g: Game) {
       }
       
       // move
-      const me = g.myPlayer.coords;
-      const meOld = { x: me.x, y: me.y };
+      const xOld = g.myPlayer.x, yOld = g.myPlayer.y;
 
       if (Keys.keysPressed.left) {
          moveLeft(g);
@@ -51,15 +50,15 @@ export function gameLoop(g: Game) {
 
       // check if the player went through any fourway portals
 
-      if (g.map === Map.FOURWAY && (me.x === meOld.x || me.y === meOld.y) && (me.x !== meOld.x || me.y !== meOld.y)) {
+      if (g.map === Map.FOURWAY && (g.myPlayer.x === xOld || g.myPlayer.y === yOld) && (g.myPlayer.x !== xOld || g.myPlayer.y !== yOld)) {
          let A, B, dif;
-         if (me.x !== meOld.x) {
-            A = me.x;
-            B = meOld.x;
+         if (g.myPlayer.x !== xOld) {
+            A = g.myPlayer.x;
+            B = xOld;
             dif = 1;
          } else {
-            A = me.y;
-            B = meOld.y;
+            A = g.myPlayer.y;
+            B = yOld;
             dif = 2;
          }
          if (A > B) {
@@ -67,24 +66,24 @@ export function gameLoop(g: Game) {
          }
 
          let portalIdx: number | null = null;
-         MAP_FOURWAY_PORTAL_POSITIONS.forEach(({x, y}, idx) => {
-            x *= BLOCK_SIZE;
-            y *= BLOCK_SIZE;
-            if ((me.x === x && me.y === y) ||
-                  (dif === 1 && me.y === y && A < x && x < B) ||
-                  (dif === 2 && me.x === x && A < y && y < B)) {
+         MAP_FOURWAY_PORTAL_POSITIONS.forEach(({ x: xPortal, y: yPortal}, idx) => {
+            xPortal *= BLOCK_SIZE;
+            yPortal *= BLOCK_SIZE;
+            if ((xPortal === g.myPlayer.x && yPortal === g.myPlayer.y) ||
+                  (dif === 1 && yPortal === g.myPlayer.y && A < xPortal && xPortal < B) ||
+                  (dif === 2 && xPortal === g.myPlayer.x && A < yPortal && yPortal < B)) {
                portalIdx = idx;
             }
          });
 
          if (portalIdx !== null) {
             sendPacket_portalTp(g);
-            me.x = MAP_FOURWAY_NEXT_PORTAL[portalIdx].x * BLOCK_SIZE;
-            me.y = MAP_FOURWAY_NEXT_PORTAL[portalIdx].y * BLOCK_SIZE;
+            g.myPlayer.x = MAP_FOURWAY_NEXT_PORTAL[portalIdx].x * BLOCK_SIZE;
+            g.myPlayer.y = MAP_FOURWAY_NEXT_PORTAL[portalIdx].y * BLOCK_SIZE;
          }
       }
 
-      sendPacket_coords(g, me.x, me.y, g.myPlayer.animState);
+      sendPacket_coords(g, g.myPlayer.x, g.myPlayer.y, g.myPlayer.animState);
    }
 
 

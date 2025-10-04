@@ -129,9 +129,9 @@ export function drawFrame(this: Game) {
       if (!player || player.dead || !player.color) {
          return;
       }
-      this.drawAnimation(Animations.animations[player.color][player.animState], player.coords.x, player.coords.y);
+      this.drawAnimation(Animations.animations[player.color][player.animState], player.x, player.y);
       if (player.shield) {
-         this.drawPlayer(Resources.images.shield, player.coords.x, player.coords.y);
+         this.drawPlayer(Resources.images.shield, player.x, player.y);
       }
    });
 

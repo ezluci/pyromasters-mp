@@ -16,8 +16,8 @@ export function sendPacket_C(this: typeof OutPackets, target: Room) {
       let x = 0, y = 0;
       let anim = Animation.IDLE_FRONT;
       if (target[color]) {
-         x = target[color].coords.x;
-         y = target[color].coords.y;
+         x = target[color].x;
+         y = target[color].y;
          anim = target[color].animState;
       }
 

@@ -14,8 +14,8 @@ export function processPacket_C(packet: Uint8Array, g: Game) {
       idx += 1;
 
       if (g.myPlayer && color !== g.myPlayer.color && g.colors[color]) {
-         g.colors[color].coords.x = x;
-         g.colors[color].coords.y = y;
+         g.colors[color].x = x;
+         g.colors[color].y = y;
          g.colors[color].animState = anim;
       }
    });

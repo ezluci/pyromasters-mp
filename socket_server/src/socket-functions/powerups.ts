@@ -57,8 +57,8 @@ function collectPowerupSwitchplayer(sok: WebSocket) {
       return;
    }
 
-   [sok.coords.x, sok.room[randColor].coords.x] = [sok.room[randColor].coords.x, sok.coords.x];
-   [sok.coords.y, sok.room[randColor].coords.y] = [sok.room[randColor].coords.y, sok.coords.y];
+   [sok.x, sok.room[randColor].x] = [sok.room[randColor].x, sok.x];
+   [sok.y, sok.room[randColor].y] = [sok.room[randColor].y, sok.y];
    
    OutPackets.send_coords(sok.room, sok);
    OutPackets.send_coords(sok.room, sok.room[randColor]);

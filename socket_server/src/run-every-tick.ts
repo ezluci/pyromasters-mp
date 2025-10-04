@@ -47,8 +47,8 @@ export function generate_runEveryTick(sok: WebSocket): () => void {
          if (!sok.room[color] || sok.room[color].dead) {
             return;
          }
-         sok.room[color].collectPowerup(Math.floor(sok.room[color].coords.x / BLOCK_SIZE), Math.floor(sok.room[color].coords.y / BLOCK_SIZE));
-         sok.room[color].collectPowerup(Math.ceil(sok.room[color].coords.x / BLOCK_SIZE), Math.ceil(sok.room[color].coords.y / BLOCK_SIZE));
+         sok.room[color].collectPowerup(Math.floor(sok.room[color].x / BLOCK_SIZE), Math.floor(sok.room[color].y / BLOCK_SIZE));
+         sok.room[color].collectPowerup(Math.ceil(sok.room[color].x / BLOCK_SIZE), Math.ceil(sok.room[color].y / BLOCK_SIZE));
       });
       
       // update bombs' positions
@@ -124,12 +124,12 @@ export function generate_runEveryTick(sok: WebSocket): () => void {
                      return;
                   }
                   
-                  if (sok.room[color].coords.x / BLOCK_SIZE === checkBlock.x) {
-                     if (Math.abs(sok.room[color].coords.y / BLOCK_SIZE - checkBlock.y) < 1) {
+                  if (sok.room[color].x / BLOCK_SIZE === checkBlock.x) {
+                     if (Math.abs(sok.room[color].y / BLOCK_SIZE - checkBlock.y) < 1) {
                         canGo = false;
                      }
-                  } else if (sok.room[color].coords.y / BLOCK_SIZE === checkBlock.y) {
-                     if (Math.abs(sok.room[color].coords.x / BLOCK_SIZE - checkBlock.x) < 1) {
+                  } else if (sok.room[color].y / BLOCK_SIZE === checkBlock.y) {
+                     if (Math.abs(sok.room[color].x / BLOCK_SIZE - checkBlock.x) < 1) {
                         canGo = false;
                      }
                   }

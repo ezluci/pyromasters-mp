@@ -25,7 +25,7 @@ export function processPacket_coords(sok: WebSocket, packet: Buffer) {
       return;
    }
    
-   sok.coords.x = x;
-   sok.coords.y = y;
+   sok.x = x;
+   sok.y = y;
    sok.animState = animation;
 }

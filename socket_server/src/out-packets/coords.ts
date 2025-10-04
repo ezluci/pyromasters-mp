@@ -14,8 +14,8 @@ export function sendPacket_coords(this: typeof OutPackets, target: Room | WebSoc
 
    packet[0] = packetChar;
 
-   const x = player.coords.x * 1e4;
-   const y = player.coords.y * 1e4;
+   const x = player.x * 1e4;
+   const y = player.y * 1e4;
 
    packet[1] = Object.values(Color).indexOf(player.color);
 

@@ -12,7 +12,8 @@ declare module 'ws' {
       kills: number;
       
       color: Color | null; // if color is null then spectator
-      coords: { x: number, y : number };
+      x: number;
+      y: number;
       dead: boolean;
       animState: Animation;
 

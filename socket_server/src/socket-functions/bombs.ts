@@ -18,8 +18,8 @@ export function tie_bombs(sok: WebSocket): void {
          return;
       }
       
-      const x = Math.round(sok.coords.x / BLOCK_SIZE);
-      const y = Math.round(sok.coords.y / BLOCK_SIZE);
+      const x = Math.round(sok.x / BLOCK_SIZE);
+      const y = Math.round(sok.y / BLOCK_SIZE);
       
       if ( !(0 <= x && x < BLOCKS_HORIZONTALLY && 0 <= y && y < BLOCKS_VERTICALLY) ) {
          OutPackets.send_error(sok, 'tryPlaceBomb: x or y out of range.');

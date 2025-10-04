@@ -10,6 +10,6 @@ export function processPacket_coords(packet: Uint8Array, g: Game) {
       return console.error('processPacket_coords: player is null');
    }
 
-   g.colors[color].coords.x = x;
-   g.colors[color].coords.y = y;
+   g.colors[color].x = x;
+   g.colors[color].y = y;
 }

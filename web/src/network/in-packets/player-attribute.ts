@@ -45,8 +45,8 @@ export function processPacket_playerAttribute(packet: Uint8Array, g: Game) {
          g.colors[color].kills = kills;
          break;
       case 4:
-         g.colors[color].coords.x = (packet[2] << 8 | packet[3]) / 70;
-         g.colors[color].coords.y = (packet[4] << 8 | packet[5]) / 70;
+         g.colors[color].x = (packet[2] << 8 | packet[3]) / 70;
+         g.colors[color].y = (packet[4] << 8 | packet[5]) / 70;
          break;
       case 5:
          g.colors[color].dead = (packet[2] ? true : false);

@@ -40,7 +40,8 @@ export function playerConnect(url: string | undefined, rooms: Map<string, Room>,
    sok.kills = 0;
 
    sok.color = null;
-   sok.coords = {x: 0, y: 0};
+   sok.x = 0;
+   sok.y = 0;
    sok.dead = false;
    sok.animState = Animation.IDLE_FRONT;
 

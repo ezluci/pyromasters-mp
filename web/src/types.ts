@@ -66,7 +66,8 @@ export class Player {
    kills: number;
 
    color: Color | null;
-   coords: { x : number, y: number };
+   x: number;
+   y: number;
    dead: boolean;
    animState: Animation;
    
@@ -87,7 +88,8 @@ export class Player {
       this.kills = 0;
 
       this.color = null;
-      this.coords = { x: 0, y: 0 };
+      this.x = 0;
+      this.y = 0;
       this.dead = false;
 
       this.animState = Animation.IDLE_BACK;
