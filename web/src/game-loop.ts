@@ -1,58 +1,57 @@
-import { changeAnimation } from "./animations/process-animations";
-import { drawFrame } from "./game-canvas";
 import { BLOCK_SIZE, MAP_FOURWAY_NEXT_PORTAL, MAP_FOURWAY_PORTAL_POSITIONS } from "./game-consts";
-import { Map, RoomStatus } from "./game-types";
-import { images } from "./load-assets";
+import { Map, RoomStatus } from "./types";
 import { moveDown, moveLeft, moveRight, moveUp } from "./movement";
-import { endScreen, map, myPlayer, ranking, roomStatus, setDeltaTime } from "./game-variables";
-import { canvasElm, ctx } from "./page";
-import { keysPressed } from "./record-keys";
-import { sendPacket_placeBomb } from "./out-packets/place-bomb";
-import { sendPacket_portalTp } from "./out-packets/portal-tp";
-import { sendPacket_coords } from "./out-packets/coords";
+import { sendPacket_placeBomb } from "./network/out-packets/place-bomb";
+import { sendPacket_portalTp } from "./network/out-packets/portal-tp";
+import { sendPacket_coords } from "./network/out-packets/coords";
+import type { Game } from "./game";
+import { Keys } from "./keys";
+import { Resources } from "./resources";
+import { Dom } from "./dom";
+import { Animations } from "./animations";
 
 
 let lastBombTime = -10000;
 let lastFrameTime = performance.now();
 
-export function gameLoop() {
+export function gameLoop(g: Game) {
 
    const currentTime = performance.now();
 
    // calculate deltaTime
-   setDeltaTime(currentTime - lastFrameTime);
+   g.deltaTime = currentTime - lastFrameTime;
    lastFrameTime = currentTime;
 
    /// UPDATES
-   if (myPlayer && myPlayer.color && !myPlayer.dead && roomStatus === RoomStatus.RUNNING) {
+   if (g.myPlayer.color && !g.myPlayer.dead && g.roomStatus === RoomStatus.RUNNING) {
       // place bomb
-      if (keysPressed.bomb && currentTime - lastBombTime > 100) {
-         sendPacket_placeBomb();
+      if (Keys.keysPressed.bomb && currentTime - lastBombTime > 100) {
+         sendPacket_placeBomb(g);
          lastBombTime = currentTime;
       }
       
       // move
-      const me = myPlayer.coords;
+      const me = g.myPlayer.coords;
       const meOld = { x: me.x, y: me.y };
 
-      if (keysPressed.left) {
-         moveLeft();
-      } else if (keysPressed.down) {
-         moveDown();
-      } else if (keysPressed.right) {
-         moveRight();
-      } else if (keysPressed.up) {
-         moveUp();
+      if (Keys.keysPressed.left) {
+         moveLeft(g);
+      } else if (Keys.keysPressed.down) {
+         moveDown(g);
+      } else if (Keys.keysPressed.right) {
+         moveRight(g);
+      } else if (Keys.keysPressed.up) {
+         moveUp(g);
       } else {
-         const currentAnimation = myPlayer.animState;
+         const currentAnimation = g.myPlayer.animState;
          if (currentAnimation >= 4) { // if walking
-            changeAnimation(myPlayer, currentAnimation - 4);
+            Animations.changeAnimation(g.myPlayer, currentAnimation - 4);
          }
       }
 
       // check if the player went through any fourway portals
 
-      if (map === Map.FOURWAY && (me.x === meOld.x || me.y === meOld.y) && (me.x !== meOld.x || me.y !== meOld.y)) {
+      if (g.map === Map.FOURWAY && (me.x === meOld.x || me.y === meOld.y) && (me.x !== meOld.x || me.y !== meOld.y)) {
          let A, B, dif;
          if (me.x !== meOld.x) {
             A = me.x;
@@ -79,29 +78,29 @@ export function gameLoop() {
          });
 
          if (portalIdx !== null) {
-            sendPacket_portalTp();
+            sendPacket_portalTp(g);
             me.x = MAP_FOURWAY_NEXT_PORTAL[portalIdx].x * BLOCK_SIZE;
             me.y = MAP_FOURWAY_NEXT_PORTAL[portalIdx].y * BLOCK_SIZE;
          }
       }
 
-      sendPacket_coords(me.x, me.y, myPlayer.animState);
+      sendPacket_coords(g, me.x, me.y, g.myPlayer.animState);
    }
 
 
 
    /// DRAWING
-   if (endScreen) {
-      ctx.drawImage(images.endscreens[endScreen], 0, 0, canvasElm.width, canvasElm.height);
-      let k = 50;
-      ranking.forEach(({ name, wins, kills }) => {
-         ctx.fillText(`${name}: ${wins} wins      ${kills} kills`, 50, k);
-         k += 50;
-      });
+   if (g.endScreen) {
+      g.ctx.drawImage(Resources.images.endscreens[g.endScreen], 0, 0, Dom.canvas.width, Dom.canvas.height);
+      // let k = 50;
+      // ranking.forEach(({ name, wins, kills }) => {
+      //    ctx.fillText(`${name}: ${wins} wins      ${kills} kills`, 50, k);
+      //    k += 50;
+      // });
    }
    else {
-      drawFrame();
+      g.drawFrame();
    }
 
-   requestAnimationFrame(gameLoop);
+   requestAnimationFrame(() => gameLoop(g));
 }

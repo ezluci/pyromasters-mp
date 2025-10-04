@@ -1,15 +1,17 @@
-import { ANIMATION_SPRITE } from "./animations/load-animations";
-import { animations, nextAnimation, AnimationInfo } from "./animations/process-animations";
+import { AnimationInfo, Animations } from "./animations";
+import { Dom } from "./dom";
+import type { Game } from "./game";
 import { BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, MAP_FOURWAY_PORTAL_POSITIONS, OFFSET_DOWN, OFFSET_LEFT, OFFSET_RIGHT, OFFSET_UP } from "./game-consts";
-import { Block, Map } from "./game-types";
-import { bombs, colors, flames, gameTime, grid, map } from "./game-variables";
-import { images } from "./load-assets";
-import { canvasElm, ctx } from "./page";
+import { Resources } from "./resources";
+import { Block, Map } from "./types";
 
 // this function draws a block using block coordinates => xB=0..15 and yB=0.11
-export function drawBlock(image: HTMLImageElement, xBlock: number, yBlock: number, manualOffset = 4) {
+export function drawBlock(this: Game, image: HTMLImageElement, xBlock: number, yBlock: number, manualOffset?: number) {
+   if (manualOffset === undefined) {
+      manualOffset = 4;
+   }
    // 53x53
-   ctx.drawImage(
+   this.ctx.drawImage(
       image,
       OFFSET_LEFT + xBlock * BLOCK_SIZE + manualOffset,
       OFFSET_UP + yBlock * BLOCK_SIZE + manualOffset,
@@ -19,9 +21,9 @@ export function drawBlock(image: HTMLImageElement, xBlock: number, yBlock: numbe
 }
 
 // this function draws a player using normal coordinates (NO OFFSET REQUIRED)
-export function drawPlayer(image: HTMLImageElement, x: number, y: number) { 
+export function drawPlayer(this: Game, image: HTMLImageElement, x: number, y: number) { 
    // 53x78
-   ctx.drawImage(
+   this.ctx.drawImage(
       image,
       OFFSET_LEFT + x,
       OFFSET_UP + y - 25,
@@ -31,7 +33,7 @@ export function drawPlayer(image: HTMLImageElement, x: number, y: number) {
 }
 
 
-export function drawAnimation(animation: AnimationInfo, x: number, y: number) {
+export function drawAnimation(this: Game, animation: AnimationInfo, x: number, y: number) {
    const spriteData = animation.spriteInfos[animation.counter];
    const trimmedRect = spriteData.trimmedRect;
    const rect = spriteData.rect;
@@ -44,98 +46,99 @@ export function drawAnimation(animation: AnimationInfo, x: number, y: number) {
    const dy = OFFSET_UP + y + (trimmedRect.y - rect.y) - 25;
    const dw = sw; // if the animations didn't match this exact resolution, this wouldn't work. you need percentages.
    const dh = sh;
-   ctx.drawImage(ANIMATION_SPRITE.img, sx, sy, sw, sh, dx, dy, dw, dh);
-   nextAnimation(animation);
+   this.ctx.drawImage(Animations.sprite.img, sx, sy, sw, sh, dx, dy, dw, dh);
+   Animations.nextAnimation(animation);
 }
 
 
-export function drawFrame() {
-   ctx.fillStyle = '#203d37';
-   ctx.fillRect(0, 0, canvasElm.width, canvasElm.height);
+export function drawFrame(this: Game) {
+   this.ctx.fillStyle = '#203d37';
+   this.ctx.fillRect(0, 0, Dom.canvas.width, Dom.canvas.height);
 
-   if (map === null) {
+   if (this.map === null) {
       return;
    }
    
    // draw background
-   ctx.drawImage(images.maps[map].background, OFFSET_LEFT, OFFSET_UP, canvasElm.width - OFFSET_LEFT - OFFSET_RIGHT, canvasElm.height - OFFSET_UP - OFFSET_DOWN);
+   this.ctx.drawImage(Resources.images.maps[this.map].background, OFFSET_LEFT, OFFSET_UP,
+      Dom.canvas.width - OFFSET_LEFT - OFFSET_RIGHT, Dom.canvas.height - OFFSET_UP - OFFSET_DOWN);
 
 
    // draw map blocks
    for (let y = 0; y < BLOCKS_VERTICALLY; ++y)
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-         if (map === Map.FOURWAY && MAP_FOURWAY_PORTAL_POSITIONS.filter(({ x: xx, y: yy }) => xx === x && yy === y).length === 1) {
-            const portalImg = images.maps[map].portal;
+         if (this.map === Map.FOURWAY && MAP_FOURWAY_PORTAL_POSITIONS.filter(({ x: xx, y: yy }) => xx === x && yy === y).length === 1) {
+            const portalImg = Resources.images.maps[this.map].portal;
             if (portalImg) {
-               drawBlock(portalImg, x, y);
+               this.drawBlock(portalImg, x, y);
             }
          }
          
-         switch (grid[y][x]) {
+         switch (this.grid[y][x]) {
             case Block.NO:
                break;
             case Block.NORMAL:
-               drawBlock(images.maps[map].normal, x, y); break;
+               this.drawBlock(Resources.images.maps[this.map].normal, x, y); break;
             case Block.PERMANENT:
-               drawBlock(images.maps[map].permanent, x, y);  break;
+               this.drawBlock(Resources.images.maps[this.map].permanent, x, y);  break;
             
             case Block.POWER_BOMBPLUS:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.bombplus, x, y);   break;
+               this.drawBlock(Resources.images.powers.main, x, y);
+               this.drawBlock(Resources.images.powers.bombplus, x, y);   break;
             case Block.POWER_BOMBLENGTH:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.bomblength, x, y); break;
+               this.drawBlock(Resources.images.powers.main, x, y);
+               this.drawBlock(Resources.images.powers.bomblength, x, y); break;
             case Block.POWER_SPEED:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.speed, x, y);   break;
+               this.drawBlock(Resources.images.powers.main, x, y);
+               this.drawBlock(Resources.images.powers.speed, x, y);   break;
             case Block.POWER_SHIELD:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.shield, x, y);  break;
+               this.drawBlock(Resources.images.powers.main, x, y);
+               this.drawBlock(Resources.images.powers.shield, x, y);  break;
             case Block.POWER_KICKBOMBS:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.kickbombs, x, y);  break;
+               this.drawBlock(Resources.images.powers.main, x, y);
+               this.drawBlock(Resources.images.powers.kickbombs, x, y);  break;
             case Block.POWER_BOMBTIME:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.bombtime, x, y);   break;
+               this.drawBlock(Resources.images.powers.main, x, y);
+               this.drawBlock(Resources.images.powers.bombtime, x, y);   break;
             case Block.POWER_SWITCHPLAYER:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.switchplayer, x, y);  break;
+               this.drawBlock(Resources.images.powers.main, x, y);
+               this.drawBlock(Resources.images.powers.switchplayer, x, y);  break;
             case Block.POWER_SICK:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.sick, x, y); break;
+               this.drawBlock(Resources.images.powers.main, x, y);
+               this.drawBlock(Resources.images.powers.sick, x, y); break;
             case Block.POWER_BONUS:
-               drawBlock(images.powers.main, x, y);
-               drawBlock(images.powers.bonus, x, y);   break;
+               this.drawBlock(Resources.images.powers.main, x, y);
+               this.drawBlock(Resources.images.powers.bonus, x, y);   break;
          }
       }
    
    // draw bombs
-   bombs.forEach(bomb => drawBlock(images.bomb, bomb.x, bomb.y, 0));
+   this.bombs.forEach(bomb => this.drawBlock(Resources.images.bomb, bomb.x, bomb.y, 0));
 
    // draw flames
    for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-         if (flames[y][x]) {
-            drawBlock(images.fire, x, y, 0);
+         if (this.flames[y][x]) {
+            this.drawBlock(Resources.images.fire, x, y, 0);
          }
       }
    }
    
    // draw players
-   Object.values(colors).forEach(player => {
+   Object.values(this.colors).forEach(player => {
       if (!player || player.dead || !player.color) {
          return;
       }
-      drawAnimation(animations[player.color][player.animState], player.coords.x, player.coords.y);
+      this.drawAnimation(Animations.animations[player.color][player.animState], player.coords.x, player.coords.y);
       if (player.shield) {
-         drawPlayer(images.shield, player.coords.x, player.coords.y);
+         this.drawPlayer(Resources.images.shield, player.coords.x, player.coords.y);
       }
    });
 
    // draw gametime
-   const m = Math.floor(gameTime / 60).toString();
-   const s = Math.floor(gameTime % 60).toString().padStart(2, '0');
-   ctx.fillStyle = 'black';
-   ctx.font = '30px serif';
-   ctx.fillText(`${m}:${s}`, 750, 23);
+   const m = Math.floor(this.gameTime / 60).toString();
+   const s = Math.floor(this.gameTime % 60).toString().padStart(2, '0');
+   this.ctx.fillStyle = 'black';
+   this.ctx.font = '30px serif';
+   this.ctx.fillText(`${m}:${s}`, 750, 23);
 }

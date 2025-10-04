@@ -1,4 +1,4 @@
-import { Block, Color } from "./game-types";
+import { Block, Color } from "./types";
 
 export function isPowerup(block: Block): boolean {
    return block === Block.POWER_BOMBLENGTH ||
