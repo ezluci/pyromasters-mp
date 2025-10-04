@@ -124,7 +124,7 @@ export function playerConnect(url: string | undefined, rooms: Map<string, Room>,
 
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
          for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
-            OutPackets.send_gridUpdate(sok, x, y, sok.room.grid[y][x]);
+            OutPackets.send_gridUpdate(sok, x, y, sok.room.grid[x][y]);
          }
       }
 

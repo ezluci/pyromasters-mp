@@ -129,7 +129,7 @@ export function processPacket_startGame(sok: WebSocket, packet: Buffer) {
    OutPackets.send_map(sok.room, sok.room.map);
    for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-         OutPackets.send_gridUpdate(sok.room, x, y, sok.room.grid[y][x]);
+         OutPackets.send_gridUpdate(sok.room, x, y, sok.room.grid[x][y]);
       }
    }
 
@@ -154,60 +154,54 @@ export function processPacket_startGame(sok: WebSocket, packet: Buffer) {
 
 
 function generateGrid(map: string): Block[][] {
-   const grid: Block[][] = [];
-   for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
-      grid[y] = [];
-      for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-         grid[y][x] = Block.NO; // default block
-      }
-   }
+   const grid: Block[][] = Array.from({ length: BLOCKS_HORIZONTALLY }, () => Array(BLOCKS_VERTICALLY).fill(Block.NO)) as Block[][];
    
    if (map === Map.TESTMAP) {
-      for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
-         for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
+      for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
+         for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
             if (y % 2 == 1 && x % 2 == 1) {
-               grid[y][x] = Block.PERMANENT;
+               grid[x][y] = Block.PERMANENT;
             }
          }
       }
 
       grid[4][4] = Block.POWER_SHIELD;
-      grid[4][6] = Block.POWER_SWITCHPLAYER;
+      grid[6][4] = Block.POWER_SWITCHPLAYER;
       grid[6][6] = Block.POWER_KICKBOMBS;
       grid[8][8] = Block.POWER_SICK;
-      grid[8][10] = Block.POWER_SICK;
+      grid[10][8] = Block.POWER_SICK;
       grid[2][2] = Block.POWER_BONUS;
-      grid[2][4] = Block.POWER_BONUS;
-      grid[2][6] = Block.POWER_BONUS;
-      grid[2][8] = Block.POWER_BONUS;
-      grid[2][10] = Block.POWER_BOMBPLUS;
+      grid[4][2] = Block.POWER_BONUS;
+      grid[6][2] = Block.POWER_BONUS;
+      grid[8][2] = Block.POWER_BONUS;
+      grid[10][2] = Block.POWER_BOMBPLUS;
       
       return grid;
    }
 
-   for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
-      for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
+   for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
+      for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
          if (y % 2 == 1 && x % 2 == 1) {
-            grid[y][x] = Block.PERMANENT;
+            grid[x][y] = Block.PERMANENT;
          } else {
             let canDraw = true;
             const blockedCoords: { x: number, y: number }[] = [
                { x: 0, y: 0 },
                { x: 0, y: 1 },
                { x: 1, y: 0 },
-               { x: 0, y: BLOCKS_HORIZONTALLY - 2 },
-               { x: 0, y: BLOCKS_HORIZONTALLY - 1 },
-               { x: 1, y: BLOCKS_HORIZONTALLY - 1 },
-               { x: BLOCKS_VERTICALLY - 2, y: 0 },
-               { x: BLOCKS_VERTICALLY - 1, y: 0 },
-               { x: BLOCKS_VERTICALLY - 1, y: 1 },
-               { x: BLOCKS_VERTICALLY - 2, y: BLOCKS_HORIZONTALLY - 1 },
-               { x: BLOCKS_VERTICALLY - 1, y: BLOCKS_HORIZONTALLY - 1 },
-               { x: BLOCKS_VERTICALLY - 1, y: BLOCKS_HORIZONTALLY - 2 }
+               { x: 0, y: BLOCKS_VERTICALLY - 2 },
+               { x: 0, y: BLOCKS_VERTICALLY - 1 },
+               { x: 1, y: BLOCKS_VERTICALLY - 1 },
+               { x: BLOCKS_HORIZONTALLY - 2, y: 0 },
+               { x: BLOCKS_HORIZONTALLY - 1, y: 0 },
+               { x: BLOCKS_HORIZONTALLY - 1, y: 1 },
+               { x: BLOCKS_HORIZONTALLY - 2, y: BLOCKS_VERTICALLY - 1 },
+               { x: BLOCKS_HORIZONTALLY - 1, y: BLOCKS_VERTICALLY - 1 },
+               { x: BLOCKS_HORIZONTALLY - 1, y: BLOCKS_VERTICALLY - 2 }
             ];
             
             blockedCoords.forEach(blockedCoord => {
-               if (y == blockedCoord.x && x == blockedCoord.y)
+               if (x === blockedCoord.x && y === blockedCoord.y)
                   canDraw = false;
             });
 
@@ -221,7 +215,7 @@ function generateGrid(map: string): Block[][] {
 
             if (canDraw) {
                if (Math.random() >= .2) {
-                  grid[y][x] = Block.NORMAL;
+                  grid[x][y] = Block.NORMAL;
                }
             }
          }

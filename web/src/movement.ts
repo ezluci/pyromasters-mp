@@ -11,7 +11,7 @@ function stop(g: Game, x: number, y: number): boolean {
    if (x < 0 || y < 0 || x >= BLOCKS_HORIZONTALLY || y >= BLOCKS_VERTICALLY) {
       return false;
    }
-   return g.grid[y][x] === Block.NORMAL || g.grid[y][x] === Block.PERMANENT || getBomb(g, x, y) !== null;
+   return g.grid[x][y] === Block.NORMAL || g.grid[x][y] === Block.PERMANENT || getBomb(g, x, y) !== null;
 }
 
 // ok so the thing is that two bombs (x1, y1) and (x2, y2) cannot have the same coords,

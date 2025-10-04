@@ -25,7 +25,7 @@ export function tie_bombs(sok: WebSocket): void {
          OutPackets.send_error(sok, 'tryPlaceBomb: x or y out of range.');
          return;
       }
-      if (sok.room.grid[y][x] === Block.PERMANENT || sok.room.grid[y][x] === Block.NORMAL) {
+      if (sok.room.grid[x][y] === Block.PERMANENT || sok.room.grid[x][y] === Block.NORMAL) {
          OutPackets.send_error(sok, 'tryPlaceBomb: can\'t place bomb here');
          return;
       }

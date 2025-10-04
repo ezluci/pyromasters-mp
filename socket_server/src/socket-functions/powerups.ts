@@ -79,34 +79,34 @@ export function tie_powerups(sok: WebSocket): void {
       if ( !(0 <= x && x < BLOCKS_HORIZONTALLY && 0 <= y && y < BLOCKS_VERTICALLY) )
          return;
       
-      if (!isPowerup(sok.room.grid[y][x]))
+      if (!isPowerup(sok.room.grid[x][y]))
          return;
 
-      if (sok.room.grid[y][x] === Block.POWER_BOMBPLUS) {
+      if (sok.room.grid[x][y] === Block.POWER_BOMBPLUS) {
          collectPowerupBombplus(sok);
       }
-      else if (sok.room.grid[y][x] === Block.POWER_BOMBLENGTH) {
+      else if (sok.room.grid[x][y] === Block.POWER_BOMBLENGTH) {
          collectPowerupBomblength(sok);
       }
-      else if (sok.room.grid[y][x] === Block.POWER_SPEED) {
+      else if (sok.room.grid[x][y] === Block.POWER_SPEED) {
          collectPowerupSpeed(sok);
       }
-      else if (sok.room.grid[y][x] === Block.POWER_SHIELD) {
+      else if (sok.room.grid[x][y] === Block.POWER_SHIELD) {
          collectPowerupShield(sok);
       }
-      else if (sok.room.grid[y][x] === Block.POWER_KICKBOMBS) {
+      else if (sok.room.grid[x][y] === Block.POWER_KICKBOMBS) {
          collectPowerupKickbombs(sok);
       }
-      else if (sok.room.grid[y][x] === Block.POWER_BOMBTIME) {
+      else if (sok.room.grid[x][y] === Block.POWER_BOMBTIME) {
          collectPowerupBombtime(sok);
       }
-      else if (sok.room.grid[y][x] === Block.POWER_SWITCHPLAYER) {
+      else if (sok.room.grid[x][y] === Block.POWER_SWITCHPLAYER) {
          collectPowerupSwitchplayer(sok);
       }
-      else if (sok.room.grid[y][x] === Block.POWER_SICK) {
+      else if (sok.room.grid[x][y] === Block.POWER_SICK) {
          collectPowerupSick(sok);
       }
-      else if (sok.room.grid[y][x] === Block.POWER_BONUS) {
+      else if (sok.room.grid[x][y] === Block.POWER_BONUS) {
          const rand = Math.floor(Math.random() * 11);
 
          switch (rand) {
@@ -157,6 +157,6 @@ export function tie_powerups(sok: WebSocket): void {
 
       OutPackets.send_gridUpdate(sok.room, x, y, Block.NO);
       OutPackets.send_playSound(sok.room, 'powerup');
-      sok.room.grid[y][x] = Block.NO;
+      sok.room.grid[x][y] = Block.NO;
    }
 }

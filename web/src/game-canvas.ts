@@ -74,7 +74,7 @@ export function drawFrame(this: Game) {
             }
          }
          
-         switch (this.grid[y][x]) {
+         switch (this.grid[x][y]) {
             case Block.NO:
                break;
             case Block.NORMAL:
@@ -116,9 +116,9 @@ export function drawFrame(this: Game) {
    this.bombs.forEach(bomb => this.drawBlock(Resources.images.bomb, bomb.x, bomb.y, 0));
 
    // draw flames
-   for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
-      for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
-         if (this.flames[y][x]) {
+   for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
+      for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
+         if (this.flames[x][y]) {
             this.drawBlock(Resources.images.fire, x, y, 0);
          }
       }

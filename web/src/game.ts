@@ -57,10 +57,9 @@ export class Game {
       this.menuSoundId = null;
 
       // ranking: ..., // export const ranking: { name: string, wins: number, kills: number }[] = [];
-      this.grid = Array.from({ length: BLOCKS_VERTICALLY }, () => Array(BLOCKS_HORIZONTALLY).fill(Block.NO)) as Block[][];
+      this.grid = Array.from({ length: BLOCKS_HORIZONTALLY }, () => Array(BLOCKS_VERTICALLY).fill(Block.NO)) as Block[][];
       this.bombs = [] as Bomb[];
-      // counts how many flames there are in a spot
-      this.flames = Array.from({ length: BLOCKS_VERTICALLY }, () => Array(BLOCKS_HORIZONTALLY).fill(0)) as number[][];
+      this.flames = Array.from({ length: BLOCKS_HORIZONTALLY }, () => Array(BLOCKS_VERTICALLY).fill(0)) as number[][];
 
       this.players = new globalThis.Map() as globalThis.Map<string, Player>;
       this.colors = {

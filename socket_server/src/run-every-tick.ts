@@ -100,8 +100,8 @@ export function generate_runEveryTick(sok: WebSocket): () => void {
             // checking if the bomb can continue walking
             let canGo: boolean = true;
             if (0 <= checkBlock.x && checkBlock.x < BLOCKS_HORIZONTALLY && 0 <= checkBlock.y && checkBlock.y < BLOCKS_VERTICALLY) {
-               if (sok.room.grid[checkBlock.y][checkBlock.x] === Block.PERMANENT ||
-                     sok.room.grid[checkBlock.y][checkBlock.x] === Block.NORMAL) {
+               if (sok.room.grid[checkBlock.x][checkBlock.y] === Block.PERMANENT ||
+                     sok.room.grid[checkBlock.x][checkBlock.y] === Block.NORMAL) {
                   canGo = false;
                }
 
@@ -148,8 +148,8 @@ export function generate_runEveryTick(sok: WebSocket): () => void {
                   OutPackets.send_playSound(sok.room, 'kickbomb');
                }
                // does it destroy any powerup?
-               if (isPowerup(sok.room.grid[checkBlock.y][checkBlock.x])) {
-                  sok.room.grid[checkBlock.y][checkBlock.x] = Block.NO;
+               if (isPowerup(sok.room.grid[checkBlock.x][checkBlock.y])) {
+                  sok.room.grid[checkBlock.x][checkBlock.y] = Block.NO;
                   OutPackets.send_gridUpdate(sok.room, checkBlock.x, checkBlock.y, Block.NO);
                }
                

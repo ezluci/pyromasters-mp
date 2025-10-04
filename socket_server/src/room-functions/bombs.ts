@@ -46,18 +46,18 @@ export function generate_explodeBomb(room: Room): (bombId: number, recursive?: b
          if (tmpBomb = room.getBomb(x, y)) {
             room.explodeBomb(tmpBomb.id, true, flames);
          }
-         if (room.grid[y][x] !== Block.PERMANENT &&
+         if (room.grid[x][y] !== Block.PERMANENT &&
                flames.filter(flame => flame.x === x && flame.y === y && flame.owner === bombOwner).length === 0) {
-            flames.push({ x: x, y: y, owner: bombOwner, oldBlock: room.grid[y][x], wasBomb: false, tickFuncId: undefined });
+            flames.push({ x: x, y: y, owner: bombOwner, oldBlock: room.grid[x][y], wasBomb: false, tickFuncId: undefined });
          }
-         return breakLoop(room.grid[y][x]);
+         return breakLoop(room.grid[x][y]);
       }
       
       const x = Math.round(bomb.x);
       const y = Math.round(bomb.y);
 
-      flames.push({ x: x, y: y, owner: bombOwner, oldBlock: room.grid[y][x], wasBomb: true, tickFuncId: undefined });
-      room.grid[y][x] = Block.NO;
+      flames.push({ x: x, y: y, owner: bombOwner, oldBlock: room.grid[x][y], wasBomb: true, tickFuncId: undefined });
+      room.grid[x][y] = Block.NO;
 
 
       for (let yy = y-1; yy >= Math.max(0, y - bombLength); --yy) {
@@ -161,10 +161,10 @@ export function generate_removeFlame(room: Room): (x: number, y: number, owner: 
             else if (rand === 12 || rand === 13)
                newBlock = Block.POWER_BONUS;
          }
-         room.grid[y][x] = newBlock;
+         room.grid[x][y] = newBlock;
          OutPackets.send_gridUpdate(room, x, y, newBlock);
       } else if (isPowerup(flame.oldBlock)) {
-         room.grid[y][x] = Block.NO;
+         room.grid[x][y] = Block.NO;
          OutPackets.send_gridUpdate(room, x, y, Block.NO);
       }
    }

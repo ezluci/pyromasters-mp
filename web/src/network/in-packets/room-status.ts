@@ -29,7 +29,7 @@ export function processPacket_roomStatus(packet: Uint8Array, g: Game) {
       g.bombs.length = 0;
       for (let x = 0; x < BLOCKS_HORIZONTALLY; ++x) {
          for (let y = 0; y < BLOCKS_VERTICALLY; ++y) {
-            g.flames[y][x] = 0;
+            g.flames[x][y] = 0;
          }
       }
       Dom.powerupsMain.hidden = false;

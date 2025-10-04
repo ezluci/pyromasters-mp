@@ -49,10 +49,10 @@ export function tie_isDying(sok: WebSocket): void {
          return false;  // he's messing with the coords =[
       }
 
-      if (deadBlk1 !== null && sok.room.grid[deadBlk1.y][deadBlk1.x] === Block.PERMANENT) {
+      if (deadBlk1 !== null && sok.room.grid[deadBlk1.x][deadBlk1.y] === Block.PERMANENT) {
          return [];
       }
-      if (deadBlk2 !== null && sok.room.grid[deadBlk2.y][deadBlk2.x] === Block.PERMANENT) {
+      if (deadBlk2 !== null && sok.room.grid[deadBlk2.x][deadBlk2.y] === Block.PERMANENT) {
          return [];
       }
       

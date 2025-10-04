@@ -6,5 +6,5 @@ export function processPacket_gridUpdate(packet: Uint8Array, g: Game) {
    const y: number = packet[2];
    const block: Block = packet[3];
 
-   g.grid[y][x] = block;
+   g.grid[x][y] = block;
 }
