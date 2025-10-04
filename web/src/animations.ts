@@ -5,7 +5,7 @@ export type AnimationInfo = {
    // name: Animation, // what kind of animation is this
    color: Color,
    spriteInfos: any[], // infos about each frame on the spritesheet
-   counter: number // current frame index
+   startTime: number // the time it started
 };
 
 type AnimationsType = {
@@ -45,7 +45,7 @@ export class Animations {
          }
          this.animations[color][anim] = {} as AnimationInfo;
          this.animations[color][anim].color = color;
-         this.animations[color][anim].counter = 0;
+         this.animations[color][anim].startTime = 0;
          this.animations[color][anim].spriteInfos = [];
          input.sources.forEach((source: any) => {
             const index = source.index as number;
@@ -56,23 +56,12 @@ export class Animations {
       Dom.addLog('Animations loaded');
    }
 
-   static nextAnimation(animation: AnimationInfo) {
-      animation.counter ++;
-      if (animation.counter === animation.spriteInfos.length) {
-         animation.counter = 0;
-      }
-   }
-
-   static resetAnimation(animation: AnimationInfo) {
-      animation.counter = 0;
-   }
-
    // change a player's animation
    static changeAnimation(player: Player, animation: Animation) {
       if (!player.color || player.animState === animation) {
          return;
       }
-      this.resetAnimation(this.animations[player.color][animation]);
+      this.animations[player.color][animation].startTime = performance.now();
       player.animState = animation;
    }
 }

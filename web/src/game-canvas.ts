@@ -1,9 +1,9 @@
-import { AnimationInfo, Animations } from "./animations";
+import { Animations } from "./animations";
 import { Dom } from "./dom";
 import type { Game } from "./game";
 import { BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, MAP_FOURWAY_PORTAL_POSITIONS, OFFSET_DOWN, OFFSET_LEFT, OFFSET_RIGHT, OFFSET_UP } from "./game-consts";
 import { Resources } from "./resources";
-import { Block, Map } from "./types";
+import { Block, Map, Player } from "./types";
 
 // this function draws a block using block coordinates => xB=0..15 and yB=0.11
 export function drawBlock(this: Game, image: HTMLImageElement, xBlock: number, yBlock: number, manualOffset?: number) {
@@ -21,7 +21,7 @@ export function drawBlock(this: Game, image: HTMLImageElement, xBlock: number, y
 }
 
 // this function draws a player using normal coordinates (NO OFFSET REQUIRED)
-export function drawPlayer(this: Game, image: HTMLImageElement, x: number, y: number) { 
+export function drawPlayerImage(this: Game, image: HTMLImageElement, x: number, y: number) { 
    // 53x78
    this.ctx.drawImage(
       image,
@@ -32,9 +32,14 @@ export function drawPlayer(this: Game, image: HTMLImageElement, x: number, y: nu
    );
 }
 
+export function drawPlayer(this: Game, player: Player) {
+   if (!player.color) {
+      return;
+   }
 
-export function drawAnimation(this: Game, animation: AnimationInfo, x: number, y: number) {
-   const spriteData = animation.spriteInfos[animation.counter];
+   const animation = Animations.animations[player.color][player.animState];
+   const animIdx = Math.floor((performance.now() - animation.startTime) * player.speed * 0.420) % animation.spriteInfos.length;
+   const spriteData = animation.spriteInfos[animIdx];
    const trimmedRect = spriteData.trimmedRect;
    const rect = spriteData.rect;
 
@@ -42,12 +47,11 @@ export function drawAnimation(this: Game, animation: AnimationInfo, x: number, y
    const sy = trimmedRect.y;
    const sw = trimmedRect.w;
    const sh = trimmedRect.h;
-   const dx = OFFSET_LEFT + x + (trimmedRect.x - rect.x);
-   const dy = OFFSET_UP + y + (trimmedRect.y - rect.y) - 25;
+   const dx = OFFSET_LEFT + player.x + (trimmedRect.x - rect.x);
+   const dy = OFFSET_UP + player.y + (trimmedRect.y - rect.y) - 25;
    const dw = sw; // if the animations didn't match this exact resolution, this wouldn't work. you need percentages.
    const dh = sh;
    this.ctx.drawImage(Animations.sprite.img, sx, sy, sw, sh, dx, dy, dw, dh);
-   Animations.nextAnimation(animation);
 }
 
 
@@ -129,9 +133,9 @@ export function drawFrame(this: Game) {
       if (!player || player.dead || !player.color) {
          return;
       }
-      this.drawAnimation(Animations.animations[player.color][player.animState], player.x, player.y);
+      this.drawPlayer(player);
       if (player.shield) {
-         this.drawPlayer(Resources.images.shield, player.x, player.y);
+         this.drawPlayerImage(Resources.images.shield, player.x, player.y);
       }
    });
 

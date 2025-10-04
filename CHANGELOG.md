@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.10] - 2025-10-04
+
+- Fixed vulnerabilities
+- Redesign entire web code
+- grid[y][x] -> grid[x][y]
+- replaced .coords = {x, y} with .x and .y
+- Fixed animations on different refresh rates
+
 ## [0.10.9] - 2025-08-09
 
 - Added more shortcuts for bombplace + movement

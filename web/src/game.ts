@@ -1,6 +1,5 @@
-import { AnimationInfo } from "./animations";
 import { Dom } from "./dom";
-import { drawAnimation, drawBlock, drawFrame, drawPlayer } from "./game-canvas";
+import { drawBlock, drawFrame, drawPlayer, drawPlayerImage } from "./game-canvas";
 import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY } from "./game-consts";
 import { gameLoop } from "./game-loop";
 import type { Network } from "./network/network";
@@ -37,8 +36,8 @@ export class Game {
    changePlayerColor: (playerUserName: string, newColor: Color | null) => void;
    startLoop: () => void;
    drawBlock: (image: HTMLImageElement, xblock: number, yblock: number, manualOffset?: number) => void;
-   drawPlayer: (image: HTMLImageElement, x: number, y: number) => void;
-   drawAnimation: (animation: AnimationInfo, x: number, y: number) => void;
+   drawPlayerImage: (image: HTMLImageElement, x: number, y: number) => void;
+   drawPlayer: (player: Player) => void;
    drawFrame: () => void;
 
    constructor(network: Network, userName: string, roomName: string) {
@@ -81,8 +80,8 @@ export class Game {
          gameLoop(this);
       }
       this.drawBlock = drawBlock.bind(this);
+      this.drawPlayerImage = drawPlayerImage.bind(this);
       this.drawPlayer = drawPlayer.bind(this);
-      this.drawAnimation = drawAnimation.bind(this);
       this.drawFrame = drawFrame.bind(this);
    }
 }
