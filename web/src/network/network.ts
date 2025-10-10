@@ -25,6 +25,7 @@ import { sendPacket_chat } from "./out-packets/chat";
 import { sendPacket_ping } from "./out-packets/ping";
 import { sendPacket_selectColor } from "./out-packets/select-color";
 import { sendPacket_startGame } from "./out-packets/start-game";
+import { sendPacket_suicide } from "./out-packets/suicide";
 
 export class Network {
    server!: WebSocket;
@@ -119,6 +120,7 @@ function startHandlingPackets(this: Network, g: Game) {
    Dom.selectOrange.addEventListener('click', () => sendPacket_selectColor(g, Color.ORANGE));
    Dom.selectGreen.addEventListener('click', () => sendPacket_selectColor(g, Color.GREEN));
    Dom.selectSpectator.addEventListener('click', () => sendPacket_selectColor(g, null));
+
    Dom.startButton.addEventListener('click', () => {
       if (g.userName === 'testmap:)') {
          sendPacket_startGame(g, Map.TESTMAP);
@@ -126,6 +128,11 @@ function startHandlingPackets(this: Network, g: Game) {
          sendPacket_startGame(g, Dom.mapSelected.value as Map);
       }
    });
+
+   Dom.suicideButton.addEventListener('click', () => {
+      sendPacket_suicide(g);
+   });
+
    Dom.chatSendMsg.addEventListener('click', () => {
       sendPacket_chat(g, Dom.chatInput.value);
       Dom.chatInput.value = '';

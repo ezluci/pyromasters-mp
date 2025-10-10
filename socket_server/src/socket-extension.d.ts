@@ -34,9 +34,10 @@ declare module 'ws' {
 
       // METHODS:
 
-      isDying: () => boolean | Color[];
+      isDying: () => false | Color[];
       placeBomb: () => void;
       kickBomb: (bombId: number, xvel: number, yvel: number) => void; // wrong declaration!
       collectPowerup: (x: number, y: number) => void;
+      kill: (assists: Color[]) => void;
    }
 }

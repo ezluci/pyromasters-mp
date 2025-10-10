@@ -10,6 +10,7 @@ export class Dom {
 
    static loading = document.querySelector('#loading') as HTMLSpanElement;
    static startButton = document.querySelector('#start-button') as HTMLButtonElement;
+   static suicideButton = document.querySelector('#suicide-button') as HTMLButtonElement;
    static mapSelected = document.querySelector('#map-selected') as HTMLSelectElement;
    static chatSendMsg = document.querySelector('#chat-send-message') as HTMLButtonElement;
 

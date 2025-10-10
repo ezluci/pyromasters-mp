@@ -10,6 +10,7 @@ import { tie_bombs } from './socket-functions/bombs';
 import { tie_powerups } from "./socket-functions/powerups";
 import { setShield, setSick } from "./socket-functions/setters";
 import { Room } from './room';
+import { tie_kill } from './socket-functions/kill';
 
 
 // read sound names and store them in an array. play-sound.ts uses this array.
@@ -70,6 +71,7 @@ server.on('connection', (socket: WebSocket, request) => {
    tie_isDying(socket);
    tie_bombs(socket);
    tie_powerups(socket);
+   tie_kill(socket);
 
    socket.on('message', (data, isBinary) => {
       if (!isBinary || !(data instanceof Buffer)) {

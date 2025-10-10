@@ -15,24 +15,10 @@ export function generate_runEveryTick(sok: WebSocket): () => void {
             return;
          }
          
-         const deathStatus: boolean | Color[] = sok.room[color].isDying();
-         if (typeof deathStatus === 'boolean') { // didn't die
-            return;
+         const deathStatus: false | Color[] = sok.room[color].isDying();
+         if (deathStatus !== false) { // did die
+            sok.room[color].kill(deathStatus);
          }
-         
-         sok.room.countPlayersAlive --;
-         OutPackets.send_death(sok.room, color);
-         OutPackets.send_playSound(sok.room, 'dead');
-
-         sok.room[color].dead = true;
-
-         deathStatus.forEach(assistColor => {
-            if (assistColor !== color) { // don't count own death
-               if (sok.room[assistColor]) {
-                  sok.room[assistColor].kills ++;
-               }
-            }
-         });
       });
       
       // check players who are sick

@@ -7,7 +7,7 @@ const BLK_SAFE = BLOCK_SAFE_PX;
 
 export function tie_isDying(sok: WebSocket): void {
    // return FALSE or an array of 'colors' (who assisted to the kill)
-   sok.isDying = (): boolean | Color[] => {
+   sok.isDying = (): false | Color[] => {
       if (sok.shield) {
          return false;
       }
