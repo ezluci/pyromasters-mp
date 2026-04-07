@@ -1,0 +1,158 @@
+body {
+   background-color: #222831;
+   color: #00ADB5;
+   text-align: center;
+   touch-action: manipulation;
+}
+
+#main {
+   display: flex;
+   justify-content: center;
+   height: calc(var(--vh) * 150);
+   overflow: hidden;
+}
+
+/* sidebars */
+
+#sidebar-left {
+   flex: 0 1 20vw;
+   min-width: 7em;
+}
+
+#sidebar-middle {
+   flex: 1 1 60vw;
+   height: calc(var(--vh) * 100);
+}
+
+#sidebar-right {
+   flex: 0 1 20vw;
+}
+
+
+/* sidebar left: */
+
+#log {
+   width: 100%;
+}
+
+#log-messages {
+   width: 100%;
+   min-height: 1.5em;
+   height: 20vh;
+   overflow-y: scroll;
+   background-color: black;
+   text-align: left;
+   font-size: 0.85em;
+
+   word-wrap: break-word;
+   word-break: break-all;
+}
+
+#log-buttons {
+   display: flex;
+}
+
+#chat-input {
+   flex: 1 0 0;
+   min-width: 0;
+}
+
+#chat-send-message {
+   margin-left: 1%;
+   flex: 0 0 15%;
+}
+
+.color-button {
+   border: solid;
+   border-color: rgb(125, 205, 207) ;
+   border-width: 0.2em; 
+   margin: 0.3em;
+   width: 30%;
+   min-width: 7.5em;
+   border-radius: 0.6em;
+   padding: 0.6em 0.9em;
+   transition-duration: 0.5s;
+   background-color: #393E46;
+   color: #00ADB5;
+}
+
+#white:hover {
+   background-color: white;
+   color: rgb(29, 28, 28);
+}
+
+#black:hover {
+   background-color: black;
+   color: aliceblue;
+}
+ 
+#orange:hover{
+   background-color: orange;
+   color:black;
+}
+#green:hover{
+   background-color: rgb(6, 161, 6);
+   color: aliceblue;
+}
+#spectator:hover{
+   background-color: grey;
+   color: black;
+}
+
+
+#powerups > div {
+   display: flex;
+   justify-content: space-between;
+   flex-wrap: no-wrap;
+   align-items: center;
+   width: 100%;
+   height: auto;
+   font-size: 0.9vw;
+}
+
+#powerups > div > div {
+   flex: 1 1 0;
+   min-width: 0;
+}
+
+.powerup-image-full {
+   width: 100%;
+}
+
+.powerup-image-up {
+   width: 80%;
+}
+
+.powerup-image-small {
+   width: 90%;
+}
+
+/* sidebar middle: */
+
+#canvas {
+   max-width: 100%;
+   height: auto;
+   max-height: 100%;
+   aspect-ratio: 815 / 620;
+}
+
+/* sidebar right: */
+
+.android-button {
+   width: 5vw;
+   height: 5vw;
+   font-size: 1.3vw;
+   padding: 0;
+   text-align: center;
+   touch-action: manipulation;
+   user-select: none;
+}
+
+#player-list {
+   display: inline-block;
+   background-color: #bfb4b4;
+   padding-top: 5px;
+   padding-bottom: 5px;
+   padding-right: 5px;
+   font-size: 1.2em;
+}

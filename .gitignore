@@ -1,21 +1,17 @@
-# dependencies, environment variables, vscode
-
-/node_modules
 /.env
 /.vscode
 
-# spright
+/socket_server/node_modules
+/socket_server/dist
 
+/web/trash
+/web/public
+
+/web/frontend/node_modules
+
+# tools
 /tools/spright
 
-# compiled files
-
-/socket_server/dist/
-/web/web-server
-/web/dist/
-
 # my random files
-
-/web/untitled.png
 /pyro.txt
 /rsync-server.sh

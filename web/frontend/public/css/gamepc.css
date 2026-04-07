@@ -1,0 +1,152 @@
+body {
+   background-color: #222831;
+   color: #00ADB5;
+   font-size: 20px;
+   text-align: center;
+}
+
+#main {
+   display: flex;
+   justify-content: center;
+   gap: 5px;
+}
+
+
+/* sidebar left: */
+
+#sidebar-left {
+   display: flex;
+   flex-direction: column;
+   width: 25em;
+   min-width: 5em;
+   padding-right: 1em;
+}
+
+.color-button {
+   border: solid;
+   border-color: rgb(125, 205, 207) ;
+   border-width: 3px; 
+   margin: 5px;
+   width: 150px;
+   border-radius: 10px;
+   padding: 7px 12px;
+   transition-duration:  0.5s;
+   background-color: #393E46;
+   color: #00ADB5;
+}
+
+#white:hover {
+   background-color: white;
+   color: rgb(29, 28, 28);
+}
+
+#black:hover {
+   background-color: black;
+   color: aliceblue;
+}
+ 
+#orange:hover{
+   background-color: orange;
+   color:black;
+}
+#green:hover{
+   background-color: rgb(6, 161, 6);
+   color: aliceblue;
+}
+#spectator:hover{
+   background-color: grey;
+   color: black;
+}
+
+#log {
+   float: left;
+   width: 100%;
+   padding-top: 3vh;
+}
+
+#log-messages {
+   width: 100%;
+   font-size: 0.9em;
+   min-height: 5vh;
+   max-height: 20vh;
+   overflow-y: scroll;
+   background-color: black;
+   text-align: left;
+}
+
+#chat-input {
+   display: inline;
+}
+
+#chat-send-message {
+   display: inline;
+}
+
+#select-map {
+   color: white;
+   background-color: red;
+}
+
+#tips {
+   color: white;
+   background-color: gray;
+   font-weight: bold;
+}
+
+
+#powerups > div {
+   display: flex;
+   justify-content: space-between;
+   flex-wrap: wrap;
+   align-items: center;
+}
+
+.powerup-image-full {
+   height: 4rem;
+}
+
+.powerup-image-up {
+   height: 2rem;
+}
+
+.powerup-image-small {
+   height: 3rem;
+}
+
+.powerup-text {
+   font-size: 0.7em
+}
+
+
+
+/* sidebar middle: */
+
+#sidebar-middle {
+   width: 50%;
+}
+
+
+/* sidebar right: */
+
+#sidebar-right {
+   display: flex;
+   flex-direction: column;
+   padding-left: 1em;
+   min-width: 10em;
+}
+
+#start-game {
+   padding-top: 3vh;
+}
+
+#start-button {
+   font-weight: bold;
+   font-size: 20px;
+   height: 30px;
+}
+
+#suicide-button {
+   font-weight: bold;
+   font-size: 20px;
+   height: 30px;
+}

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"html/template"
 	"log"
 	"net/http"
@@ -16,7 +15,7 @@ var port string
 
 func main() {
 
-	err := godotenv.Load("../.env")
+	err := godotenv.Load("../../.env")
 	if err != nil {
 		log.Default().Panic(err.Error())
 	}
@@ -28,27 +27,17 @@ func main() {
 
 	// setting 'version' variable
 
-	type packageStruct struct {
-		Version string `json:"version"`
-	}
-
-	packageContent, err := os.ReadFile("../package.json")
+	versionByte, err := os.ReadFile("../../VERSION")
 	if err != nil {
 		log.Default().Panic(err.Error())
 	}
-
-	var packageJSON packageStruct
-	err = json.Unmarshal(packageContent, &packageJSON)
-	if err != nil {
-		log.Default().Panic(err.Error())
-	}
-	version = packageJSON.Version
+	version = string(versionByte)
 
 	// loading all the templates
 
 	tmpl, err := template.New("").Funcs(template.FuncMap{
 		"version": func() string { return version },
-	}).ParseGlob("dist/*.html")
+	}).ParseGlob("../public/*.html")
 
 	if err != nil {
 		log.Default().Panic(err.Error())
@@ -82,7 +71,7 @@ func main() {
 		}
 
 		// serve non html content
-		fileContents, err := os.ReadFile("./dist/" + path)
+		fileContents, err := os.ReadFile("../public/" + path)
 		if err != nil {
 			w.WriteHeader(http.StatusNotFound)
 			w.Header().Set("Content-Type", "text/html")
