@@ -14,6 +14,7 @@ var requiredTemplates = []string{
 	"404",
 	"gamemobile",
 	"gamepc",
+	"topbar",
 }
 
 func LoadTemplates() {

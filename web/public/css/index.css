@@ -3,7 +3,7 @@ body {
     color: #00ADB5;
     text-align: center;
 }
-button {
+#play-button {
     border: solid; 
     border-width: 4px; 
     height: 130px; 

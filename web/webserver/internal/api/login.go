@@ -13,7 +13,6 @@ import (
 )
 
 type LoginResponse struct {
-	Token string `json:"token"`
 }
 
 type User = model.User
@@ -52,10 +51,11 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	exp := time.Now().Add(10 * 24 * time.Hour)
 	claims := jwt.MapClaims{
 		"user_id":  user.ID,
 		"username": user.Username,
-		"exp":      time.Now().Add(10 * 24 * time.Hour).Unix(),
+		"exp":      exp.Unix(),
 		"iat":      time.Now().Unix(),
 	}
 
@@ -69,7 +69,14 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	writeJSON(w, http.StatusOK, LoginResponse{
-		Token: signedToken,
+	http.SetCookie(w, &http.Cookie{
+		Name:     "jwt_token",
+		Value:    signedToken,
+		Path:     "/",
+		Expires:  exp,
+		HttpOnly: true,
+		SameSite: http.SameSiteStrictMode,
 	})
+
+	writeJSON(w, http.StatusOK, LoginResponse{})
 }

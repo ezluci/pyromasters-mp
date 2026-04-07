@@ -1,0 +1,31 @@
+<div style="height: 50px; display: flex; justify-content: right; align-items: center; background-color: #2a5821; color: black;">
+    <div style="margin-right: 10px;">
+    {{ if not .IsLoggedIn }}
+        <div id="login-div">
+            <label>username</label>
+            <input type="text" id="login-username">
+            <label>password</label>
+            <input type="password" id="login-password">
+            <button type="submit" id="login-button">login</button>
+            <a href="#" id="goto-register">dont have an account?</a>
+        </div>
+        <div id="register-div" hidden>
+            <label>username</label>
+            <input type="text" id="register-username">
+            <label>password</label>
+            <input type="password" id="register-password">
+            <button type="submit" id="register-button">register</button>
+            <a href="#" id="goto-login">already have an account?</a>
+        </div>
+    {{ else }}
+        <div>
+            <div>
+                welcome {{ .Username }}!
+            </div>
+            <div>
+                <a href="#" id="logout">logout</a>
+            </div>
+        </div>
+    {{ end }}
+    </div>
+</div>

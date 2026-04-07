@@ -7,7 +7,8 @@ export default defineConfig({
             index: `${__dirname}/index.html`,
             gamepc: `${__dirname}/gamepc.html`,
             gamemobile: `${__dirname}/gamemobile.html`,
-            footer: `${__dirname}/footer.html`
+            footer: `${__dirname}/footer.html`,
+            topbar: `${__dirname}/topbar.html`
          }
       },
       outDir: '../public',

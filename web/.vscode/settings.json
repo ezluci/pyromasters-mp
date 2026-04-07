@@ -1,17 +1,23 @@
 {
     "files.exclude": {
-        "public": true,
     },
     "search.exclude": {
         "frontend/node_modules": true,
-        "trash": true
+        "trash": true,
+        "public": true,
     },
     "editor.insertSpaces": true,
     "editor.tabSize": 4,
     "[html]": {
         "editor.tabSize": 4
     },
+    "[css]": {
+        "editor.suggest.insertMode": "replace",
+        "editor.tabSize": 4
+    },
     "[typescript]": {
         "editor.tabSize": 2
-    }
+    },
+    "workbench.colorTheme": "Visual Studio 2017 Dark - C++",
+    "window.autoDetectColorScheme": false
 }

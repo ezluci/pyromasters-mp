@@ -14,56 +14,59 @@
       const md = new MobileDetect(window.navigator.userAgent);
       document.querySelector('#platform-select').value = md.mobile() ? 'mobile' : 'pc';
    </script>
+   <script type="module" src="src/index/index.ts"></script>
 </head>
 
 <body>
-   <img src="/images/title.png">
-   
-   <h1 style="font-family: initial;">JOIN A GAME</h1>
-   
-   <input style="height: 30px;" id="username" name="username" autocomplete="off" placeholder="Username">
-   <br>
-   <input style="height: 30px;" id="room" name="room" autocomplete="off" placeholder="Room">
-   <br>
+    {{ template "topbar.html" . }}
 
-   <label for="platform-select">Select your platform:</label>
+    <img src="/images/title.png">
+    
+    <h1 style="font-family: initial;">JOIN A GAME</h1>
+    
+    <input style="height: 30px;" id="username" name="username" autocomplete="off" placeholder="Username">
+    <br>
+    <input style="height: 30px;" id="room" name="room" autocomplete="off" placeholder="Room">
+    <br>
 
-   <select id="platform-select">
-      <option value="pc">PC</option>
-      <option value="mobile">Mobile</option>
-   </select>
+    <label for="platform-select">Select your platform:</label>
 
-   <br><br>
+    <select id="platform-select">
+        <option value="pc">PC</option>
+        <option value="mobile">Mobile</option>
+    </select>
 
-   <script>
-      function getUsername() {
-         return document.querySelector('#username').value;
-      }
-      function getRoom() {
-         return document.querySelector('#room').value;
-      }
+    <br><br>
 
-      const params = new URLSearchParams(window.location.search);
-   </script>
-   
-   <button onclick="
-      username = getUsername();
-      room = getRoom();
-      const el = document.createElement('div');
-      if (!username || !room) {
-         el.innerText = 'please put something ...';
-      } else if (username.length > 15 || room.length > 15) {
-         el.innerText = 'max 15 characters :(';
-      } else if (! /^[ -~]{1,15}$/.test(username) || ! /^[ -~]{1,15}$/.test(room)) {
-         el.innerText = 'please use printable ascii characters 🦆🦆';
-      } else {
-         document.location.href = `game${document.querySelector('#platform-select').value==='mobile' ? 'mobile' : 'pc'}?username=${encodeURIComponent(username)}&room=${encodeURIComponent(room)}`;
-      }
-      document.querySelector('#errors').appendChild(el);
-   ">PLAY</button>
+    <script>
+        function getUsername() {
+            return document.querySelector('#username').value;
+        }
+        function getRoom() {
+            return document.querySelector('#room').value;
+        }
 
-   <div id="errors"></div>
-   
-   {{ template "footer.html" . }}
+        const params = new URLSearchParams(window.location.search);
+    </script>
+    
+    <button id="play-button" onclick="
+        username = getUsername();
+        room = getRoom();
+        const el = document.createElement('div');
+        if (!username || !room) {
+            el.innerText = 'please put something ...';
+        } else if (username.length > 15 || room.length > 15) {
+            el.innerText = 'max 15 characters :(';
+        } else if (! /^[ -~]{1,15}$/.test(username) || ! /^[ -~]{1,15}$/.test(room)) {
+            el.innerText = 'please use printable ascii characters 🦆🦆';
+        } else {
+            document.location.href = `game${document.querySelector('#platform-select').value==='mobile' ? 'mobile' : 'pc'}?username=${encodeURIComponent(username)}&room=${encodeURIComponent(room)}`;
+        }
+        document.querySelector('#errors').appendChild(el);
+    ">PLAY</button>
+
+    <div id="errors"></div>
+    
+    {{ template "footer.html" . }}
 </body>
 </html>
