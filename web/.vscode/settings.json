@@ -1,0 +1,17 @@
+{
+    "files.exclude": {
+        "public": true,
+    },
+    "search.exclude": {
+        "frontend/node_modules": true,
+        "trash": true
+    },
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "[html]": {
+        "editor.tabSize": 4
+    },
+    "[typescript]": {
+        "editor.tabSize": 2
+    }
+}
