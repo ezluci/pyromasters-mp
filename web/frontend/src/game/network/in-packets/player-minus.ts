@@ -1,11 +1,7 @@
-import type { Game } from "../..";
+import { Game } from "../../game";
 
 export function processPacket_playerMinus(packet: Uint8Array, g: Game) {
-   let idx = 1;
-   let userName = '';
-   for (; idx < packet.length; ++idx) {
-      userName += String.fromCharCode(packet[idx]);
-   }
+  const id = packet[1] << 24 | packet[2] << 16 | packet[3] << 8 | packet[4];
 
-   g.removePlayer(userName);
+  g.removePlayer(id);
 }

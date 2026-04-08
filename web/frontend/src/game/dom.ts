@@ -1,55 +1,56 @@
 import { Color, Player } from "./types";
 
 export class Dom {
-   // elements
-   static canvas = document.querySelector('#canvas') as HTMLCanvasElement;
+  // elements
+  static canvas = document.querySelector('#canvas') as HTMLCanvasElement;
 
-   static log = document.querySelector('#log-messages') as HTMLDivElement;
-   static playerList = document.querySelector('#player-list') as HTMLUListElement;
-   static ping = document.querySelector('#ping') as HTMLSpanElement;
+  static log = document.querySelector('#log-messages') as HTMLDivElement;
+  static playerList = document.querySelector('#player-list') as HTMLUListElement;
+  static ping = document.querySelector('#ping') as HTMLSpanElement;
 
-   static loading = document.querySelector('#loading') as HTMLSpanElement;
-   static startButton = document.querySelector('#start-button') as HTMLButtonElement;
-   static suicideButton = document.querySelector('#suicide-button') as HTMLButtonElement;
-   static mapSelected = document.querySelector('#map-selected') as HTMLSelectElement;
-   static chatSendMsg = document.querySelector('#chat-send-message') as HTMLButtonElement;
+  static loading = document.querySelector('#loading') as HTMLSpanElement;
+  static startButton = document.querySelector('#start-button') as HTMLButtonElement;
+  static suicideButton = document.querySelector('#suicide-button') as HTMLButtonElement;
+  static mapSelected = document.querySelector('#map-selected') as HTMLSelectElement;
+  static chatSendMsg = document.querySelector('#chat-send-message') as HTMLButtonElement;
 
-   static roomStatus = document.querySelector('#room-status') as HTMLSpanElement;
-   static selectColors = document.querySelector('#select-color') as HTMLDivElement;
-   static selectMap = document.querySelector('#select-map') as HTMLDivElement;
-   static chatInput = document.querySelector('#chat-input') as HTMLInputElement;
-   static slider = document.querySelector('#volume') as HTMLInputElement;
+  static roomStatus = document.querySelector('#room-status') as HTMLSpanElement;
+  static selectColors = document.querySelector('#select-color') as HTMLDivElement;
+  static selectMap = document.querySelector('#select-map') as HTMLDivElement;
+  static tips = document.querySelector('#tips') as HTMLDivElement;
+  static chatInput = document.querySelector('#chat-input') as HTMLInputElement;
+  static slider = document.querySelector('#volume') as HTMLInputElement;
 
-   static selectWhite = document.querySelector('#white') as HTMLButtonElement;
-   static selectBlack = document.querySelector('#black') as HTMLButtonElement;
-   static selectOrange = document.querySelector('#orange') as HTMLButtonElement;
-   static selectGreen = document.querySelector('#green') as HTMLButtonElement;
-   static selectSpectator = document.querySelector('#spectator') as HTMLButtonElement;
+  static selectWhite = document.querySelector('#white') as HTMLButtonElement;
+  static selectBlack = document.querySelector('#black') as HTMLButtonElement;
+  static selectOrange = document.querySelector('#orange') as HTMLButtonElement;
+  static selectGreen = document.querySelector('#green') as HTMLButtonElement;
+  static selectSpectator = document.querySelector('#spectator') as HTMLButtonElement;
 
-   static powerupsMain = document.querySelector('#powerups') as HTMLDivElement;
-   static powerups = {} as { [C in Color]: PowerupDOM };
+  static powerupsMain = document.querySelector('#powerups') as HTMLDivElement;
+  static powerups = {} as { [C in Color]: PowerupDOM };
 
-   // functions
-   static addPlayer = DOM_addPlayer.bind(this);
-   static updatePlayer = DOM_updatePlayer.bind(this);
-   static removePlayer = DOM_removePlayer.bind(this);
-   static addChatMessage = DOM_addChatMessage.bind(this);
-   static addLog = DOM_addLog.bind(this);
+  // functions
+  static addPlayer = DOM_addPlayer.bind(this);
+  static updatePlayer = DOM_updatePlayer.bind(this);
+  static removePlayer = DOM_removePlayer.bind(this);
+  static addChatMessage = DOM_addChatMessage.bind(this);
+  static addLog = DOM_addLog.bind(this);
 };
 
 
 // set up Dom.powerups
 type PowerupType = 'main' | 'bomblength' | 'bombtime' | 'speed' | 'kickbomb' | 'bomb1' | 'bomb2' | 'bomb3' | 'bomb4';
 type PowerupDOM = {
-   [P in PowerupType]: HTMLDivElement
+  [P in PowerupType]: HTMLDivElement
 };
 
 Object.values(Color).forEach(color => {
-   Dom.powerups[color] = {} as PowerupDOM;
-   Dom.powerups[color].main = document.querySelector('#powerups-' + color) as HTMLDivElement;
-   ['bomblength', 'bombtime', 'speed', 'kickbomb', 'bomb1', 'bomb2', 'bomb3', 'bomb4'].forEach((powerName: string) => {
-      Dom.powerups[color][powerName as PowerupType] = document.querySelector('#powerups-' + color + '-' + powerName) as HTMLDivElement;
-   });
+  Dom.powerups[color] = {} as PowerupDOM;
+  Dom.powerups[color].main = document.querySelector('#powerups-' + color) as HTMLDivElement;
+  ['bomblength', 'bombtime', 'speed', 'kickbomb', 'bomb1', 'bomb2', 'bomb3', 'bomb4'].forEach((powerName: string) => {
+    Dom.powerups[color][powerName as PowerupType] = document.querySelector('#powerups-' + color + '-' + powerName) as HTMLDivElement;
+  });
 }); // at least it's short
 
 function DOM_addPlayer(this: typeof Dom, player: Player) {

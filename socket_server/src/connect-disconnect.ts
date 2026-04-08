@@ -9,6 +9,7 @@ import { logger } from "./log";
 export function playerConnect(
     url: string | undefined,
     rooms: Map<string, Room>,
+    users: Map<number, WebSocket>,
     sok: WebSocket,
     claims: jwt.JwtPayload | undefined
 ): void {
@@ -26,11 +27,17 @@ export function playerConnect(
     return sok.close();
   }
 
-  sok.id = (claims ? claims.user_id : '');
+  sok.id = (claims ? parseInt(claims.user_id) : 0);
   sok.name = (claims ? claims.username : '');
 
   sok.isOwner = !rooms.has(roomName);
   sok.isGuest = (claims ? false : true);
+
+  if (!sok.isGuest && users.get(sok.id)) {
+    const msg = 'you are already in a room, try again later';
+    OutPackets.send_error(sok, msg);
+    return sok.close();
+  }
 
   sok.wins = 0;
   sok.kills = 0;
@@ -54,6 +61,12 @@ export function playerConnect(
   
   sok.kickBombs = false;
 
+  if (sok.isGuest && sok.isOwner) {
+    const msg = 'the room doesnt exist. you dont have an account so you cant create rooms. make an account to play';
+    OutPackets.send_error(sok, msg);
+    return sok.close();
+  }
+
   if (sok.isOwner) {
     rooms.set(roomName, new Room(roomName, sok));
   }
@@ -61,6 +74,9 @@ export function playerConnect(
   const room = rooms.get(roomName);
   if (room) {
     sok.room = room;
+  }
+  if (!sok.isGuest) {
+    users.set(sok.id, sok);
   }
 
   if (!sok.isGuest) {
@@ -78,10 +94,16 @@ export function playerConnect(
   });
 
   // add the new player to the room
-  sok.room.players.set(sok.name, sok);
+  if (!sok.isGuest) {
+    sok.room.players.set(sok.name, sok);
+  } else {
+    sok.room.guests.add(sok);
+  }
 
   // send the new player to EVERYONE in the room
-  OutPackets.send_playerPlus(sok.room, sok);
+  if (!sok.isGuest) {
+    OutPackets.send_playerPlus(sok.room, sok);
+  }
 
   sok.room.players.forEach(player => {
     if (player.isOwner) {
@@ -139,44 +161,55 @@ export function playerConnect(
 }
 
 
-export function playerDisconnect(rooms: Map<string, Room>, sok: WebSocket): void {
+export function playerDisconnect(rooms: Map<string, Room>, users: Map<number, WebSocket>, sok: WebSocket): void {
   if (!sok.room) {
     return;
   }
   const room = rooms.get(sok.room.name);
-  if (!room || !room.players.get(sok.name)) {
+  if (!room) {
     return;
   }
 
   if (!sok.isGuest) {
-    logger.info(`{ id: ${sok.id}, name: ${sok.name} }   LEAVES '${sok.room.name}'`);
+    logger.info(`{ id: ${sok.id}, name: ${sok.name} }   LEAVES '${room.name}'`);
   } else {
-    logger.info(`Guest LEAVES '${sok.room.name}'`);
+    logger.info(`Guest LEAVES '${room.name}'`);
   }
 
   if (sok.isOwner) {
     // destroy room
-    OutPackets.send_chat(sok.room, sok, 'Owner left. Room deleted.');
+    OutPackets.send_chat(room, sok, 'Owner left. Room deleted.');
     
-    sok.room.players.forEach(player => {
-      player.close();
-    });
-    if (sok.room.ticks.tickLoopIntervalId) {
-      sok.room.ticks.endTickLoop();
-    }
-    rooms.delete(sok.room.name);
-  } else {
-    OutPackets.send_playerMinus(sok.room, sok.name);
-
-    if (sok.color !== null) {
-      if (sok.room.status === RoomStatus.RUNNING && !sok.dead) {
-        OutPackets.send_death(sok.room, sok.color);
-        sok.room.countPlayersAlive --;
-        OutPackets.send_playSound(sok.room, 'dead');
+    room.players.forEach(player => {
+      if (player !== sok) {
+        playerDisconnect(rooms, users, player);
       }
-      sok.room[sok.color] = null;
+    });
+    if (room.ticks.tickLoopIntervalId) {
+      room.ticks.endTickLoop();
     }
-    sok.close();
+    rooms.delete(room.name);
+  } else {
+    if (!sok.isGuest) {
+      OutPackets.send_playerMinus(room, sok);
+      if (sok.color !== null) {
+        if (room.status === RoomStatus.RUNNING && !sok.dead) {
+          OutPackets.send_death(room, sok.color);
+          room.countPlayersAlive --;
+          OutPackets.send_playSound(room, 'dead');
+        }
+        room[sok.color] = null;
+      }
+    } else {
+      room.guests.delete(sok);
+    }
   }
-  sok.room.players.delete(sok.name);
+
+  sok.close();
+  if (!sok.isGuest) {
+    room.players.delete(sok.name);
+    users.delete(sok.id);
+  } else {
+    room.guests.delete(sok);
+  }
 }

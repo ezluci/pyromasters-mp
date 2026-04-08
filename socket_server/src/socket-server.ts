@@ -1,3 +1,5 @@
+import './config.ts';
+
 import { readFileSync } from 'fs';
 import { WebSocket, WebSocketServer } from 'ws';
 
@@ -41,8 +43,7 @@ soundNames.forEach(soundName => {
 
 
 const rooms = new Map<string, Room>(); // info about all rooms by name
-
-process.loadEnvFile('../.env');
+const users = new Map<number, WebSocket>(); // into about all users (by id)
 
 if (!process.env.PORT_SOCKET || !process.env.JWT_SECRET) {
   logger.alert('wrong .env');
@@ -58,57 +59,57 @@ const server = new WebSocketServer({
 });
 
 server.on('connection', (sok: WebSocket, req) => {
-   sok.lastReceivedPing = performance.now();
+  sok.lastReceivedPing = performance.now();
 
-   let claims: jwt.JwtPayload | undefined;
-   if (req.headers.cookie) {
-      const cookies = parseCookie(req.headers.cookie);
-      const token = cookies.jwt_token;
+  let claims: jwt.JwtPayload | undefined;
+  if (req.headers.cookie) {
+    const cookies = parseCookie(req.headers.cookie);
+    const token = cookies.jwt_token;
 
-      if (token) {
-         try {
-            claims = jwt.verify(token, process.env.JWT_SECRET!, { algorithms: ['HS256'] }) as jwt.JwtPayload;
-         } catch (err) {
-            sok.close();
-            return;
-         }
-      }
-   }
-   
-   // process the new player
-   playerConnect(req.url, rooms, sok, claims);
+    if (token) {
+        try {
+          claims = jwt.verify(token, process.env.JWT_SECRET!, { algorithms: ['HS256'] }) as jwt.JwtPayload;
+        } catch (err) {
+          sok.close();
+          return;
+        }
+    }
+  }
+  
+  // process the new player
+  playerConnect(req.url, rooms, users, sok, claims);
 
-   // attach setters for some socket properties
-   sok.setShield = setShield;
-   sok.setSick = setSick;
-   
-   // attach functions to the sok object
-   tie_isDying(sok);
-   tie_bombs(sok);
-   tie_powerups(sok);
-   tie_kill(sok);
+  // attach setters for some socket properties
+  sok.setShield = setShield;
+  sok.setSick = setSick;
+  
+  // attach functions to the sok object
+  tie_isDying(sok);
+  tie_bombs(sok);
+  tie_powerups(sok);
+  tie_kill(sok);
 
-   sok.on('message', (data, isBinary) => {
-      if (!isBinary || !(data instanceof Buffer)) {
-         return;
-      }
-      processPacket(sok, data);
-   })
+  sok.on('message', (data, isBinary) => {
+    if (!isBinary || !(data instanceof Buffer)) {
+      return;
+    }
+    processPacket(sok, data);
+  });
 
-   sok.on('close', (_code, _reason) => {
-      playerDisconnect(rooms, sok);
-   });
+  sok.on('close', (_code, _reason) => {
+    playerDisconnect(rooms, users, sok);
+  });
 });
 
 
 // remove dead connections
 setInterval(() => {
-   rooms.forEach(room => {
-      room.players.forEach(sok => {
-         if (performance.now() - sok.lastReceivedPing >= 9000) {
-            playerDisconnect(rooms, sok);
-            sok.close();
-         }
-      });
-   });
+  rooms.forEach(room => {
+    room.players.forEach(sok => {
+      if (performance.now() - sok.lastReceivedPing >= 9000) {
+        playerDisconnect(rooms, users, sok);
+        sok.close();
+      }
+    });
+  });
 }, 2000);

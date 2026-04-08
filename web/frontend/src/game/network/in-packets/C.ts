@@ -13,7 +13,7 @@ export function processPacket_C(packet: Uint8Array, g: Game) {
       const anim: Animation = packet[idx];
       idx += 1;
 
-      if (g.myPlayer && color !== g.myPlayer.color && g.colors[color]) {
+      if (color !== g.myPlayer?.color && g.colors[color]) {
          g.colors[color].x = x;
          g.colors[color].y = y;
          g.colors[color].animState = anim;

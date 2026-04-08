@@ -34,15 +34,15 @@
    <div id="main">
       <div id="sidebar-left">
 
-         <div id="log">
+        <div id="log">
             <div id="log-messages"></div>
-            <div id="log-buttons">
+            <div id="log-buttons" {{ if not .IsLoggedIn }} hidden {{ end }}>
                <input id="chat-input">
                <button id="chat-send-message">Send</button>
             </div>
-         </div>
+        </div>
 
-         <div id="select-color" style="color: black; font-weight: bold;" hidden>
+        <div id="select-color" style="color: black; font-weight: bold;" hidden>
             <b><i>
                <span style="color: red;">Select</span>
                <span style="color: aqua;">color</span>
@@ -54,9 +54,9 @@
             <button id="orange" class="color-button">ORANGE</button>
             <button id="green" class="color-button">GREEN</button>
             <button id="spectator" class="color-button">SPECTATOR</button>
-         </div>
+        </div>
 
-         <div id="select-map" hidden>
+        <div id="select-map" hidden>
             <b><i>
                Select map here (owner only):
             </i></b>
@@ -66,9 +66,15 @@
                <option value="fourway">Fourway</option>
                <option value="magneto">Magneto</option>
             </select>
-         </div>
+        </div>
 
-         <div id="tips">Move with W A S D. Place bombs with P.</div>
+        <div id="tips">
+        {{ if .IsLoggedIn }}
+            Move with W A S D. Place bombs with P.
+        {{ else }}
+            You are spectating the game. LOGIN to play.
+        {{ end }}
+        </div>
 
          <div id="powerups" hidden>
             <div id="powerups-white" style="display: none">
@@ -208,33 +214,33 @@
          <!-- canvas resize script at the end -->
       </div>
 
-      <div id="sidebar-right">
-         <div id="start-game">
-            <span id="room-status" style="color: red;"></span>
+        <div id="sidebar-right">
+            <div id="start-game">
+                <span id="room-status" style="color: red;"></span>
+                <br>
+                <button id="start-button" {{ if not .IsLoggedIn }} hidden {{ end }}>Start game</button>
+            </div>
             <br>
-            <button id="start-button">Start game</button>
-         </div>
-         <br>
-         
-         <div>
-            <button id="suicide-button">Suicide</button>
-         </div>
+                
+            <div {{ if not .IsLoggedIn }} hidden {{ end }}>
+                <button id="suicide-button">Suicide</button>
+            </div>
 
-         <label hidden for="fps">Enter fps limit:</label>
-         <input hidden value="60" id="fps">
+            <label hidden for="fps">Enter fps limit:</label>
+            <input hidden value="60" id="fps">
 
-         <ul id="player-list"
-            style="display: inline-block; background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; font-size: 30px;">
-         </ul>
+            <ul id="player-list"
+                style="display: inline-block; background-color: #bfb4b4; padding-top: 5px; padding-bottom: 5px; padding-right: 5px; font-size: 30px;">
+            </ul>
 
 
-         <br>set volume:
-         <input id="volume">
-         <br>
+            <br>set volume:
+            <input id="volume">
+            <br>
 
-         <span id="ping">ping: - </span>
-      </div>
-   </div>
+            <span id="ping">ping: - </span>
+        </div>
+    </div>
 
    <script>
       const cv = document.querySelector('#canvas');
