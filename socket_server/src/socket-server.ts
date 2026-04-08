@@ -1,4 +1,4 @@
-import './config.ts';
+import './config';
 
 import { readFileSync } from 'fs';
 import { WebSocket, WebSocketServer } from 'ws';

@@ -15,11 +15,11 @@
         document.querySelector('#platform-select').value = md.mobile() ? 'mobile' : 'pc';
     </script>
 
-{{ if eq .AppEnv "development" }}
-    <script type="module" src="http://localhost:5173/src/index/index.ts"></script>
-{{ else }}
-    <script type="module" src=""></script>
-{{ end }}
+<!-- {{ if eq .AppEnv "development" }} -->
+    <script type="module" src="/src/index/index.ts"></script>
+<!-- {{ else }} -->
+    <!-- <script type="module" src="//fillhere"></script> -->
+<!-- {{ end }} -->
 </head>
 
 <body>
