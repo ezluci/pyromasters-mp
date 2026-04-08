@@ -1,5 +1,5 @@
 import { Color } from "../../types";
-import type { Game } from "../..";
+import { Game } from "../../game";
 
 export function processPacket_coords(packet: Uint8Array, g: Game) {
    const color = Object.values(Color)[packet[1]];

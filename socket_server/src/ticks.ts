@@ -1,6 +1,7 @@
 // !! the tick loop is not started on object construction
 
 import { WebSocket } from "ws";
+import { logger } from "./log";
 
 /*
  breakdown of the tick class:
@@ -51,7 +52,7 @@ export class Ticks {
 
    startTickLoop() {
       if (this.tickLoopIntervalId) {
-         console.warn('tick loop already started, ignoring request');
+         logger.error('tick loop already started, ignoring request');
          return;
       }
 
@@ -66,7 +67,7 @@ export class Ticks {
 
    endTickLoop() {
       if (this.tickLoopIntervalId === null) {
-         return console.warn('tick loop already ended, ignoring request');
+         return logger.error('tick loop already ended, ignoring request');
       }
       
       clearInterval(this.tickLoopIntervalId);
@@ -85,11 +86,11 @@ export class Ticks {
 
    addFunc = (func: Function, ticks_after: number): number | undefined => {
       if (!this.tickLoopIntervalId) {
-         console.warn('addfunc on ended tickloop');
+         logger.error('addfunc on ended tickloop');
          return undefined;
       }
       if (ticks_after < 0) {
-         console.error('trying to add a function to a past tick');
+         logger.error('trying to add a function to a past tick');
          return undefined;
       }
       
@@ -109,23 +110,23 @@ export class Ticks {
 
    removeFunc = (funcId: number) => {
       if (!this.tickLoopIntervalId) {
-         console.warn('removefunc on ended tickloop:');
-         console.warn("DEBUG: " + this.funcs[funcId].func.toString());
+         logger.error('removefunc on ended tickloop:');
+         logger.debug(this.funcs[funcId].func.toString());
          return;
       }
       if (this.funcs[funcId] === undefined) {
-         return console.error('error removeFunc funcId inexistent');
+         return logger.error('removeFunc funcId inexistent');
       }
       const tick: number = this.funcs[funcId].tick;
       if (this.tickIds[tick] === undefined) {
-         return console.error('trying to remove an inexistent funcId');
+         return logger.error('trying to remove an inexistent funcId');
       }
 
       const index: number = this.tickIds[tick].indexOf(funcId);
       if (index !== -1) {
          this.tickIds[tick].splice(index, 1);
       } else {
-         return console.error('trying to remove an inexistent funcId');
+         return logger.error('trying to remove an inexistent funcId');
       }
    }
 };

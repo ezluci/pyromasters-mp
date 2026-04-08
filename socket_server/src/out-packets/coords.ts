@@ -2,6 +2,7 @@ import { OutPackets } from "./out-packets";
 import { Room } from "../room";
 import { WebSocket } from "ws";
 import { Color } from "../game-types";
+import { logger } from "../log";
 
 const packetChar = 'w'.charCodeAt(0);
 
@@ -9,7 +10,7 @@ export function sendPacket_coords(this: typeof OutPackets, target: Room | WebSoc
    const packet = new Uint8Array(1 + 1 + 6);
 
    if (!player.color) {
-      return console.error('sendPacket_coords: player null');
+      return logger.error('sendPacket_coords: player null');
    }
 
    packet[0] = packetChar;

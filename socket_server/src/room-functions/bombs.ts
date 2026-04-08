@@ -3,6 +3,7 @@ import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, FIRE_TIME, isPowerup } from "..
 import { Block, Bomb, Flame } from "../game-types";
 import { Room } from "../room";
 import { OutPackets } from "../out-packets/out-packets";
+import { logger } from "../log";
 
 
 export function generate_getBomb(room: Room): (arg1: number, arg2?: number) => Bomb | undefined {
@@ -30,7 +31,7 @@ export function generate_explodeBomb(room: Room): (bombId: number, recursive?: b
    return (bombId, recursive = false, flames = []) => {
       const bomb = room.getBomb(bombId);
       if (!bomb) {
-         console.error('explodeBomb: no bomb found');
+         logger.error('explodeBomb: no bomb found');
          return [];
       }
 
@@ -98,7 +99,7 @@ export function generate_explodeBomb(room: Room): (bombId: number, recursive?: b
          if (existingFlame) {
             // if we already had such triple, then replace its tickFuncId
             if (!existingFlame.tickFuncId) {
-               return console.error('explode error');
+               return logger.error('explode error');
             }
             room.ticks.removeFunc(existingFlame.tickFuncId);
             existingFlame.tickFuncId = room.ticks.addFunc(
@@ -129,7 +130,7 @@ export function generate_removeFlame(room: Room): (x: number, y: number, owner: 
    return (x, y, owner) => {
       const flame = room.getFlame(x, y, owner);
       if (!flame) {
-         return console.error('error removeFlame');
+         return logger.error('error removeFlame');
       }
 
       room.flames = room.flames.filter(roomFlame => roomFlame !== flame);

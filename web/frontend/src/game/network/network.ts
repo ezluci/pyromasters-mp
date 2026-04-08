@@ -1,5 +1,5 @@
 import { Dom } from "../dom";
-import type { Game } from "..";
+import { Game } from "../game";
 import { Color, Map } from "../types";
 import { processPacket_addBomb } from "./in-packets/add-bomb";
 import { processPacket_addFlame } from "./in-packets/add-flame";
@@ -122,7 +122,7 @@ function startHandlingPackets(this: Network, g: Game) {
    Dom.selectSpectator.addEventListener('click', () => sendPacket_selectColor(g, null));
 
    Dom.startButton.addEventListener('click', () => {
-      if (g.userName === 'testmap:)') {
+      if ((window as any).myUser.name === 'testmap:)') {
          sendPacket_startGame(g, Map.TESTMAP);
       } else {
          sendPacket_startGame(g, Dom.mapSelected.value as Map);

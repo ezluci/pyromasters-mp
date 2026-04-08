@@ -1,4 +1,4 @@
-import type { Game } from "../..";
+import { Game } from "../../game";
 import { Color } from "../../types";
 
 const packetChar = 'O'.charCodeAt(0);

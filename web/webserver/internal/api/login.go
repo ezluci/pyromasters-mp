@@ -3,6 +3,7 @@ package api
 import (
 	"log"
 	"net/http"
+	"strconv"
 	"time"
 	"webserver/configs"
 	"webserver/internal/db"
@@ -53,7 +54,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 	exp := time.Now().Add(10 * 24 * time.Hour)
 	claims := jwt.MapClaims{
-		"user_id":  user.ID,
+		"user_id":  strconv.Itoa(user.ID),
 		"username": user.Username,
 		"exp":      exp.Unix(),
 		"iat":      time.Now().Unix(),

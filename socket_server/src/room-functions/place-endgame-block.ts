@@ -1,5 +1,6 @@
 import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY } from "../game-consts";
 import { Block } from "../game-types";
+import { logger } from "../log";
 import { OutPackets } from "../out-packets/out-packets";
 import { Room } from "../room";
 
@@ -21,7 +22,7 @@ export function generate_placeEndgameBlock(room: Room): () => void {
       }
 
       if (room.endgameBlocks === BLOCKS_HORIZONTALLY * BLOCKS_VERTICALLY) {
-         console.error('endgameblocks already full');
+         logger.error('endgameblocks already full');
          return;
       }
 

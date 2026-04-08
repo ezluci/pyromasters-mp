@@ -1,5 +1,5 @@
 import { Map } from "../../types";
-import type { Game } from "../..";
+import { Game } from "../../game";
 
 export function processPacket_map(packet: Uint8Array, g: Game) {
    let map = '';

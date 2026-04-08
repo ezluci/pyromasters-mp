@@ -2,6 +2,7 @@ import { WebSocket } from "ws";
 import { Block, Bomb, Color } from "./game-types";
 import { OutPackets, Packet } from "./out-packets/out-packets";
 import { BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, END_SCREEN_TIMEOUT, isPowerup, KICK_BOMB_SPEED, MAP_FOURWAY_PORTAL_POSITIONS } from "./game-consts";
+import { logger } from "./log";
 
 // this GENERATES the runEveryTick function that is going to be passed into the Ticks class
 export function generate_runEveryTick(sok: WebSocket): () => void {
@@ -192,7 +193,7 @@ export function generate_runEveryTick(sok: WebSocket): () => void {
 
          const frame = OutPackets.constructFrame(playerNewBuffer);
          if (!frame) {
-            return console.error('generate_runEveryTick: constructFrame returned undefined');
+            return logger.error('generate_runEveryTick: constructFrame returned undefined');
          }
 
          OutPackets.sendFrame(player, frame);

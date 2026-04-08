@@ -1,5 +1,5 @@
 import { Dom } from "../../dom";
-import type { Game } from "../..";
+import { Game } from "../../game";
 import { Color } from "../../types";
 
 export function processPacket_endScreen(packet: Uint8Array, g: Game) {

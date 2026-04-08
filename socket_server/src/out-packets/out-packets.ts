@@ -20,6 +20,7 @@ import { sendPacket_C } from "./C";
 import { sendPacket_coords } from "./coords";
 import { sendPacket_endScreen } from "./end-screen";
 import { sendPacket_pong } from "./pong";
+import { logger } from "../log";
 
 // you use bufferPacket to pack more packets at once before actually sending them.
 // the packets are sent automatically. if ~the room / the client's room~ has an active
@@ -46,7 +47,7 @@ export class OutPackets {
       });
 
       if (notSorted) {
-         console.error('constructFrame: packets are not sorted by time!');
+         logger.error('constructFrame: packets are not sorted by time!');
          return undefined;
       }
 
@@ -55,10 +56,10 @@ export class OutPackets {
       let idx = 0;
       packets.forEach(packet => {
          if (packet.data.length >= (1 << (8 * OutPackets.PREFIX_SIZE_BYTES))) {
-            return console.error('PREFIX_SIZE_BYTES not enough!');
+            return logger.error('PREFIX_SIZE_BYTES not enough!');
          }
          if (OutPackets.PREFIX_SIZE_BYTES !== 2) {
-            return console.error('change packets code!');
+            return logger.alert('change packets code!');
          }
          frameView.setUint16(idx, packet.data.length);
          idx += 2;
@@ -107,7 +108,7 @@ export class OutPackets {
       if (!room || !room.ticks.tickLoopIntervalId) {
          const frame = this.constructFrame(buf);
          if (!frame) {
-            return console.error('bufferPacket: can\'t construct frame');
+            return logger.error('bufferPacket: can\'t construct frame');
          }
          this.sendFrame(target, frame);
          this.buffer.set(target, []);

@@ -19,7 +19,6 @@ export const ez_testSV: boolean = (
 
 const queryParams = new URLSearchParams(window.location.search);
 const roomName = queryParams.get('room');
-
 if (!roomName) {
   throw new Error("Missing query param 'room'.");
 }
@@ -39,7 +38,7 @@ await Promise.all([ Resources.load(), Animations.init(), network.connect(url) ])
 
 // start the game
 
-export const g = new Game(network, 'alex', roomName);
+export const g = new Game(network, roomName);
 network.startHandlingPackets(g);
 Keys.init(g);
 g.startLoop();

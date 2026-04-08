@@ -1,19 +1,18 @@
-import type { Game } from "../..";
+import { Game } from "../../game";
 
 export function processPacket_playerPlus(packet: Uint8Array, g: Game) {
-   let idx = 1;
-   let newUserName = '';
-   for (; idx < packet.length; ++idx) {
-      newUserName += String.fromCharCode(packet[idx]);
-   }
+  const id = packet[1] << 24 | packet[2] << 16 | packet[3] << 8 | packet[4];
 
-   g.addPlayer(newUserName);
-   if (newUserName === g.userName) {
-      const player = g.players.get(newUserName);
-      if (player) {
-         g.myPlayer = player;
-      } else {
-         console.error('?');
-      }
-   }
+  let name = '';
+  for (let idx = 5; idx < packet.length; ++idx) {
+    name += String.fromCharCode(packet[idx]);
+  }
+
+  g.addPlayer(id, name);
+  if (id.toString() === (window as any).myUser.id) {
+    const player = g.players.get(id);
+    if (player) {
+      g.myPlayer = player;
+    }
+  }
 }

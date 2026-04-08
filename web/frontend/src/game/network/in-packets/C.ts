@@ -1,5 +1,5 @@
 import { Animation, Color } from "../../types";
-import type { Game } from "../..";
+import { Game } from "../../game";
 
 export function processPacket_C(packet: Uint8Array, g: Game) {
    let idx = 1;

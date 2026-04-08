@@ -1,4 +1,5 @@
-import type { Game } from "../..";
+
+import { Game } from "../../game";
 
 export function processPacket_gameTime(packet: Uint8Array, g: Game) {
    

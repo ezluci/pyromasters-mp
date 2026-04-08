@@ -2,11 +2,12 @@ import { Color, RoomStatus } from "../game-types";
 import { Room } from "../room";
 import { OutPackets } from "../out-packets/out-packets";
 import { WebSocket } from "ws";
+import { logger } from "../log";
 
 export function generate_showEndScreen(room: Room): () => void {
    return () => {
       if (room.countPlayersAlive >= 2) {
-         console.error('showEndScreen ignored');
+         logger.error('showEndScreen ignored');
          return;
       }
       

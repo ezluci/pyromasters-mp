@@ -2,6 +2,7 @@ import { WebSocket } from "ws";
 import { BLOCK_SIZE, BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY, MAP_FOURWAY_PORTAL_POSITIONS } from "../game-consts";
 import { Block, Bomb, Color, RoomStatus } from "../game-types";
 import { OutPackets } from "../out-packets/out-packets";
+import { logger } from "../log";
 
 export function tie_bombs(sok: WebSocket): void {
    sok.placeBomb = (): void => {
@@ -78,7 +79,8 @@ export function tie_bombs(sok: WebSocket): void {
       );
 
       if (!tickFuncId) {
-         return console.error('tryPlaceBomb: something went wrong');
+         logger.error('tryPlaceBomb: something went wrong');
+         return;
       }
       sok.room.bombs.push({ x, y, id: bombId, xvel: 0, yvel: 0, xvel_push: 0, yvel_push: 0, owner: sok, length: sok.bombLength, tickFuncId });
       sok.room.bombIdCounter ++;

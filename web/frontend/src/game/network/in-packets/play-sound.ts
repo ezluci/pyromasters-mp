@@ -1,4 +1,4 @@
-import type { Game } from "../..";
+import { Game } from "../../game";
 import { Resources } from "../../resources";
 
 export function processPacket_playSound(packet: Uint8Array, g: Game) {

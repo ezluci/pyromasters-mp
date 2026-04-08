@@ -1,5 +1,5 @@
 import { Dom } from "../../dom";
-import type { Game } from "../..";
+import { Game } from "../../game";
 
 export function processPacket_chat(packet: Uint8Array, g: Game) {
    let idx = 1;

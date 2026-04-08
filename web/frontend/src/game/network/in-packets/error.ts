@@ -1,5 +1,5 @@
-import { Dom } from "../../dom";
-import type { Game } from "../..";
+import { Game } from "../../game";
+import { toast } from "../../../toast/toast";
 
 export function processPacket_error(packet: Uint8Array, g: Game) {
    let idx = 1;
@@ -10,6 +10,6 @@ export function processPacket_error(packet: Uint8Array, g: Game) {
    }
 
 
-   Dom.addLog(`ERROR: ${message}`);
+   toast.show(message, 'error');
    console.error(`ERROR: ${message}`);
 }

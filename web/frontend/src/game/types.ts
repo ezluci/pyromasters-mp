@@ -59,47 +59,49 @@ export enum Map {
 }
 
 export class Player {
-   name: string;
-   isOwner: boolean;
+  id: number;
+  name: string;
+  isOwner: boolean;
 
-   wins: number;
-   kills: number;
+  wins: number;
+  kills: number;
 
-   color: Color | null;
-   x: number;
-   y: number;
-   dead: boolean;
-   animState: Animation;
-   
-   speed: number;
-   bombCount: number;
-   bombTime: number;
-   bombLength: number;
-   switchedKeys: number;
-   shield: boolean;
-   sick: boolean;
-   kickBombs: boolean;
+  color: Color | null;
+  x: number;
+  y: number;
+  dead: boolean;
+  animState: Animation;
+  
+  speed: number;
+  bombCount: number;
+  bombTime: number;
+  bombLength: number;
+  switchedKeys: number;
+  shield: boolean;
+  sick: boolean;
+  kickBombs: boolean;
 
-   constructor(name: string) {
-      this.name = name;
-      this.isOwner = false;
-      
-      this.wins = 0;
-      this.kills = 0;
+  constructor(id: number, name: string) {
+    this.id = id;
+    this.name = name;
+    this.isOwner = false;
+    
+    this.wins = 0;
+    this.kills = 0;
 
-      this.color = null;
-      this.x = 0;
-      this.y = 0;
-      this.dead = false;
+    this.color = null;
+    this.x = 0;
+    this.y = 0;
+    this.dead = false;
 
-      this.animState = Animation.IDLE_BACK;
-      this.speed = 0;
-      this.bombCount = 0;
-      this.bombTime = 0;
-      this.bombLength = 0;
-      this.switchedKeys = 0;
-      this.shield = false;
-      this.sick = false;
-      this.kickBombs = false;
-   }
+    this.animState = Animation.IDLE_BACK;
+    this.speed = 0;
+    this.bombCount = 0;
+    this.bombTime = 0;
+    this.bombLength = 0;
+    this.switchedKeys = 0;
+    this.shield = false;
+    this.sick = false;
+    this.kickBombs = false;
+  }
 }

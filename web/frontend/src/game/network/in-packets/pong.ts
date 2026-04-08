@@ -1,5 +1,5 @@
 import { Dom } from "../../dom";
-import type { Game } from "../..";
+import { Game } from "../../game";
 
 export function processPacket_pong(packet: Uint8Array, g: Game) {
    if ((window as any).testnopong)  return;

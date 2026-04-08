@@ -1,4 +1,4 @@
-import type { Game } from "../..";
+import { Game } from "../../game";
 
 export function processPacket_updateBomb(packet: Uint8Array, g: Game) {
    const x = (packet[1] << 16 | packet[2] << 8 | packet[3]) * 1e-4;

@@ -1,4 +1,4 @@
-import type { Game } from "../..";
+import { Game } from "../../game";
 
 const packetChar = ';'.charCodeAt(0);
 

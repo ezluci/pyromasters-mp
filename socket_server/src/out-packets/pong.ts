@@ -1,5 +1,6 @@
 import { WebSocket } from "ws";
 import { OutPackets } from "./out-packets";
+import { logger } from "../log";
 
 const packetChar = ':'.charCodeAt(0);
 
@@ -14,7 +15,7 @@ export function sendPacket_pong(this: typeof OutPackets, target: WebSocket, time
 
    const frame = this.constructFrame([{ data: packet, time: performance.now() }]);
    if (!frame) {
-      console.error(`can\'t send pong: ${frame}`);
+      logger.error(`can\'t send pong: ${frame}`);
       return;
    }
    this.sendFrame(target, frame);

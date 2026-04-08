@@ -1,6 +1,6 @@
 import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY } from "../../game-consts";
 import { Color, RoomStatus } from "../../types";
-import type { Game } from "../..";
+import { Game } from "../../game";
 import { Dom } from "../../dom";
 import { Resources } from "../../resources";
 

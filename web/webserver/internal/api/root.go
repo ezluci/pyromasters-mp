@@ -14,8 +14,9 @@ import (
 
 type PageData struct {
 	IsLoggedIn bool
-	Username   string
 	AppEnv     string
+	Username   string
+	UserID     string
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
@@ -65,17 +66,14 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 				return []byte(configs.Cfg.JWTSecret), nil
 			}, jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}))
 
-			if err != nil {
-				writeJSON(w, http.StatusInternalServerError, ErrorResponse{
-					Error: "cant decode token",
-				})
-				return
-			}
+			if err == nil {
+				claims, ok := jwtToken.Claims.(jwt.MapClaims)
 
-			claims, ok := jwtToken.Claims.(jwt.MapClaims)
-			if ok && jwtToken.Valid {
-				data.IsLoggedIn = true
-				data.Username = claims["username"].(string)
+				if ok && jwtToken.Valid {
+					data.Username, _ = claims["username"].(string)
+					data.UserID, _ = claims["user_id"].(string)
+					data.IsLoggedIn = true
+				}
 			}
 		}
 

@@ -1,4 +1,4 @@
-import type { Game } from "../..";
+import { Game } from "../../game";
 
 export function processPacket_addBomb(packet: Uint8Array, g: Game) {
    

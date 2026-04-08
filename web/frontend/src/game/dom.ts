@@ -1,4 +1,4 @@
-import { Color } from "./types";
+import { Color, Player } from "./types";
 
 export class Dom {
    // elements
@@ -31,9 +31,8 @@ export class Dom {
 
    // functions
    static addPlayer = DOM_addPlayer.bind(this);
+   static updatePlayer = DOM_updatePlayer.bind(this);
    static removePlayer = DOM_removePlayer.bind(this);
-   static changePlayerColor = DOM_changePlayerColor.bind(this);
-   static changePlayerIsOwner = DOM_changePlayerIsOwner.bind(this);
    static addChatMessage = DOM_addChatMessage.bind(this);
    static addLog = DOM_addLog.bind(this);
 };
@@ -53,52 +52,47 @@ Object.values(Color).forEach(color => {
    });
 }); // at least it's short
 
+function DOM_addPlayer(this: typeof Dom, player: Player) {
+  const li = document.createElement('li');
+  li.innerText = player.name;
 
-function DOM_addPlayer(this: typeof Dom, userName: string) {
-   const li = document.createElement('li');
-   li.innerText = userName;
+  li.dataset.name = player.name;
+  li.dataset.id = player.id.toString();
 
-   li.dataset.userName = userName;
-
-   li.style.backgroundColor = 'gray';
-   li.style.fontWeight = 'bolder';
-   li.style.color = 'black';
-   Dom.playerList.appendChild(li);
+  li.style.backgroundColor = 'gray';
+  li.style.fontWeight = 'bolder';
+  li.style.color = 'black';
+  Dom.playerList.appendChild(li);
 }
 
-function DOM_removePlayer(this: typeof Dom, userName: string) {
-   Array.from(Dom.playerList.children).forEach((child) => {
-      if ((child as HTMLLIElement).dataset.userName === userName) {
-         child.remove();
-         return;
+function DOM_updatePlayer(this: typeof Dom, player: Player) {
+  Array.from(Dom.playerList.children).forEach((child) => {
+    const liChild = child as HTMLLIElement;
+    if (liChild.dataset.id === player.id.toString()) {
+      // color
+      liChild.style.backgroundColor = (player.color === null ? 'gray' : player.color);
+      if (player.color === Color.BLACK) {
+        liChild.style.color = 'white';
+      } else {
+        liChild.style.color = 'black';
       }
-   })
+
+      // isOwner
+      liChild.innerText = player.name;
+      if (player.isOwner) {
+        liChild.innerText += ` ${String.fromCodePoint(0x1F451)}`;
+      }
+    }
+  });
 }
 
-function DOM_changePlayerColor(this: typeof Dom, userName: string, newColor: Color | null) {
-   Array.from(Dom.playerList.children).forEach((child) => {
-      const liChild = child as HTMLLIElement;
-      if (liChild.dataset.userName === userName) {
-         liChild.style.backgroundColor = (newColor === null ? 'gray' : newColor);
-         if (newColor === Color.BLACK) {
-            liChild.style.color = 'white';
-         } else {
-            liChild.style.color = 'black';
-         }
-      }
-   });
-}
-
-function DOM_changePlayerIsOwner(this: typeof Dom, userName: string, isOwner: boolean) {
-   Array.from(this.playerList.children).forEach((child) => {
-      const liChild = child as HTMLLIElement;
-      if (liChild.dataset.userName === userName) {
-         liChild.innerText = userName;
-         if (isOwner) {
-            liChild.innerText += ` ${String.fromCodePoint(0x1F451)}`;
-         }
-      }
-   });
+function DOM_removePlayer(this: typeof Dom, player: Player) {
+  Array.from(Dom.playerList.children).forEach((child) => {
+    if ((child as HTMLLIElement).dataset.id === player.id.toString()) {
+      child.remove();
+      return;
+    }
+  })
 }
 
 function DOM_addChatMessage(this: typeof Dom, userName: string, msg: string) {

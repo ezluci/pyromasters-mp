@@ -13,6 +13,16 @@
 {{ else }}
     <script type="module" src=""></script>
 {{ end }}
+
+{{ if .IsLoggedIn }}
+    <script>
+        window.myUser = {
+            "name": {{ .Username }},
+            "id": {{ .UserID }}
+        };
+    </script>
+{{ end }}
+
 </head>
 
 

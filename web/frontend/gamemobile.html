@@ -15,6 +15,15 @@
     <script type="module" src=""></script>
 {{ end }}
 
+{{ if .IsLoggedIn }}
+    <script>
+        window.myUser = {
+            "name": {{ .Username }},
+            "id": {{ .UserID }}
+        };
+    </script>
+{{ end }}
+
    <script>
       function setViewportHeight() {
          const vh = window.innerHeight * 0.01;

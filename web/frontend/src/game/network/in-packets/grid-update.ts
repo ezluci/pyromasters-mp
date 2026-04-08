@@ -1,5 +1,5 @@
 import { Block } from "../../types";
-import type { Game } from "../..";
+import { Game } from "../../game";
 
 export function processPacket_gridUpdate(packet: Uint8Array, g: Game) {
    const x: number = packet[1];
