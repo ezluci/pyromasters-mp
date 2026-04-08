@@ -3,8 +3,8 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"log"
 	"webserver/configs"
+	"webserver/internal/logger"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -20,6 +20,6 @@ func Connect() {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s)/%s?parseTime=true", user, pass, host, name)
 	var err error
 	if DB, err = sql.Open("mysql", dsn); err != nil {
-		log.Fatal(err.Error())
+		logger.Log.Fatal(err.Error())
 	}
 }

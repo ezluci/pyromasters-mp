@@ -29,8 +29,7 @@ Dom.chatInput.value = '';
 // load resources, animations, connect to server
 
 const protocol = (ez_testPC || ez_testSV ? 'http' : 'https');
-const port = (ez_testSV ? 3301 : 22822);
-const url = `${protocol}://${window.location.hostname}:${port}/${encodeURIComponent(roomName)}`;
+const url = `${protocol}://${window.location.hostname}:${(window as any).portSocket}/${encodeURIComponent(roomName)}`;
 
 const network = new Network;
 
@@ -41,23 +40,34 @@ await Promise.all([ Resources.load(), Animations.init(), network.connect(url) ])
 export const g = new Game(network, roomName);
 network.startHandlingPackets(g);
 Keys.init(g);
-g.startLoop();
+
+// wait for my player before starting
+if (!g.isGuest) {
+  const intv = setInterval(() => {
+    if (g.myPlayer) {
+      g.startLoop();
+      clearInterval(intv);
+    }
+  }, 100);
+} else {
+  g.startLoop();
+}
 
 
 
 if (g.isMobile) {
-   Dom.addLog('please rotate your device in landscape mode.')
+  Dom.addLog('please rotate your device in landscape mode.')
 }
 
 if (!g.isMobile) {
-   Dom.slider.type = 'range';
-   Dom.slider.min = '0';
-   Dom.slider.max = '100';
-   Dom.slider.value = '20'; // default volume
+  Dom.slider.type = 'range';
+  Dom.slider.min = '0';
+  Dom.slider.max = '100';
+  Dom.slider.value = '20'; // default volume
 
-   Resources.audio.volume(parseInt(Dom.slider.value) / 100);
+  Resources.audio.volume(parseInt(Dom.slider.value) / 100);
 
-   Dom.slider.addEventListener('input', () => { Resources.audio.volume(parseInt(Dom.slider.value) / 100); });
+  Dom.slider.addEventListener('input', () => { Resources.audio.volume(parseInt(Dom.slider.value) / 100); });
 }
 
 

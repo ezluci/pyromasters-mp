@@ -62,7 +62,7 @@ export function playerConnect(
   sok.kickBombs = false;
 
   if (sok.isGuest && sok.isOwner) {
-    const msg = 'the room doesnt exist. you dont have an account so you cant create rooms. make an account to play';
+    const msg = 'the room doesnt exist. ur not logged in so you cant create rooms. make an account to play';
     OutPackets.send_error(sok, msg);
     return sok.close();
   }

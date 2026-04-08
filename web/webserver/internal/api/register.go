@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"regexp"
 	"webserver/internal/db"
+	"webserver/internal/logger"
 
 	"github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
@@ -68,6 +69,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 				writeJSON(w, http.StatusConflict, ErrorResponse{
 					Error: "username already exists",
 				})
+				logger.Log.Infof("username %s already exists", username)
 				return
 			}
 		}
@@ -79,6 +81,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeJSON(w, http.StatusCreated, RegisterResponse{})
+	logger.Log.Infof("new user registered: %s", username)
 }
 
 func isUsernameValid(username string) bool {

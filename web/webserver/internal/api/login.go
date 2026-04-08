@@ -1,12 +1,12 @@
 package api
 
 import (
-	"log"
 	"net/http"
 	"strconv"
 	"time"
 	"webserver/configs"
 	"webserver/internal/db"
+	"webserver/internal/logger"
 	"webserver/internal/model"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -42,6 +42,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusBadRequest, ErrorResponse{
 			Error: "user doesnt exist",
 		})
+		logger.Log.Infof("wrong username on login: %s", username)
 		return
 	}
 
@@ -49,6 +50,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		writeJSON(w, http.StatusBadRequest, ErrorResponse{
 			Error: "wrong password",
 		})
+		logger.Log.Infof("wrong password on login for %s", username)
 		return
 	}
 
@@ -63,7 +65,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedToken, err := token.SignedString([]byte(configs.Cfg.JWTSecret))
 	if err != nil {
-		log.Printf("error cant sign token: %s", err)
+		logger.Log.Infof("error cant sign token: %s", err)
 		writeJSON(w, http.StatusInternalServerError, ErrorResponse{
 			Error: "cant sign token",
 		})
@@ -75,9 +77,11 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		Value:    signedToken,
 		Path:     "/",
 		Expires:  exp,
+		Secure:   configs.Cfg.AppEnv == "production",
 		HttpOnly: true,
 		SameSite: http.SameSiteStrictMode,
 	})
 
 	writeJSON(w, http.StatusOK, LoginResponse{})
+	logger.Log.Infof("user %s logged in", username)
 }

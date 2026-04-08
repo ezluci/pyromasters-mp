@@ -2,29 +2,28 @@ package api
 
 import (
 	"html/template"
-	"log"
 	"net/http"
-	"os"
+	"strconv"
 	"strings"
 	"webserver/configs"
+	"webserver/internal/logger"
 	"webserver/internal/templates"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
 type PageData struct {
-	IsLoggedIn bool
 	AppEnv     string
+	IsLoggedIn bool
 	Username   string
-	UserID     string
+	UserID     int
+	PortSocket string
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	path := r.URL.Path
 	path = strings.TrimPrefix(path, "/")
 	lowerPath := strings.ToLower(path)
-
-	log.Default().Print(r.URL)
 
 	if strings.HasSuffix(lowerPath, ".js") {
 		w.Header().Set("Content-Type", "text/javascript")
@@ -40,23 +39,28 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		var tmpl *template.Template
-		// var err error
-		// if configs.Cfg.AppEnv != "production" {
-		// 	tmpl, err = template.New("").Funcs(
-		// 		template.FuncMap{
-		// 			"version": func() string { return configs.Cfg.Version },
-		// 		}).ParseFiles("../public/" + lowerPath + ".html")
-		// 	if err != nil {
-		// 		log.Panicf("cant find %s template", lowerPath)
-		// 		return
-		// 	}
-		// } else {
-		tmpl = templates.Templates.Lookup(lowerPath + ".html")
-		// }
+		var err error
+		if configs.Cfg.AppEnv != "production" {
+			tmpl, err = template.New(lowerPath+".html").Funcs(
+				template.FuncMap{
+					"version": func() string { return configs.Cfg.Version },
+				}).ParseFiles(
+				"../public/"+lowerPath+".html",
+				"../public/footer.html",
+				"../public/topbar.html",
+			)
+			if err != nil {
+				logger.Log.Panicf("cant parse template: %v", err)
+				return
+			}
+		} else {
+			tmpl = templates.Templates.Lookup(lowerPath + ".html")
+		}
 
 		data := PageData{
-			IsLoggedIn: false,
 			AppEnv:     configs.Cfg.AppEnv,
+			IsLoggedIn: false,
+			PortSocket: configs.Cfg.PortSocket,
 		}
 
 		cookie, err := r.Cookie("jwt_token")
@@ -71,7 +75,8 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 
 				if ok && jwtToken.Valid {
 					data.Username, _ = claims["username"].(string)
-					data.UserID, _ = claims["user_id"].(string)
+					userID, _ := claims["user_id"].(string)
+					data.UserID, _ = strconv.Atoi(userID)
 					data.IsLoggedIn = true
 				}
 			}
@@ -79,7 +84,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 
 		if err := tmpl.Execute(w, data); err != nil {
 			writeJSON(w, http.StatusInternalServerError, ErrorResponse{
-				Error: "cant execute template",
+				Error: "cant execute template ",
 			})
 			return
 		}
@@ -87,20 +92,5 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// serve non html content
-	fileContents, err := os.ReadFile("../public/" + path)
-
-	if err != nil {
-		tmpl := templates.Templates.Lookup("404.html")
-		w.Header().Set("Content-Type", "text/html")
-		w.WriteHeader(http.StatusNotFound)
-
-		if err := tmpl.Execute(w, ""); err != nil {
-			writeJSON(w, http.StatusInternalServerError, ErrorResponse{
-				Error: "cant execute 404 template",
-			})
-			return
-		}
-		return
-	}
-	w.Write(fileContents)
+	http.FileServer(http.Dir("../public")).ServeHTTP(w, r)
 }

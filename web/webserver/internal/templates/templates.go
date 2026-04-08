@@ -2,8 +2,8 @@ package templates
 
 import (
 	"html/template"
-	"log"
 	"webserver/configs"
+	"webserver/internal/logger"
 )
 
 var Templates *template.Template
@@ -24,12 +24,12 @@ func LoadTemplates() {
 	}).ParseGlob("../public/*.html")
 
 	if err != nil {
-		log.Fatal(err.Error())
+		logger.Log.Fatal(err.Error())
 	}
 
 	for _, t := range requiredTemplates {
 		if Templates.Lookup(t+".html") == nil {
-			log.Fatalf("template %s not found", t)
+			logger.Log.Fatalf("template %s not found", t)
 		}
 	}
 }

@@ -23,7 +23,7 @@ export function gameLoop(g: Game) {
   lastFrameTime = currentTime;
 
   /// UPDATES
-  if (g.myPlayer && g.myPlayer.color && !g.myPlayer.dead && g.roomStatus === RoomStatus.RUNNING) {
+  if (!g.isGuest && g.myPlayer && g.myPlayer.color && !g.myPlayer.dead && g.roomStatus === RoomStatus.RUNNING) {
     // place bomb
     if (Keys.keysPressed.bomb && currentTime - lastBombTime > 100) {
         sendPacket_placeBomb(g);

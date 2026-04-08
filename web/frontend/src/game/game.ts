@@ -7,7 +7,9 @@ import { Block, Bomb, Color, Map, Player, RoomStatus } from "./types";
 
 export class Game {
   roomName: string;
-  myPlayer!: Player; // initialized in player-plus packet -- undefined means guest
+  isGuest: boolean;
+
+  myPlayer!: Player; // initialized in player-plus packet
   ping: number;
   deltaTime: number;
 
@@ -41,6 +43,7 @@ export class Game {
 
   constructor(network: Network, roomName: string) {
     this.roomName = roomName;
+    this.isGuest = (window as any).isGuest;
     this.ping = 0;
     this.deltaTime = 0;
 
@@ -73,7 +76,7 @@ export class Game {
     this.removePlayer = removePlayer.bind(this);
     this.changePlayerColor = changePlayerColor.bind(this);
     this.startLoop = () => {
-      if (this.myPlayer) {
+      if (!this.isGuest) {
         Dom.loading.hidden = true;
         Dom.selectColors.hidden = false;
       }

@@ -16,8 +16,8 @@ export function processPacket_roomStatus(packet: Uint8Array, g: Game) {
   );
 
   if (status === RoomStatus.WAITING) {
-    if (g.myPlayer) {
-      Dom.powerupsMain.hidden = true;
+    Dom.powerupsMain.hidden = true;
+    if (!g.isGuest) {
       Dom.selectColors.hidden = false;
       Dom.selectMap.hidden = false;
     }
@@ -34,14 +34,14 @@ export function processPacket_roomStatus(packet: Uint8Array, g: Game) {
           g.flames[x][y] = 0;
         }
     }
-    if (g.myPlayer) {
-      Dom.powerupsMain.hidden = false;
+    Dom.powerupsMain.hidden = false;
+    if (!g.isGuest) {
       Dom.selectColors.hidden = true;
       Dom.selectMap.hidden = true;
     }
   } else if (status === RoomStatus.RUNNING) {
-    if (g.myPlayer) {
-      Dom.powerupsMain.hidden = false;
+    Dom.powerupsMain.hidden = false;
+    if (!g.isGuest) {
       Dom.selectColors.hidden = true;
       Dom.selectMap.hidden = true;
     }

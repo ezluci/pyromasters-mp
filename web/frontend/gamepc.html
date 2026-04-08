@@ -11,17 +11,19 @@
 {{ if eq .AppEnv "development" }}
     <script type="module" src="http://localhost:5173/src/game/index.ts"></script>
 {{ else }}
-    <script type="module" src=""></script>
+    <script type="module" src="//fillhere"></script>
 {{ end }}
 
-{{ if .IsLoggedIn }}
     <script>
+    {{ if .IsLoggedIn }}
         window.myUser = {
             "name": {{ .Username }},
             "id": {{ .UserID }}
         };
+    {{ end }}
+        window.isGuest = {{ if .IsLoggedIn }} false {{ else }} true {{ end }};
+        window.portSocket = {{ .PortSocket }};
     </script>
-{{ end }}
 
 </head>
 

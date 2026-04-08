@@ -12,17 +12,20 @@
 {{ if eq .AppEnv "development" }}
     <script type="module" src="http://localhost:5173/src/game/index.ts"></script>
 {{ else }}
-    <script type="module" src=""></script>
+    <script type="module" src="//fillhere"></script>
 {{ end }}
 
-{{ if .IsLoggedIn }}
     <script>
+    {{ if .IsLoggedIn }}
         window.myUser = {
             "name": {{ .Username }},
             "id": {{ .UserID }}
         };
+    {{ end }}
+        window.isGuest = {{ if .IsLoggedIn }} false {{ else }} true {{ end }};
+        window.portSocket = {{ .PortSocket }};
     </script>
-{{ end }}
+
 
    <script>
       function setViewportHeight() {
@@ -44,7 +47,7 @@
 
          <div id="log">
             <div id="log-messages"></div>
-            <div id="log-buttons">
+            <div id="log-buttons" {{ if not .IsLoggedIn }} hidden {{ end }}>
                <input id="chat-input">
                <button id="chat-send-message">Send</button>
             </div>
@@ -75,6 +78,14 @@
                <option value="magneto">Magneto</option>
             </select>
          </div>
+
+        <div id="tips">
+        {{ if .IsLoggedIn }}
+            
+        {{ else }}
+            You are spectating the game. LOGIN to play.
+        {{ end }}
+        </div>
 
          <div id="powerups" hidden>
             <div id="powerups-white" style="display: none">
@@ -218,10 +229,10 @@
          <div id="start-game">
             <span id="room-status" style="color: red;"></span>
             <br>
-            <button id="start-button">Start game</button>
+            <button id="start-button" {{ if not .IsLoggedIn }} hidden {{ end }}>Start game</button>
          </div>
          
-         <div>
+         <div {{ if not .IsLoggedIn }} hidden {{ end }}>
             <button id="suicide-button">Suicide</button>
          </div>
 

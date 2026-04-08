@@ -9,7 +9,7 @@ export function processPacket_playerPlus(packet: Uint8Array, g: Game) {
   }
 
   g.addPlayer(id, name);
-  if (id.toString() === (window as any).myUser?.id) {
+  if (id === (window as any).myUser?.id) {
     const player = g.players.get(id);
     if (player) {
       g.myPlayer = player;
