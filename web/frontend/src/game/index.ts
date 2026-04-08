@@ -4,22 +4,24 @@ import { Network } from "./network/network";
 import { Game } from "./game";
 import { Keys } from "./keys";
 import { Animations } from "./animations";
+import "../toast/toast.css";
+import "../toast/toast";
+import "../topbar";
 
 export const ez_testPC: boolean = (
-   window.location.hostname === 'localhost' ||
-   window.location.hostname.startsWith('192.168.') ||
-   window.location.hostname === '0.0.0.0'
+  window.location.hostname === 'localhost' ||
+  window.location.hostname.startsWith('192.168.') ||
+  window.location.hostname === '0.0.0.0'
 );
 export const ez_testSV: boolean = (
-   window.location.hostname.startsWith('93.113.33.138')
+  window.location.hostname.startsWith('93.113.33.138')
 );
 
 const queryParams = new URLSearchParams(window.location.search);
-const userName = queryParams.get('username');
 const roomName = queryParams.get('room');
 
-if (!userName || !roomName) {
-   throw new Error("Missing query params 'username' or 'room'.");
+if (!roomName) {
+  throw new Error("Missing query param 'room'.");
 }
 
 Dom.chatInput.value = '';
@@ -29,7 +31,7 @@ Dom.chatInput.value = '';
 
 const protocol = (ez_testPC || ez_testSV ? 'http' : 'https');
 const port = (ez_testSV ? 3301 : 22822);
-const url = `${protocol}://${window.location.hostname}:${port}/${encodeURIComponent(userName)}/${encodeURIComponent(roomName)}`;
+const url = `${protocol}://${window.location.hostname}:${port}/${encodeURIComponent(roomName)}`;
 
 const network = new Network;
 
@@ -37,7 +39,7 @@ await Promise.all([ Resources.load(), Animations.init(), network.connect(url) ])
 
 // start the game
 
-export const g = new Game(network, userName, roomName);
+export const g = new Game(network, 'alex', roomName);
 network.startHandlingPackets(g);
 Keys.init(g);
 g.startLoop();

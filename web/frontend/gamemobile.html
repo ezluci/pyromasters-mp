@@ -9,7 +9,11 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    
    <link rel="stylesheet" href="/css/gamemobile.css">
-   <script type="module" src="/src/game/index.ts"></script>
+{{ if eq .AppEnv "development" }}
+    <script type="module" src="http://localhost:5173/src/game/index.ts"></script>
+{{ else }}
+    <script type="module" src=""></script>
+{{ end }}
 
    <script>
       function setViewportHeight() {
@@ -22,6 +26,8 @@
 </head>
 
 <body tabindex="-1">
+    {{ template "topbar.html" . }}
+
    <span id="loading" style="font-size: large; font-weight: bold;"></span>
    
    <div id="main">

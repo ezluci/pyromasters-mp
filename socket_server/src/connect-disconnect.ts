@@ -10,18 +10,9 @@ export function playerConnect(url: string | undefined, rooms: Map<string, Room>,
       return sok.close();
    }
 
-   const urlParts = url.split('/');
-   if (urlParts.length !== 2) {
-      return sok.close();
-   }
+   const roomName = decodeURIComponent(url).toLowerCase();
 
-   const userName = decodeURIComponent(urlParts[0]);
-   const roomName = decodeURIComponent(urlParts[1]).toLowerCase();
-
-   if (! /^[ -~]{1,15}$/.test(userName)) {
-      OutPackets.send_error(sok, 'playerJoined: invalid username. DISCONNECTED.');
-      return sok.close();
-   }
+   const userName = 'aa';
    
    if (! /^[ -~]{1,15}$/.test(roomName)) {
       OutPackets.send_error(sok, 'playerJoined: invalid room name. DISCONNECTED.');

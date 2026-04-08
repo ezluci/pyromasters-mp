@@ -15,6 +15,7 @@ import (
 type PageData struct {
 	IsLoggedIn bool
 	Username   string
+	AppEnv     string
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
@@ -54,6 +55,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 
 		data := PageData{
 			IsLoggedIn: false,
+			AppEnv:     configs.Cfg.AppEnv,
 		}
 
 		cookie, err := r.Cookie("jwt_token")
@@ -67,6 +69,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 				writeJSON(w, http.StatusInternalServerError, ErrorResponse{
 					Error: "cant decode token",
 				})
+				return
 			}
 
 			claims, ok := jwtToken.Claims.(jwt.MapClaims)
@@ -90,15 +93,15 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		tmpl := templates.Templates.Lookup("404.html")
+		w.Header().Set("Content-Type", "text/html")
+		w.WriteHeader(http.StatusNotFound)
+
 		if err := tmpl.Execute(w, ""); err != nil {
 			writeJSON(w, http.StatusInternalServerError, ErrorResponse{
 				Error: "cant execute 404 template",
 			})
 			return
 		}
-
-		w.Header().Set("Content-Type", "text/html")
-		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 	w.Write(fileContents)

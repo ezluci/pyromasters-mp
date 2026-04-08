@@ -28,10 +28,10 @@ export class Animations {
          const img = new Image();
          img.onload = () => resolve(img);
          img.onerror = reject;
-         img.src = '/assets/images/animations/spritesheet.png';
+         img.src = '/images/animations/spritesheet.png';
       });
 
-      this.sprite.data = await fetch('/assets/images/animations/spritesheet.json').then(file => file.json());
+      this.sprite.data = await fetch('/images/animations/spritesheet.json').then(file => file.json());
       
       this.animations = {} as AnimationsType;
       this.sprite.data.inputs.forEach((input: any) => {

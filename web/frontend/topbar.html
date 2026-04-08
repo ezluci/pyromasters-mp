@@ -1,19 +1,21 @@
-<div style="height: 50px; display: flex; justify-content: right; align-items: center; background-color: #2a5821; color: black;">
+<div style="height: 35px; display: flex; justify-content: right; align-items: center; background-color: #2a5821; color: black; font-size: 16px;">
     <div style="margin-right: 10px;">
     {{ if not .IsLoggedIn }}
         <div id="login-div">
+            <span style="background-color: white;">LOGIN:</span>
             <label>username</label>
-            <input type="text" id="login-username">
+            <input type="text" id="login-username" data-enter-target="login-button">
             <label>password</label>
-            <input type="password" id="login-password">
+            <input type="password" id="login-password" data-enter-target="login-button">
             <button type="submit" id="login-button">login</button>
             <a href="#" id="goto-register">dont have an account?</a>
         </div>
         <div id="register-div" hidden>
+            <span style="background-color: white;">REGISTER:</span>
             <label>username</label>
-            <input type="text" id="register-username">
+            <input type="text" id="register-username" data-enter-target="register-button">
             <label>password</label>
-            <input type="password" id="register-password">
+            <input type="password" id="register-password" data-enter-target="register-button">
             <button type="submit" id="register-button">register</button>
             <a href="#" id="goto-login">already have an account?</a>
         </div>

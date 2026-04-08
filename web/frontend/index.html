@@ -2,19 +2,24 @@
 <html lang="en-us">
 
 <head>
-   <title>pyromasters-mp - index</title>
+    <title>pyromasters-mp - index</title>
 
-   <meta charset="UTF-8">
-   <link rel="icon" href="/favicon.ico">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
-   <link rel="stylesheet" href="/css/index.css">
-   <script type="module">
-      import MobileDetect from 'mobile-detect';
-      const md = new MobileDetect(window.navigator.userAgent);
-      document.querySelector('#platform-select').value = md.mobile() ? 'mobile' : 'pc';
-   </script>
-   <script type="module" src="src/index/index.ts"></script>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="/css/index.css">
+    <script type="module">
+        import MobileDetect from 'mobile-detect';
+        const md = new MobileDetect(window.navigator.userAgent);
+        document.querySelector('#platform-select').value = md.mobile() ? 'mobile' : 'pc';
+    </script>
+
+{{ if eq .AppEnv "development" }}
+    <script type="module" src="http://localhost:5173/src/index/index.ts"></script>
+{{ else }}
+    <script type="module" src=""></script>
+{{ end }}
 </head>
 
 <body>
@@ -24,8 +29,6 @@
     
     <h1 style="font-family: initial;">JOIN A GAME</h1>
     
-    <input style="height: 30px;" id="username" name="username" autocomplete="off" placeholder="Username">
-    <br>
     <input style="height: 30px;" id="room" name="room" autocomplete="off" placeholder="Room">
     <br>
 
@@ -36,34 +39,10 @@
         <option value="mobile">Mobile</option>
     </select>
 
-    <br><br>
-
-    <script>
-        function getUsername() {
-            return document.querySelector('#username').value;
-        }
-        function getRoom() {
-            return document.querySelector('#room').value;
-        }
-
-        const params = new URLSearchParams(window.location.search);
-    </script>
+    <br>
+    {{ if not .IsLoggedIn }} <p><b>You are not logged in! you can only spectate.</b></p> {{ end }}
     
-    <button id="play-button" onclick="
-        username = getUsername();
-        room = getRoom();
-        const el = document.createElement('div');
-        if (!username || !room) {
-            el.innerText = 'please put something ...';
-        } else if (username.length > 15 || room.length > 15) {
-            el.innerText = 'max 15 characters :(';
-        } else if (! /^[ -~]{1,15}$/.test(username) || ! /^[ -~]{1,15}$/.test(room)) {
-            el.innerText = 'please use printable ascii characters 🦆🦆';
-        } else {
-            document.location.href = `game${document.querySelector('#platform-select').value==='mobile' ? 'mobile' : 'pc'}?username=${encodeURIComponent(username)}&room=${encodeURIComponent(room)}`;
-        }
-        document.querySelector('#errors').appendChild(el);
-    ">PLAY</button>
+    <button id="join-button">{{ if .IsLoggedIn }} PLAY {{ else }} SPECTATE {{ end }}</button>
 
     <div id="errors"></div>
     

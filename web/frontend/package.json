@@ -13,5 +13,8 @@
     "howler": "^2.2.4",
     "mobile-detect": "^1.4.5",
     "vite": "^8.0.5"
+  },
+  "dependencies": {
+    "@types/howler": "^2.2.12"
   }
 }

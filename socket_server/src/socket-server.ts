@@ -1,7 +1,6 @@
 import dotenv from 'dotenv';
 import { readFileSync } from 'fs';
-import path from 'path';
-import { WebSocket, WebSocketServer } from 'ws';
+import { CLOSING, WebSocket, WebSocketServer } from 'ws';
 
 import { playerConnect, playerDisconnect } from "./connect-disconnect";
 import { processPacket } from "./in-packets/process-packet";
@@ -16,7 +15,7 @@ import { tie_kill } from './socket-functions/kill';
 // read sound names and store them in an array. play-sound.ts uses this array.
 // the sounds are in the same order as the client.
 
-const soundsFile = readFileSync(path.join('..', 'web', 'public', 'assets', 'audiosprite.json'), 'utf8');
+const soundsFile = readFileSync('../web/public/audiosprite.json', 'utf8');
 const soundsJSON = JSON.parse(soundsFile);
 
 export const soundNames: string[] = [];
