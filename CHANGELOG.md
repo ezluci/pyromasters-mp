@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.11.0] - 2026-04-08
+
+- Removed bomb background
+- Added a Suicide button
+- reorganize project + start working on db
+- create login/register endpoints
+- create topbar for login/register & cookies
+- add logout + remove manual username
+- a working version with db users
+- added guests
+- fixed bugs with new users
+
 ## [0.10.10] - 2025-10-04
 
 - Fixed vulnerabilities
