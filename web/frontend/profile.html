@@ -2,11 +2,13 @@
 <html lang="en-us">
 
 <head>
-    <title>profile: {{ }}</title>
+    <title>profile: {{ .Username }}</title>
 
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script type="module" src="/src/profile.ts"></script>
     
     <!-- CSS -->
     <link rel="stylesheet" href="/css/profile.css">
@@ -17,7 +19,7 @@
 
     <div id="main">
         <div id="profile-main">
-            <div class="profile-header">Profile: ez</div>
+            <div class="profile-header">Profile: {{ .Username }}</div>
             <div class="profile-info">Last online: ---</div>
             <div class="profile-info">Friends: ---</div>
             <div class="profile-info">Games played: ---</div>

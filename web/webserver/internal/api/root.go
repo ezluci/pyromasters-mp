@@ -1,24 +1,19 @@
 package api
 
 import (
-	"html/template"
 	"net/http"
-	"strconv"
 	"strings"
 	"webserver/configs"
-	"webserver/internal/logger"
 	"webserver/internal/templates"
-
-	"github.com/golang-jwt/jwt/v5"
 )
 
-type PageData struct {
-	AppEnv     string
-	IsLoggedIn bool
-	Username   string
-	UserID     int
-	SocketUrl  string
-	Secure     bool
+type IndexPageData struct {
+	BaseData
+}
+
+type GamePageData struct {
+	BaseData
+	SocketUrl string
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
@@ -34,64 +29,27 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 
 	// serve the 3 html pages
 	if lowerPath == "" || lowerPath == "gamepc" || lowerPath == "gamemobile" {
-		w.Header().Set("Content-Type", "text/html")
 		if lowerPath == "" {
 			lowerPath = "index"
 		}
+		tmpl := templates.Lookup(lowerPath)
 
-		var tmpl *template.Template
-		var err error
-		if configs.Cfg.AppEnv != "production" {
-			tmpl, err = template.New(lowerPath+".html").Funcs(
-				template.FuncMap{
-					"version": func() string { return configs.Cfg.Version },
-				}).ParseFiles(
-				"../public/"+lowerPath+".html",
-				"../public/footer.html",
-				"../public/topbar.html",
-			)
-			if err != nil {
-				logger.Log.Panicf("cant parse template: %v", err)
-				return
-			}
+		baseData := getBaseData(r)
+		var data any
+		if lowerPath == "index" {
+			data = IndexPageData{baseData}
 		} else {
-			tmpl = templates.Templates.Lookup(lowerPath + ".html")
+			data = GamePageData{baseData, configs.Cfg.SocketUrl}
 		}
 
-		data := PageData{
-			AppEnv:     configs.Cfg.AppEnv,
-			IsLoggedIn: false,
-			SocketUrl:  configs.Cfg.SocketUrl,
-		}
-
-		cookie, err := r.Cookie("jwt_token")
-		if err == nil {
-			jwtTokenEncoded := cookie.Value
-			jwtToken, err := jwt.Parse(jwtTokenEncoded, func(token *jwt.Token) (any, error) {
-				return []byte(configs.Cfg.JWTSecret), nil
-			}, jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Alg()}))
-
-			if err == nil {
-				claims, ok := jwtToken.Claims.(jwt.MapClaims)
-
-				if ok && jwtToken.Valid {
-					data.Username, _ = claims["username"].(string)
-					userID, _ := claims["user_id"].(string)
-					data.UserID, _ = strconv.Atoi(userID)
-					data.IsLoggedIn = true
-				}
-			}
-		}
-
+		w.Header().Set("Content-Type", "text/html")
 		if err := tmpl.Execute(w, data); err != nil {
-			writeJSON(w, http.StatusInternalServerError, ErrorResponse{
-				Error: "cant execute template ",
-			})
+			http.Error(w, "cant execute template", http.StatusInternalServerError)
 			return
 		}
 		return
 	}
 
-	// serve non html content
+	// serve static content
 	http.FileServer(http.Dir("../public")).ServeHTTP(w, r)
 }

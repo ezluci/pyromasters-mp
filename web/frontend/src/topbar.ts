@@ -53,13 +53,13 @@ if (document.querySelector('#login-div')) {
   });
 
   function switchToLoginDiv() {
-    loginDiv.hidden = false;
-    registerDiv.hidden = true;
+    loginDiv.style.display = 'flex';
+    registerDiv.style.display = 'none';
   }
 
   function switchToRegisterDiv() {
-    loginDiv.hidden = true;
-    registerDiv.hidden = false;
+    loginDiv.style.display = 'none';
+    registerDiv.style.display = 'flex';
   }
 
   async function login() {

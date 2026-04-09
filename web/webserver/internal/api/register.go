@@ -14,7 +14,7 @@ type RegisterResponse struct {
 }
 
 var (
-	usernameRegex = regexp.MustCompile(`^[ -~]{2,15}$`)
+	usernameRegex = regexp.MustCompile(`^[a-zA-Z0-9_-]{2,15}$`)
 	passwordRegex = regexp.MustCompile(`^[ -~]{5,50}$`)
 )
 
@@ -37,7 +37,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.Form.Get("username")
 	if !isUsernameValid(username) {
 		writeJSON(w, http.StatusBadRequest, ErrorResponse{
-			Error: "username must match ^[ -~]{2,15}$",
+			Error: "username must match " + usernameRegex.String(),
 		})
 		return
 	}
@@ -45,7 +45,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	password := r.Form.Get("password")
 	if !isPasswordValid(password) {
 		writeJSON(w, http.StatusBadRequest, ErrorResponse{
-			Error: "password must match ^[ -~]{5,50}$",
+			Error: "password must match " + passwordRegex.String(),
 		})
 		return
 	}

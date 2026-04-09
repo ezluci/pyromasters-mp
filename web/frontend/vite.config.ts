@@ -8,8 +8,9 @@ export default defineConfig({
         gamepc: 'gamepc.html',
         gamemobile: 'gamemobile.html',
         footer: 'footer.html',
-        topbar: 'topbar.html'
-      }
+        topbar: 'topbar.html',
+        profile: 'profile.html',
+      },
     },
     outDir: '../public',
     emptyOutDir: true,
@@ -19,7 +20,7 @@ export default defineConfig({
   server: {
     cors: true,
     hmr: {
-      host: 'localhost'
-    }
-  }
+      host: 'localhost',
+    },
+  },
 });

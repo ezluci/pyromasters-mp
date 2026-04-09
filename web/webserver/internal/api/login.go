@@ -7,7 +7,6 @@ import (
 	"webserver/configs"
 	"webserver/internal/db"
 	"webserver/internal/logger"
-	"webserver/internal/model"
 
 	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
@@ -15,8 +14,6 @@ import (
 
 type LoginResponse struct {
 }
-
-type User = model.User
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {

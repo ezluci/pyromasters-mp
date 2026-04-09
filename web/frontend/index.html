@@ -2,7 +2,7 @@
 <html lang="en-us">
 
 <head>
-    <title>pyromasters-mp - index</title>
+    <title>pyromasters-mp</title>
 
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
@@ -10,7 +10,7 @@
     
     <script type="module">
         import MobileDetect from 'mobile-detect';
-        const md = new MobileDetect(window.navigator.userAgent);
+        const md = new MobileDetect(window.navigator.CurrentUserAgent);
         document.querySelector('#platform-select').value = md.mobile() ? 'mobile' : 'pc';
     </script>
 
@@ -43,9 +43,9 @@
     </select>
 
     <br>
-    {{ if not .IsLoggedIn }} <p><b>You are not logged in! you can only spectate.</b></p> {{ end }}
+    {{ if not .CurrentUser }} <p><b>You are not logged in! you can only spectate.</b></p> {{ end }}
     
-    <button id="join-button">{{ if .IsLoggedIn }} PLAY {{ else }} SPECTATE {{ end }}</button>
+    <button id="join-button">{{ if .CurrentUser }} PLAY {{ else }} SPECTATE {{ end }}</button>
 
     <div id="errors"></div>
     

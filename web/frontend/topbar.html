@@ -4,7 +4,7 @@
             <a href="/">goto index</a>
         </div>
 
-    {{ if not .IsLoggedIn }}
+    {{ if not .CurrentUser }}
         <div id="login-div">
             <span id="login-header">LOGIN:</span>
             <label>username</label>
@@ -25,7 +25,7 @@
         </div>
     {{ else }}
         <div id="topbar-profile">
-            <b>welcome {{ .Username }}!</b>
+            <b>welcome {{ .CurrentUser.Username }}!</b>
             <a href="/profile">your profile</a>
             <a href="#" id="logout">logout</a>
         </div>

@@ -15,6 +15,7 @@ var requiredTemplates = []string{
 	"gamemobile",
 	"gamepc",
 	"topbar",
+	"profile",
 }
 
 func LoadTemplates() {
@@ -31,5 +32,26 @@ func LoadTemplates() {
 		if Templates.Lookup(t+".html") == nil {
 			logger.Log.Fatalf("template %s not found", t)
 		}
+	}
+}
+
+func nonProdLookup(name string) *template.Template {
+	tmpl, err := template.New(name+".html").ParseFiles(
+		"../public/"+name+".html",
+		"../public/footer.html",
+		"../public/topbar.html",
+	)
+	if err != nil {
+		logger.Log.Panicf("cant parse template: %v", err)
+		return nil
+	}
+	return tmpl
+}
+
+func Lookup(name string) *template.Template {
+	if configs.Cfg.AppEnv != "production" {
+		return nonProdLookup(name)
+	} else {
+		return Templates.Lookup(name + ".html")
 	}
 }

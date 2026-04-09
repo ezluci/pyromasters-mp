@@ -19,13 +19,13 @@
 
 
     <script>
-    {{ if .IsLoggedIn }}
+    {{ if .CurrentUser }}
         window.myUser = {
-            "name": {{ .Username }},
-            "id": {{ .UserID }}
+            "name": {{ .CurrentUser.Username }},
+            "id": {{ .CurrentUser.ID }}
         };
     {{ end }}
-        window.isGuest = {{ if .IsLoggedIn }} false {{ else }} true {{ end }};
+        window.isGuest = {{ if .CurrentUser }} false {{ else }} true {{ end }};
         window.socketUrl = {{ .SocketUrl }};
     </script>
 </head>
@@ -41,7 +41,7 @@
 
         <div id="log">
             <div id="log-messages"></div>
-            <div id="log-buttons" {{ if not .IsLoggedIn }} hidden {{ end }}>
+            <div id="log-buttons" {{ if not .CurrentUser }} hidden {{ end }}>
                <input id="chat-input">
                <button id="chat-send-message">Send</button>
             </div>
@@ -74,7 +74,7 @@
         </div>
 
         <div id="tips">
-        {{ if .IsLoggedIn }}
+        {{ if .CurrentUser }}
             Move with W A S D. Place bombs with P.
         {{ else }}
             You are spectating the game. LOGIN to play.
@@ -223,11 +223,11 @@
             <div id="start-game">
                 <span id="room-status" style="color: red;"></span>
                 <br>
-                <button id="start-button" {{ if not .IsLoggedIn }} hidden {{ end }}>Start game</button>
+                <button id="start-button" {{ if not .CurrentUser }} hidden {{ end }}>Start game</button>
             </div>
             <br>
                 
-            <div {{ if not .IsLoggedIn }} hidden {{ end }}>
+            <div {{ if not .CurrentUser }} hidden {{ end }}>
                 <button id="suicide-button">Suicide</button>
             </div>
 
