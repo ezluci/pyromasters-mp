@@ -1,9 +1,14 @@
-import { Dom } from "./dom";
-import { drawBlock, drawFrame, drawPlayer, drawPlayerImage } from "./game-canvas";
-import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY } from "./game-consts";
-import { gameLoop } from "./game-loop";
-import type { Network } from "./network/network";
-import { Block, Bomb, Color, Map, Player, RoomStatus } from "./types";
+import { Dom } from './dom';
+import {
+  drawBlock,
+  drawFrame,
+  drawPlayer,
+  drawPlayerImage,
+} from './game-canvas';
+import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY } from './game-consts';
+import { gameLoop } from './game-loop';
+import type { Network } from './network/network';
+import { Block, Bomb, Color, Map, Player, RoomStatus } from './types';
 
 export class Game {
   roomName: string;
@@ -22,13 +27,14 @@ export class Game {
   endScreen: Color | 'draw' | null;
   menuSoundId: number | null;
 
-    // ranking: ..., // export const ranking: { name: string, wins: number, kills: number }[] = [];
+  // ranking: ..., // export const ranking: { name: string, wins: number, kills: number }[] = [];
   grid: Block[][];
   bombs: Bomb[];
   flames: number[][]; // counts how many flames there are in a spot
 
   players: globalThis.Map<number, Player>;
   colors: { [C in Color]: Player | null };
+  guestCount: number;
 
   network: Network;
 
@@ -36,7 +42,12 @@ export class Game {
   removePlayer: (id: number) => void;
   changePlayerColor: (id: number, newColor: Color | null) => void;
   startLoop: () => void;
-  drawBlock: (image: HTMLImageElement, xblock: number, yblock: number, manualOffset?: number) => void;
+  drawBlock: (
+    image: HTMLImageElement,
+    xblock: number,
+    yblock: number,
+    manualOffset?: number,
+  ) => void;
   drawPlayerImage: (image: HTMLImageElement, x: number, y: number) => void;
   drawPlayer: (player: Player) => void;
   drawFrame: () => void;
@@ -48,7 +59,7 @@ export class Game {
     this.deltaTime = 0;
 
     this.ctx = Dom.canvas.getContext('2d')!;
-    this.isMobile = (window.location.pathname.toLowerCase() === '/gamemobile');
+    this.isMobile = window.location.pathname.toLowerCase() === '/gamemobile';
 
     this.map = null;
     this.gameTime = 0;
@@ -57,17 +68,22 @@ export class Game {
     this.menuSoundId = null;
 
     // ranking: ..., // export const ranking: { name: string, wins: number, kills: number }[] = [];
-    this.grid = Array.from({ length: BLOCKS_HORIZONTALLY }, () => Array(BLOCKS_VERTICALLY).fill(Block.NO)) as Block[][];
+    this.grid = Array.from({ length: BLOCKS_HORIZONTALLY }, () =>
+      Array(BLOCKS_VERTICALLY).fill(Block.NO),
+    ) as Block[][];
     this.bombs = [] as Bomb[];
-    this.flames = Array.from({ length: BLOCKS_HORIZONTALLY }, () => Array(BLOCKS_VERTICALLY).fill(0)) as number[][];
+    this.flames = Array.from({ length: BLOCKS_HORIZONTALLY }, () =>
+      Array(BLOCKS_VERTICALLY).fill(0),
+    ) as number[][];
 
     this.players = new globalThis.Map();
     this.colors = {
       white: null,
       black: null,
       orange: null,
-      green: null
+      green: null,
     } as { [C in Color]: Player | null };
+    this.guestCount = 0;
 
     this.network = network;
 
@@ -81,14 +97,13 @@ export class Game {
         Dom.selectColors.hidden = false;
       }
       gameLoop(this);
-    }
+    };
     this.drawBlock = drawBlock.bind(this);
     this.drawPlayerImage = drawPlayerImage.bind(this);
     this.drawPlayer = drawPlayer.bind(this);
     this.drawFrame = drawFrame.bind(this);
   }
 }
-
 
 function addPlayer(this: Game, id: number, name: string) {
   const player = new Player(id, name);

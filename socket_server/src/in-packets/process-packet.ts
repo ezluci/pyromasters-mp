@@ -1,13 +1,13 @@
-import { WebSocket } from "ws";
-import { processPacket_chat } from "./chat";
-import { processPacket_selectColor } from "./select-color";
-import { processPacket_startGame } from "./start-game";
-import { processPacket_portalTp } from "./portal-tp";
-import { processPacket_placeBomb } from "./place-bomb";
-import { processPacket_coords } from "./coords";
-import { processPacket_kickBomb } from "./kick-bomb";
-import { processPacket_ping } from "./ping";
-import { processPacket_suicide } from "./suicide";
+import { WebSocket } from 'ws';
+import { processPacket_chat } from './chat';
+import { processPacket_selectColor } from './select-color';
+import { processPacket_startGame } from './start-game';
+import { processPacket_portalTp } from './portal-tp';
+import { processPacket_placeBomb } from './place-bomb';
+import { processPacket_coords } from './coords';
+import { processPacket_kickBomb } from './kick-bomb';
+import { processPacket_ping } from './ping';
+import { processPacket_suicide } from './suicide';
 
 const char_chat = 'C'.charCodeAt(0);
 const char_selectColor = 'O'.charCodeAt(0);
@@ -23,7 +23,7 @@ export function processPacket(sok: WebSocket, packet: Buffer) {
   if (packet.length === 0) {
     return;
   }
-  
+
   const packetType = packet[0];
 
   if (packetType === char_chat) {

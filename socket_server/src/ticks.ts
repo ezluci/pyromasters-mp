@@ -1,7 +1,7 @@
 // !! the tick loop is not started on object construction
 
-import { WebSocket } from "ws";
-import { logger } from "./log";
+import { WebSocket } from 'ws';
+import { logger } from './log';
 
 /*
  breakdown of the tick class:
@@ -21,112 +21,111 @@ import { logger } from "./log";
 */
 
 export class Ticks {
-   sok: WebSocket;
-   
-   TPS: number; // ticks per second
-   MSPT: number; // ms per tick
-   runEveryTick: Function | null; // a function that will run on every tick
-   
-   tick: number; // the tick to be processed
-   tickIds: number[][]; // tickIds[tick] = [the funcIds to be processed]
-   funcIdCounter: number;
-   funcs: { func: Function, tick: number }[]; // funcs[id] = {func, tick}
-   
-   tickLoopIntervalId: ReturnType<typeof setTimeout> | null;
+  sok: WebSocket;
 
-   
-   constructor(sok: WebSocket, runEveryTick: Function | null) {
-      this.sok = sok;
+  TPS: number; // ticks per second
+  MSPT: number; // ms per tick
+  runEveryTick: Function | null; // a function that will run on every tick
 
-      this.TPS = 62.5;
-      this.MSPT = Math.round(1000 / this.TPS);
-      this.runEveryTick = runEveryTick;
-      
-      this.tick = 0;
-      this.tickIds = [];
-      this.funcIdCounter = 0;
-      this.funcs = [];
-      
-      this.tickLoopIntervalId = null;
-   }
+  tick: number; // the tick to be processed
+  tickIds: number[][]; // tickIds[tick] = [the funcIds to be processed]
+  funcIdCounter: number;
+  funcs: { func: Function; tick: number }[]; // funcs[id] = {func, tick}
 
-   startTickLoop() {
-      if (this.tickLoopIntervalId) {
-         logger.error('tick loop already started, ignoring request');
-         return;
-      }
+  tickLoopIntervalId: ReturnType<typeof setTimeout> | null;
 
-      this.tick = 0;
-      this.tickIds = [];
-      this.funcIdCounter = 0;
-      this.funcs = [];
+  constructor(sok: WebSocket, runEveryTick: Function | null) {
+    this.sok = sok;
 
-      this.processCurrentTick();
-      this.tickLoopIntervalId = setInterval(this.processCurrentTick, this.MSPT);
-   }
+    this.TPS = 62.5;
+    this.MSPT = Math.round(1000 / this.TPS);
+    this.runEveryTick = runEveryTick;
 
-   endTickLoop() {
-      if (this.tickLoopIntervalId === null) {
-         return logger.error('tick loop already ended, ignoring request');
-      }
-      
-      clearInterval(this.tickLoopIntervalId);
-      this.tickLoopIntervalId = null;
-   }
+    this.tick = 0;
+    this.tickIds = [];
+    this.funcIdCounter = 0;
+    this.funcs = [];
 
-   processCurrentTick = () => {
-      this.tickIds[this.tick]?.forEach(funcId => this.funcs[funcId].func());
+    this.tickLoopIntervalId = null;
+  }
 
-      if (this.runEveryTick) {
-         this.runEveryTick();
-      }
-      
-      this.tick ++;
-   };
+  startTickLoop() {
+    if (this.tickLoopIntervalId) {
+      logger.error('tick loop already started, ignoring request');
+      return;
+    }
 
-   addFunc = (func: Function, ticks_after: number): number | undefined => {
-      if (!this.tickLoopIntervalId) {
-         logger.error('addfunc on ended tickloop');
-         return undefined;
-      }
-      if (ticks_after < 0) {
-         logger.error('trying to add a function to a past tick');
-         return undefined;
-      }
-      
-      ticks_after = Math.round(ticks_after);
-      const newTick: number = this.tick + ticks_after;
-      const funcId: number = this.funcIdCounter;
-      this.funcs[funcId] = { func: func, tick: newTick };
-      
-      if (this.tickIds[newTick] === undefined) {
-         this.tickIds[newTick] = [];
-      }
-      this.tickIds[newTick].push(funcId);
-      
-      this.funcIdCounter ++;
-      return funcId;
-   };
+    this.tick = 0;
+    this.tickIds = [];
+    this.funcIdCounter = 0;
+    this.funcs = [];
 
-   removeFunc = (funcId: number) => {
-      if (!this.tickLoopIntervalId) {
-         logger.error('removefunc on ended tickloop:');
-         logger.debug(this.funcs[funcId].func.toString());
-         return;
-      }
-      if (this.funcs[funcId] === undefined) {
-         return logger.error('removeFunc funcId inexistent');
-      }
-      const tick: number = this.funcs[funcId].tick;
-      if (this.tickIds[tick] === undefined) {
-         return logger.error('trying to remove an inexistent funcId');
-      }
+    this.processCurrentTick();
+    this.tickLoopIntervalId = setInterval(this.processCurrentTick, this.MSPT);
+  }
 
-      const index: number = this.tickIds[tick].indexOf(funcId);
-      if (index !== -1) {
-         this.tickIds[tick].splice(index, 1);
-      } else {
-         return logger.error('trying to remove an inexistent funcId');
-      }
-   }
-};
+  endTickLoop() {
+    if (this.tickLoopIntervalId === null) {
+      return logger.error('tick loop already ended, ignoring request');
+    }
+
+    clearInterval(this.tickLoopIntervalId);
+    this.tickLoopIntervalId = null;
+  }
+
+  processCurrentTick = () => {
+    this.tickIds[this.tick]?.forEach((funcId) => this.funcs[funcId].func());
+
+    if (this.runEveryTick) {
+      this.runEveryTick();
+    }
+
+    this.tick++;
+  };
+
+  addFunc = (func: Function, ticks_after: number): number | undefined => {
+    if (!this.tickLoopIntervalId) {
+      logger.error('addfunc on ended tickloop');
+      return undefined;
+    }
+    if (ticks_after < 0) {
+      logger.error('trying to add a function to a past tick');
+      return undefined;
+    }
+
+    ticks_after = Math.round(ticks_after);
+    const newTick: number = this.tick + ticks_after;
+    const funcId: number = this.funcIdCounter;
+    this.funcs[funcId] = { func: func, tick: newTick };
+
+    if (this.tickIds[newTick] === undefined) {
+      this.tickIds[newTick] = [];
+    }
+    this.tickIds[newTick].push(funcId);
+
+    this.funcIdCounter++;
+    return funcId;
+  };
+
+  removeFunc = (funcId: number) => {
+    if (!this.tickLoopIntervalId) {
+      logger.error('removefunc on ended tickloop:');
+      logger.error(this.funcs[funcId].func.toString());
+      return;
+    }
+    if (this.funcs[funcId] === undefined) {
+      return logger.error('removeFunc funcId inexistent');
+    }
+    const tick: number = this.funcs[funcId].tick;
+    if (this.tickIds[tick] === undefined) {
+      return logger.error('trying to remove an inexistent funcId');
+    }
+
+    const index: number = this.tickIds[tick].indexOf(funcId);
+    if (index !== -1) {
+      this.tickIds[tick].splice(index, 1);
+    } else {
+      return logger.error('trying to remove an inexistent funcId');
+    }
+  };
+}

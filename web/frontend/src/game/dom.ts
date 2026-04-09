@@ -1,21 +1,34 @@
-import { Color, Player } from "./types";
+import { Color, Player } from './types';
 
 export class Dom {
   // elements
   static canvas = document.querySelector('#canvas') as HTMLCanvasElement;
 
   static log = document.querySelector('#log-messages') as HTMLDivElement;
-  static playerList = document.querySelector('#player-list') as HTMLUListElement;
+  static playerList = document.querySelector(
+    '#player-list',
+  ) as HTMLUListElement;
   static ping = document.querySelector('#ping') as HTMLSpanElement;
 
   static loading = document.querySelector('#loading') as HTMLSpanElement;
-  static startButton = document.querySelector('#start-button') as HTMLButtonElement;
-  static suicideButton = document.querySelector('#suicide-button') as HTMLButtonElement;
-  static mapSelected = document.querySelector('#map-selected') as HTMLSelectElement;
-  static chatSendMsg = document.querySelector('#chat-send-message') as HTMLButtonElement;
+  static startButton = document.querySelector(
+    '#start-button',
+  ) as HTMLButtonElement;
+  static suicideButton = document.querySelector(
+    '#suicide-button',
+  ) as HTMLButtonElement;
+  static guestCount = document.querySelector('#guest-count') as HTMLSpanElement;
+  static mapSelected = document.querySelector(
+    '#map-selected',
+  ) as HTMLSelectElement;
+  static chatSendMsg = document.querySelector(
+    '#chat-send-message',
+  ) as HTMLButtonElement;
 
   static roomStatus = document.querySelector('#room-status') as HTMLSpanElement;
-  static selectColors = document.querySelector('#select-color') as HTMLDivElement;
+  static selectColors = document.querySelector(
+    '#select-color',
+  ) as HTMLDivElement;
   static selectMap = document.querySelector('#select-map') as HTMLDivElement;
   static tips = document.querySelector('#tips') as HTMLDivElement;
   static chatInput = document.querySelector('#chat-input') as HTMLInputElement;
@@ -25,7 +38,9 @@ export class Dom {
   static selectBlack = document.querySelector('#black') as HTMLButtonElement;
   static selectOrange = document.querySelector('#orange') as HTMLButtonElement;
   static selectGreen = document.querySelector('#green') as HTMLButtonElement;
-  static selectSpectator = document.querySelector('#spectator') as HTMLButtonElement;
+  static selectSpectator = document.querySelector(
+    '#spectator',
+  ) as HTMLButtonElement;
 
   static powerupsMain = document.querySelector('#powerups') as HTMLDivElement;
   static powerups = {} as { [C in Color]: PowerupDOM };
@@ -34,22 +49,44 @@ export class Dom {
   static addPlayer = DOM_addPlayer.bind(this);
   static updatePlayer = DOM_updatePlayer.bind(this);
   static removePlayer = DOM_removePlayer.bind(this);
+  static updateGuestCount = DOM_updateGuestCount.bind(this);
   static addChatMessage = DOM_addChatMessage.bind(this);
   static addLog = DOM_addLog.bind(this);
-};
-
+}
 
 // set up Dom.powerups
-type PowerupType = 'main' | 'bomblength' | 'bombtime' | 'speed' | 'kickbomb' | 'bomb1' | 'bomb2' | 'bomb3' | 'bomb4';
+type PowerupType =
+  | 'main'
+  | 'bomblength'
+  | 'bombtime'
+  | 'speed'
+  | 'kickbomb'
+  | 'bomb1'
+  | 'bomb2'
+  | 'bomb3'
+  | 'bomb4';
 type PowerupDOM = {
-  [P in PowerupType]: HTMLDivElement
+  [P in PowerupType]: HTMLDivElement;
 };
 
-Object.values(Color).forEach(color => {
+Object.values(Color).forEach((color) => {
   Dom.powerups[color] = {} as PowerupDOM;
-  Dom.powerups[color].main = document.querySelector('#powerups-' + color) as HTMLDivElement;
-  ['bomblength', 'bombtime', 'speed', 'kickbomb', 'bomb1', 'bomb2', 'bomb3', 'bomb4'].forEach((powerName: string) => {
-    Dom.powerups[color][powerName as PowerupType] = document.querySelector('#powerups-' + color + '-' + powerName) as HTMLDivElement;
+  Dom.powerups[color].main = document.querySelector(
+    '#powerups-' + color,
+  ) as HTMLDivElement;
+  [
+    'bomblength',
+    'bombtime',
+    'speed',
+    'kickbomb',
+    'bomb1',
+    'bomb2',
+    'bomb3',
+    'bomb4',
+  ].forEach((powerName: string) => {
+    Dom.powerups[color][powerName as PowerupType] = document.querySelector(
+      '#powerups-' + color + '-' + powerName,
+    ) as HTMLDivElement;
   });
 }); // at least it's short
 
@@ -71,7 +108,8 @@ function DOM_updatePlayer(this: typeof Dom, player: Player) {
     const liChild = child as HTMLLIElement;
     if (liChild.dataset.id === player.id.toString()) {
       // color
-      liChild.style.backgroundColor = (player.color === null ? 'gray' : player.color);
+      liChild.style.backgroundColor =
+        player.color === null ? 'gray' : player.color;
       if (player.color === Color.BLACK) {
         liChild.style.color = 'white';
       } else {
@@ -81,10 +119,14 @@ function DOM_updatePlayer(this: typeof Dom, player: Player) {
       // isOwner
       liChild.innerText = player.name;
       if (player.isOwner) {
-        liChild.innerText += ` ${String.fromCodePoint(0x1F451)}`;
+        liChild.innerText += ` ${String.fromCodePoint(0x1f451)}`;
       }
     }
   });
+}
+
+function DOM_updateGuestCount(this: typeof Dom, guestCount: number) {
+  this.guestCount.innerText = guestCount.toString();
 }
 
 function DOM_removePlayer(this: typeof Dom, player: Player) {
@@ -93,21 +135,21 @@ function DOM_removePlayer(this: typeof Dom, player: Player) {
       child.remove();
       return;
     }
-  })
+  });
 }
 
 function DOM_addChatMessage(this: typeof Dom, userName: string, msg: string) {
-   const div = document.createElement('div');
-   div.innerText = `Player ${userName}: ${msg}`;
-   this.log.append(div);
-   this.log.scrollTop = this.log.scrollHeight;
+  const div = document.createElement('div');
+  div.innerText = `Player ${userName}: ${msg}`;
+  this.log.append(div);
+  this.log.scrollTop = this.log.scrollHeight;
 }
 
 function DOM_addLog(this: typeof Dom, msg: string) {
-   const date = new Date();
-   const spanEl = document.createElement('span');
-   spanEl.style.display = 'block';
-   spanEl.innerText = `${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}:${date.getSeconds().toString().padStart(2,'0')}: ${msg}`;
-   this.log.appendChild(spanEl);
-   this.log.scrollTop = this.log.scrollHeight;
+  const date = new Date();
+  const spanEl = document.createElement('span');
+  spanEl.style.display = 'block';
+  spanEl.innerText = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:${date.getSeconds().toString().padStart(2, '0')}: ${msg}`;
+  this.log.appendChild(spanEl);
+  this.log.scrollTop = this.log.scrollHeight;
 }

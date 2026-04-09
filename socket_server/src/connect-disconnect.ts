@@ -1,17 +1,22 @@
-import { Animation, Color, RoomStatus } from "./game-types";
-import { Room } from "./room";
-import { WebSocket } from "ws";
-import { OutPackets } from "./out-packets/out-packets";
-import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY } from "./game-consts";
-import jwt from "jsonwebtoken";
-import { logger } from "./log";
+import { Animation, Color, RoomStatus } from './game-types';
+import { Room } from './room';
+import { WebSocket } from 'ws';
+import { OutPackets } from './out-packets/out-packets';
+import { BLOCKS_HORIZONTALLY, BLOCKS_VERTICALLY } from './game-consts';
+import jwt from 'jsonwebtoken';
+import { logger } from './log';
+import { isDying } from './socket-functions/is-dying';
+import { kickBomb, placeBomb } from './socket-functions/bombs';
+import { kill } from './socket-functions/kill';
+import { setShield, setSick } from './socket-functions/setters';
+import { collectPowerup } from './socket-functions/powerups';
 
 export function playerConnect(
-    url: string | undefined,
-    rooms: Map<string, Room>,
-    users: Map<number, WebSocket>,
-    sok: WebSocket,
-    claims: jwt.JwtPayload | undefined
+  url: string | undefined,
+  rooms: Map<string, Room>,
+  users: Map<number, WebSocket>,
+  sok: WebSocket,
+  claims: jwt.JwtPayload | undefined,
 ): void {
   url = url?.substring(1);
   if (!url) {
@@ -19,19 +24,19 @@ export function playerConnect(
   }
 
   const roomName = decodeURIComponent(url).toLowerCase();
-  
-  if (! /^[ -~]{1,15}$/.test(roomName)) {
+
+  if (!/^[ -~]{1,15}$/.test(roomName)) {
     const msg = `invalid room name: ${roomName}`;
     logger.notice(msg);
     OutPackets.send_error(sok, msg);
     return sok.close();
   }
 
-  sok.id = (claims ? parseInt(claims.user_id) : 0);
-  sok.name = (claims ? claims.username : '');
+  sok.id = claims ? parseInt(claims.user_id) : 0;
+  sok.name = claims ? claims.username : '';
 
   sok.isOwner = !rooms.has(roomName);
-  sok.isGuest = (claims ? false : true);
+  sok.isGuest = claims ? false : true;
 
   if (!sok.isGuest && users.get(sok.id)) {
     const msg = 'you are already in a room, try again later';
@@ -52,17 +57,27 @@ export function playerConnect(
   sok.bombCount = 0;
   sok.bombTime = 0;
   sok.bombLength = 0;
-  
+
   sok.shield = false;
   sok.shieldFalse_tickId = 0;
 
   sok.sick = false;
   sok.sickFalse_tickId = 0;
-  
+
   sok.kickBombs = false;
 
+  sok.setShield = setShield;
+  sok.setSick = setSick;
+
+  sok.isDying = isDying;
+  sok.placeBomb = placeBomb;
+  sok.kickBomb = kickBomb;
+  sok.kill = kill;
+  sok.collectPowerup = collectPowerup;
+
   if (sok.isGuest && sok.isOwner) {
-    const msg = 'the room doesnt exist. ur not logged in so you cant create rooms. make an account to play';
+    const msg =
+      'the room doesnt exist. ur not logged in so you cant create rooms. make an account to play';
     OutPackets.send_error(sok, msg);
     return sok.close();
   }
@@ -80,13 +95,15 @@ export function playerConnect(
   }
 
   if (!sok.isGuest) {
-    logger.info(`{ id: ${sok.id}, name: ${sok.name} }   JOINS  '${sok.room.name}'`);
+    logger.info(
+      `{ id: ${sok.id}, name: ${sok.name} }   JOINS  '${sok.room.name}'`,
+    );
   } else {
     logger.info(`Guest JOINS  '${sok.room.name}'`);
   }
 
   // send all the existing players to the new player
-  sok.room.players.forEach(player => {
+  sok.room.players.forEach((player) => {
     OutPackets.send_playerPlus(sok, player);
     if (player.color) {
       OutPackets.send_playerAttribute(sok, player, 'color');
@@ -100,17 +117,19 @@ export function playerConnect(
     sok.room.guests.add(sok);
   }
 
-  // send the new player to EVERYONE in the room
   if (!sok.isGuest) {
     OutPackets.send_playerPlus(sok.room, sok);
+    OutPackets.send_guestCount(sok, sok.room.guests.size);
+  } else {
+    OutPackets.send_guestCount(sok.room, sok.room.guests.size);
   }
 
-  sok.room.players.forEach(player => {
+  sok.room.players.forEach((player) => {
     if (player.isOwner) {
       OutPackets.send_playerAttribute(sok, player, 'isOwner');
     }
   });
-  
+
   if (sok.room.status !== RoomStatus.RUNNING) {
     OutPackets.send_playSound(sok, 'menu');
   }
@@ -120,7 +139,7 @@ export function playerConnect(
 
   // send other information about the game
   if (sok.room.status !== RoomStatus.WAITING) {
-    Object.values(Color).forEach(color => {
+    Object.values(Color).forEach((color) => {
       if (sok.room[color]) {
         const sokFrom = sok.room[color];
         // OutPackets.send_playerAttribute(sok, sokFrom, 'wins');
@@ -151,17 +170,20 @@ export function playerConnect(
       }
     }
 
-    sok.room.bombs.forEach(bomb => {
+    sok.room.bombs.forEach((bomb) => {
       OutPackets.send_addBomb(sok, bomb.x, bomb.y, bomb.id);
     });
-    sok.room.flames.forEach(flame => {
+    sok.room.flames.forEach((flame) => {
       OutPackets.send_addFlame(sok, flame.x, flame.y);
     });
   }
 }
 
-
-export function playerDisconnect(rooms: Map<string, Room>, users: Map<number, WebSocket>, sok: WebSocket): void {
+export function playerDisconnect(
+  rooms: Map<string, Room>,
+  users: Map<number, WebSocket>,
+  sok: WebSocket,
+): void {
   if (!sok.room) {
     return;
   }
@@ -179,8 +201,8 @@ export function playerDisconnect(rooms: Map<string, Room>, users: Map<number, We
   if (sok.isOwner) {
     // destroy room
     OutPackets.send_chat(room, sok, 'Owner left. Room deleted.');
-    
-    room.players.forEach(player => {
+
+    room.players.forEach((player) => {
       if (player !== sok) {
         playerDisconnect(rooms, users, player);
       }
@@ -195,13 +217,14 @@ export function playerDisconnect(rooms: Map<string, Room>, users: Map<number, We
       if (sok.color !== null) {
         if (room.status === RoomStatus.RUNNING && !sok.dead) {
           OutPackets.send_death(room, sok.color);
-          room.countPlayersAlive --;
+          room.countPlayersAlive--;
           OutPackets.send_playSound(room, 'dead');
         }
         room[sok.color] = null;
       }
     } else {
       room.guests.delete(sok);
+      OutPackets.send_guestCount(room, sok.room.guests.size);
     }
   }
 

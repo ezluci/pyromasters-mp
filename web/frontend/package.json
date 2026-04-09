@@ -13,7 +13,13 @@
     "concurrently": "^9.2.1",
     "howler": "^2.2.4",
     "mobile-detect": "^1.4.5",
-    "vite": "^8.0.5"
+    "vite": "^8.0.5",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.2.0",
+    "globals": "^17.4.0",
+    "jiti": "^2.6.1",
+    "prettier": "3.8.1",
+    "typescript-eslint": "^8.58.1"
   },
   "dependencies": {
     "@types/howler": "^2.2.12"

@@ -1,10 +1,14 @@
-import { WebSocket } from "ws";
-import { Room } from "../room";
-import { OutPackets } from "./out-packets";
+import { WebSocket } from 'ws';
+import { Room } from '../room';
+import { OutPackets } from './out-packets';
 
 const packetChar = '+'.charCodeAt(0);
 
-export function sendPacket_playerPlus(this: typeof OutPackets, target: Room | WebSocket, sok: WebSocket) {
+export function sendPacket_playerPlus(
+  this: typeof OutPackets,
+  target: Room | WebSocket,
+  sok: WebSocket,
+) {
   const packet = new Uint8Array(1 + 4 + sok.name.length);
 
   packet[0] = packetChar;

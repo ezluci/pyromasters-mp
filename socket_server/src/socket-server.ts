@@ -3,18 +3,12 @@ import './config';
 import { readFileSync } from 'fs';
 import { WebSocket, WebSocketServer } from 'ws';
 
-import { playerConnect, playerDisconnect } from "./connect-disconnect";
-import { processPacket } from "./in-packets/process-packet";
-import { tie_isDying } from "./socket-functions/is-dying";
-import { tie_bombs } from './socket-functions/bombs';
-import { tie_powerups } from "./socket-functions/powerups";
-import { setShield, setSick } from "./socket-functions/setters";
+import { playerConnect, playerDisconnect } from './connect-disconnect';
+import { processPacket } from './in-packets/process-packet';
 import { Room } from './room';
-import { tie_kill } from './socket-functions/kill';
 import { parseCookie } from 'cookie';
 import jwt from 'jsonwebtoken';
 import { logger } from './log';
-
 
 // read sound names and store them in an array. play-sound.ts uses this array.
 // the sounds are in the same order as the client.
@@ -29,7 +23,7 @@ Object.keys(soundsJSON.sprite).forEach((soundName, index) => {
 
 export const soundsCount: { [key: string]: number } = {};
 
-soundNames.forEach(soundName => {
+soundNames.forEach((soundName) => {
   const parts = soundName.split('_');
   if (parts.length > 2) {
     logger.error(`sound name format not good ${soundName}`);
@@ -41,7 +35,6 @@ soundNames.forEach(soundName => {
   soundsCount[parts[0]] += 1;
 });
 
-
 const rooms = new Map<string, Room>(); // info about all rooms by name
 const users = new Map<number, WebSocket>(); // into about all users (by id)
 
@@ -51,14 +44,17 @@ if (!process.env.SOCKET_ADDR || !process.env.JWT_SECRET) {
 }
 
 const [host, port] = process.env.SOCKET_ADDR.split(':');
-const server = new WebSocketServer({
-  autoPong: false,
-  maxPayload: 500_000,
-  host: host,
-  port: parseInt(port)
-}, () => {
-  logger.notice(`Socket server listening on addr ${host}:${port}`);
-});
+const server = new WebSocketServer(
+  {
+    autoPong: false,
+    maxPayload: 500_000,
+    host: host,
+    port: parseInt(port),
+  },
+  () => {
+    logger.notice(`Socket server listening on addr ${host}:${port}`);
+  },
+);
 
 server.on('connection', (sok: WebSocket, req) => {
   sok.lastReceivedPing = performance.now();
@@ -69,27 +65,19 @@ server.on('connection', (sok: WebSocket, req) => {
     const token = cookies.jwt_token;
 
     if (token) {
-        try {
-          claims = jwt.verify(token, process.env.JWT_SECRET!, { algorithms: ['HS256'] }) as jwt.JwtPayload;
-        } catch (err) {
-          sok.close();
-          return;
-        }
+      try {
+        claims = jwt.verify(token, process.env.JWT_SECRET!, {
+          algorithms: ['HS256'],
+        }) as jwt.JwtPayload;
+      } catch (err) {
+        sok.close();
+        return;
+      }
     }
   }
-  
+
   // process the new player
   playerConnect(req.url, rooms, users, sok, claims);
-
-  // attach setters for some socket properties
-  sok.setShield = setShield;
-  sok.setSick = setSick;
-  
-  // attach functions to the sok object
-  tie_isDying(sok);
-  tie_bombs(sok);
-  tie_powerups(sok);
-  tie_kill(sok);
 
   sok.on('message', (data, isBinary) => {
     if (!isBinary || !(data instanceof Buffer)) {
@@ -103,11 +91,10 @@ server.on('connection', (sok: WebSocket, req) => {
   });
 });
 
-
 // remove dead connections
 setInterval(() => {
-  rooms.forEach(room => {
-    room.players.forEach(sok => {
+  rooms.forEach((room) => {
+    room.players.forEach((sok) => {
       if (performance.now() - sok.lastReceivedPing >= 9000) {
         playerDisconnect(rooms, users, sok);
         sok.close();

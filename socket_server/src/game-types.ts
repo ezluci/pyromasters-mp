@@ -1,4 +1,4 @@
-import { WebSocket } from "ws";
+import { WebSocket } from 'ws';
 
 export interface Bomb {
   x: number;
@@ -23,9 +23,9 @@ export interface Flame {
 }
 
 export enum Block {
-  NO,      // nothing
-  NORMAL,  // a block that can be destroyed with bombs
-  PERMANENT,  // a block that cannot be destroyed
+  NO, // nothing
+  NORMAL, // a block that can be destroyed with bombs
+  PERMANENT, // a block that cannot be destroyed
   POWER_BOMBPLUS,
   POWER_BOMBLENGTH,
   POWER_SPEED,
@@ -34,14 +34,14 @@ export enum Block {
   POWER_BOMBTIME,
   POWER_SWITCHPLAYER,
   POWER_SICK,
-  POWER_BONUS
+  POWER_BONUS,
 }
 
 export enum Color {
   WHITE = 'white',
   BLACK = 'black',
   ORANGE = 'orange',
-  GREEN = 'green'
+  GREEN = 'green',
 }
 
 export enum Animation {
@@ -49,17 +49,17 @@ export enum Animation {
   IDLE_FRONT,
   IDLE_LEFT,
   IDLE_RIGHT,
-  
+
   WALK_BACK,
   WALK_FRONT,
   WALK_LEFT,
-  WALK_RIGHT
+  WALK_RIGHT,
 }
 
 export enum RoomStatus {
   WAITING,
   STARTING,
-  RUNNING
+  RUNNING,
 }
 
 export enum Map {
@@ -67,5 +67,5 @@ export enum Map {
   RANDOM = 'random',
   BRICKTOWN = 'bricktown',
   FOURWAY = 'fourway',
-  MAGNETO = 'magneto'
+  MAGNETO = 'magneto',
 }

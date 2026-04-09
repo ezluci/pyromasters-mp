@@ -1,11 +1,15 @@
-import { Block, Bomb, Flame, Map, RoomStatus } from "./game-types";
-import { Ticks } from "./ticks";
-import { generate_runEveryTick } from "./run-every-tick";
-import { generate_placeEndgameBlock } from "./room-functions/place-endgame-block";
-import { generate_explodeBomb, generate_getBomb, generate_getFlame, generate_removeFlame } from "./room-functions/bombs";
-import { generate_showEndScreen } from "./room-functions/show-end-screen";
-import { WebSocket } from "ws";
-
+import { Block, Bomb, Flame, Map, RoomStatus } from './game-types';
+import { Ticks } from './ticks';
+import { generate_runEveryTick } from './run-every-tick';
+import { generate_placeEndgameBlock } from './room-functions/endgame';
+import { generate_showEndScreen } from './room-functions/endscreen';
+import { WebSocket } from 'ws';
+import {
+  explodeBomb,
+  getBomb,
+  getFlame,
+  removeFlame,
+} from './room-functions/bombs';
 
 export class Room {
   name: string;
@@ -15,12 +19,12 @@ export class Room {
   players: globalThis.Map<string, WebSocket>; // <name, sok>
   guests: Set<WebSocket>;
   countPlayersAlive: number;
-  
+
   white: WebSocket | null;
   black: WebSocket | null;
   orange: WebSocket | null;
   green: WebSocket | null;
-  
+
   grid: Block[][];
   map: Map | null;
 
@@ -31,7 +35,7 @@ export class Room {
   endscreen_tickId: number | null;
   endgameBlocks: number;
   status: RoomStatus;
-  
+
   ticks: Ticks;
   singlePlayer: boolean; // the owner of the room is playing alone
 
@@ -46,7 +50,6 @@ export class Room {
   explodeBomb: (bombId: number, recursive?: boolean, flames?: Flame[]) => void;
   removeFlame: (x: number, y: number, owner: WebSocket) => void;
   showEndScreen: () => void;
-
 
   constructor(name: string, owner: WebSocket) {
     this.name = name.toLowerCase();
@@ -74,10 +77,10 @@ export class Room {
     this.singlePlayer = false;
 
     this.placeEndgameBlock = generate_placeEndgameBlock(this);
-    this.getBomb = generate_getBomb(this);
-    this.getFlame = generate_getFlame(this);
-    this.explodeBomb = generate_explodeBomb(this);
-    this.removeFlame = generate_removeFlame(this);
+    this.getBomb = getBomb;
+    this.getFlame = getFlame;
+    this.explodeBomb = explodeBomb;
+    this.removeFlame = removeFlame;
     this.showEndScreen = generate_showEndScreen(this);
   }
 }
