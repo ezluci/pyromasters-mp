@@ -1,0 +1,31 @@
+body {
+    background-color: #222831;
+}
+
+#main {
+    display: flex;
+    justify-content: center;
+}
+
+#profile-main {
+    display: inline-block;
+    overflow-wrap: break-word;
+    border: 2px dashed white;
+
+    margin-top: 5vh;
+    padding: 5px 10px;
+
+    min-height: 300px;
+    min-width: min(400px, 80vw);
+    max-width: 60vw;
+}
+
+.profile-header {
+    color: white;
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.profile-info {
+    color: #a2a2a2;
+}
