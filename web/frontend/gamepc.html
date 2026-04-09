@@ -2,17 +2,21 @@
 <html lang="en-us">
 
 <head>
-   <title>pyromasters-mp - GamePC</title>
-   
-   <meta charset="UTF-8">
-   <link rel="icon" href="/favicon.ico">
+    <title>pyromasters-mp - GamePC</title>
+    
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
 
-   <link rel="stylesheet" href="/css/gamepc.css">
 <!-- {{ if eq .AppEnv "development" }} -->
     <script type="module" src="/src/game/index.ts"></script>
 <!-- {{ else }} -->
     <!-- <script type="module" src="//fillhere"></script> -->
 <!-- {{ end }} -->
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/gamepc.css">
+    <link rel="stylesheet" href="/css/topbar.css">
+
 
     <script>
     {{ if .IsLoggedIn }}
@@ -24,7 +28,6 @@
         window.isGuest = {{ if .IsLoggedIn }} false {{ else }} true {{ end }};
         window.socketUrl = {{ .SocketUrl }};
     </script>
-
 </head>
 
 

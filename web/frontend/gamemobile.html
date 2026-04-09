@@ -2,18 +2,21 @@
 <html lang="en-us">
 
 <head>
-   <title>pyromasters-mp - GameMobile</title>
+    <title>pyromasters-mp - GameMobile</title>
 
-   <meta charset="UTF-8">
-   <link rel="icon" href="/favicon.ico">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    
-   <link rel="stylesheet" href="/css/gamemobile.css">
 <!-- {{ if eq .AppEnv "development" }} -->
     <script type="module" src="/src/game/index.ts"></script>
 <!-- {{ else }} -->
     <!-- <script type="module" src="//fillhere"></script> -->
 <!-- {{ end }} -->
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/gamemobile.css">
+    <link rel="stylesheet" href="/css/topbar.css">
 
     <script>
     {{ if .IsLoggedIn }}

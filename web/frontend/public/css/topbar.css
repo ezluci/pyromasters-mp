@@ -1,0 +1,64 @@
+#topbar {
+    height: 35px;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    background-color: #84e371;
+    border: 6px ridge #8971ba;
+    color: black;
+    font-size: 16px;
+}
+
+#topbar-inner {
+    width: 100%;
+    height: 100%;
+    margin: 0 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* logo */
+
+#topbar-logo {
+    display: flex;
+    align-items: center;
+}
+
+/* profile */
+
+#topbar-profile {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* login / register */
+
+#login-div {
+    display: flex;
+    align-items: center;
+}
+
+#register-div {
+    display: none;
+    align-items: center;
+}
+
+#login-header, #register-header {
+    background-color: white;
+    text-decoration: underline;
+    margin-right: 3px;
+    color: black;
+}
+
+#login-username, #register-username {
+    margin-right: 2px;
+}
+
+#login-password, #register-password {
+    margin-right: 1px;
+}
+
+#goto-register, #goto-login {
+    margin-left: 3px;
+}
