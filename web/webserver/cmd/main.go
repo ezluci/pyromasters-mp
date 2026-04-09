@@ -17,7 +17,7 @@ func main() {
 	logger.Log.Infof("starting webserver...")
 	logger.Log.Infof("- pyro version: %s", configs.Cfg.Version)
 	logger.Log.Infof("- mode: %s", configs.Cfg.AppEnv)
-	logger.Log.Infof("- port: %s", configs.Cfg.PortHttp)
+	logger.Log.Infof("- listen addr: %s", configs.Cfg.HttpAddr)
 
 	db.Connect()
 	defer db.DB.Close()
@@ -28,7 +28,7 @@ func main() {
 	api.RegisterRoutes(mux)
 
 	logger.Log.Infof("listening...")
-	err := http.ListenAndServe(":"+configs.Cfg.PortHttp, mux)
+	err := http.ListenAndServe(configs.Cfg.HttpAddr, mux)
 	if err != nil {
 		logger.Log.Panic(err)
 	}

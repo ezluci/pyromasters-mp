@@ -8,16 +8,15 @@ import (
 )
 
 type Config struct {
-	Version    string
-	AppEnv     string
-	PortHttp   string
-	PortSocket string
-	SocketUrl  string
-	DBName     string
-	DBHost     string
-	DBUser     string
-	DBPass     string
-	JWTSecret  string
+	Version   string
+	AppEnv    string
+	HttpAddr  string
+	SocketUrl string
+	DBName    string
+	DBHost    string
+	DBUser    string
+	DBPass    string
+	JWTSecret string
 }
 
 var Cfg Config
@@ -34,16 +33,15 @@ func LoadConfig() {
 	version := string(versionByte)
 
 	Cfg = Config{
-		Version:    version,
-		AppEnv:     getEnv("APP_ENV"),
-		PortHttp:   getEnv("PORT_HTTP"),
-		PortSocket: getEnv("PORT_SOCKET"),
-		SocketUrl:  getEnv("SOCKET_URL"),
-		DBName:     getEnv("DB_NAME"),
-		DBHost:     getEnv("DB_HOST"),
-		DBUser:     getEnv("DB_USER"),
-		DBPass:     getEnv("DB_PASS"),
-		JWTSecret:  getEnv("JWT_SECRET"),
+		Version:   version,
+		AppEnv:    getEnv("APP_ENV"),
+		HttpAddr:  getEnv("HTTP_ADDR"),
+		SocketUrl: getEnv("SOCKET_URL"),
+		DBName:    getEnv("DB_NAME"),
+		DBHost:    getEnv("DB_HOST"),
+		DBUser:    getEnv("DB_USER"),
+		DBPass:    getEnv("DB_PASS"),
+		JWTSecret: getEnv("JWT_SECRET"),
 	}
 }
 

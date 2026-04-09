@@ -45,17 +45,19 @@ soundNames.forEach(soundName => {
 const rooms = new Map<string, Room>(); // info about all rooms by name
 const users = new Map<number, WebSocket>(); // into about all users (by id)
 
-if (!process.env.PORT_SOCKET || !process.env.JWT_SECRET) {
+if (!process.env.SOCKET_ADDR || !process.env.JWT_SECRET) {
   logger.alert('wrong .env');
   process.exit(1);
 }
 
+const [host, port] = process.env.SOCKET_ADDR.split(':');
 const server = new WebSocketServer({
   autoPong: false,
   maxPayload: 500_000,
-  port: parseInt(process.env.PORT_SOCKET)
+  host: host,
+  port: parseInt(port)
 }, () => {
-  logger.notice(`Socket server listening on port ${process.env.PORT_SOCKET}`);
+  logger.notice(`Socket server listening on addr ${host}:${port}`);
 });
 
 server.on('connection', (sok: WebSocket, req) => {
