@@ -23,7 +23,7 @@
         };
     {{ end }}
         window.isGuest = {{ if .IsLoggedIn }} false {{ else }} true {{ end }};
-        window.portSocket = {{ .PortSocket }};
+        window.socketUrl = {{ .SocketUrl }};
     </script>
 
 

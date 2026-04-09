@@ -17,7 +17,8 @@ type PageData struct {
 	IsLoggedIn bool
 	Username   string
 	UserID     int
-	PortSocket string
+	SocketUrl  string
+	Secure     bool
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
@@ -60,7 +61,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		data := PageData{
 			AppEnv:     configs.Cfg.AppEnv,
 			IsLoggedIn: false,
-			PortSocket: configs.Cfg.PortSocket,
+			SocketUrl:  configs.Cfg.SocketUrl,
 		}
 
 		cookie, err := r.Cookie("jwt_token")

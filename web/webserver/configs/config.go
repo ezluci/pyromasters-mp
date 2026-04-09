@@ -12,6 +12,7 @@ type Config struct {
 	AppEnv     string
 	PortHttp   string
 	PortSocket string
+	SocketUrl  string
 	DBName     string
 	DBHost     string
 	DBUser     string
@@ -37,6 +38,7 @@ func LoadConfig() {
 		AppEnv:     getEnv("APP_ENV"),
 		PortHttp:   getEnv("PORT_HTTP"),
 		PortSocket: getEnv("PORT_SOCKET"),
+		SocketUrl:  getEnv("SOCKET_URL"),
 		DBName:     getEnv("DB_NAME"),
 		DBHost:     getEnv("DB_HOST"),
 		DBUser:     getEnv("DB_USER"),

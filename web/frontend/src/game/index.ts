@@ -28,8 +28,7 @@ Dom.chatInput.value = '';
 
 // load resources, animations, connect to server
 
-const protocol = (ez_testPC || ez_testSV ? 'http' : 'https');
-const url = `${protocol}://${window.location.hostname}:${(window as any).portSocket}/${encodeURIComponent(roomName)}`;
+const url = `${(window as any).socketUrl}/${encodeURIComponent(roomName)}`;
 
 const network = new Network;
 
