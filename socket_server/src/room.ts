@@ -10,6 +10,7 @@ import {
   getFlame,
   removeFlame,
 } from './room-functions/bombs';
+import { MatchEvent } from './match-event/event';
 
 export class Room {
   name: string;
@@ -37,6 +38,9 @@ export class Room {
   status: RoomStatus;
 
   ticks: Ticks;
+  matchEvents: MatchEvent[];
+  matchId: number;
+  matchStartTime: number;
   singlePlayer: boolean; // the owner of the room is playing alone
 
   // METHODS:
@@ -74,6 +78,9 @@ export class Room {
     this.status = RoomStatus.WAITING;
 
     this.ticks = new Ticks(owner, generate_runEveryTick(owner));
+    this.matchEvents = [];
+    this.matchId = 0;
+    this.matchStartTime = Date.now();
     this.singlePlayer = false;
 
     this.placeEndgameBlock = generate_placeEndgameBlock(this);

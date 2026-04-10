@@ -20,13 +20,19 @@
     <div id="main">
         <div id="profile-main">
             <div class="profile-header">Profile: {{ .Username }}</div>
-            <div class="profile-info">Last online: ---</div>
+            <div class="profile-info">Bio: {{ .Bio }}</div>
+            <div class="profile-info">Last played: {{ .LastPlayed }}</div>
+            <div class="profile-info">Account created: {{ .CreatedAt }} </div>
             <div class="profile-info">Friends: ---</div>
-            <div class="profile-info">Games played: ---</div>
-            <div class="profile-info">Wins: ---</div>
-            <div class="profile-info">Kills: ---</div>
+            <div class="profile-info">Games played: {{ .GamesPlayed }}</div>
+            <div class="profile-info">Wins: {{ .Wins }}</div>
+            <div class="profile-info">Kills: {{ .Kills }}</div>
             <div class="profile-info">Favorite color: ---</div>
-            <div class="profile-info">Bombs placed: ---</div>
+            <div class="profile-info">Bombs placed: {{ .BombsPlaced }}</div>
         </div>
     </div>
+    
+    {{ template "footer.html" . }}
 </body>
+
+</html>

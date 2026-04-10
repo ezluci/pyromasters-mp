@@ -8,6 +8,7 @@ import {
 import { Block, Bomb, Color, RoomStatus } from '../game-types';
 import { OutPackets } from '../out-packets/out-packets';
 import { logger } from '../log';
+import { MatchEvent_placeBomb } from '../match-event/place-bomb';
 
 export function placeBomb(this: WebSocket): void {
   const sok = this;
@@ -90,7 +91,8 @@ export function placeBomb(this: WebSocket): void {
     logger.error('tryPlaceBomb: something went wrong');
     return;
   }
-  sok.room.bombs.push({
+
+  const bomb: Bomb = {
     x,
     y,
     id: bombId,
@@ -101,8 +103,14 @@ export function placeBomb(this: WebSocket): void {
     owner: sok,
     length: sok.bombLength,
     tickFuncId,
-  });
+  };
+
+  sok.room.bombs.push(bomb);
   sok.room.bombIdCounter++;
+
+  sok.room.matchEvents.push(
+    new MatchEvent_placeBomb(sok.room.ticks.tick, bomb),
+  );
 
   OutPackets.send_addBomb(sok.room, x, y, bombId);
   if (sok.sick) {

@@ -9,7 +9,14 @@ import (
 
 type ProfilePageData struct {
 	BaseData
-	Username string
+	Username    string
+	Bio         string
+	CreatedAt   string
+	LastPlayed  string
+	GamesPlayed int
+	Wins        int
+	Kills       int
+	BombsPlaced int
 }
 
 func ownProfileHandler(w http.ResponseWriter, r *http.Request) {
@@ -48,8 +55,20 @@ func profileHandler(w http.ResponseWriter, r *http.Request) {
 	tmpl := templates.Lookup("profile")
 
 	data := ProfilePageData{
-		BaseData: baseData,
-		Username: user.Username,
+		BaseData:    baseData,
+		Username:    user.Username,
+		Bio:         user.Bio,
+		CreatedAt:   user.CreatedAt.String(),
+		GamesPlayed: user.GamesPlayed,
+		Wins:        user.Wins,
+		Kills:       user.Kills,
+		BombsPlaced: user.BombsPlaced,
+	}
+
+	if user.LastPlayed != nil {
+		data.LastPlayed = user.LastPlayed.String()
+	} else {
+		data.LastPlayed = "unknown"
 	}
 
 	w.Header().Set("Content-Type", "text/html")

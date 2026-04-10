@@ -7,4 +7,10 @@ type User struct {
 	Username     string
 	PasswordHash string
 	CreatedAt    time.Time
+	Bio          string
+	GamesPlayed  int
+	Wins         int
+	Kills        int
+	BombsPlaced  int
+	LastPlayed   *time.Time
 }

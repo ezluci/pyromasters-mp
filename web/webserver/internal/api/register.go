@@ -3,6 +3,7 @@ package api
 import (
 	"net/http"
 	"regexp"
+	"time"
 	"webserver/internal/db"
 	"webserver/internal/logger"
 
@@ -59,8 +60,8 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	_, err = db.DB.Exec(
-		"insert into users (username, password_hash) values (?, ?)",
-		username, hashedPassword,
+		"insert into users (username, password_hash, created_at) values (?, ?, ?)",
+		username, hashedPassword, time.Now().UnixMilli(),
 	)
 
 	if err != nil {
@@ -74,6 +75,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 
+		logger.Log.Errorf("cant decode error %v", err)
 		writeJSON(w, http.StatusInternalServerError, ErrorResponse{
 			Error: "cant decode error",
 		})

@@ -9,6 +9,7 @@ import {
   MOVE_SPEEDS,
 } from '../game-consts';
 import { OutPackets } from '../out-packets/out-packets';
+import { MatchEvent_startGame } from '../match-event/start-game';
 
 export function processPacket_startGame(sok: WebSocket, packet: Buffer) {
   if (sok.isGuest) {
@@ -53,7 +54,7 @@ export function processPacket_startGame(sok: WebSocket, packet: Buffer) {
     map = randomMaps[Math.floor(Math.random() * randomMaps.length)];
   }
 
-  let playersAlive: Color[] = [];
+  const playersAlive: Color[] = [];
   Object.values(Color).forEach((color) => {
     if (sok.room[color]) {
       playersAlive.push(color);
@@ -72,6 +73,8 @@ export function processPacket_startGame(sok: WebSocket, packet: Buffer) {
 
   sok.room.status = RoomStatus.STARTING;
   OutPackets.send_roomStatus(sok.room, sok.room.status);
+
+  sok.room.matchStartTime = Date.now();
 
   sok.room.grid = generateGrid(map);
 
@@ -176,6 +179,10 @@ export function processPacket_startGame(sok: WebSocket, packet: Buffer) {
       sok.room.ticks.TPS * (2 + sok.room.gameTime + 0.84 * i),
     );
   }
+
+  sok.room.matchEvents.push(
+    new MatchEvent_startGame(sok.room.ticks.tick, sok.id, sok.room),
+  );
 }
 
 function generateGrid(map: string): Block[][] {
@@ -228,7 +235,9 @@ function generateGrid(map: string): Block[][] {
         ];
 
         blockedCoords.forEach((blockedCoord) => {
-          if (x === blockedCoord.x && y === blockedCoord.y) canDraw = false;
+          if (x === blockedCoord.x && y === blockedCoord.y) {
+            canDraw = false;
+          }
         });
 
         if (map === Map.FOURWAY) {

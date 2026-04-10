@@ -38,7 +38,14 @@ soundNames.forEach((soundName) => {
 const rooms = new Map<string, Room>(); // info about all rooms by name
 const users = new Map<number, WebSocket>(); // into about all users (by id)
 
-if (!process.env.SOCKET_ADDR || !process.env.JWT_SECRET) {
+if (
+  !process.env.SOCKET_ADDR ||
+  !process.env.JWT_SECRET ||
+  !process.env.DB_NAME ||
+  !process.env.DB_HOST ||
+  !process.env.DB_USER ||
+  !process.env.DB_PASS
+) {
   logger.alert('wrong .env');
   process.exit(1);
 }
